@@ -28,7 +28,7 @@
   --chart-3: hsl(134 61% 41%);
   --chart-4: hsl(120 100% 25%);
   --chart-5: hsl(103 43% 50%);
-  --radius: 0.75rem;
+  --radius: 12px;
   --sidebar: hsl(0 0% 98%);
   --sidebar-foreground: oklch(0.15 0.01 260);
   --sidebar-primary: oklch(0.55 0.15 195);

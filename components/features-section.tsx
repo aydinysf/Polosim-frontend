@@ -1,20 +1,39 @@
 import { Zap, Shield, Globe, Clock, CreditCard, Headphones } from "lucide-react";
+import Image from "next/image";
 
 const features = [
   {
     icon: Zap,
     title: "Instant Activation",
     description: "Get connected in minutes. No waiting for physical SIM delivery - just scan the QR code and you're online.",
+    image: "/images/feature-instant.jpg",
+    gradient: "from-blue-600/15 via-cyan-500/10 to-blue-400/5",
+    accentColor: "text-cyan-400",
+    borderColor: "hover:border-cyan-400/50",
+    iconBg: "bg-blue-500/15 border-blue-500/25",
+    iconColor: "text-blue-500",
   },
   {
     icon: Shield,
     title: "No Roaming Fees",
     description: "Say goodbye to expensive roaming charges. Our transparent pricing means no surprise bills when you return home.",
+    image: "/images/feature-noroaming.jpg",
+    gradient: "from-emerald-600/15 via-teal-500/10 to-green-400/5",
+    accentColor: "text-emerald-400",
+    borderColor: "hover:border-emerald-400/50",
+    iconBg: "bg-emerald-500/15 border-emerald-500/25",
+    iconColor: "text-emerald-500",
   },
   {
     icon: Globe,
     title: "Global Coverage",
     description: "Coverage in 200+ countries and territories. One eSIM for all your international travel needs.",
+    image: "/images/feature-global.jpg",
+    gradient: "from-amber-500/15 via-orange-400/10 to-yellow-300/5",
+    accentColor: "text-amber-400",
+    borderColor: "hover:border-amber-400/50",
+    iconBg: "bg-amber-500/15 border-amber-500/25",
+    iconColor: "text-amber-500",
   },
 ];
 
@@ -23,16 +42,22 @@ const additionalFeatures = [
     icon: Clock,
     title: "Flexible Validity",
     description: "Plans from 7 days to 30 days",
+    iconBg: "bg-violet-500/15 border-violet-500/25",
+    iconColor: "text-violet-500",
   },
   {
     icon: CreditCard,
     title: "Easy Top-ups",
     description: "Add more data anytime, anywhere",
+    iconBg: "bg-rose-500/15 border-rose-500/25",
+    iconColor: "text-rose-500",
   },
   {
     icon: Headphones,
     title: "24/7 Support",
     description: "Expert help whenever you need it",
+    iconBg: "bg-sky-500/15 border-sky-500/25",
+    iconColor: "text-sky-500",
   },
 ];
 
@@ -55,34 +80,37 @@ export function FeaturesSection() {
 
         {/* Main features */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-12">
-          {features.map((feature, index) => (
+          {features.map((feature) => (
             <div
               key={feature.title}
-              className="group relative overflow-hidden rounded-xl sm:rounded-2xl border border-border/50 bg-card/30 backdrop-blur-sm p-5 sm:p-8 transition-all duration-300 hover:border-primary/50 hover:bg-card/50"
+              className={`group relative overflow-hidden rounded-xl sm:rounded-2xl border border-border/50 bg-gradient-to-br ${feature.gradient} backdrop-blur-sm transition-all duration-300 ${feature.borderColor} hover:scale-[1.02]`}
             >
-              {/* Gradient overlay on hover */}
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+              {/* Feature image */}
+              <div className="relative w-full h-40 sm:h-48 overflow-hidden">
+                <Image
+                  src={feature.image}
+                  alt={feature.title}
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-card/95 via-card/40 to-transparent" />
+              </div>
               
-              <div className="relative z-10">
-                {/* Icon container */}
-                <div className="w-12 sm:w-14 h-12 sm:h-14 rounded-lg sm:rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center mb-4 sm:mb-6 group-hover:bg-primary/20 transition-colors">
-                  <feature.icon className="w-6 sm:w-7 h-6 sm:h-7 text-primary" />
+              <div className="relative z-10 p-5 sm:p-6 -mt-8">
+                {/* Icon */}
+                <div className={`w-12 sm:w-14 h-12 sm:h-14 rounded-xl ${feature.iconBg} border flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
+                  <feature.icon className={`w-6 sm:w-7 h-6 sm:h-7 ${feature.iconColor}`} />
                 </div>
                 
-                <h3 className="text-lg sm:text-xl font-semibold mb-2 sm:mb-3 text-foreground">{feature.title}</h3>
+                <h3 className="text-lg sm:text-xl font-semibold mb-2 text-foreground">{feature.title}</h3>
                 <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">{feature.description}</p>
               </div>
-
-              {/* Decorative number - hidden on mobile */}
-              <span className="hidden sm:block absolute top-6 right-6 text-8xl font-bold text-border/30 pointer-events-none">
-                {String(index + 1).padStart(2, '0')}
-              </span>
             </div>
           ))}
         </div>
 
         {/* Additional features bar */}
-        <div className="rounded-2xl border border-border/50 bg-card/30 backdrop-blur-sm p-6">
+        <div className="rounded-2xl border border-border/50 bg-gradient-to-r from-card/40 via-card/60 to-card/40 backdrop-blur-sm p-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {additionalFeatures.map((feature, index) => (
               <div
@@ -91,8 +119,8 @@ export function FeaturesSection() {
                   index < additionalFeatures.length - 1 ? "md:border-r md:border-border/30" : ""
                 } md:px-4`}
               >
-                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-                  <feature.icon className="w-5 h-5 text-primary" />
+                <div className={`w-10 h-10 rounded-lg ${feature.iconBg} border flex items-center justify-center shrink-0`}>
+                  <feature.icon className={`w-5 h-5 ${feature.iconColor}`} />
                 </div>
                 <div>
                   <h4 className="font-semibold text-foreground">{feature.title}</h4>
