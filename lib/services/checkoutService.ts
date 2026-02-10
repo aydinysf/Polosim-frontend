@@ -1,41 +1,89 @@
-import { api } from "../api-client";
-import type { Cart } from "./cartService";
+import { api, getAuthToken } from "../api-client";
 
-export interface CheckoutPreview {
-  cart: Cart;
+export interface CheckoutPreviewRequest {
+  items?: Array<{
+    product_id: number;
+    quantity: number;
+  }>;
+  // For guest checkout with session
+  session_id?: string;
+}
+
+export interface CheckoutPreviewResponse {
   subtotal: number;
-  discount: number;
-  tax: number;
+  discount: number; // or discount_amount
+  discount_amount?: number;
   total: number;
-  coupon_applied?: {
-    code: string;
-    discount_amount: number;
-  };
+  items: Array<{
+    product_id: number;
+    name: string;
+    quantity: number;
+    price?: number;
+    unit_price?: number; // From API
+    total?: number;
+    line_amount?: number; // From API
+  }>;
 }
 
 export interface CheckoutExecuteRequest {
-  payment_method: "stripe" | "wallet";
+  payment_method: 'wallet' | 'stripe';
+  // Guest information (required for guests)
+  guest_email?: string;
+  guest_name?: string;
+  guest_surname?: string;
+  // Fallback/Alternative fields
   email?: string;
-  coupon_code?: string;
+  name?: string;
+  surname?: string;
+  customer_email?: string;
+  receipt_email?: string;
+  user?: {
+    email: string;
+    name: string;
+    surname: string;
+  };
+  // For guest checkout with session
+  session_id?: string;
+  [key: string]: any; // Allow additional properties
 }
 
 export interface CheckoutExecuteResponse {
   order_id: number;
-  client_secret?: string; // For Stripe
-  redirect_url?: string;
-  status: "pending" | "processing" | "completed" | "failed";
+  status: string;
+  total: number;
+  // For Stripe payments
+  client_secret?: string;
+  // For wallet payments
+  wallet_balance_used?: number;
+  wallet_remaining_balance?: number;
 }
 
 export const checkoutService = {
-  async preview(couponCode?: string): Promise<CheckoutPreview> {
-    const response = await api.post<CheckoutPreview>("/checkout/preview", {
-      coupon_code: couponCode,
-    });
+  async preview(data: CheckoutPreviewRequest): Promise<CheckoutPreviewResponse> {
+    const token = getAuthToken();
+    
+    const config = {
+      headers: {
+        ...(token && { Authorization: `Bearer ${token}` }),
+        ...(data.session_id && { 'X-Session-ID': data.session_id })
+      }
+    };
+
+    const response = await api.post<CheckoutPreviewResponse>('/checkout/preview', data, config);
     return response.data;
   },
 
   async execute(data: CheckoutExecuteRequest): Promise<CheckoutExecuteResponse> {
-    const response = await api.post<CheckoutExecuteResponse>("/checkout/execute", data);
+    const token = getAuthToken();
+    
+    const config = {
+      headers: {
+        ...(token && { Authorization: `Bearer ${token}` }),
+        ...(data.session_id && { 'X-Session-ID': data.session_id })
+      }
+    };
+
+    const response = await api.post<CheckoutExecuteResponse>('/checkout/execute', data, config);
     return response.data;
-  },
+  }
 };

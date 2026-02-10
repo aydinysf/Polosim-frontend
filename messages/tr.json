@@ -1,0 +1,219 @@
+{
+  "HomePage": {
+    "title": "Tek Sim Tek Dünya",
+    "description": "Küresel eSIM pazar yeri"
+  },
+  "Navbar": {
+    "destinations": "Destinasyonlar",
+    "plans": "Planlar",
+    "howItWorks": "Nasıl Çalışır",
+    "support": "Destek",
+    "login": "Giriş Yap",
+    "myProfile": "Profilim",
+    "logout": "Çıkış Yap"
+  },
+  "Hero": {
+    "title": "Küresel Bağlan, Yerel Öde",
+    "subtitle": "200'den fazla ülke için anında eSIM teslimatı. Roaming ücreti yok. Numaranızı koruyun.",
+    "searchPlaceholder": "Nereye gidiyorsunuz?",
+    "searchButton": "Ara",
+    "bestSeller": "Çok Satan",
+    "regionalPlans": "Bölgesel Planlar",
+    "countryPlans": "Ülke Planları",
+    "buyNow": "Satın Al"
+  },
+  "Footer": {
+    "description": "Tek Sim, Tek Dünya. 200'den fazla ülkede anında aktivasyon ve roaming ücreti olmadan bağlı kalın.",
+    "product": "Ürün",
+    "company": "Şirket",
+    "support": "Destek",
+    "legal": "Yasal",
+    "links": {
+      "destinations": "Destinasyonlar",
+      "dataPlans": "Veri Planları",
+      "regions": "Bölgeler",
+      "coverageMap": "Kapsama Haritası",
+      "aboutUs": "Hakkımızda",
+      "careers": "Kariyer",
+      "blog": "Blog",
+      "press": "Basın",
+      "helpCenter": "Yardım Merkezi",
+      "contactUs": "İletişim",
+      "setupGuide": "Kurulum Rehberi",
+      "deviceCompatibility": "Cihaz Uyumluluğu",
+      "privacyPolicy": "Gizlilik Politikası",
+      "termsOfService": "Kullanım Koşulları",
+      "refundPolicy": "İade Politikası"
+    },
+    "copyright": "© {year} POLO SIM. Tüm hakları saklıdır."
+  },
+  "Plans": {
+    "hero": {
+      "destinationsAvailable": "200+ Destinasyon Mevcut",
+      "browseRegions": "Tüm Bölgeleri İncele",
+      "browsePlans": "Tüm Planları İncele",
+      "regionsDescription": "Tek paketle birden fazla ülkeyi kapsayan bölgesel eSIM planlarımızı keşfedin.",
+      "plansDescription": "Hedefiniz için mükemmel eSIM veri planını bulun. Anında aktivasyon, roaming ücreti yok."
+    },
+    "search": {
+      "regionsPlaceholder": "Bölgelerde ara...",
+      "plansPlaceholder": "Ülke veya plan ara..."
+    },
+    "tabs": {
+      "regions": "Bölgeler"
+    },
+    "filters": {
+      "title": "Filtreler",
+      "bestSellers": "Çok Satanlar",
+      "dataAmount": "Veri Miktarı",
+      "duration": "Süre",
+      "priceRange": "Fiyat Aralığı",
+      "any": "Herhangi",
+      "unlimited": "Sınırsız"
+    },
+    "sort": {
+      "popular": "En Popüler",
+      "priceLow": "Fiyat: Düşükten Yükseğe",
+      "priceHigh": "Fiyat: Yüksekten Düşüğe",
+      "dataHigh": "Veri: Yüksekten Düşüğe",
+      "dataLow": "Veri: Düşükten Yükseğe",
+      "validityHigh": "Süre: Uzundan Kısaya",
+      "validityLow": "Süre: Kısadan Uzuna",
+      "nameAz": "İsim: A'dan Z'ye",
+      "nameZa": "İsim: Z'den A'ya"
+    },
+    "validity": {
+      "days": "{count} Gün"
+    },
+    "results": {
+      "plansCount": "{count} plan gösteriliyor",
+      "regionsCount": "{count} bölge gösteriliyor"
+    },
+    "labels": {
+      "bestSeller": "Çok Satan",
+      "hotspot": "Hotspot",
+      "instant": "Anında",
+      "from": "Başlangıç",
+      "countriesCount": "{count} ülke",
+      "region": "Bölge",
+      "dataPlan": "Veri Planı"
+    },
+    "cta": {
+      "buy": "Satın Al",
+      "added": "Eklendi",
+      "viewPlans": "Planları Gör"
+    },
+    "empty": {
+      "title": "Sonuç bulunamadı",
+      "description": "Aramanızı veya filtreleri ayarlamayı deneyin"
+    }
+  },
+  "Features": {
+    "title": "Neden POLO SIM?",
+    "subtitle": "En son teknoloji eSIM teknolojimizle mobil bağlantının geleceğini deneyimleyin.",
+    "instantActivation": {
+      "title": "Anında Aktivasyon",
+      "description": "Dakikalar içinde bağlanın. Fiziksel SIM teslimatını beklemenize gerek yok - sadece QR kodunu tarayın ve çevrimiçi olun."
+    },
+    "noRoamingFees": {
+      "title": "Roaming Ücreti Yok",
+      "description": "Pahalı roaming ücretlerine veda edin. Şeffaf fiyatlandırmamız, eve döndüğünüzde sürpriz faturalar olmayacağı anlamına gelir."
+    },
+    "globalCoverage": {
+      "title": "Küresel Kapsama",
+      "description": "200'den fazla ülke ve bölgede kapsama. Tüm uluslararası seyahat ihtiyaçlarınız için tek bir eSIM."
+    },
+    "flexibleValidity": {
+      "title": "Esnek Geçerlilik",
+      "description": "7 günden 30 güne kadar planlar"
+    },
+    "easyTopUps": {
+      "title": "Kolay Yükleme",
+      "description": "Her zaman, her yerde daha fazla veri ekleyin"
+    },
+    "support247": {
+      "title": "7/24 Destek",
+      "description": "İhtiyacınız olduğunda uzman yardımı"
+    }
+  },
+  "Profile": {
+    "title": "Profil",
+    "myPackages": "eSIM Paketlerim",
+    "logout": "Çıkış Yap",
+    "tabs": {
+      "all": "Tümü",
+      "active": "Aktif",
+      "upcoming": "Gelecek",
+      "expired": "Süresi Dolmuş"
+    },
+    "status": {
+      "active": "Aktif",
+      "upcoming": "Gelecek",
+      "expired": "Süresi Dolmuş"
+    },
+    "package": {
+      "defaultName": "eSIM Paketi",
+      "data": "Veri",
+      "validity": "Geçerlilik",
+      "days": "Gün",
+      "remaining": "Kalan",
+      "used": "Kullanılan",
+      "expires": "Bitiş",
+      "activated": "Aktifleştirildi",
+      "installEsim": "eSIM'i Kur"
+    },
+    "messages": {
+      "loading": "Paketler yükleniyor...",
+      "error": "Paketler yüklenemedi. Lütfen tekrar deneyin.",
+      "copied": "panoya kopyalandı",
+      "noPackages": "Paket bulunamadı"
+    },
+    "verification": {
+      "title": "E-posta Doğrulaması Gerekli",
+      "message": "Tüm özelliklerin kilidini açmak ve hesap güvenliğini sağlamak için lütfen e-posta adresinizi doğrulayın.",
+      "button": "Doğrulama Kodunu Girin"
+    },
+    "stats": {
+      "totalPackages": "Toplam Paket",
+      "activeUnits": "Aktif Üniteler",
+      "walletBalance": "Cüzdan Bakiyesi"
+    },
+    "assets": {
+      "title": "eSIM Varlıklarım",
+      "subtitle": "Küresel bağlantınızı yönetin ve izleyin",
+      "refresh": "Yenile",
+      "buyNewPlan": "Yeni Plan Satın Al"
+    },
+    "emptyState": {
+      "title": "Paket Bulunamadı",
+      "description": "Bu kategori için henüz herhangi bir plan satın almadınız.",
+      "button": "Küresel Planlara Göz At"
+    },
+    "card": {
+      "dataVolume": "Veri Hacmi",
+      "validityPeriod": "Geçerlilik Süresi",
+      "timelineProgress": "Zaman Çizelgesi İlerlemesi"
+    },
+    "modal": {
+      "manualActivation": "Manuel Aktivasyon",
+      "smdpAddress": "SM-DP+ Adresi",
+      "activationCode": "Aktivasyon Kodu",
+      "copy": "Kopyala",
+      "installEsim": "eSIM'i Kur",
+      "qrCode": "QR Kod",
+      "scanToInstall": "Yüklemek için Tara",
+      "synchronizing": "Ağ ile senkronize ediliyor...",
+      "activationInfo": "Aktivasyon Bilgisi",
+      "installByScanning": "Cihazınızla taratarak yükleyin",
+      "processing": "İşlem devam ediyor...",
+      "iccidAddress": "ICCID Adresi",
+      "planData": "Plan Verisi",
+      "validity": "Geçerlilik",
+      "topUp": "Planı Yükle",
+      "renew": "Planı Yenile",
+      "close": "Kapat",
+      "generating": "Oluşturuluyor...",
+      "order": "Sipariş #"
+    }
+  }
+}

@@ -68,6 +68,7 @@ export interface Product {
   region_id?: number;
   region_name?: MultiLang;
   flag_url?: string;
+  image_url?: string;
   
   // Flags
   is_best_seller?: boolean;
@@ -80,6 +81,7 @@ export interface Product {
     id: number;
     name: MultiLang;
     flag_url?: string;
+    image_url?: string;
     iso_code?: string;
   };
   region?: {
@@ -95,11 +97,31 @@ export interface ProductFilters {
   is_best_seller?: boolean;
   min_price?: number;
   max_price?: number;
-  sort_by?: "price_asc" | "price_desc" | "popular" | "data_amount";
+  data_amount?: string; // e.g. "1GB", "3GB", "10GB", "Unlimited"
+  validity_days?: number; // e.g. 7, 15, 30
+  sort_by?: "price_asc" | "price_desc" | "data_asc" | "data_desc" | "validity_asc" | "validity_desc" | "name_asc" | "name_desc" | "popular";
+  page?: number;
+  per_page?: number;
+}
+
+export interface PaginationMeta {
+  current_page: number;
+  from: number;
+  last_page: number;
+  per_page: number;
+  to: number;
+  total: number;
+  links?: unknown[];
+  path?: string;
+}
+
+export interface PaginatedResponse<T> {
+  data: T[];
+  meta?: PaginationMeta;
 }
 
 export const productService = {
-  async getAll(filters?: ProductFilters): Promise<Product[]> {
+  async getAll(filters?: ProductFilters): Promise<PaginatedResponse<Product>> {
     const params = new URLSearchParams();
     
     if (filters) {
@@ -108,30 +130,46 @@ export const productService = {
       if (filters.is_best_seller) params.append("is_best_seller", "true");
       if (filters.min_price) params.append("min_price", filters.min_price.toString());
       if (filters.max_price) params.append("max_price", filters.max_price.toString());
+      if (filters.data_amount) params.append("data_amount", filters.data_amount);
+      if (filters.validity_days) params.append("validity_days", filters.validity_days.toString());
       if (filters.sort_by) params.append("sort_by", filters.sort_by);
+      if (filters.page) params.append("page", filters.page.toString());
+      if (filters.per_page) params.append("per_page", filters.per_page.toString());
     }
 
     const queryString = params.toString();
     const endpoint = queryString ? `/products?${queryString}` : "/products";
     
     const response = await api.get<Product[]>(endpoint);
-    return response.data;
+    return {
+      data: response.data,
+      meta: response.meta
+    };
   },
 
-  async getByCountry(countryId: number): Promise<Product[]> {
-    const response = await api.get<Product[]>(`/products?country_id=${countryId}`);
-    return response.data;
+  async getByCountry(countryId: number, page: number = 1): Promise<PaginatedResponse<Product>> {
+    const response = await api.get<Product[]>(`/products?country_id=${countryId}&page=${page}`);
+    return {
+      data: response.data,
+      meta: response.meta
+    };
   },
 
-  async getByRegion(regionId: number): Promise<Product[]> {
-    const response = await api.get<Product[]>(`/products?region_id=${regionId}`);
-    return response.data;
+  async getByRegion(regionId: number, page: number = 1): Promise<PaginatedResponse<Product>> {
+    const response = await api.get<Product[]>(`/products?region_id=${regionId}&page=${page}`);
+    return {
+      data: response.data,
+      meta: response.meta
+    };
   },
 
-  async getByRegionSlug(slug: string): Promise<Product[]> {
+  async getByRegionSlug(slug: string, page: number = 1): Promise<PaginatedResponse<Product>> {
     // Try to fetch by region slug - the API might support this
-    const response = await api.get<Product[]>(`/regions/${slug}/products`);
-    return response.data;
+    const response = await api.get<Product[]>(`/regions/${slug}/products?page=${page}`);
+    return {
+      data: response.data,
+      meta: response.meta
+    };
   },
 
   async getById(id: number): Promise<Product> {
@@ -139,8 +177,40 @@ export const productService = {
     return response.data;
   },
 
-  async getBestSellers(): Promise<Product[]> {
-    const response = await api.get<Product[]>("/products?is_best_seller=true");
-    return response.data;
+  async getBestSellers(page: number = 1): Promise<PaginatedResponse<Product>> {
+    const response = await api.get<Product[]>(`/products?is_best_seller=true&page=${page}`);
+    return {
+      data: response.data,
+      meta: response.meta
+    };
+  },
+
+  async fetchAll(filters?: ProductFilters): Promise<Product[]> {
+    // Initial request with a larger page size to minimize requests
+    const batchSize = 50;
+    const initialFilters = { ...filters, page: 1, per_page: batchSize };
+    
+    const firstResponse = await this.getAll(initialFilters);
+    let allProducts = [...firstResponse.data];
+    
+    const lastPage = firstResponse.meta?.last_page || 1;
+    
+    if (lastPage > 1) {
+      const promises = [];
+      for (let page = 2; page <= lastPage; page++) {
+        promises.push(this.getAll({ ...filters, page, per_page: batchSize }));
+      }
+      
+      try {
+        const responses = await Promise.all(promises);
+        responses.forEach(response => {
+          allProducts = [...allProducts, ...response.data];
+        });
+      } catch (error) {
+        console.error("Error fetching remaining pages:", error);
+      }
+    }
+    
+    return allProducts;
   },
 };

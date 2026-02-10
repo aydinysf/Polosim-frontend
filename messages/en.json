@@ -1,0 +1,219 @@
+{
+  "HomePage": {
+    "title": "One Sim One World",
+    "description": "Global eSIM marketplace"
+  },
+  "Navbar": {
+    "destinations": "Destinations",
+    "plans": "Plans",
+    "howItWorks": "How It Works",
+    "support": "Support",
+    "login": "Login",
+    "myProfile": "My Profile",
+    "logout": "Logout"
+  },
+  "Hero": {
+    "title": "Connect Globally, Pay Locally",
+    "subtitle": "Instant eSIM delivery for 200+ countries. No roaming fees. Keep your number.",
+    "searchPlaceholder": "Where are you going?",
+    "searchButton": "Search",
+    "bestSeller": "Best Seller",
+    "regionalPlans": "Regional Plans",
+    "countryPlans": "Country Plans",
+    "buyNow": "Buy Now"
+  },
+  "Footer": {
+    "description": "One Sim, One World. Stay connected in 200+ countries with instant activation and no roaming fees.",
+    "product": "Product",
+    "company": "Company",
+    "support": "Support",
+    "legal": "Legal",
+    "links": {
+      "destinations": "Destinations",
+      "dataPlans": "Data Plans",
+      "regions": "Regions",
+      "coverageMap": "Coverage Map",
+      "aboutUs": "About Us",
+      "careers": "Careers",
+      "blog": "Blog",
+      "press": "Press",
+      "helpCenter": "Help Center",
+      "contactUs": "Contact Us",
+      "setupGuide": "Setup Guide",
+      "deviceCompatibility": "Device Compatibility",
+      "privacyPolicy": "Privacy Policy",
+      "termsOfService": "Terms of Service",
+      "refundPolicy": "Refund Policy"
+    },
+    "copyright": "© {year} POLO SIM. All rights reserved."
+  },
+  "Plans": {
+    "hero": {
+      "destinationsAvailable": "200+ Destinations Available",
+      "browseRegions": "Browse All Regions",
+      "browsePlans": "Browse All Plans",
+      "regionsDescription": "Explore our regional eSIM plans covering multiple countries with a single package.",
+      "plansDescription": "Find the perfect eSIM data plan for your destination. Instant activation, no roaming fees."
+    },
+    "search": {
+      "regionsPlaceholder": "Search regions...",
+      "plansPlaceholder": "Search countries or plans..."
+    },
+    "tabs": {
+      "regions": "Regions"
+    },
+    "filters": {
+      "title": "Filters",
+      "bestSellers": "Best Sellers",
+      "dataAmount": "Data Amount",
+      "duration": "Duration",
+      "priceRange": "Price Range",
+      "any": "Any",
+      "unlimited": "Unlimited"
+    },
+    "sort": {
+      "popular": "Most Popular",
+      "priceLow": "Price: Low to High",
+      "priceHigh": "Price: High to Low",
+      "dataHigh": "Data: High to Low",
+      "dataLow": "Data: Low to High",
+      "validityHigh": "Duration: Long to Short",
+      "validityLow": "Duration: Short to Long",
+      "nameAz": "Name: A to Z",
+      "nameZa": "Name: Z to A"
+    },
+    "validity": {
+      "days": "{count} Days"
+    },
+    "results": {
+      "plansCount": "Showing {count} plans",
+      "regionsCount": "Showing {count} regions"
+    },
+    "labels": {
+      "bestSeller": "Best Seller",
+      "hotspot": "Hotspot",
+      "instant": "Instant",
+      "from": "From",
+      "countriesCount": "{count} countries",
+      "region": "Region",
+      "dataPlan": "Data Plan"
+    },
+    "cta": {
+      "buy": "Buy",
+      "added": "Added",
+      "viewPlans": "View Plans"
+    },
+    "empty": {
+      "title": "No results found",
+      "description": "Try adjusting your search or filters"
+    }
+  },
+  "Features": {
+    "title": "Why Choose POLO SIM?",
+    "subtitle": "Experience the future of mobile connectivity with our cutting-edge eSIM technology.",
+    "instantActivation": {
+      "title": "Instant Activation",
+      "description": "Get connected in minutes. No waiting for physical SIM delivery - just scan the QR code and you're online."
+    },
+    "noRoamingFees": {
+      "title": "No Roaming Fees",
+      "description": "Say goodbye to expensive roaming charges. Our transparent pricing means no surprise bills when you return home."
+    },
+    "globalCoverage": {
+      "title": "Global Coverage",
+      "description": "Coverage in 200+ countries and territories. One eSIM for all your international travel needs."
+    },
+    "flexibleValidity": {
+      "title": "Flexible Validity",
+      "description": "Plans from 7 days to 30 days"
+    },
+    "easyTopUps": {
+      "title": "Easy Top-ups",
+      "description": "Add more data anytime, anywhere"
+    },
+    "support247": {
+      "title": "24/7 Support",
+      "description": "Expert help whenever you need it"
+    }
+  },
+  "Profile": {
+    "title": "Profile",
+    "myPackages": "My eSIM Packages",
+    "logout": "Logout",
+    "tabs": {
+      "all": "All",
+      "active": "Active",
+      "upcoming": "Upcoming",
+      "expired": "Expired"
+    },
+    "status": {
+      "active": "Active",
+      "upcoming": "Upcoming",
+      "expired": "Expired"
+    },
+    "package": {
+      "defaultName": "eSIM Package",
+      "data": "Data",
+      "validity": "Validity",
+      "days": "Days",
+      "remaining": "Remaining",
+      "used": "Used",
+      "expires": "Expires",
+      "activated": "Activated",
+      "installEsim": "Install eSIM"
+    },
+    "messages": {
+      "loading": "Loading packages...",
+      "error": "Failed to load packages. Please try again.",
+      "copied": "copied to clipboard",
+      "noPackages": "No packages found"
+    },
+    "verification": {
+      "title": "Email Verification Required",
+      "message": "Please verify your email address to unlock all features and ensure account security.",
+      "button": "Enter Verification Code"
+    },
+    "stats": {
+      "totalPackages": "Total Packages",
+      "activeUnits": "Active Units",
+      "walletBalance": "Wallet Balance"
+    },
+    "assets": {
+      "title": "My eSIM Assets",
+      "subtitle": "Manage and monitor your global connectivity",
+      "refresh": "Refresh",
+      "buyNewPlan": "Buy New Plan"
+    },
+    "emptyState": {
+      "title": "No Packages Found",
+      "description": "You haven't purchased any plans for this category yet.",
+      "button": "Browse Global Plans"
+    },
+    "card": {
+      "dataVolume": "Data Volume",
+      "validityPeriod": "Validity Period",
+      "timelineProgress": "Timeline Progress"
+    },
+    "modal": {
+      "manualActivation": "Manual Activation",
+      "smdpAddress": "SM-DP+ Address",
+      "activationCode": "Activation Code",
+      "copy": "Copy",
+      "installEsim": "Install eSIM",
+      "qrCode": "QR Code",
+      "scanToInstall": "Scan to Install",
+      "synchronizing": "Synchronizing with network...",
+      "activationInfo": "Activation Info",
+      "installByScanning": "Install by scanning with your device",
+      "processing": "Processing...",
+      "iccidAddress": "ICCID Address",
+      "planData": "Plan Data",
+      "validity": "Validity",
+      "topUp": "Top Up Plan",
+      "renew": "Renew Plan",
+      "close": "Close",
+      "generating": "Generating...",
+      "order": "Order #"
+    }
+  }
+}

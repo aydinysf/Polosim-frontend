@@ -29,12 +29,13 @@ export default function SignInPage() {
     setError("");
 
     try {
-      await login(email, password);
+      await login({ email, password });
       router.push("/profile");
     } catch (err) {
       if (err instanceof ApiError) {
         setError(err.message || "Invalid email or password");
       } else {
+        console.error("Login failed with unexpected error:", err);
         setError("An error occurred. Please try again.");
       }
     } finally {
@@ -76,7 +77,17 @@ export default function SignInPage() {
             <form onSubmit={handleSubmit} className="space-y-5">
               {error && (
                 <div className="p-3 rounded-lg bg-destructive/10 border border-destructive/20 text-destructive text-sm">
-                  {error}
+                  {error.includes("not verified") ? (
+                    <div className="flex flex-col gap-1">
+                      <span>{error}</span>
+                      <Link
+                        href={`/verify-email?email=${encodeURIComponent(email)}`}
+                        className="font-bold underline hover:text-destructive/80"
+                      >
+                        Click here to verify your account
+                      </Link>
+                    </div>
+                  ) : error}
                 </div>
               )}
 

@@ -41,7 +41,7 @@ export default function GetStartedPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (step === 1) {
       if (!formData.firstName || !formData.lastName || !formData.email) {
         setError("Please fill in all fields");
@@ -71,16 +71,28 @@ export default function GetStartedPage() {
     setError("");
 
     try {
-      const fullName = `${formData.firstName} ${formData.lastName}`;
-      await register(fullName, formData.email, formData.password);
-      router.push("/profile");
+      const firstName = formData.firstName.trim();
+      const lastName = formData.lastName.trim();
+      const email = formData.email.trim();
+
+      const fullName = `${firstName} ${lastName}`;
+      await register({
+        name: fullName,
+        email: email,
+        password: formData.password,
+        password_confirmation: formData.confirmPassword,
+      });
+      // Redirect to verification page instead of profile
+      router.push(`/verify-email?email=${encodeURIComponent(email)}`);
     } catch (err) {
+      console.error("Registration error:", err);
       if (err instanceof ApiError) {
-        setError(err.message || "Registration failed. Please try again.");
+        setError(err.message);
       } else {
         setError("An error occurred. Please try again.");
       }
-    } finally {
+    }
+    finally {
       setIsLoading(false);
     }
   };
@@ -129,15 +141,13 @@ export default function GetStartedPage() {
 
           {/* Progress Steps */}
           <div className="flex items-center justify-center gap-3 mb-8">
-            <div className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-medium ${
-              step >= 1 ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
-            }`}>
+            <div className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-medium ${step >= 1 ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
+              }`}>
               {step > 1 ? <Check className="w-4 h-4" /> : "1"}
             </div>
             <div className={`w-16 h-1 rounded-full ${step > 1 ? "bg-primary" : "bg-muted"}`} />
-            <div className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-medium ${
-              step >= 2 ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
-            }`}>
+            <div className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-medium ${step >= 2 ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
+              }`}>
               2
             </div>
           </div>
@@ -237,9 +247,8 @@ export default function GetStartedPage() {
                           {[...Array(4)].map((_, i) => (
                             <div
                               key={i}
-                              className={`h-1 flex-1 rounded-full ${
-                                i < passwordStrength() ? strengthColors[passwordStrength() - 1] : "bg-muted"
-                              }`}
+                              className={`h-1 flex-1 rounded-full ${i < passwordStrength() ? strengthColors[passwordStrength() - 1] : "bg-muted"
+                                }`}
                             />
                           ))}
                         </div>

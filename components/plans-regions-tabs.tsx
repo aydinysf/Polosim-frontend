@@ -79,7 +79,7 @@ export function PlansRegionsTabs() {
           <Button 
             size="lg"
             className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 gap-2"
-            onClick={() => router.push("/login")}
+            onClick={() => router.push("/sign-in")}
           >
             Create Free Account
             <ArrowRight className="w-4 h-4" />

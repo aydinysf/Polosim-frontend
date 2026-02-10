@@ -1,10 +1,10 @@
 import type { Product } from "./services/productService";
 
-// Helper to get localized text from multilingual objects like {en: "...", tr: "..."}
-export function getLocalizedText(value: unknown, fallback = ""): string {
+export function getLocalizedText(value: unknown, fallback = "", locale?: string): string {
   if (typeof value === "string") return value;
   if (value && typeof value === "object") {
     const obj = value as Record<string, string>;
+    if (locale && obj[locale]) return obj[locale];
     return obj.en || obj.tr || Object.values(obj)[0] || fallback;
   }
   return fallback;
@@ -68,11 +68,11 @@ export function isBestSeller(product: Product): boolean {
 }
 
 // Helper to get product name
-export function getProductName(product: Product): string {
-  return getLocalizedText(product.country_name) || 
-         getLocalizedText(product.country?.name) || 
-         getLocalizedText(product.region?.name) ||
-         getLocalizedText(product.name) || 
+export function getProductName(product: Product, locale?: string): string {
+  return getLocalizedText(product.country_name, "", locale) || 
+         getLocalizedText(product.country?.name, "", locale) || 
+         getLocalizedText(product.region?.name, "", locale) ||
+         getLocalizedText(product.name, "", locale) || 
          "eSIM Plan";
 }
 

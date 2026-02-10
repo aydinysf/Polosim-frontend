@@ -38,8 +38,31 @@ export interface Order {
 
 export const orderService = {
   async getAll(): Promise<Order[]> {
-    const response = await api.get<Order[]>("/orders");
-    return response.data;
+    try {
+      const response = await api.get<any>("/orders");
+      
+      // API response structure can vary - handle different formats
+      if (Array.isArray(response.data)) {
+        return response.data; // Direct array in data property
+      } else if (response.data && Array.isArray(response.data.data)) {
+        return response.data.data; // Laravel paginated response { data: [...] }
+      } else if (response.data && Array.isArray(response.data.orders)) {
+        return response.data.orders; // Custom orders property
+      } else if (Array.isArray(response)) {
+        return response; // Direct array response (unlikely but possible)
+      }
+      
+      console.warn("Unexpected orders API response format:", response);
+      return []; // Return empty array if format is unexpected
+    } catch (error: any) {
+      if (error?.status === 401) {
+        // User is not authenticated, return empty array instead of throwing
+        console.warn("User not authenticated - returning empty orders array");
+        return [];
+      }
+      // Re-throw other errors
+      throw error;
+    }
   },
 
   async getById(id: number): Promise<Order> {

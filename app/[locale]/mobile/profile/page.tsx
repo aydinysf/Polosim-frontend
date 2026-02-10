@@ -21,7 +21,22 @@ import { BottomNav } from "@/components/mobile/bottom-nav";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 
-const menuSections = [
+interface MenuItem {
+  icon: any;
+  label: string;
+  href: string;
+  badge?: string;
+  value?: string;
+  toggle?: boolean;
+  enabled?: boolean;
+}
+
+interface MenuSection {
+  title: string;
+  items: MenuItem[];
+}
+
+const menuSections: MenuSection[] = [
   {
     title: "Account",
     items: [

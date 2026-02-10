@@ -1,24 +1,25 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { Menu, X, Globe, ShoppingCart, User, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/lib/cart-context";
 import { useAuth } from "@/lib/auth-context";
 import Image from "next/image";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { Link, usePathname, useRouter } from "@/i18n/routing";
+import { useLocale, useTranslations } from "next-intl";
 
+// Nav links will be translated in the component
 const navLinks = [
-  { name: "Destinations", href: "/#destinations" },
-  { name: "Plans", href: "/plans" },
-  { name: "How It Works", href: "/how-it-works" },
-  { name: "Support", href: "/support" },
+  { key: "destinations", href: "/#destinations" },
+  { key: "plans", href: "/plans" },
+  { key: "howItWorks", href: "/how-it-works" },
+  { key: "support", href: "/support" },
 ];
 
 const languages = [
-  { code: "EN", label: "English" },
-  { code: "TR", label: "Turkce" },
+  { code: "en", label: "English" },
+  { code: "tr", label: "Türkçe" },
 ];
 
 const currencies = [
@@ -28,7 +29,8 @@ const currencies = [
 
 export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [currentLang, setCurrentLang] = useState("EN");
+  const locale = useLocale();
+  const t = useTranslations('Navbar');
   const [currentCurrency, setCurrentCurrency] = useState("EUR");
   const [langMenuOpen, setLangMenuOpen] = useState(false);
   const [currencyMenuOpen, setCurrencyMenuOpen] = useState(false);
@@ -36,11 +38,20 @@ export function Navbar() {
   const { totalItems } = useCart();
   const { user, isAuthenticated, logout, isLoading } = useAuth();
   const router = useRouter();
+  const pathname = usePathname();
+  const [isPending, startTransition] = useTransition();
 
   const handleLogout = async () => {
     await logout();
     setUserMenuOpen(false);
     router.push("/");
+  };
+
+  const handleLanguageChange = (newLocale: string) => {
+    startTransition(() => {
+      router.replace(pathname, {locale: newLocale});
+    });
+    setLangMenuOpen(false);
   };
 
   return (
@@ -49,27 +60,27 @@ export function Navbar() {
         <div className="max-w-7xl mx-auto px-6 py-2 rounded-2xl bg-card/70 backdrop-blur-xl border border-border/50">
           <div className="flex items-center justify-between">
             {/* Logo */}
-            <a href="/" className="flex items-center">
+            <Link href="/" className="flex items-center">
               <Image
                 src="/logo.png"
                 alt="POLO SIM - One Sim One World"
                 width={360}
                 height={120}
-                className="h-12 sm:h-16 md:h-28 w-auto"
+                className="h-14 sm:h-20 md:h-32 w-auto scale-150 origin-left"
                 priority
               />
-            </a>
+            </Link>
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center gap-8">
               {navLinks.map((link) => (
-                <a
-                  key={link.name}
+                <Link
+                  key={link.key}
                   href={link.href}
                   className="text-muted-foreground hover:text-foreground transition-colors text-sm font-medium"
                 >
-                  {link.name}
-                </a>
+                  {t(link.key)}
+                </Link>
               ))}
             </div>
 
@@ -110,24 +121,22 @@ export function Navbar() {
                   onClick={() => setLangMenuOpen(!langMenuOpen)}
                   onBlur={() => setTimeout(() => setLangMenuOpen(false), 150)}
                   className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-secondary/50 transition-colors"
+                  disabled={isPending}
                 >
                   <Globe className="w-4 h-4" />
-                  {currentLang}
+                  {locale.toUpperCase()}
                 </button>
                 {langMenuOpen && (
                   <div className="absolute top-full right-0 mt-2 bg-card/95 backdrop-blur-xl border border-border/50 rounded-xl overflow-hidden z-50 min-w-[120px]">
                     {languages.map((lang) => (
                       <button
                         key={lang.code}
-                        onClick={() => {
-                          setCurrentLang(lang.code);
-                          setLangMenuOpen(false);
-                        }}
+                        onClick={() => handleLanguageChange(lang.code)}
                         className={`w-full px-4 py-2.5 text-left text-sm hover:bg-secondary/50 transition-colors ${
-                          currentLang === lang.code ? "text-primary font-medium" : "text-foreground"
+                          locale === lang.code ? "text-primary font-medium" : "text-foreground"
                         }`}
                       >
-                        {lang.code} - {lang.label}
+                        {lang.code.toUpperCase()} - {lang.label}
                       </button>
                     ))}
                   </div>
@@ -171,14 +180,14 @@ export function Navbar() {
                         onClick={() => setUserMenuOpen(false)}
                       >
                         <User className="w-4 h-4" />
-                        My Profile
+                        {t('myProfile')}
                       </Link>
                       <button
                         onClick={handleLogout}
                         className="flex items-center gap-2 w-full px-4 py-2.5 text-sm hover:bg-secondary/50 transition-colors text-destructive"
                       >
                         <LogOut className="w-4 h-4" />
-                        Sign Out
+                        {t('logout')}
                       </button>
                     </div>
                   )}
@@ -187,7 +196,7 @@ export function Navbar() {
                 <>
                   <Link href="/sign-in">
                     <Button variant="ghost" className="text-muted-foreground hover:text-foreground">
-                      Sign In
+                      {t('login')}
                     </Button>
                   </Link>
                   <Link href="/get-started">
@@ -226,14 +235,14 @@ export function Navbar() {
             <div className="md:hidden mt-4 pt-4 border-t border-border/50">
               <div className="flex flex-col gap-2">
                 {navLinks.map((link) => (
-                  <a
-                    key={link.name}
+                  <Link
+                    key={link.key}
                     href={link.href}
                     className="px-4 py-3 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary/50 transition-colors"
                     onClick={() => setMobileMenuOpen(false)}
                   >
-                    {link.name}
-                  </a>
+                    {t(link.key)}
+                  </Link>
                 ))}
                 <div className="flex flex-col gap-2 mt-4 pt-4 border-t border-border/50">
                   {/* Mobile Currency Switcher */}
@@ -260,9 +269,12 @@ export function Navbar() {
                     {languages.map((lang) => (
                       <button
                         key={lang.code}
-                        onClick={() => setCurrentLang(lang.code)}
+                        onClick={() => {
+                          handleLanguageChange(lang.code);
+                          setMobileMenuOpen(false);
+                        }}
                         className={`px-3 py-1 rounded-md text-sm ${
-                          currentLang === lang.code
+                          locale === lang.code
                             ? "bg-primary text-primary-foreground"
                             : "bg-secondary/50 text-muted-foreground"
                         }`}
@@ -276,7 +288,7 @@ export function Navbar() {
                       <Link href="/profile" onClick={() => setMobileMenuOpen(false)}>
                         <Button variant="ghost" className="w-full justify-start text-muted-foreground">
                           <User className="w-4 h-4 mr-2" />
-                          My Profile
+                          {t('myProfile')}
                         </Button>
                       </Link>
                       <Button 
@@ -288,14 +300,14 @@ export function Navbar() {
                         }}
                       >
                         <LogOut className="w-4 h-4 mr-2" />
-                        Sign Out
+                        {t('logout')}
                       </Button>
                     </>
                   ) : (
                     <>
                       <Link href="/sign-in" onClick={() => setMobileMenuOpen(false)}>
                         <Button variant="ghost" className="w-full justify-start text-muted-foreground">
-                          Sign In
+                          {t('login')}
                         </Button>
                       </Link>
                       <Link href="/get-started" onClick={() => setMobileMenuOpen(false)}>

@@ -1,31 +1,6 @@
 import { Twitter, Instagram, Facebook, Linkedin } from "lucide-react";
 import Image from "next/image";
-
-const footerLinks = {
-  product: [
-    { name: "Destinations", href: "/plans" },
-    { name: "Data Plans", href: "/plans" },
-    { name: "Regions", href: "/plans?view=regions" },
-    { name: "Coverage Map", href: "#" },
-  ],
-  company: [
-    { name: "About Us", href: "#" },
-    { name: "Careers", href: "#" },
-    { name: "Blog", href: "#" },
-    { name: "Press", href: "#" },
-  ],
-  support: [
-    { name: "Help Center", href: "#" },
-    { name: "Contact Us", href: "#" },
-    { name: "Setup Guide", href: "#" },
-    { name: "Device Compatibility", href: "#" },
-  ],
-  legal: [
-    { name: "Privacy Policy", href: "#" },
-    { name: "Terms of Service", href: "#" },
-    { name: "Refund Policy", href: "#" },
-  ],
-};
+import { useTranslations } from "next-intl";
 
 const socialLinks = [
   { name: "Twitter", icon: Twitter, href: "#", hoverColor: "hover:bg-sky-500/25 hover:text-sky-300 hover:border-sky-500/50" },
@@ -35,6 +10,34 @@ const socialLinks = [
 ];
 
 export function Footer() {
+  const t = useTranslations('Footer');
+
+  const footerLinks = {
+    product: [
+      { name: t('links.destinations'), href: "/plans" },
+      { name: t('links.dataPlans'), href: "/plans" },
+      { name: t('links.regions'), href: "/plans?view=regions" },
+      { name: t('links.coverageMap'), href: "#" },
+    ],
+    company: [
+      { name: t('links.aboutUs'), href: "#" },
+      { name: t('links.careers'), href: "#" },
+      { name: t('links.blog'), href: "#" },
+      { name: t('links.press'), href: "#" },
+    ],
+    support: [
+      { name: t('links.helpCenter'), href: "#" },
+      { name: t('links.contactUs'), href: "#" },
+      { name: t('links.setupGuide'), href: "#" },
+      { name: t('links.deviceCompatibility'), href: "#" },
+    ],
+    legal: [
+      { name: t('links.privacyPolicy'), href: "#" },
+      { name: t('links.termsOfService'), href: "#" },
+      { name: t('links.refundPolicy'), href: "#" },
+    ],
+  };
+
   return (
     <footer className="relative overflow-hidden bg-[hsl(215_40%_14%)]">
       <div className="max-w-7xl mx-auto px-4 py-10 sm:py-16">
@@ -52,7 +55,7 @@ export function Footer() {
               />
             </a>
             <p className="text-[hsl(215_20%_60%)] text-sm mb-6 max-w-xs leading-relaxed">
-              One Sim, One World. Stay connected in 200+ countries with instant activation and no roaming fees.
+              {t('description')}
             </p>
             <div className="flex gap-3">
               {socialLinks.map((social) => (
@@ -70,7 +73,7 @@ export function Footer() {
 
           {/* Links columns */}
           <div>
-            <h4 className="font-semibold mb-3 sm:mb-4 text-sm sm:text-base text-cyan-400">Product</h4>
+            <h4 className="font-semibold mb-3 sm:mb-4 text-sm sm:text-base text-cyan-400">{t('product')}</h4>
             <ul className="space-y-2 sm:space-y-3">
               {footerLinks.product.map((link) => (
                 <li key={link.name}>
@@ -109,7 +112,7 @@ export function Footer() {
           </div>
 
           <div>
-            <h4 className="font-semibold mb-3 sm:mb-4 text-sm sm:text-base text-cyan-400">Legal</h4>
+            <h4 className="font-semibold mb-3 sm:mb-4 text-sm sm:text-base text-cyan-400">{t('legal')}</h4>
             <ul className="space-y-2 sm:space-y-3">
               {footerLinks.legal.map((link) => (
                 <li key={link.name}>

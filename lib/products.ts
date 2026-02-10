@@ -1,5 +1,5 @@
 export interface Product {
-  id: string;
+  id: number;
   name: string;
   description: string;
   priceInCents: number;
@@ -13,7 +13,7 @@ export interface Product {
 
 export const PRODUCTS: Product[] = [
   {
-    id: "turkey-10gb",
+    id: 1,
     name: "Turkey",
     description: "10GB Data Plan for Turkey",
     priceInCents: 1499,
@@ -25,7 +25,7 @@ export const PRODUCTS: Product[] = [
     region: "europe",
   },
   {
-    id: "europe-20gb",
+    id: 2,
     name: "Europe",
     description: "20GB Data Plan for 40+ European Countries",
     priceInCents: 2999,
@@ -37,7 +37,7 @@ export const PRODUCTS: Product[] = [
     region: "europe",
   },
   {
-    id: "japan-15gb",
+    id: 3,
     name: "Japan",
     description: "15GB Data Plan for Japan",
     priceInCents: 2499,
@@ -49,7 +49,7 @@ export const PRODUCTS: Product[] = [
     region: "asia",
   },
   {
-    id: "usa-30gb",
+    id: 4,
     name: "USA",
     description: "30GB Data Plan for United States",
     priceInCents: 3499,
@@ -61,7 +61,7 @@ export const PRODUCTS: Product[] = [
     region: "americas",
   },
   {
-    id: "thailand-8gb",
+    id: 5,
     name: "Thailand",
     description: "8GB Data Plan for Thailand",
     priceInCents: 1199,
@@ -73,7 +73,7 @@ export const PRODUCTS: Product[] = [
     region: "asia",
   },
   {
-    id: "australia-25gb",
+    id: 6,
     name: "Australia",
     description: "25GB Data Plan for Australia",
     priceInCents: 3999,
@@ -85,7 +85,7 @@ export const PRODUCTS: Product[] = [
     region: "oceania",
   },
   {
-    id: "uk-12gb",
+    id: 7,
     name: "UK",
     description: "12GB Data Plan for United Kingdom",
     priceInCents: 1999,
@@ -97,7 +97,7 @@ export const PRODUCTS: Product[] = [
     region: "europe",
   },
   {
-    id: "korea-10gb",
+    id: 8,
     name: "South Korea",
     description: "10GB Data Plan for South Korea",
     priceInCents: 1899,
@@ -109,7 +109,7 @@ export const PRODUCTS: Product[] = [
     region: "asia",
   },
   {
-    id: "germany-15gb",
+    id: 9,
     name: "Germany",
     description: "15GB Data Plan for Germany",
     priceInCents: 2299,
@@ -121,7 +121,7 @@ export const PRODUCTS: Product[] = [
     region: "europe",
   },
   {
-    id: "france-12gb",
+    id: 10,
     name: "France",
     description: "12GB Data Plan for France",
     priceInCents: 1999,
@@ -133,7 +133,7 @@ export const PRODUCTS: Product[] = [
     region: "europe",
   },
   {
-    id: "uae-10gb",
+    id: 11,
     name: "UAE",
     description: "10GB Data Plan for United Arab Emirates",
     priceInCents: 2199,
@@ -145,7 +145,7 @@ export const PRODUCTS: Product[] = [
     region: "middle-east",
   },
   {
-    id: "singapore-12gb",
+    id: 12,
     name: "Singapore",
     description: "12GB Data Plan for Singapore",
     priceInCents: 1999,

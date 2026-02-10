@@ -1,4 +1,19 @@
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://api.ezgiselyazilim.com.tr/api/V1";
+const STORAGE_BASE_URL = API_BASE_URL.split('/api')[0];
+
+export function getImageUrl(path: string | null | undefined): string | null {
+  if (!path) return null;
+  if (path.startsWith("http") || path.startsWith("//")) return path;
+
+  // Clean the path and the base URL
+  const cleanPath = path.startsWith("/") ? path.substring(1) : path;
+  return `${STORAGE_BASE_URL}/${cleanPath}`;
+}
+
+export function getFlagFromISO(isoCode: string | null | undefined): string | null {
+  if (!isoCode || isoCode.length !== 2) return null;
+  return `https://flagcdn.com/w80/${isoCode.toLowerCase()}.png`;
+}
 
 // Token management
 export function getAuthToken(): string | null {
@@ -46,6 +61,22 @@ export interface ApiResponse<T> {
   data: T;
   message?: string;
   session_id?: string;
+  meta?: {
+    current_page: number;
+    from: number;
+    last_page: number;
+    per_page: number;
+    to: number;
+    total: number;
+    links?: unknown[];
+    path?: string;
+  };
+  links?: {
+    first: string;
+    last: string;
+    prev: string | null;
+    next: string | null;
+  };
 }
 
 // Main fetch function
@@ -57,7 +88,7 @@ export async function apiFetch<T>(
   const baseUrl = API_BASE_URL.replace(/\/+$/, "");
   const cleanEndpoint = endpoint.replace(/^\/+/, "");
   const url = `${baseUrl}/${cleanEndpoint}`;
-  
+
   const headers: HeadersInit = {
     "Content-Type": "application/json",
     "Accept": "application/json",
@@ -90,8 +121,23 @@ export async function apiFetch<T>(
     }
 
     if (!response.ok) {
+      let errorMessage = data.message || "An error occurred";
+
+      // Laravel validation errors often come in a nested 'errors' object
+      if (data.errors && typeof data.errors === 'object') {
+        const errorValues = Object.values(data.errors);
+        if (errorValues.length > 0) {
+          const firstError = errorValues[0];
+          if (Array.isArray(firstError) && firstError.length > 0) {
+            errorMessage = firstError[0];
+          }
+        }
+      } else if (data.error) {
+        errorMessage = data.error;
+      }
+
       throw new ApiError(
-        data.message || "An error occurred",
+        errorMessage,
         response.status,
         data
       );
@@ -111,23 +157,27 @@ export async function apiFetch<T>(
 
 // HTTP method helpers
 export const api = {
-  get: <T>(endpoint: string) => apiFetch<T>(endpoint, { method: "GET" }),
-  
-  post: <T>(endpoint: string, body?: unknown) =>
+  get: <T>(endpoint: string, config?: RequestInit) =>
+    apiFetch<T>(endpoint, { method: "GET", ...config }),
+
+  post: <T>(endpoint: string, body?: unknown, config?: RequestInit) =>
     apiFetch<T>(endpoint, {
       method: "POST",
       body: body ? JSON.stringify(body) : undefined,
+      ...config,
     }),
-  
-  put: <T>(endpoint: string, body?: unknown) =>
+
+  put: <T>(endpoint: string, body?: unknown, config?: RequestInit) =>
     apiFetch<T>(endpoint, {
       method: "PUT",
       body: body ? JSON.stringify(body) : undefined,
+      ...config,
     }),
-  
-  delete: <T>(endpoint: string, body?: unknown) =>
+
+  delete: <T>(endpoint: string, body?: unknown, config?: RequestInit) =>
     apiFetch<T>(endpoint, {
       method: "DELETE",
       body: body ? JSON.stringify(body) : undefined,
+      ...config,
     }),
 };

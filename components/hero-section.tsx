@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Search, Wifi, Globe, Smartphone, X, Signal, Clock, ShoppingCart, Check, ArrowRight, Loader2 } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import { Search, Wifi, Globe, Smartphone, X, Signal, Clock, ShoppingCart, Check, ArrowRight, Loader2, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useCart } from "@/lib/cart-context";
@@ -12,6 +12,8 @@ import { countryService, type Country } from "@/lib/services/countryService";
 import { regionService, type Region } from "@/lib/services/regionService";
 import { productService, type Product } from "@/lib/services/productService";
 import { getLocalizedText, getProductData, getProductValidity, getProductSpeed, getProductThrottleSpeed, isHotspotAllowed, hasInstantActivation, isBestSeller, getProductName } from "@/lib/product-helpers";
+import { getImageUrl, getFlagFromISO } from "@/lib/api-client";
+import { useTranslations } from "next-intl";
 
 
 
@@ -89,43 +91,125 @@ function FlagDisplay({ flag, name, size = "md" }: { flag?: string; name: string;
     md: "w-6 h-6 text-xl",
     lg: "w-8 h-8 text-2xl"
   };
-  
+
   if (!flag) {
     return <span className={sizeClasses[size]}>🌍</span>;
   }
-  
-  // Check if it's a URL
-  if (flag.startsWith("http") || flag.startsWith("/")) {
+
+  // 1. Check if it's a URL or needs prefixing (API path)
+  const isPath = flag.includes('.') || flag.includes('/') || flag.startsWith('http');
+  const imageUrl = isPath ? getImageUrl(flag) : null;
+
+  if (imageUrl) {
     return (
-      <Image 
-        src={flag || "/placeholder.svg"} 
-        alt={`${name} flag`} 
+      <Image
+        src={imageUrl}
+        alt={`${name} flag`}
         width={size === "sm" ? 16 : size === "md" ? 24 : 32}
         height={size === "sm" ? 16 : size === "md" ? 24 : 32}
         className={`${sizeClasses[size]} object-cover rounded-sm`}
+        unoptimized={true}
       />
     );
   }
-  
-  // It's an emoji
-  return <span className={sizeClasses[size]}>{flag}</span>;
+
+  // 2. If it's a country code (2 letters), show image flag from FlagCDN
+  const isoMatch = flag.match(/^[A-Za-z]{2}$/);
+  const flagFromISO = getFlagFromISO(flag);
+  if (isoMatch && flagFromISO) {
+    return (
+      <Image
+        src={flagFromISO}
+        alt={`${name} flag`}
+        width={size === "sm" ? 16 : size === "md" ? 24 : 32}
+        height={size === "sm" ? 16 : size === "md" ? 24 : 32}
+        className={`${sizeClasses[size]} object-cover rounded-sm`}
+        unoptimized={true}
+      />
+    );
+  }
+
+  // 3. Special case for common emojis that are not 2-letter ISO (e.g. "🇹🇷", "🇪🇺")
+  // We can convert these to 2-letter ISO if they are regional indicator pairs
+  if (flag.length > 2) {
+    // Attempt to convert emoji to ISO
+    const iso = emojiToISO(flag);
+    const flagUrl = getFlagFromISO(iso);
+    if (flagUrl) {
+      return (
+        <Image
+          src={flagUrl}
+          alt={`${name} flag`}
+          width={size === "sm" ? 16 : size === "md" ? 24 : 32}
+          height={size === "sm" ? 16 : size === "md" ? 24 : 32}
+          className={`${sizeClasses[size]} object-cover rounded-sm`}
+          unoptimized={true}
+        />
+      );
+    }
+  }
+
+  // Fallback to globe
+  return <span className={sizeClasses[size]}>🌍</span>;
 }
 
+// Convert flag emoji to ISO code
+function emojiToISO(emoji: string): string | null {
+  const codePoints = Array.from(emoji).map(c => c.codePointAt(0)!);
+  if (codePoints.length >= 2 && codePoints.every(cp => cp >= 127462 && cp <= 127487)) {
+    return codePoints.map(cp => String.fromCharCode(cp - 127397)).join("");
+  }
+  return null;
+}
+
+
 export function HeroSection() {
+  const t = useTranslations('Hero');
   const [searchQuery, setSearchQuery] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [showSearchResults, setShowSearchResults] = useState(false);
   const [selectedItem, setSelectedItem] = useState<{ type: string; name: string; flag?: string; region?: string; id?: number } | null>(null);
   const [addedToCart, setAddedToCart] = useState<number | null>(null);
   const [searchResultPlans, setSearchResultPlans] = useState<any[]>([]); // Declare searchResultPlans variable
-  
+
+  const [selectedCountryId, setSelectedCountryId] = useState<number | null>(null);
+  const [selectedRegionId, setSelectedRegionId] = useState<number | null>(null);
+
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [isAutoScrolling, setIsAutoScrolling] = useState(true);
+
+  useEffect(() => {
+    const scrollContainer = scrollContainerRef.current;
+    if (!scrollContainer || !isAutoScrolling) return;
+
+    const scrollInterval = setInterval(() => {
+      if (scrollContainer.scrollLeft + scrollContainer.clientWidth >= scrollContainer.scrollWidth - 1) {
+        scrollContainer.scrollLeft = 0;
+      } else {
+        scrollContainer.scrollLeft += 1;
+      }
+    }, 30);
+
+    return () => clearInterval(scrollInterval);
+  }, [isAutoScrolling]);
+
+  const scroll = (direction: 'left' | 'right') => {
+    if (scrollContainerRef.current) {
+      const scrollAmount = 300;
+      scrollContainerRef.current.scrollBy({
+        left: direction === 'left' ? -scrollAmount : scrollAmount,
+        behavior: 'smooth'
+      });
+    }
+  };
+
   // API data states
   const [countries, setCountries] = useState<Country[]>([]);
   const [regions, setRegions] = useState<Region[]>([]);
   const [searchResultProducts, setSearchResultProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingProducts, setIsLoadingProducts] = useState(false);
-  
+
   const { addItem } = useCart();
   const router = useRouter();
 
@@ -152,19 +236,19 @@ export function HeroSection() {
 
   // Build searchable items from API data + fallback
   const searchableItems = [
-    ...countries.map(c => ({ 
-      type: "country" as const, 
-      name: getLocalizedText(c.name, "Unknown Country"), 
-      flag: c.flag_url || c.iso_code, 
+    ...countries.map(c => ({
+      type: "country" as const,
+      name: getLocalizedText(c.name, "Unknown Country"),
+      flag: c.flag_url || c.iso_code,
       region: c.region_id?.toString(),
-      id: c.id 
+      id: c.id
     })),
-    ...regions.map(r => ({ 
-      type: "region" as const, 
-      name: getLocalizedText(r.name, "Unknown Region"), 
-      flag: r.icon, 
+    ...regions.map(r => ({
+      type: "region" as const,
+      name: getLocalizedText(r.name, "Unknown Region"),
+      flag: r.icon,
       region: r.slug,
-      id: r.id 
+      id: r.id
     })),
     // Fallback items if API returns empty
     ...(countries.length === 0 ? [
@@ -185,30 +269,33 @@ export function HeroSection() {
         setSearchResultProducts([]);
         return;
       }
-      
+
       try {
         setIsLoadingProducts(true);
         let products: Product[] = [];
-        
+
         if (selectedItem.type === "country" && selectedItem.id) {
-          products = await productService.getByCountry(selectedItem.id);
+          const response = await productService.getByCountry(selectedItem.id);
+          products = response.data;
         } else if (selectedItem.type === "region") {
           // For regions, try multiple approaches
           if (selectedItem.id) {
-            products = await productService.getByRegion(selectedItem.id);
+            const response = await productService.getByRegion(selectedItem.id);
+            products = response.data;
           } else {
             // Try to find region ID from loaded regions
             const matchedRegion = regions.find(r => {
               const rName = getLocalizedText(r.name, "").toLowerCase();
               return rName === selectedItem.name.toLowerCase() || r.slug === selectedItem.region;
             });
-            
+
             if (matchedRegion?.id) {
-              products = await productService.getByRegion(matchedRegion.id);
+              const response = await productService.getByRegion(matchedRegion.id);
+              products = response.data;
             } else {
               // Last resort: fetch all and filter
-              const allProducts = await productService.getAll();
-              products = allProducts.filter(p => {
+              const response = await productService.getAll();
+              products = response.data.filter(p => {
                 const regionName = getLocalizedText(p.region_name || p.region?.name, "").toLowerCase();
                 return regionName.includes(selectedItem.name.toLowerCase());
               });
@@ -216,15 +303,15 @@ export function HeroSection() {
           }
         } else {
           // Fallback to all products filtered by name
-          const allProducts = await productService.getAll();
-          products = allProducts.filter(p => {
+          const response = await productService.getAll();
+          products = response.data.filter(p => {
             const countryName = getLocalizedText(p.country_name || p.country?.name, "").toLowerCase();
             const regionName = getLocalizedText(p.region_name || p.region?.name, "").toLowerCase();
             return countryName.includes(selectedItem.name.toLowerCase()) ||
-                   regionName.includes(selectedItem.name.toLowerCase());
+              regionName.includes(selectedItem.name.toLowerCase());
           });
         }
-        
+
         setSearchResultProducts(products);
       } catch (error) {
         console.error("Error fetching products:", error);
@@ -233,11 +320,11 @@ export function HeroSection() {
         setIsLoadingProducts(false);
       }
     }
-    
+
     fetchProducts();
   }, [selectedItem, regions]);
 
-  const handleSelectSuggestion = (item: typeof searchableItems[0]) => {
+  const handleSelectSuggestion = (item: { type: string; name: string; flag?: string; region?: string; id?: number }) => {
     setSelectedItem(item);
     setSearchQuery(item.name);
     setShowSuggestions(false);
@@ -246,7 +333,7 @@ export function HeroSection() {
 
   const handleSearch = () => {
     if (searchQuery.trim()) {
-      const found = searchableItems.find(item => 
+      const found = searchableItems.find(item =>
         item.name.toLowerCase() === searchQuery.toLowerCase()
       );
       if (found) {
@@ -266,16 +353,16 @@ export function HeroSection() {
     const productData = getProductData(product);
     const productValidity = getProductValidity(product);
     const productSpeed = getProductSpeed(product);
-    
+
     const cartItem = {
-      id: product.id.toString(),
+      id: product.id,
       name: productName,
       description: getLocalizedText(product.description) || `${productData} Data Plan`,
-      priceInCents: Math.round((product.price || 0) * 100),
-      flag: product.flag_url || product.country?.flag_url,
+      priceInCents: product.price ? Math.round(product.price * 100) : 0,
+      flag: product.flag_url || product.country?.flag_url || "",
       data: productData,
-      validity: productValidity,
-      speed: productSpeed,
+      validity: String(productValidity),
+      speed: productSpeed || "4G/LTE",
       region: getLocalizedText(product.region_name),
     };
     addItem(cartItem);
@@ -300,6 +387,15 @@ export function HeroSection() {
       </div>
 
       <div className="relative z-10 w-full max-w-7xl mx-auto px-4">
+        <div className="text-center mb-8 sm:mb-12">
+          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black text-foreground tracking-tight mb-4 sm:mb-6">
+            {t('title')}
+          </h1>
+          <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto px-4">
+            {t('subtitle')}
+          </p>
+        </div>
+
         {/* Search bar - TOP */}
         <div className="relative max-w-xl mx-auto mb-8">
           <div className="relative">
@@ -310,7 +406,7 @@ export function HeroSection() {
                   <Search className="w-5 h-5 text-muted-foreground shrink-0" />
                   <Input
                     type="text"
-                    placeholder="Where are you traveling?"
+                    placeholder={t('searchPlaceholder')}
                     value={searchQuery}
                     onChange={(e) => {
                       setSearchQuery(e.target.value);
@@ -322,8 +418,8 @@ export function HeroSection() {
                     className="border-0 bg-transparent focus-visible:ring-0 text-foreground placeholder:text-muted-foreground text-base sm:text-lg"
                   />
                 </div>
-                <Button 
-                  size="lg" 
+                <Button
+                  size="lg"
                   className="w-full sm:w-auto rounded-lg sm:rounded-xl px-4 sm:px-6 bg-primary text-primary-foreground hover:bg-primary/90"
                   onClick={handleSearch}
                 >
@@ -363,12 +459,12 @@ export function HeroSection() {
             >
               <X className="w-5 h-5 text-muted-foreground" />
             </button>
-            
+
             <div className="flex items-center gap-3 mb-6">
               <FlagDisplay flag={selectedItem.flag} name={selectedItem.name} size="lg" />
               <div>
                 <h2 className="text-2xl font-bold text-foreground">{selectedItem.name}</h2>
-                <p className="text-muted-foreground capitalize">{selectedItem.type === "region" ? "Regional Plans" : "Country Plans"}</p>
+                <p className="text-muted-foreground capitalize">{selectedItem.type === "region" ? t('regionalPlans') : t('countryPlans')}</p>
               </div>
             </div>
 
@@ -388,7 +484,7 @@ export function HeroSection() {
                     const hotspot = isHotspotAllowed(product);
                     const instantActivation = hasInstantActivation(product);
                     const bestSeller = isBestSeller(product);
-                    
+
                     return (
                       <div
                         key={product.id}
@@ -396,10 +492,10 @@ export function HeroSection() {
                       >
                         {bestSeller && (
                           <div className="absolute top-2 right-2">
-                            <span className="px-2 py-1 text-xs font-medium bg-primary/20 text-primary rounded-full">Best Seller</span>
+                            <span className="px-2 py-1 text-xs font-medium bg-primary/20 text-primary rounded-full">{t('bestSeller')}</span>
                           </div>
                         )}
-                        
+
                         {/* Header with flag and data */}
                         <div className="flex items-center gap-2 mb-3">
                           <FlagDisplay flag={product.flag_url || product.country?.flag_url} name={productName} size="md" />
@@ -408,7 +504,7 @@ export function HeroSection() {
                             <p className="text-lg font-bold text-primary">{productData}</p>
                           </div>
                         </div>
-                        
+
                         {/* Plan details */}
                         <div className="space-y-1.5 mb-4 text-sm text-muted-foreground">
                           <div className="flex items-center gap-2">
@@ -428,7 +524,7 @@ export function HeroSection() {
                             </div>
                           )}
                         </div>
-                        
+
                         {/* Features badges */}
                         <div className="flex flex-wrap gap-1.5 mb-3">
                           {hotspot && (
@@ -442,11 +538,11 @@ export function HeroSection() {
                             </span>
                           )}
                         </div>
-                        
+
                         {/* Price and buy button */}
                         <div className="flex items-center justify-between pt-3 border-t border-border/30">
                           <span className="text-xl font-bold text-foreground">EUR {product.price}</span>
-                          <Button 
+                          <Button
                             size="sm"
                             className={`transition-all ${addedToCart === product.id ? "bg-emerald-500 hover:bg-emerald-500" : "bg-primary hover:bg-primary/90"} text-primary-foreground`}
                             onClick={() => handleAddToCart(product)}
@@ -462,7 +558,7 @@ export function HeroSection() {
                     );
                   })}
                 </div>
-                <div className="text-center">
+                {/* <div className="text-center">
                   <Button 
                     variant="outline" 
                     className="gap-2 bg-transparent"
@@ -471,7 +567,7 @@ export function HeroSection() {
                     View All {selectedItem.name} Plans
                     <ArrowRight className="w-4 h-4" />
                   </Button>
-                </div>
+                </div> */}
               </>
             ) : !isLoadingProducts ? (
               <div className="text-center py-8">
@@ -500,7 +596,7 @@ export function HeroSection() {
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4 px-2">
             <h3 className="text-sm font-medium text-muted-foreground">Popular Plans</h3>
-            <Button 
+            <Button
               variant="link"
               size="sm"
               className="text-primary p-0 h-auto"
@@ -509,28 +605,57 @@ export function HeroSection() {
               View All <ArrowRight className="w-3 h-3 ml-1" />
             </Button>
           </div>
-          <div className="relative overflow-hidden">
-            <div className="flex gap-3 animate-marquee hover:[animation-play-state:paused]">
+          <div
+            className="relative overflow-hidden group"
+            onMouseEnter={() => setIsAutoScrolling(false)}
+            onMouseLeave={() => setIsAutoScrolling(true)}
+          >
+            <Button
+              variant="outline"
+              size="icon"
+              className="absolute left-0 top-1/2 -translate-y-1/2 z-10 h-8 w-8 rounded-full bg-background/80 backdrop-blur-sm shadow-md hidden sm:flex"
+              onClick={() => scroll('left')}
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+
+            <div
+              ref={scrollContainerRef}
+              className="flex gap-3 overflow-x-auto scrollbar-hide snap-x p-1"
+              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            >
               {[
-                { flag: "🇹🇷", name: "Turkey", data: "10GB", price: "14.99" },
-                { flag: "🇯🇵", name: "Japan", data: "15GB", price: "24.99" },
-                { flag: "🇺🇸", name: "USA", data: "30GB", price: "34.99" },
-                { flag: "🇹🇭", name: "Thailand", data: "8GB", price: "11.99" },
-                { flag: "🇦🇺", name: "Australia", data: "25GB", price: "39.99" },
-                { flag: "🇬🇧", name: "UK", data: "12GB", price: "19.99" },
-                { flag: "🇰🇷", name: "Korea", data: "10GB", price: "18.99" },
-                { flag: "🇩🇪", name: "Germany", data: "15GB", price: "22.99" },
-                { flag: "🇹🇷", name: "Turkey", data: "10GB", price: "14.99" },
-                { flag: "🇯🇵", name: "Japan", data: "15GB", price: "24.99" },
-                { flag: "🇺🇸", name: "USA", data: "30GB", price: "34.99" },
-                { flag: "🇹🇭", name: "Thailand", data: "8GB", price: "11.99" },
+                { flag: "TR", name: "Turkey", data: "10GB", price: "14.99" },
+                { flag: "JP", name: "Japan", data: "15GB", price: "24.99" },
+                { flag: "US", name: "USA", data: "30GB", price: "34.99" },
+                { flag: "TH", name: "Thailand", data: "8GB", price: "11.99" },
+                { flag: "AU", name: "Australia", data: "25GB", price: "39.99" },
+                { flag: "GB", name: "UK", data: "12GB", price: "19.99" },
+                { flag: "KR", name: "Korea", data: "10GB", price: "18.99" },
+                { flag: "DE", name: "Germany", data: "15GB", price: "22.99" },
+                { flag: "TR", name: "Turkey", data: "10GB", price: "14.99" },
+                { flag: "JP", name: "Japan", data: "15GB", price: "24.99" },
+                { flag: "US", name: "USA", data: "30GB", price: "34.99" },
+                { flag: "TH", name: "Thailand", data: "8GB", price: "11.99" },
               ].map((plan, index) => (
                 <button
                   key={index}
                   className="flex-shrink-0 flex items-center gap-2 px-4 py-3 rounded-xl bg-card/60 border border-border/50 backdrop-blur-sm hover:bg-card hover:border-primary/50 transition-all cursor-pointer group"
-                  onClick={() => handleSelectSuggestion({ type: "country", name: plan.name, flag: plan.flag, region: "unknown" })}
+                  onClick={() => {
+                    const matchedCountry = countries.find(c =>
+                      getLocalizedText(c.name, "").toLowerCase() === plan.name.toLowerCase()
+                    );
+
+                    handleSelectSuggestion({
+                      type: "country",
+                      name: plan.name,
+                      flag: plan.flag,
+                      region: matchedCountry?.region_id?.toString(),
+                      id: matchedCountry?.id
+                    });
+                  }}
                 >
-                  <span className="text-2xl">{plan.flag}</span>
+                  <FlagDisplay flag={plan.flag} name={plan.name} size="md" />
                   <div className="text-left">
                     <span className="block text-sm font-medium text-foreground group-hover:text-primary transition-colors">{plan.name}</span>
                     <span className="block text-xs text-muted-foreground">{plan.data} - EUR {plan.price}</span>
@@ -538,6 +663,15 @@ export function HeroSection() {
                 </button>
               ))}
             </div>
+
+            <Button
+              variant="outline"
+              size="icon"
+              className="absolute right-0 top-1/2 -translate-y-1/2 z-10 h-8 w-8 rounded-full bg-background/80 backdrop-blur-sm shadow-md hidden sm:flex"
+              onClick={() => scroll('right')}
+            >
+              <ChevronRight className="h-4 w-4" />
+            </Button>
           </div>
         </div>
 
@@ -563,7 +697,7 @@ export function HeroSection() {
                   const countryCount = regionData?.countries_count || 0;
                   const startingPrice = regionData?.starting_price || 0;
                   const regionCountries = regionData?.countries || (region as { countries?: { name: string; iso_code?: string; flag_url?: string }[] }).countries || [];
-                  
+
                   const gradients = [
                     "from-blue-600/20 via-cyan-500/10 to-teal-400/5",
                     "from-rose-500/20 via-orange-400/10 to-amber-300/5",
@@ -576,18 +710,18 @@ export function HeroSection() {
                     "hover:border-emerald-400/60",
                     "hover:border-amber-400/60",
                   ];
-                  
+
                   return (
                     <button
                       key={regionName}
                       className={`group relative overflow-hidden flex flex-col items-center justify-center gap-3 rounded-2xl bg-gradient-to-br ${gradients[index % 4]} border border-border/40 backdrop-blur-sm ${borderColors[index % 4]} hover:scale-[1.03] transition-all duration-300 cursor-pointer p-5 min-h-[200px] sm:min-h-[230px]`}
                       onClick={() => {
-                        handleSelectSuggestion({ 
-                          type: "region", 
-                          name: regionName, 
-                          flag: regionIcon, 
-                          region: regionData?.slug || regionName.toLowerCase(),
-                          id: regionData?.id 
+                        handleSelectSuggestion({
+                          type: "region",
+                          name: regionName,
+                          flag: regionIcon,
+                          region: region.slug,
+                          id: region.id
                         });
                       }}
                     >
@@ -610,11 +744,24 @@ export function HeroSection() {
                             return (
                               <div key={cName} className="flex flex-col items-center gap-0.5">
                                 <span className="text-[9px] text-muted-foreground/80 font-medium uppercase leading-none">{cCode}</span>
-                                {country.flag_url ? (
-                                  <img src={country.flag_url || "/placeholder.svg"} alt={cName} className="w-5 h-3.5 rounded-sm object-cover" />
-                                ) : (
-                                  <span className="text-xs leading-none">🏳️</span>
-                                )}
+                                {(() => {
+                                  const raw = country.flag_url;
+                                  const isPath = raw && (raw.includes('.') || raw.includes('/'));
+                                  const url = isPath ? getImageUrl(raw) : getFlagFromISO(country.iso_code);
+                                  return url ? (
+                                    <img
+                                      src={url}
+                                      alt={cName}
+                                      className="w-5 h-3.5 rounded-sm object-cover"
+                                      onError={(e) => {
+                                        (e.target as HTMLImageElement).style.display = 'none';
+                                        (e.target as HTMLImageElement).parentElement!.innerHTML = `<span class="text-xs leading-none">🌍</span>`;
+                                      }}
+                                    />
+                                  ) : (
+                                    <span className="text-xs leading-none">🌍</span>
+                                  );
+                                })()}
                               </div>
                             );
                           })}
@@ -630,10 +777,10 @@ export function HeroSection() {
                   );
                 })}
               </div>
-              
+
               {/* View All Regions Button */}
               <div className="flex justify-center mt-6">
-                <Button 
+                <Button
                   variant="outline"
                   className="border-border/50 hover:border-primary hover:bg-primary/10 text-foreground bg-transparent gap-2"
                   onClick={() => router.push("/plans?view=regions")}

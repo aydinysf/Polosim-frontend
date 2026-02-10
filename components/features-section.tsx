@@ -1,67 +1,70 @@
 import { Zap, Shield, Globe, Clock, CreditCard, Headphones } from "lucide-react";
 import Image from "next/image";
-
-const features = [
-  {
-    icon: Zap,
-    title: "Instant Activation",
-    description: "Get connected in minutes. No waiting for physical SIM delivery - just scan the QR code and you're online.",
-    image: "/images/feature-instant.jpg",
-    gradient: "from-blue-600/15 via-cyan-500/10 to-blue-400/5",
-    accentColor: "text-cyan-400",
-    borderColor: "hover:border-cyan-400/50",
-    iconBg: "bg-blue-500/15 border-blue-500/25",
-    iconColor: "text-blue-500",
-  },
-  {
-    icon: Shield,
-    title: "No Roaming Fees",
-    description: "Say goodbye to expensive roaming charges. Our transparent pricing means no surprise bills when you return home.",
-    image: "/images/feature-noroaming.jpg",
-    gradient: "from-emerald-600/15 via-teal-500/10 to-green-400/5",
-    accentColor: "text-emerald-400",
-    borderColor: "hover:border-emerald-400/50",
-    iconBg: "bg-emerald-500/15 border-emerald-500/25",
-    iconColor: "text-emerald-500",
-  },
-  {
-    icon: Globe,
-    title: "Global Coverage",
-    description: "Coverage in 200+ countries and territories. One eSIM for all your international travel needs.",
-    image: "/images/feature-global.jpg",
-    gradient: "from-amber-500/15 via-orange-400/10 to-yellow-300/5",
-    accentColor: "text-amber-400",
-    borderColor: "hover:border-amber-400/50",
-    iconBg: "bg-amber-500/15 border-amber-500/25",
-    iconColor: "text-amber-500",
-  },
-];
-
-const additionalFeatures = [
-  {
-    icon: Clock,
-    title: "Flexible Validity",
-    description: "Plans from 7 days to 30 days",
-    iconBg: "bg-violet-500/15 border-violet-500/25",
-    iconColor: "text-violet-500",
-  },
-  {
-    icon: CreditCard,
-    title: "Easy Top-ups",
-    description: "Add more data anytime, anywhere",
-    iconBg: "bg-rose-500/15 border-rose-500/25",
-    iconColor: "text-rose-500",
-  },
-  {
-    icon: Headphones,
-    title: "24/7 Support",
-    description: "Expert help whenever you need it",
-    iconBg: "bg-sky-500/15 border-sky-500/25",
-    iconColor: "text-sky-500",
-  },
-];
+import { useTranslations } from "next-intl";
 
 export function FeaturesSection() {
+  const t = useTranslations('Features');
+
+  const features = [
+    {
+      icon: Zap,
+      title: t('instantActivation.title'),
+      description: t('instantActivation.description'),
+      image: "/images/feature-instant.jpg",
+      gradient: "from-blue-600/15 via-cyan-500/10 to-blue-400/5",
+      accentColor: "text-cyan-400",
+      borderColor: "hover:border-cyan-400/50",
+      iconBg: "bg-blue-500/15 border-blue-500/25",
+      iconColor: "text-blue-500",
+    },
+    {
+      icon: Shield,
+      title: t('noRoamingFees.title'),
+      description: t('noRoamingFees.description'),
+      image: "/images/feature-noroaming.jpg",
+      gradient: "from-emerald-600/15 via-teal-500/10 to-green-400/5",
+      accentColor: "text-emerald-400",
+      borderColor: "hover:border-emerald-400/50",
+      iconBg: "bg-emerald-500/15 border-emerald-500/25",
+      iconColor: "text-emerald-500",
+    },
+    {
+      icon: Globe,
+      title: t('globalCoverage.title'),
+      description: t('globalCoverage.description'),
+      image: "/images/feature-global.jpg",
+      gradient: "from-amber-500/15 via-orange-400/10 to-yellow-300/5",
+      accentColor: "text-amber-400",
+      borderColor: "hover:border-amber-400/50",
+      iconBg: "bg-amber-500/15 border-amber-500/25",
+      iconColor: "text-amber-500",
+    },
+  ];
+
+  const additionalFeatures = [
+    {
+      icon: Clock,
+      title: t('flexibleValidity.title'),
+      description: t('flexibleValidity.description'),
+      iconBg: "bg-violet-500/15 border-violet-500/25",
+      iconColor: "text-violet-500",
+    },
+    {
+      icon: CreditCard,
+      title: t('easyTopUps.title'),
+      description: t('easyTopUps.description'),
+      iconBg: "bg-rose-500/15 border-rose-500/25",
+      iconColor: "text-rose-500",
+    },
+    {
+      icon: Headphones,
+      title: t('support247.title'),
+      description: t('support247.description'),
+      iconBg: "bg-sky-500/15 border-sky-500/25",
+      iconColor: "text-sky-500",
+    },
+  ];
+
   return (
     <section className="py-16 sm:py-24 px-4 relative">
       {/* Background gradient */}
@@ -71,10 +74,10 @@ export function FeaturesSection() {
         {/* Section header */}
         <div className="text-center mb-10 sm:mb-16">
           <h2 className="text-3xl sm:text-4xl font-bold mb-3 sm:mb-4 text-foreground md:text-4xl">
-            Why Choose POLO SIM?
+            {t('title')}
           </h2>
           <p className="text-muted-foreground text-base sm:text-lg max-w-2xl mx-auto px-4">
-            Experience the future of mobile connectivity with our cutting-edge eSIM technology.
+            {t('subtitle')}
           </p>
         </div>
 

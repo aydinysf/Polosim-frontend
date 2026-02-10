@@ -10,11 +10,12 @@ export interface CartItem extends Product {
 interface CartContextType {
   items: CartItem[];
   addItem: (product: Product) => void;
-  removeItem: (productId: string) => void;
-  updateQuantity: (productId: string, quantity: number) => void;
+  removeItem: (productId: number) => void;
+  updateQuantity: (productId: number, quantity: number) => void;
   clearCart: () => void;
   totalItems: number;
   totalPrice: number;
+  isLoaded: boolean;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -23,27 +24,34 @@ const CART_STORAGE_KEY = "polo-sim-cart";
 
 export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
-  const [isHydrated, setIsHydrated] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   // Load cart from localStorage on mount
   useEffect(() => {
     const savedCart = localStorage.getItem(CART_STORAGE_KEY);
     if (savedCart) {
       try {
-        setItems(JSON.parse(savedCart));
+        const parsedItems = JSON.parse(savedCart);
+        if (Array.isArray(parsedItems)) {
+          const validItems = parsedItems.filter(
+            (item): item is CartItem =>
+              item && typeof item.id === "number" && !isNaN(item.id) && typeof item.quantity === "number"
+          );
+          setItems(validItems);
+        }
       } catch (e) {
         console.error("Failed to parse cart from localStorage", e);
       }
     }
-    setIsHydrated(true);
+    setIsLoaded(true);
   }, []);
 
   // Save cart to localStorage whenever it changes
   useEffect(() => {
-    if (isHydrated) {
+    if (isLoaded) {
       localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(items));
     }
-  }, [items, isHydrated]);
+  }, [items, isLoaded]);
 
   const addItem = useCallback((product: Product) => {
     setItems((currentItems) => {
@@ -57,11 +65,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
     });
   }, []);
 
-  const removeItem = useCallback((productId: string) => {
+  const removeItem = useCallback((productId: number) => {
     setItems((currentItems) => currentItems.filter((item) => item.id !== productId));
   }, []);
 
-  const updateQuantity = useCallback((productId: string, quantity: number) => {
+  const updateQuantity = useCallback((productId: number, quantity: number) => {
     if (quantity <= 0) {
       removeItem(productId);
       return;
@@ -76,7 +84,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
-  const totalPrice = items.reduce((sum, item) => sum + item.priceInCents * item.quantity, 0);
+  const totalPrice = items.reduce((sum, item) => sum + (item.priceInCents || 0) * item.quantity, 0);
 
   return (
     <CartContext.Provider
@@ -88,6 +96,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         clearCart,
         totalItems,
         totalPrice,
+        isLoaded,
       }}
     >
       {children}
