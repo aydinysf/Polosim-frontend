@@ -2,7 +2,7 @@
 
 import { Navbar } from "@/components/navbar";
 import { NewCheckout } from "./new-checkout";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { ArrowLeft } from "lucide-react";
 
 export default function CheckoutPage() {

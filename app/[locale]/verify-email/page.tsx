@@ -8,8 +8,9 @@ import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { authService } from "@/lib/services/authService";
 import { ApiError } from "@/lib/api-client";
-import { useRouter, useSearchParams } from "next/navigation";
-import Link from "next/link";
+import { useRouter } from "@/i18n/routing";
+import { useSearchParams } from "next/navigation";
+import { Link } from "@/i18n/routing";
 import Image from "next/image";
 
 import { Suspense } from "react";

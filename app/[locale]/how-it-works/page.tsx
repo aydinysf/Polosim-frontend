@@ -4,7 +4,7 @@ import { Smartphone, QrCode, Wifi, CheckCircle, Globe, Zap, Shield, Clock, Chevr
 import { Button } from "@/components/ui/button";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 
 const steps = [
   {

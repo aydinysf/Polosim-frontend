@@ -13,8 +13,7 @@ import { Footer } from "@/components/footer";
 import { useAuth } from "@/lib/auth-context";
 import { orderService, type Order } from "@/lib/services/orderService";
 import { esimService } from "@/lib/services/esimService";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { Link, useRouter } from "@/i18n/routing";
 // import { QRCode } from "react-qr-code"; // Removed to prevent build errors
 import { toast } from "sonner";
 import { getImageUrl, getFlagFromISO } from "@/lib/api-client";

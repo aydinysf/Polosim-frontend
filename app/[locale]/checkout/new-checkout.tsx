@@ -14,9 +14,10 @@ import { Loader2, CreditCard, Wallet, User, CheckCircle, ArrowLeft, ShoppingBag 
 import { EmbeddedCheckout, EmbeddedCheckoutProvider } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
+const hasStripeKey = !!process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
 
 interface GuestInfo {
   guest_email: string;
@@ -41,13 +42,49 @@ export function NewCheckout() {
   const [processing, setProcessing] = useState(false);
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
+  const [createdOrderId, setCreatedOrderId] = useState<number | null>(null);
+  const [emailSent, setEmailSent] = useState(false);
+
+  const notifyOrderEmail = async () => {
+    if (emailSent) return;
+    const to = isAuthenticated ? user?.email : guestInfo.guest_email;
+    if (!to) return;
+    const payload = {
+      email: to,
+      name: isAuthenticated ? user?.name : guestInfo.guest_name,
+      surname: isAuthenticated ? (user as any)?.surname || "" : guestInfo.guest_surname,
+      orderId: createdOrderId || undefined,
+      total: (checkoutData?.total || checkoutData?.subtotal || 0),
+      currency: "EUR",
+      items: (checkoutData?.items || []).map((i) => ({
+        name: i.name,
+        quantity: i.quantity,
+        amount: (i.line_amount || i.total || 0),
+      })),
+    };
+    try {
+      const resp = await fetch("/api/notifications/order-confirmation", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const data = await resp.json();
+      if (resp.ok) {
+        setEmailSent(true);
+      } else {
+        console.warn("Order confirmation email failed:", data?.error);
+      }
+    } catch (e) {
+      console.warn("Order confirmation email error:", e);
+    }
+  };
 
   const handleComplete = useCallback(() => {
     clearCart();
+    notifyOrderEmail();
     setPaymentSuccess(true);
-  }, [clearCart]);
+  }, [clearCart, notifyOrderEmail]);
 
-  // Load checkout preview
   useEffect(() => {
     if (!isLoaded) return;
 
@@ -86,7 +123,17 @@ export function NewCheckout() {
         if (isAuthenticated && user?.wallet_balance && user.wallet_balance >= total) {
           setSelectedMethod('wallet');
         }
-        
+        if (isAuthenticated && user?.email && user?.name && !guestInfo.guest_email && !guestInfo.guest_name) {
+          const parts = String(user.name).trim().split(" ");
+          const first = parts[0] || "";
+          const last = parts.slice(1).join(" ") || "";
+          const newInfo = {
+            guest_email: user.email,
+            guest_name: first,
+            guest_surname: last
+          };
+          setGuestInfo(newInfo);
+        }
       } catch (err) {
         console.error("Checkout preview error:", err);
         setError(err instanceof Error ? err.message : "Failed to load checkout");
@@ -104,40 +151,59 @@ export function NewCheckout() {
       
       const sessionId = isAuthenticated ? undefined : getSessionId();
       
-      // Prepare execute data
       const executeData: any = {
         payment_method: selectedMethod,
         session_id: sessionId
       };
 
-      if (!isAuthenticated) {
-        executeData.guest_email = guestInfo.guest_email;
-        executeData.guest_name = guestInfo.guest_name;
-        executeData.guest_surname = guestInfo.guest_surname;
-        
-        // Comprehensive email fields to ensure backend/Stripe receives it
-        executeData.email = guestInfo.guest_email;
-        executeData.name = guestInfo.guest_name;
-        executeData.surname = guestInfo.guest_surname;
-        executeData.customer_email = guestInfo.guest_email;
-        executeData.receipt_email = guestInfo.guest_email;
-        
-        // Simulate user object structure if backend expects it
-        executeData.user = {
-          email: guestInfo.guest_email,
-          name: guestInfo.guest_name,
-          surname: guestInfo.guest_surname
-        };
-      }
+      executeData.guest_email = guestInfo.guest_email;
+      executeData.guest_name = guestInfo.guest_name;
+      executeData.guest_surname = guestInfo.guest_surname;
+      executeData.email = guestInfo.guest_email;
+      executeData.name = guestInfo.guest_name;
+      executeData.surname = guestInfo.guest_surname;
+      executeData.customer_email = guestInfo.guest_email;
+      executeData.receipt_email = guestInfo.guest_email;
+      executeData.user = {
+        email: guestInfo.guest_email,
+        name: guestInfo.guest_name,
+        surname: guestInfo.guest_surname
+      };
 
       console.log("Checkout Execute Data:", executeData);
 
       const result = await checkoutService.execute(executeData);
+      if ((result as any)?.order_id) {
+        setCreatedOrderId((result as any).order_id as number);
+      }
+      const secret = (result as any).client_secret || (result as any).clientSecret;
       
-      if (result.client_secret && selectedMethod === 'stripe') {
-        setClientSecret(result.client_secret);
+      if (selectedMethod === 'stripe') {
+        if (secret) {
+          setClientSecret(secret as string);
+        } else {
+          try {
+            const resp = await fetch("/api/stripe/embedded", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                cartItems: items.map((i) => ({
+                  productId: i.id,
+                  quantity: i.quantity,
+                })),
+              }),
+            });
+            const data = await resp.json();
+            if (resp.ok && data?.client_secret) {
+              setClientSecret(data.client_secret as string);
+            } else {
+              setError(data?.error || "Stripe ödeme başlatılamadı. Lütfen daha sonra tekrar deneyin.");
+            }
+          } catch (e) {
+            setError("Stripe ödeme başlatılırken beklenmeyen bir hata oluştu.");
+          }
+        }
       } else {
-        // Wallet payment successful
         handleComplete();
       }
       
@@ -186,17 +252,23 @@ export function NewCheckout() {
           </Button>
           <h1 className="text-2xl font-bold">Complete Payment</h1>
         </div>
-        <div className="rounded-2xl border border-border/50 bg-card/30 backdrop-blur-sm overflow-hidden p-4">
-          <EmbeddedCheckoutProvider
-            stripe={stripePromise}
-            options={{
-              clientSecret,
-              onComplete: handleComplete,
-            }}
-          >
-            <EmbeddedCheckout />
-          </EmbeddedCheckoutProvider>
-        </div>
+        {!hasStripeKey ? (
+          <div className="rounded-2xl border border-destructive/50 bg-destructive/10 p-4 text-destructive">
+            Stripe public anahtar yapılandırılmamış. Lütfen NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY değerini .env dosyanıza ekleyin.
+          </div>
+        ) : (
+          <div className="rounded-2xl border border-border/50 bg-card/30 backdrop-blur-sm overflow-hidden p-4">
+            <EmbeddedCheckoutProvider
+              stripe={stripePromise}
+              options={{
+                clientSecret,
+                onComplete: handleComplete,
+              }}
+            >
+              <EmbeddedCheckout />
+            </EmbeddedCheckoutProvider>
+          </div>
+        )}
       </div>
     );
   }
@@ -248,10 +320,23 @@ export function NewCheckout() {
         </CardHeader>
       </Card>
 
-      {/* Guest Information Form */}
-      {!isAuthenticated && (
-        <GuestCheckoutForm onGuestInfoChange={setGuestInfo} />
-      )}
+      <GuestCheckoutForm
+        onGuestInfoChange={setGuestInfo}
+        defaultInfo={
+          isAuthenticated && user
+            ? (() => {
+                const parts = String(user.name || "").trim().split(" ");
+                const first = parts[0] || "";
+                const last = parts.slice(1).join(" ") || "";
+                return {
+                  guest_email: user.email || "",
+                  guest_name: first,
+                  guest_surname: last,
+                };
+              })()
+            : undefined
+        }
+      />
 
       {/* Payment Method Selection */}
       <PaymentMethodSelector
@@ -300,8 +385,12 @@ export function NewCheckout() {
 
       {/* Checkout Button */}
       <Button 
-        onClick={handleCheckout} 
-        disabled={processing || (!isAuthenticated && (!guestInfo.guest_email || !guestInfo.guest_name || !guestInfo.guest_surname))}
+    onClick={handleCheckout} 
+    disabled={
+      processing || 
+      (!guestInfo.guest_email || !guestInfo.guest_name || !guestInfo.guest_surname) ||
+      (selectedMethod === 'stripe' && !hasStripeKey)
+    }
         className="w-full"
         size="lg"
       >

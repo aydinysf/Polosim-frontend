@@ -2,7 +2,7 @@
 
 import { Smartphone, Signal, Globe, Wifi, ArrowRight, Users, Gift } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
 
 export function PlansRegionsTabs() {
   const router = useRouter();

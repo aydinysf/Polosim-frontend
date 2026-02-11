@@ -1,8 +1,7 @@
 "use client";
 
 import { Home, Globe2, ShoppingBag, User } from "lucide-react";
-import { usePathname } from "next/navigation";
-import Link from "next/link";
+import { usePathname, Link } from "@/i18n/routing";
 
 const navItems = [
   { id: "home", label: "Home", icon: Home, href: "/mobile" },

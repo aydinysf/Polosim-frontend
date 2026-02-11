@@ -5,8 +5,7 @@ import { Search, Wifi, Globe, Smartphone, X, Signal, Clock, ShoppingCart, Check,
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useCart } from "@/lib/cart-context";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
+import { useRouter, Link } from "@/i18n/routing";
 import Image from "next/image";
 import { countryService, type Country } from "@/lib/services/countryService";
 import { regionService, type Region } from "@/lib/services/regionService";

@@ -11,13 +11,18 @@ interface GuestCheckoutFormProps {
     guest_name: string;
     guest_surname: string;
   }) => void;
+  defaultInfo?: {
+    guest_email?: string;
+    guest_name?: string;
+    guest_surname?: string;
+  };
 }
 
-export function GuestCheckoutForm({ onGuestInfoChange }: GuestCheckoutFormProps) {
+export function GuestCheckoutForm({ onGuestInfoChange, defaultInfo }: GuestCheckoutFormProps) {
   const [guestInfo, setGuestInfo] = useState({
-    guest_email: "",
-    guest_name: "",
-    guest_surname: ""
+    guest_email: defaultInfo?.guest_email || "",
+    guest_name: defaultInfo?.guest_name || "",
+    guest_surname: defaultInfo?.guest_surname || ""
   });
 
   const handleInputChange = (field: keyof typeof guestInfo, value: string) => {
