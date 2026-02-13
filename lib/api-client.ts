@@ -6,8 +6,11 @@ export function getImageUrl(path: string | null | undefined): string | null {
   if (path.startsWith("http") || path.startsWith("//")) return path;
 
   // Clean the path and the base URL
-  const cleanPath = path.startsWith("/") ? path.substring(1) : path;
-  return `${STORAGE_BASE_URL}/${cleanPath}`;
+  const cleanPath = path.replace(/^\/+/, "");
+  // Ensure Laravel storage prefix is present
+  const hasStoragePrefix = cleanPath.startsWith("storage/") || cleanPath.includes("/storage/");
+  const finalPath = hasStoragePrefix ? cleanPath : `storage/${cleanPath}`;
+  return `${STORAGE_BASE_URL}/${finalPath}`;
 }
 
 export function getFlagFromISO(isoCode: string | null | undefined): string | null {
