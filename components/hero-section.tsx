@@ -16,83 +16,21 @@ import { useTranslations } from "next-intl";
 
 
 
-// All searchable plans with full details
-const allPlans = [
-  { id: 1, name: "Turkey", flag: "🇹🇷", data: "5GB", validity: "7 Days", speed: "5G/LTE", price: 9.99, region: "europe" },
-  { id: 2, name: "Turkey", flag: "🇹🇷", data: "10GB", validity: "30 Days", speed: "5G/LTE", price: 14.99, region: "europe", bestSeller: true },
-  { id: 3, name: "Turkey", flag: "🇹🇷", data: "20GB", validity: "30 Days", speed: "5G/LTE", price: 24.99, region: "europe" },
-  { id: 4, name: "Europe", flag: "🇪🇺", data: "10GB", validity: "14 Days", speed: "5G/LTE", price: 19.99, region: "europe" },
-  { id: 5, name: "Europe", flag: "🇪🇺", data: "20GB", validity: "30 Days", speed: "5G/LTE", price: 29.99, region: "europe", bestSeller: true },
-  { id: 6, name: "Europe", flag: "🇪🇺", data: "50GB", validity: "30 Days", speed: "5G/LTE", price: 49.99, region: "europe" },
-  { id: 7, name: "Japan", flag: "🇯🇵", data: "5GB", validity: "7 Days", speed: "5G/LTE", price: 12.99, region: "asia" },
-  { id: 8, name: "Japan", flag: "🇯🇵", data: "15GB", validity: "14 Days", speed: "5G/LTE", price: 24.99, region: "asia", bestSeller: true },
-  { id: 9, name: "Japan", flag: "🇯🇵", data: "30GB", validity: "30 Days", speed: "5G/LTE", price: 39.99, region: "asia" },
-  { id: 10, name: "USA", flag: "🇺🇸", data: "10GB", validity: "14 Days", speed: "5G/LTE", price: 19.99, region: "americas" },
-  { id: 11, name: "USA", flag: "🇺🇸", data: "30GB", validity: "30 Days", speed: "5G/LTE", price: 34.99, region: "americas", bestSeller: true },
-  { id: 12, name: "USA", flag: "🇺🇸", data: "Unlimited", validity: "30 Days", speed: "5G/LTE", price: 54.99, region: "americas" },
-  { id: 13, name: "Thailand", flag: "🇹🇭", data: "8GB", validity: "15 Days", speed: "LTE", price: 11.99, region: "asia", bestSeller: true },
-  { id: 14, name: "Thailand", flag: "🇹🇭", data: "15GB", validity: "30 Days", speed: "LTE", price: 19.99, region: "asia" },
-  { id: 15, name: "Australia", flag: "🇦🇺", data: "15GB", validity: "14 Days", speed: "5G/LTE", price: 29.99, region: "oceania" },
-  { id: 16, name: "Australia", flag: "🇦🇺", data: "25GB", validity: "30 Days", speed: "5G/LTE", price: 39.99, region: "oceania", bestSeller: true },
-  { id: 17, name: "UK", flag: "🇬🇧", data: "12GB", validity: "14 Days", speed: "5G/LTE", price: 19.99, region: "europe" },
-  { id: 18, name: "UK", flag: "🇬🇧", data: "20GB", validity: "30 Days", speed: "5G/LTE", price: 29.99, region: "europe" },
-  { id: 19, name: "Germany", flag: "🇩🇪", data: "10GB", validity: "14 Days", speed: "5G/LTE", price: 17.99, region: "europe" },
-  { id: 20, name: "Germany", flag: "🇩🇪", data: "20GB", validity: "30 Days", speed: "5G/LTE", price: 27.99, region: "europe" },
-  { id: 21, name: "France", flag: "🇫🇷", data: "10GB", validity: "14 Days", speed: "5G/LTE", price: 17.99, region: "europe" },
-  { id: 22, name: "France", flag: "🇫🇷", data: "20GB", validity: "30 Days", speed: "5G/LTE", price: 27.99, region: "europe" },
-  { id: 23, name: "South Korea", flag: "🇰🇷", data: "10GB", validity: "10 Days", speed: "5G", price: 18.99, region: "asia", bestSeller: true },
-  { id: 24, name: "South Korea", flag: "🇰🇷", data: "20GB", validity: "30 Days", speed: "5G", price: 32.99, region: "asia" },
-  { id: 25, name: "Italy", flag: "🇮🇹", data: "10GB", validity: "14 Days", speed: "5G/LTE", price: 17.99, region: "europe" },
-  { id: 26, name: "Spain", flag: "🇪🇸", data: "10GB", validity: "14 Days", speed: "5G/LTE", price: 16.99, region: "europe" },
-  { id: 27, name: "Netherlands", flag: "🇳🇱", data: "10GB", validity: "14 Days", speed: "5G/LTE", price: 18.99, region: "europe" },
-  { id: 28, name: "Singapore", flag: "🇸🇬", data: "10GB", validity: "14 Days", speed: "5G", price: 19.99, region: "asia" },
-  { id: 29, name: "UAE", flag: "🇦🇪", data: "10GB", validity: "14 Days", speed: "5G/LTE", price: 24.99, region: "middle-east" },
-  { id: 30, name: "Asia", flag: "🌏", data: "10GB", validity: "14 Days", speed: "LTE", price: 19.99, region: "asia" },
-  { id: 31, name: "Asia", flag: "🌏", data: "20GB", validity: "30 Days", speed: "LTE", price: 34.99, region: "asia", bestSeller: true },
-  { id: 32, name: "Americas", flag: "🌎", data: "15GB", validity: "14 Days", speed: "5G/LTE", price: 29.99, region: "americas" },
-  { id: 33, name: "Middle East", flag: "🕌", data: "10GB", validity: "14 Days", speed: "LTE", price: 24.99, region: "middle-east" },
-  { id: 34, name: "Oceania", flag: "🦘", data: "15GB", validity: "14 Days", speed: "5G/LTE", price: 34.99, region: "oceania" },
-  { id: 35, name: "Africa", flag: "🌍", data: "10GB", validity: "14 Days", speed: "LTE", price: 29.99, region: "africa" },
-];
 
-const searchableItems = [
-  // Countries
-  { type: "country", name: "Turkey", flag: "🇹🇷", region: "europe" },
-  { type: "country", name: "Japan", flag: "🇯🇵", region: "asia" },
-  { type: "country", name: "USA", flag: "🇺🇸", region: "americas" },
-  { type: "country", name: "United States", flag: "🇺🇸", region: "americas" },
-  { type: "country", name: "Thailand", flag: "🇹🇭", region: "asia" },
-  { type: "country", name: "Australia", flag: "🇦🇺", region: "oceania" },
-  { type: "country", name: "UK", flag: "🇬🇧", region: "europe" },
-  { type: "country", name: "United Kingdom", flag: "🇬🇧", region: "europe" },
-  { type: "country", name: "Germany", flag: "🇩🇪", region: "europe" },
-  { type: "country", name: "France", flag: "🇫🇷", region: "europe" },
-  { type: "country", name: "Italy", flag: "🇮🇹", region: "europe" },
-  { type: "country", name: "Spain", flag: "🇪🇸", region: "europe" },
-  { type: "country", name: "Netherlands", flag: "🇳🇱", region: "europe" },
-  { type: "country", name: "South Korea", flag: "🇰🇷", region: "asia" },
-  { type: "country", name: "Korea", flag: "🇰🇷", region: "asia" },
-  { type: "country", name: "Singapore", flag: "🇸🇬", region: "asia" },
-  { type: "country", name: "UAE", flag: "🇦🇪", region: "middle-east" },
-  // Regions
-  { type: "region", name: "Europe", flag: "🇪🇺", region: "europe" },
-  { type: "region", name: "Asia", flag: "🌏", region: "asia" },
-  { type: "region", name: "Americas", flag: "🌎", region: "americas" },
-  { type: "region", name: "Middle East", flag: "🕌", region: "middle-east" },
-  { type: "region", name: "Oceania", flag: "🦘", region: "oceania" },
-  { type: "region", name: "Africa", flag: "🌍", region: "africa" },
-];
 
 // Flag component that handles both emoji and URL
 function FlagDisplay({ flag, name, size = "md" }: { flag?: string; name: string; size?: "sm" | "md" | "lg" }) {
-  const sizeClasses = {
-    sm: "w-4 h-4 text-sm",
-    md: "w-6 h-6 text-xl",
-    lg: "w-8 h-8 text-2xl"
+  const sizeStyles = {
+    sm: { width: 16, height: 12, className: "w-4 h-3" },
+    md: { width: 24, height: 18, className: "w-6 h-[18px]" },
+    lg: { width: 32, height: 24, className: "w-8 h-6" },
   };
+  const { width, height, className } = sizeStyles[size];
+  const textClass = size === 'sm' ? 'text-sm' : size === 'md' ? 'text-xl' : 'text-2xl';
+
 
   if (!flag) {
-    return <span className={sizeClasses[size]}>🌍</span>;
+    return <span className={`${className} ${textClass}`}>🌍</span>;
   }
 
   // 1. Check if it's a URL or needs prefixing (API path)
@@ -104,9 +42,9 @@ function FlagDisplay({ flag, name, size = "md" }: { flag?: string; name: string;
       <Image
         src={imageUrl}
         alt={`${name} flag`}
-        width={size === "sm" ? 16 : size === "md" ? 24 : 32}
-        height={size === "sm" ? 16 : size === "md" ? 24 : 32}
-        className={`${sizeClasses[size]} object-cover rounded-sm`}
+        width={width}
+        height={height}
+        className={`${className} object-cover`}
         unoptimized={true}
       />
     );
@@ -120,9 +58,9 @@ function FlagDisplay({ flag, name, size = "md" }: { flag?: string; name: string;
       <Image
         src={flagFromISO}
         alt={`${name} flag`}
-        width={size === "sm" ? 16 : size === "md" ? 24 : 32}
-        height={size === "sm" ? 16 : size === "md" ? 24 : 32}
-        className={`${sizeClasses[size]} object-cover rounded-sm`}
+        width={width}
+        height={height}
+        className={`${className} object-cover`}
         unoptimized={true}
       />
     );
@@ -139,9 +77,9 @@ function FlagDisplay({ flag, name, size = "md" }: { flag?: string; name: string;
         <Image
           src={flagUrl}
           alt={`${name} flag`}
-          width={size === "sm" ? 16 : size === "md" ? 24 : 32}
-          height={size === "sm" ? 16 : size === "md" ? 24 : 32}
-          className={`${sizeClasses[size]} object-cover rounded-sm`}
+          width={width}
+          height={height}
+          className={`${className} object-cover`}
           unoptimized={true}
         />
       );
@@ -149,7 +87,7 @@ function FlagDisplay({ flag, name, size = "md" }: { flag?: string; name: string;
   }
 
   // Fallback to globe
-  return <span className={sizeClasses[size]}>🌍</span>;
+  return <span className={`${className} ${textClass}`}>🌍</span>;
 }
 
 // Convert flag emoji to ISO code
@@ -205,6 +143,7 @@ export function HeroSection() {
   // API data states
   const [countries, setCountries] = useState<Country[]>([]);
   const [regions, setRegions] = useState<Region[]>([]);
+  const [popularCountries, setPopularCountries] = useState<Country[]>([]);
   const [searchResultProducts, setSearchResultProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingProducts, setIsLoadingProducts] = useState(false);
@@ -214,23 +153,24 @@ export function HeroSection() {
 
   // Fetch countries and regions on mount
   useEffect(() => {
-    async function fetchData() {
+    async function fetchInitialData() {
       try {
         setIsLoading(true);
-        const [countriesData, regionsData] = await Promise.all([
+        const [countriesResponse, regionsData, popularData] = await Promise.all([
+          countryService.getAll(),
+          regionService.getAll(),
           countryService.getPopular(),
-          regionService.getPopular()
         ]);
-        setCountries(countriesData);
-        setRegions(regionsData);
+        setCountries(Array.isArray(countriesResponse) ? countriesResponse : (countriesResponse as any).data);
+        setRegions(Array.isArray(regionsData) ? regionsData : (regionsData as any).data);
+        setPopularCountries(popularData);
       } catch (error) {
-        console.error("[v0] Error fetching data:", error);
-        // Keep fallback data if API fails
+        console.error("Failed to fetch initial data:", error);
       } finally {
         setIsLoading(false);
       }
     }
-    fetchData();
+    fetchInitialData();
   }, []);
 
   // Build searchable items from API data + fallback
@@ -249,12 +189,6 @@ export function HeroSection() {
       region: r.slug,
       id: r.id
     })),
-    // Fallback items if API returns empty
-    ...(countries.length === 0 ? [
-      { type: "country" as const, name: "Turkey", flag: "🇹🇷", region: "europe" },
-      { type: "country" as const, name: "Japan", flag: "🇯🇵", region: "asia" },
-      { type: "country" as const, name: "United States", flag: "🇺🇸", region: "americas" },
-    ] : []),
   ];
 
   const filteredSuggestions = searchableItems.filter((item) =>
@@ -376,7 +310,7 @@ export function HeroSection() {
   };
 
   return (
-    <section className="relative pt-36 sm:pt-40 pb-8 flex flex-col items-center justify-start overflow-hidden">
+    <section className="relative pt-36 sm:pt-40 pb-8 flex flex-col items-center justify-start overflow-hidden bg-gray-100">
       {/* Background */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(14,116,144,0.04)_1px,transparent_1px),linear-gradient(to_bottom,rgba(14,116,144,0.04)_1px,transparent_1px)] bg-[size:40px_40px] md:bg-[size:60px_60px]" />
@@ -591,10 +525,10 @@ export function HeroSection() {
           </Button>
         </div>
 
-        {/* Popular Plans - Marquee */}
+        {/* Popular Destinations Marquee */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4 px-2">
-            <h3 className="text-sm font-medium text-muted-foreground">Popular Plans</h3>
+            <h3 className="text-sm font-medium text-muted-foreground">{t('popularDestinations')}</h3>
             <Button
               variant="link"
               size="sm"
@@ -623,44 +557,30 @@ export function HeroSection() {
               className="flex gap-3 overflow-x-auto scrollbar-hide snap-x p-1"
               style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
             >
-              {[
-                { flag: "TR", name: "Turkey", data: "10GB", price: "14.99" },
-                { flag: "JP", name: "Japan", data: "15GB", price: "24.99" },
-                { flag: "US", name: "USA", data: "30GB", price: "34.99" },
-                { flag: "TH", name: "Thailand", data: "8GB", price: "11.99" },
-                { flag: "AU", name: "Australia", data: "25GB", price: "39.99" },
-                { flag: "GB", name: "UK", data: "12GB", price: "19.99" },
-                { flag: "KR", name: "Korea", data: "10GB", price: "18.99" },
-                { flag: "DE", name: "Germany", data: "15GB", price: "22.99" },
-                { flag: "TR", name: "Turkey", data: "10GB", price: "14.99" },
-                { flag: "JP", name: "Japan", data: "15GB", price: "24.99" },
-                { flag: "US", name: "USA", data: "30GB", price: "34.99" },
-                { flag: "TH", name: "Thailand", data: "8GB", price: "11.99" },
-              ].map((plan, index) => (
-                <button
-                  key={index}
-                  className="flex-shrink-0 flex items-center gap-2 px-4 py-3 rounded-xl bg-card/60 border border-border/50 backdrop-blur-sm hover:bg-card hover:border-primary/50 transition-all cursor-pointer group"
-                  onClick={() => {
-                    const matchedCountry = countries.find(c =>
-                      getLocalizedText(c.name, "").toLowerCase() === plan.name.toLowerCase()
-                    );
-
-                    handleSelectSuggestion({
-                      type: "country",
-                      name: plan.name,
-                      flag: plan.flag,
-                      region: matchedCountry?.region_id?.toString(),
-                      id: matchedCountry?.id
-                    });
-                  }}
-                >
-                  <FlagDisplay flag={plan.flag} name={plan.name} size="md" />
-                  <div className="text-left">
-                    <span className="block text-sm font-medium text-foreground group-hover:text-primary transition-colors">{plan.name}</span>
-                    <span className="block text-xs text-muted-foreground">{plan.data} - EUR {plan.price}</span>
-                  </div>
-                </button>
-              ))}
+              {(popularCountries.length > 0 ? [...popularCountries, ...popularCountries] : []).map((country, index) => {
+                const countryName = getLocalizedText(country.name);
+                return (
+                  <button
+                    key={`${country.id}-${index}`}
+                    className="flex-shrink-0 flex items-center gap-2 px-4 py-3 rounded-xl bg-card/60 border border-border/50 backdrop-blur-sm hover:bg-card hover:border-primary/50 transition-all cursor-pointer group"
+                    onClick={() => {
+                      handleSelectSuggestion({
+                        type: "country",
+                        name: countryName,
+                        flag: country.flag_url || country.iso_code,
+                        region: country.region_id?.toString(),
+                        id: country.id
+                      });
+                    }}
+                  >
+                    <FlagDisplay flag={country.flag_url || country.iso_code} name={countryName} size="md" />
+                    <div className="text-left">
+                      <span className="block text-sm font-medium text-foreground group-hover:text-primary transition-colors">{countryName}</span>
+                      <span className="block text-xs text-muted-foreground">eSIM Plans Available</span>
+                    </div>
+                  </button>
+                );
+              })}
             </div>
 
             <Button

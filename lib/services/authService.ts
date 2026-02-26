@@ -1,108 +1,103 @@
-import { api, setAuthToken, removeAuthToken, getAuthToken } from "../api-client";
+import api from '../api-client';
 
-export { getAuthToken, setAuthToken };
-
+// Tipler
 export interface User {
   id: number;
   name: string;
   email: string;
-  email_verified_at?: string;
-  created_at: string;
-  updated_at: string;
   wallet_balance?: number;
+  created_at?: string;
+  email_verified_at?: string | null;
+}
+
+export interface AuthResponse {
+  token: string;
+  user: User;
 }
 
 export interface LoginRequest {
   email: string;
-  password: string;
+  password?: string; // OTP için şifre opsiyonel olabilir
+  code?: string;     // OTP kodu
 }
 
 export interface RegisterRequest {
   name: string;
   email: string;
-  password: string;
-  password_confirmation: string;
+  password?: string;
 }
 
-export interface AuthResponse {
-  user: User;
-  token: string;
+export interface CheckoutPayload {
+  payment_method: 'stripe';
+  product_id: number;
+  quantity: number;
+  guest_name: string;
+  guest_surname: string;
 }
 
-export const setUser = (user: User | null) => {
-  if (typeof window !== "undefined") {
-    if (user) {
-      localStorage.setItem("user", JSON.stringify(user));
-    } else {
-      localStorage.removeItem("user");
-    }
+// localStorage İşlemleri
+export const setAuthToken = (token: string | null) => {
+  if (typeof window === 'undefined') return;
+  if (token) {
+    localStorage.setItem('auth_token', token);
+  } else {
+    localStorage.removeItem('auth_token');
+  }
+};
+
+export const setUserToStorage = (user: User | null) => {
+  if (typeof window === 'undefined') return;
+  if (user) {
+    localStorage.setItem('user', JSON.stringify(user));
+  } else {
+    localStorage.removeItem('user');
   }
 };
 
 export const getUserFromStorage = (): User | null => {
-  if (typeof window !== "undefined") {
-    const user = localStorage.getItem("user");
-    return user ? JSON.parse(user) : null;
+  if (typeof window === 'undefined') return null;
+  const userJson = localStorage.getItem('user');
+  if (!userJson) return null;
+  try {
+    return JSON.parse(userJson);
+  } catch (e) {
+    return null;
   }
-  return null;
 };
 
+// Servis Fonksiyonları
 export const authService = {
-  async login(credentials: LoginRequest): Promise<AuthResponse> {
-    const response = await api.post<any>("/login", credentials);
-
-    // API'nin token'ı doğrudan mı yoksa data nesnesi içinde mi döndürdüğünü kontrol et
-    const authData = response.data || response;
-
-    if (authData && authData.token) {
-      setAuthToken(authData.token);
-      setUser(authData.user);
-      return authData as AuthResponse;
+  login: async (credentials: LoginRequest): Promise<AuthResponse> => {
+    const response = await api.post<AuthResponse>('/login', credentials);
+    if (response.data.token && response.data.user) {
+      setAuthToken(response.data.token);
+      setUserToStorage(response.data.user);
     }
-
-    // Beklenmedik bir yanıt formatı varsa hata fırlat
-    throw new Error("Authentication failed: Invalid response structure from API.");
-  },
-
-  async register(data: RegisterRequest): Promise<AuthResponse> {
-    const response = await api.post<any>("/register", data);
-
-    // Check if token is directly in response or nested in data
-    const authData = response.data || response;
-
-    if (authData && authData.token) {
-      setAuthToken(authData.token);
-      setUser(authData.user);
-      return authData as AuthResponse;
-    }
-
-    return authData;
-  },
-
-  async verifyEmail(email: string, code: string): Promise<{ message: string }> {
-    const response = await api.post<{ message: string }>("/verify-email", { email, verification_code: code });
     return response.data;
   },
 
-  async resendVerificationEmail(email: string): Promise<{ message: string }> {
-    const response = await api.post<{ message: string }>("/resend-verification", { email });
+  register: async (data: RegisterRequest): Promise<AuthResponse> => {
+    const response = await api.post<AuthResponse>('/register', data);
+    if (response.data.token && response.data.user) {
+      setAuthToken(response.data.token);
+      setUserToStorage(response.data.user);
+    }
     return response.data;
   },
 
-  async getUser(): Promise<User> {
-    const user = getUserFromStorage();
-    if (user) {
-      return Promise.resolve(user);
-    }
-    return Promise.reject("No user found");
+  logout: () => {
+    setAuthToken(null);
+    setUserToStorage(null);
+    // Gerekirse sunucuya da logout isteği gönderilebilir
+    // api.post('/logout');
   },
 
-  logout(): void {
-    removeAuthToken();
-    setUser(null);
-  },
+  requestOtp: (email: string) =>
+    api.post('/login', { email }),
 
-  isAuthenticated(): boolean {
-    return getAuthToken() !== null;
-  },
+  verifyOtp: (email: string, code: string) =>
+    api.post('/login/verify', { email, code }),
+
+  checkout: (payload: CheckoutPayload) =>
+    api.post('/checkout/execute', payload),
 };

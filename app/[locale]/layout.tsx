@@ -1,5 +1,5 @@
 import { NextIntlClientProvider } from 'next-intl';
-import { getMessages } from 'next-intl/server';
+import { getMessages, setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
 
@@ -16,23 +16,9 @@ const _geistMono = Geist_Mono({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: 'POLO SIM - One Sim One World',
   description: 'Your global eSIM marketplace. Get instant mobile data in 200+ countries. No roaming fees, instant activation, global coverage.',
-  generator: 'v0.app',
   icons: {
-    icon: [
-      {
-        url: '/icon-light-32x32.png?v=2',
-        media: '(prefers-color-scheme: light)',
-      },
-      {
-        url: '/icon-dark-32x32.png?v=2',
-        media: '(prefers-color-scheme: dark)',
-      },
-      {
-        url: '/icon.svg?v=2',
-        type: 'image/svg+xml',
-      },
-    ],
-    apple: '/apple-icon.png?v=2',
+    icon: '/logo.svg',
+    apple: '/logo.svg',
   },
 }
 
@@ -43,12 +29,14 @@ export default async function RootLayout({
   children: React.ReactNode;
   params: { locale: string };
 }) {
-  const { locale } = await params;
-  
+  const awaitedParams = await params;
+  const { locale } = awaitedParams;
   // Ensure that the incoming `locale` is valid
   if (!['en', 'tr'].includes(locale as any)) {
     notFound();
   }
+ 
+  setRequestLocale(locale);
  
   // Providing all messages to the client
   // side is the easiest way to get started

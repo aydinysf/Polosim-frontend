@@ -130,7 +130,7 @@ export function ProductListing() {
     });
 
   return (
-    <section className="py-16 sm:py-24 px-4">
+    <section className="py-16 sm:py-24 px-4 bg-gray-400">
       <div className="max-w-7xl mx-auto">
         {/* Section header */}
         <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-8 sm:mb-12 gap-4 sm:gap-6">

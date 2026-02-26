@@ -8,6 +8,7 @@
     "plans": "Planlar",
     "howItWorks": "Nasıl Çalışır",
     "support": "Destek",
+    "bayi-girisi": "Bayi Girişi",
     "login": "Giriş Yap",
     "myProfile": "Profilim",
     "logout": "Çıkış Yap"
@@ -20,7 +21,8 @@
     "bestSeller": "Çok Satan",
     "regionalPlans": "Bölgesel Planlar",
     "countryPlans": "Ülke Planları",
-    "buyNow": "Satın Al"
+    "buyNow": "Satın Al",
+    "popularDestinations": "Popüler Destinasyonlar"
   },
   "Footer": {
     "description": "Tek Sim, Tek Dünya. 200'den fazla ülkede anında aktivasyon ve roaming ücreti olmadan bağlı kalın.",

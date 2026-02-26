@@ -8,7 +8,7 @@ export function PlansRegionsTabs() {
   const router = useRouter();
 
   return (
-    <section className="py-16 sm:py-24 px-4 relative">
+    <section className="py-16 sm:py-24 px-4 relative bg-gray-300">
       {/* Background gradient */}
       <div className="absolute inset-0 bg-gradient-to-b from-background via-card/20 to-background" />
       

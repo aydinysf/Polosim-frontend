@@ -1,16 +1,16 @@
 "use client";
 
 import { createContext, useContext, useState, useEffect, type ReactNode } from "react";
-import { 
-  authService, 
-  getUserFromStorage, 
-  getAuthToken, 
+import {
+  authService,
+  getUserFromStorage,
   setAuthToken,
-  type User, 
-  type LoginRequest, 
+  type User,
+  type LoginRequest,
   type RegisterRequest,
-  type AuthResponse 
+  type AuthResponse
 } from "./services/authService";
+import { getAuthToken } from "./api-client";
 
 interface AuthContextType {
   user: User | null;
@@ -19,6 +19,7 @@ interface AuthContextType {
   login: (credentials: LoginRequest) => Promise<AuthResponse>;
   register: (data: RegisterRequest) => Promise<AuthResponse>;
   logout: () => void;
+  setAuthData: (user: User, token: string) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -33,7 +34,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const storedUser = getUserFromStorage();
 
     if (token && storedUser) {
-      setAuthToken(token);
       setUser(storedUser);
       setIsAuthenticated(true);
     }
@@ -64,6 +64,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setIsAuthenticated(false);
   };
 
+  const setAuthData = (userData: User, token: string) => {
+    localStorage.setItem("auth_token", token);
+    localStorage.setItem("user", JSON.stringify(userData));
+    setUser(userData);
+    setIsAuthenticated(true);
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -73,6 +80,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         login,
         register,
         logout,
+        setAuthData,
       }}
     >
       {children}

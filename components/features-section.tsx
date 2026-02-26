@@ -22,11 +22,11 @@ export function FeaturesSection() {
       title: t('noRoamingFees.title'),
       description: t('noRoamingFees.description'),
       image: "/images/feature-noroaming.jpg",
-      gradient: "from-emerald-600/15 via-teal-500/10 to-green-400/5",
-      accentColor: "text-emerald-400",
-      borderColor: "hover:border-emerald-400/50",
-      iconBg: "bg-emerald-500/15 border-emerald-500/25",
-      iconColor: "text-emerald-500",
+      gradient: "from-blue-600/15 via-sky-500/10 to-indigo-400/5",
+      accentColor: "text-blue-400",
+      borderColor: "hover:border-blue-400/50",
+      iconBg: "bg-blue-500/15 border-blue-500/25",
+      iconColor: "text-blue-500",
     },
     {
       icon: Globe,
@@ -66,7 +66,7 @@ export function FeaturesSection() {
   ];
 
   return (
-    <section className="py-16 sm:py-24 px-4 relative">
+    <section className="py-16 sm:py-24 px-4 relative bg-gray-200">
       {/* Background gradient */}
       <div className="absolute inset-0 bg-gradient-to-b from-background via-card/20 to-background" />
       

@@ -1,89 +1,47 @@
-import { api, getAuthToken } from "../api-client";
+import api from '../api-client';
 
-export interface CheckoutPreviewRequest {
-  items?: Array<{
-    product_id: number;
-    quantity: number;
-  }>;
-  // For guest checkout with session
+interface CheckoutItem {
+  product_id: number;
+  quantity: number;
+}
+
+interface CheckoutPreviewPayload {
+  items?: CheckoutItem[];
   session_id?: string;
 }
 
 export interface CheckoutPreviewResponse {
+  items: any[];
   subtotal: number;
-  discount: number; // or discount_amount
-  discount_amount?: number;
   total: number;
-  items: Array<{
-    product_id: number;
-    name: string;
-    quantity: number;
-    price?: number;
-    unit_price?: number; // From API
-    total?: number;
-    line_amount?: number; // From API
-  }>;
+  currency: string;
+  discount_amount?: number;
+  discount?: any;
 }
 
-export interface CheckoutExecuteRequest {
-  payment_method: 'wallet' | 'stripe';
-  // Guest information (required for guests)
+interface CheckoutExecutePayload {
+  payment_method: 'stripe' | 'wallet';
+  session_id?: string;
   guest_email?: string;
   guest_name?: string;
   guest_surname?: string;
-  // Fallback/Alternative fields
-  email?: string;
-  name?: string;
-  surname?: string;
-  customer_email?: string;
-  receipt_email?: string;
-  user?: {
-    email: string;
-    name: string;
-    surname: string;
-  };
-  // For guest checkout with session
-  session_id?: string;
-  [key: string]: any; // Allow additional properties
+  product_id?: number;
+  quantity?: number;
 }
 
-export interface CheckoutExecuteResponse {
+interface CheckoutExecuteResponse {
+  client_secret: string;
   order_id: number;
   status: string;
-  total: number;
-  // For Stripe payments
-  client_secret?: string;
-  // For wallet payments
-  wallet_balance_used?: number;
-  wallet_remaining_balance?: number;
 }
 
 export const checkoutService = {
-  async preview(data: CheckoutPreviewRequest): Promise<CheckoutPreviewResponse> {
-    const token = getAuthToken();
-    
-    const config = {
-      headers: {
-        ...(token && { Authorization: `Bearer ${token}` }),
-        ...(data.session_id && { 'X-Session-ID': data.session_id })
-      }
-    };
-
-    const response = await api.post<CheckoutPreviewResponse>('/checkout/preview', data, config);
+  preview: async (payload: CheckoutPreviewPayload): Promise<CheckoutPreviewResponse> => {
+    const response = await api.post('/checkout/preview', payload);
     return response.data;
   },
-
-  async execute(data: CheckoutExecuteRequest): Promise<CheckoutExecuteResponse> {
-    const token = getAuthToken();
-    
-    const config = {
-      headers: {
-        ...(token && { Authorization: `Bearer ${token}` }),
-        ...(data.session_id && { 'X-Session-ID': data.session_id })
-      }
-    };
-
-    const response = await api.post<CheckoutExecuteResponse>('/checkout/execute', data, config);
+  execute: async (payload: CheckoutExecutePayload): Promise<CheckoutExecuteResponse> => {
+    const response = await api.post('/checkout/execute', payload);
     return response.data;
-  }
+  },
 };

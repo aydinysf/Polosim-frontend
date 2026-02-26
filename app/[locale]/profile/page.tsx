@@ -2,47 +2,34 @@
 
 import { useState, useEffect } from "react";
 import {
-  User, Settings, LogOut, Smartphone, Clock, CheckCircle,
-  AlertCircle, ChevronRight, QrCode, Signal, Calendar,
-  Download, RefreshCw, X, Wifi, Globe, Loader2, Copy, Check
+  User, LogOut, Smartphone, Clock, CheckCircle,
+  AlertCircle, ChevronRight, Signal, Calendar,
+  RefreshCw, X, Wifi, Loader2, Copy, Check
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { useAuth } from "@/lib/auth-context";
-import { orderService, type Order } from "@/lib/services/orderService";
-import { esimService } from "@/lib/services/esimService";
+import { esimProfileService, type EsimPackageData } from "@/lib/services/esimProfileService";
 import { Link, useRouter } from "@/i18n/routing";
-// import { QRCode } from "react-qr-code"; // Removed to prevent build errors
 import { toast } from "sonner";
-import { getImageUrl, getFlagFromISO } from "@/lib/api-client";
+import { getFlagFromISO } from "@/lib/api-client";
 import { useTranslations } from "next-intl";
 
 type PackageStatus = "all" | "active" | "upcoming" | "expired";
 
-interface EsimPackage {
-  id: string;
-  orderId: number;
-  name: string;
-  flag: string;
-  flagUrl: string | null;
-  data: string;
+type EsimPackage = EsimPackageData & {
+  // timeProgress computed locally
+  timeProgress: number;
   validity: string;
-  status: "active" | "upcoming" | "expired";
   usedData: string;
   remainingData: string;
   usagePercentage: number;
-  timeProgress: number;
-  startDate: string;
-  endDate: string;
+  qrCodeUrl: string | null;
   expiresAt: string | null;
   activatedAt: string | null;
-  qrCodeUrl: string | null;
-  qrCodeData: string | null;
-  iccid: string | null;
-  activationCode: string | null;
-}
+};
 
 export default function ProfilePage() {
   const t = useTranslations('Profile');
@@ -67,123 +54,53 @@ export default function ProfilePage() {
     }
   }, [isAuthenticated]);
 
-  const calculateDateProgress = (startDate: string, durationDays: number) => {
-    const start = new Date(startDate).getTime();
-    const now = new Date().getTime();
-    const end = start + durationDays * 24 * 60 * 60 * 1000;
-
-    if (now < start) return 0;
-    if (now > end) return 100;
-
-    const progress = ((now - start) / (end - start)) * 100;
-    return Math.min(100, Math.max(0, progress));
-  };
-
-  const getEndDate = (startDate: string, durationDays: number) => {
-    const date = new Date(startDate);
-    date.setDate(date.getDate() + durationDays);
-    return date.toISOString();
-  };
 
   const loadPackages = async () => {
     setIsLoading(true);
     setError("");
-
     try {
-      const orders = await orderService.getAll();
-      const esimPackages: EsimPackage[] = [];
+      const esims = await esimProfileService.getMyEsims();
 
-      if (Array.isArray(orders)) {
-        for (const order of orders) {
-          const orderItem = order.items?.[0];
-          const product = orderItem?.product;
-          const duration = product?.validity_days || 0;
-          const startDate = order.created_at;
-          const endDate = getEndDate(startDate, duration);
+      const mapped: EsimPackage[] = esims.map((esim) => {
+        const duration = esim.validityDays;
+        const startDate = esim.startDate;
 
-          // Determine status based on order and time
-          let status: "active" | "upcoming" | "expired" = "upcoming";
-          const now = new Date();
-          const end = new Date(endDate);
-
-          if (order.payment_status === "paid") {
-            if (now > end) {
-              status = "expired";
-            } else {
-              status = "active";
-            }
-          } else if (order.payment_status === "pending") {
-            status = "upcoming";
-          }
-
-          if (order.esim_details && order.esim_details.length > 0) {
-            for (const esim of order.esim_details) {
-              const timeProgress = calculateDateProgress(startDate, duration);
-
-              esimPackages.push({
-                id: esim.iccid || `order-${order.id}`,
-                orderId: order.id,
-                name: (typeof product?.name === 'string' ? product.name : product?.name?.en) ||
-                  (typeof product?.country?.name === 'string' ? product.country.name : product?.country?.name?.en) ||
-                  t('package.defaultName'),
-                flag: product?.country?.iso_code || "",
-                flagUrl: (() => {
-                  const raw = product?.flag_url || product?.country?.flag_url;
-                  if (raw && (raw.includes('.') || raw.includes('/'))) return getImageUrl(raw);
-                  return getFlagFromISO(product?.country?.iso_code);
-                })(),
-                data: product?.data_amount || "N/A",
-                validity: `${duration} ${t('package.days')}`,
-                status: status,
-                usedData: "0GB", // Default, ideally fetched from usage API
-                remainingData: product?.data_amount || "N/A",
-                usagePercentage: 0,
-                timeProgress: timeProgress,
-                startDate: startDate,
-                endDate: endDate,
-                expiresAt: esim.expires_at || endDate,
-                activatedAt: esim.activated_at || null,
-                qrCodeUrl: esim.qr_code_url || null,
-                qrCodeData: esim.qr_code_data || esim.activation_code || null,
-                iccid: esim.iccid || null,
-                activationCode: esim.activation_code || null,
-              });
-            }
-          } else {
-            // Handle cases where order exists but esim_details hasn't populated yet
-            esimPackages.push({
-              id: `pending-${order.id}`,
-              orderId: order.id,
-              name: (typeof product?.name === 'string' ? product.name : product?.name?.en) ||
-                (typeof product?.country?.name === 'string' ? product.country.name : product?.country?.name?.en) ||
-                t('package.defaultName'),
-              flag: product?.country?.iso_code || "",
-              flagUrl: (() => {
-                const raw = product?.flag_url || product?.country?.flag_url;
-                if (raw && (raw.includes('.') || raw.includes('/'))) return getImageUrl(raw);
-                return getFlagFromISO(product?.country?.iso_code);
-              })(),
-              data: product?.data_amount || "N/A",
-              validity: `${duration} ${t('package.days')}`,
-              status: status,
-              usedData: "0GB",
-              remainingData: product?.data_amount || "N/A",
-              usagePercentage: 0,
-              timeProgress: calculateDateProgress(startDate, duration),
-              startDate: startDate,
-              endDate: endDate,
-              expiresAt: endDate,
-              activatedAt: null,
-              qrCodeUrl: null,
-              qrCodeData: null,
-              iccid: null,
-              activationCode: null,
-            });
+        // Süre ilerlemesi
+        let timeProgress = 0;
+        if (startDate && duration > 0 && esim.endDate) {
+          const start = new Date(startDate).getTime();
+          const end = new Date(esim.endDate).getTime();
+          const now = Date.now();
+          if (now >= start && now <= end) {
+            timeProgress = ((now - start) / (end - start)) * 100;
+          } else if (now > end) {
+            timeProgress = 100;
           }
         }
-      }
 
-      setPackages(esimPackages);
+        // Kalan data hesabı (plan varsa)
+        const latestPlan = esim.plans?.[0];
+        const totalBytes = latestPlan?.totalData || 0;
+        const remainingBytes = latestPlan?.remainingData || 0;
+        const usagePercentage = totalBytes > 0
+          ? Math.round(((totalBytes - remainingBytes) / totalBytes) * 100)
+          : 0;
+        const toGB = (b: number) => b > 0 ? `${(b / 1024 / 1024 / 1024).toFixed(1)} GB` : "0 GB";
+
+        return {
+          ...esim,
+          validity: duration > 0 ? `${duration} ${t('package.days')}` : "N/A",
+          timeProgress: Math.min(100, Math.max(0, timeProgress)),
+          usedData: totalBytes > 0 ? toGB(totalBytes - remainingBytes) : "0 GB",
+          remainingData: totalBytes > 0 ? toGB(remainingBytes) : esim.data,
+          usagePercentage,
+          qrCodeUrl: null,
+          expiresAt: esim.endDate,
+          activatedAt: null,
+        };
+      });
+
+      setPackages(mapped);
     } catch (err) {
       console.error("Failed to load packages:", err);
       setError(t('messages.error'));
@@ -401,7 +318,7 @@ export default function ProfilePage() {
                     <div className="flex items-start justify-between mb-6">
                       <div className="flex items-center gap-4">
                         {pkg.flagUrl ? (
-                          <div className="w-12 h-8 rounded-lg overflow-hidden border border-border/50 shadow-sm flex-shrink-0">
+                          <div className="w-12 h-8 rounded-md overflow-hidden border border-border/50 shadow-sm flex-shrink-0">
                             <img
                               src={pkg.flagUrl}
                               alt={pkg.name}
@@ -441,7 +358,7 @@ export default function ProfilePage() {
                       <div className="flex items-center gap-2 pt-2 border-t border-border/20">
                         <Calendar className="w-3.5 h-3.5 text-muted-foreground" />
                         <span className="text-xs text-muted-foreground">
-                          {new Date(pkg.startDate).toLocaleDateString()} - {new Date(pkg.endDate).toLocaleDateString()}
+                          {new Date(pkg.startDate).toLocaleDateString()} - {pkg.endDate ? new Date(pkg.endDate).toLocaleDateString() : "—"}
                         </span>
                       </div>
 
@@ -485,7 +402,7 @@ export default function ProfilePage() {
             {/* Modal Header */}
             <div className="flex items-center gap-6 mb-10">
               {selectedPackage.flagUrl ? (
-                <div className="w-24 h-16 rounded-2xl overflow-hidden border-2 border-primary/20 shadow-2xl flex-shrink-0">
+                <div className="w-24 h-16 rounded-lg overflow-hidden border-2 border-primary/20 shadow-2xl flex-shrink-0">
                   <img
                     src={selectedPackage.flagUrl}
                     alt={selectedPackage.name}

@@ -15,14 +15,16 @@ export interface Country {
 
 export const countryService = {
   async getAll(): Promise<Country[]> {
-    const response = await api.get<Country[]>("/countries");
-    return response.data;
+    const response = await api.get<any>("/countries");
+    if (!response.data) return [];
+    return Array.isArray(response.data) ? response.data : (response.data.data || []);
   },
 
   async getPopular(): Promise<Country[]> {
     try {
-      const response = await api.get<Country[]>("/countries/popular");
-      return response.data;
+      const response = await api.get<any>("/countries/popular");
+      if (!response.data) return [];
+      return Array.isArray(response.data) ? response.data : (response.data.data || []);
     } catch {
       // Fallback to all countries if popular endpoint fails
       const allCountries = await this.getAll();

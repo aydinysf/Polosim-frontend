@@ -56,7 +56,7 @@ const destinations = [
 
 export function PopularDestinations() {
   return (
-    <section className="py-16 sm:py-24 px-4">
+    <section className="py-16 sm:py-24 px-4 bg-gray-500">
       <div className="max-w-7xl mx-auto">
         {/* Section header */}
         <div className="text-center mb-10 sm:mb-16">

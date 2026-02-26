@@ -8,6 +8,7 @@
     "plans": "Plans",
     "howItWorks": "How It Works",
     "support": "Support",
+    "bayi-girisi": "Reseller Login",
     "login": "Login",
     "myProfile": "My Profile",
     "logout": "Logout"
@@ -20,7 +21,8 @@
     "bestSeller": "Best Seller",
     "regionalPlans": "Regional Plans",
     "countryPlans": "Country Plans",
-    "buyNow": "Buy Now"
+    "buyNow": "Buy Now",
+    "popularDestinations": "Popular Destinations"
   },
   "Footer": {
     "description": "One Sim, One World. Stay connected in 200+ countries with instant activation and no roaming fees.",

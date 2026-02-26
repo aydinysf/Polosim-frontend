@@ -7,3 +7,4 @@ services:
     restart: always
     environment:
       - NODE_ENV=production
+      - NEXT_PUBLIC_API_URL=https://web-api.polosim.com/api/V1/

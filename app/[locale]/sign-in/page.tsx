@@ -1,43 +1,108 @@
 "use client";
 
-import React from "react"
-
-import { useState } from "react";
-import { Eye, EyeOff, Mail, Lock, ArrowRight, Smartphone } from "lucide-react";
+import React, { useState, useRef, ChangeEvent, KeyboardEvent, ClipboardEvent, useEffect } from "react";
+import { Mail, ArrowRight, Smartphone, Lock, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { useAuth } from "@/lib/auth-context";
+import { authService } from "@/lib/services/authService";
 import { ApiError } from "@/lib/api-client";
 import { Link } from "@/i18n/routing";
 import Image from "next/image";
 import { useRouter } from "@/i18n/routing";
 
+type Step = "email" | "otp";
+
 export default function SignInPage() {
+  const [step, setStep] = useState<Step>("email");
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
+  const [otp, setOtp] = useState<string[]>(Array(6).fill(""));
+  const [countdown, setCountdown] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const { login } = useAuth();
+  const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+  const { login, setAuthData } = useAuth();
   const router = useRouter();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  // Geri sayım
+  useEffect(() => {
+    if (countdown <= 0) return;
+    const timer = setTimeout(() => setCountdown((c) => c - 1), 1000);
+    return () => clearTimeout(timer);
+  }, [countdown]);
+
+  // Adım 1: E-posta gönder, OTP iste
+  const handleRequestOtp = async (e?: React.FormEvent) => {
+    e?.preventDefault();
+    if (!email || !/\S+@\S+\.\S+/.test(email)) {
+      setError("Lütfen geçerli bir e-posta adresi girin.");
+      return;
+    }
     setIsLoading(true);
     setError("");
-
     try {
-      await login({ email, password });
-      router.push("/profile");
+      await authService.requestOtp(email);
+      setStep("otp");
+      setOtp(Array(6).fill(""));
+      setCountdown(60);
     } catch (err) {
       if (err instanceof ApiError) {
-        setError(err.message || "Invalid email or password");
+        setError(err.message || "Kod gönderilemedi. Lütfen tekrar deneyin.");
       } else {
-        console.error("Login failed with unexpected error:", err);
-        setError("An error occurred. Please try again.");
+        setError("Bir hata oluştu. Lütfen tekrar deneyin.");
       }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // OTP kutu değişimi
+  const handleOtpChange = (e: ChangeEvent<HTMLInputElement>, index: number) => {
+    const { value } = e.target;
+    if (!/^[0-9]$/.test(value) && value !== "") return;
+    const newOtp = [...otp];
+    newOtp[index] = value;
+    setOtp(newOtp);
+    if (value !== "" && index < 5) {
+      inputRefs.current[index + 1]?.focus();
+    }
+    if (newOtp.every((d) => d !== "")) {
+      handleVerifyOtp(newOtp.join(""));
+    }
+  };
+
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>, index: number) => {
+    if (e.key === "Backspace" && otp[index] === "" && index > 0) {
+      inputRefs.current[index - 1]?.focus();
+    }
+  };
+
+  const handlePaste = (e: ClipboardEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    const paste = e.clipboardData.getData("text").slice(0, 6);
+    if (/^[0-9]{6}$/.test(paste)) {
+      setOtp(paste.split(""));
+      handleVerifyOtp(paste);
+    }
+  };
+
+  // Adım 2: OTP doğrula ve giriş yap
+  const handleVerifyOtp = async (code: string) => {
+    setIsLoading(true);
+    setError("");
+    try {
+      const response = await authService.verifyOtp(email, code);
+      const { token, user } = (response as any).data;
+      if (token && user) {
+        setAuthData(user, token); // auth-context'i güncelle (locale-aware)
+        router.push("/profile");
+      }
+    } catch (err) {
+      setError("Hatalı veya süresi dolmuş kod. Lütfen tekrar deneyin.");
+      setOtp(Array(6).fill(""));
+      inputRefs.current[0]?.focus();
     } finally {
       setIsLoading(false);
     }
@@ -68,154 +133,145 @@ export default function SignInPage() {
                 className="h-16 w-auto mx-auto"
               />
             </Link>
-            <h1 className="text-2xl font-bold text-foreground mt-6">Welcome Back</h1>
-            <p className="text-muted-foreground mt-2">Sign in to manage your eSIM plans</p>
+            <h1 className="text-2xl font-bold text-foreground mt-6">
+              {step === "email" ? "Welcome Back" : "Check Your Email"}
+            </h1>
+            <p className="text-muted-foreground mt-2">
+              {step === "email"
+                ? "Sign in with your email – no password needed"
+                : `We sent a 6-digit code to ${email}`}
+            </p>
           </div>
 
-          {/* Sign In Form */}
-          <div className="bg-card/60 backdrop-blur-xl border border-border/50 rounded-2xl p-8">
-            <form onSubmit={handleSubmit} className="space-y-5">
-              {error && (
-                <div className="p-3 rounded-lg bg-destructive/10 border border-destructive/20 text-destructive text-sm">
-                  {error.includes("not verified") ? (
-                    <div className="flex flex-col gap-1">
-                      <span>{error}</span>
-                      <Link
-                        href={`/verify-email?email=${encodeURIComponent(email)}`}
-                        className="font-bold underline hover:text-destructive/80"
-                      >
-                        Click here to verify your account
-                      </Link>
-                    </div>
-                  ) : error}
-                </div>
-              )}
+          {/* Form Card */}
+          <div className="bg-card/60 backdrop-blur-xl border border-border/50 rounded-2xl p-8 space-y-6">
 
-              {/* Email */}
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-foreground">Email</label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                  <Input
-                    type="email"
-                    placeholder="you@example.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="pl-10 bg-background/50 border-border/50 focus:border-primary"
-                    required
-                  />
-                </div>
+            {/* Error */}
+            {error && (
+              <div className="p-3 rounded-lg bg-destructive/10 border border-destructive/20 text-destructive text-sm">
+                {error}
               </div>
+            )}
 
-              {/* Password */}
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <label className="text-sm font-medium text-foreground">Password</label>
-                  <Link href="/forgot-password" className="text-sm text-primary hover:underline">
-                    Forgot password?
-                  </Link>
-                </div>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                  <Input
-                    type={showPassword ? "text" : "password"}
-                    placeholder="Enter your password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="pl-10 pr-10 bg-background/50 border-border/50 focus:border-primary"
-                    required
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-                  >
-                    {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                  </button>
-                </div>
-              </div>
-
-              {/* Remember me */}
-              <div className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  id="remember"
-                  className="w-4 h-4 rounded border-border/50 bg-background/50 text-primary focus:ring-primary"
-                />
-                <label htmlFor="remember" className="text-sm text-muted-foreground">
-                  Remember me for 30 days
-                </label>
-              </div>
-
-              {/* Submit */}
-              <Button
-                type="submit"
-                className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
-                disabled={isLoading}
-              >
-                {isLoading ? (
-                  <div className="flex items-center gap-2">
-                    <div className="w-4 h-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
-                    Signing in...
+            {/* ADIM 1: E-posta */}
+            {step === "email" && (
+              <form onSubmit={handleRequestOtp} className="space-y-5">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-foreground">Email</label>
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                    <Input
+                      type="email"
+                      placeholder="you@example.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="pl-10 bg-background/50 border-border/50 focus:border-primary"
+                      required
+                      autoFocus
+                    />
                   </div>
-                ) : (
-                  <div className="flex items-center gap-2">
-                    Sign In
-                    <ArrowRight className="w-4 h-4" />
+                </div>
+
+                <Button
+                  type="submit"
+                  className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
+                  disabled={isLoading}
+                >
+                  {isLoading ? (
+                    <div className="flex items-center gap-2">
+                      <div className="w-4 h-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
+                      Sending Code...
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-2">
+                      Send Login Code
+                      <ArrowRight className="w-4 h-4" />
+                    </div>
+                  )}
+                </Button>
+              </form>
+            )}
+
+            {/* ADIM 2: OTP */}
+            {step === "otp" && (
+              <div className="space-y-5">
+                <div className="flex items-center gap-2 text-sm text-emerald-600 bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800 rounded-lg p-3">
+                  <CheckCircle className="w-4 h-4 shrink-0" />
+                  <span>Code sent! Check your inbox (and spam folder).</span>
+                </div>
+
+                <div className="space-y-3">
+                  <label className="text-sm font-medium text-foreground block text-center">
+                    Enter 6-Digit Code
+                  </label>
+                  <div className="flex justify-center gap-2" onPaste={handlePaste}>
+                    {otp.map((digit, index) => (
+                      <Input
+                        key={index}
+                        ref={(el) => { if (el) inputRefs.current[index] = el; }}
+                        type="text"
+                        inputMode="numeric"
+                        maxLength={1}
+                        value={digit}
+                        onChange={(e) => handleOtpChange(e, index)}
+                        onKeyDown={(e) => handleKeyDown(e, index)}
+                        className="w-11 h-13 text-center text-xl font-bold border-2 rounded-lg focus:border-primary bg-background/50"
+                        disabled={isLoading}
+                        autoFocus={index === 0}
+                      />
+                    ))}
+                  </div>
+                </div>
+
+                {isLoading && (
+                  <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
+                    <div className="w-4 h-4 border-2 border-muted-foreground/30 border-t-muted-foreground rounded-full animate-spin" />
+                    Verifying...
                   </div>
                 )}
-              </Button>
-            </form>
 
-            {/* Divider */}
-            <div className="relative my-6">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-border/50" />
+                <div className="text-center text-sm text-muted-foreground">
+                  {countdown > 0 ? (
+                    <p>Resend code in {countdown}s</p>
+                  ) : (
+                    <button
+                      onClick={() => handleRequestOtp()}
+                      disabled={isLoading}
+                      className="text-primary hover:underline font-medium disabled:opacity-50"
+                    >
+                      Resend Code
+                    </button>
+                  )}
+                </div>
+
+                <button
+                  onClick={() => { setStep("email"); setError(""); setOtp(Array(6).fill("")); }}
+                  className="w-full text-sm text-muted-foreground hover:text-foreground text-center"
+                >
+                  ← Use a different email
+                </button>
               </div>
-              <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-card px-2 text-muted-foreground">Or continue with</span>
-              </div>
-            </div>
-
-            {/* Social Login */}
-            <div className="grid grid-cols-2 gap-3">
-              <Button variant="outline" className="bg-transparent border-border/50 hover:bg-secondary/50">
-                <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
-                  <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-                  <path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-                  <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
-                  <path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
-                </svg>
-                Google
-              </Button>
-              <Button variant="outline" className="bg-transparent border-border/50 hover:bg-secondary/50">
-                <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701" />
-                </svg>
-                Apple
-              </Button>
-            </div>
-
-            {/* Sign Up Link */}
-            <p className="text-center text-sm text-muted-foreground mt-6">
-              Don't have an account?{" "}
-              <Link href="/get-started" className="text-primary hover:underline font-medium">
-                Get Started
-              </Link>
-            </p>
+            )}
           </div>
 
           {/* Trust badges */}
           <div className="flex items-center justify-center gap-6 mt-8 text-xs text-muted-foreground">
             <div className="flex items-center gap-1.5">
               <Lock className="w-3.5 h-3.5" />
-              <span>Secure Login</span>
+              <span>No Password Needed</span>
             </div>
             <div className="flex items-center gap-1.5">
               <Smartphone className="w-3.5 h-3.5" />
               <span>200+ Countries</span>
             </div>
           </div>
+
+          <p className="text-center text-sm text-muted-foreground mt-6">
+            New here?{" "}
+            <Link href="/get-started" className="text-primary hover:underline font-medium">
+              Get Started
+            </Link>
+          </p>
         </div>
       </section>
 

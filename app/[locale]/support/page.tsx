@@ -167,7 +167,7 @@ export default function SupportPage() {
       <Navbar />
       
       {/* Hero Section */}
-      <section className="pt-40 pb-12 px-4 relative overflow-hidden">
+      <section className="pt-40 pb-12 px-4 relative overflow-hidden bg-gray-100">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(14,116,144,0.04)_1px,transparent_1px),linear-gradient(to_bottom,rgba(14,116,144,0.04)_1px,transparent_1px)] bg-[size:40px_40px]" />
         <div className="absolute top-20 left-10 w-48 h-48 bg-primary/10 rounded-full blur-3xl" />
         <div className="absolute bottom-0 right-10 w-64 h-64 bg-primary/5 rounded-full blur-3xl" />
@@ -208,7 +208,7 @@ export default function SupportPage() {
       </section>
 
       {/* Support Categories */}
-      <section className="py-12 px-4">
+      <section className="py-12 px-4 bg-gray-200">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-2xl font-bold text-foreground mb-6">Browse by Category</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -230,7 +230,7 @@ export default function SupportPage() {
       </section>
 
       {/* Popular Articles */}
-      <section className="py-12 px-4 bg-card/20">
+      <section className="py-12 px-4 bg-gray-300">
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-bold text-foreground">Popular Articles</h2>
@@ -256,7 +256,7 @@ export default function SupportPage() {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-12 px-4">
+      <section className="py-12 px-4 bg-gray-400">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-10">
             <h2 className="text-3xl font-bold text-foreground mb-3">Frequently Asked Questions</h2>
@@ -302,7 +302,7 @@ export default function SupportPage() {
       </section>
 
       {/* Contact Section */}
-      <section className="py-12 px-4 bg-card/20">
+      <section className="py-12 px-4 bg-gray-500">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-10">
             <h2 className="text-3xl font-bold text-foreground mb-3">Still Need Help?</h2>
@@ -341,7 +341,7 @@ export default function SupportPage() {
       </section>
 
       {/* Status Banner */}
-      <section className="py-8 px-4">
+      <section className="py-8 px-4 bg-gray-600">
         <div className="max-w-4xl mx-auto">
           <div className="flex items-center justify-between p-4 rounded-xl border border-emerald-500/30 bg-emerald-500/10">
             <div className="flex items-center gap-3">

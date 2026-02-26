@@ -10,8 +10,8 @@
   --card-foreground: oklch(0.15 0.01 260);
   --popover: hsl(0 0% 100%);
   --popover-foreground: oklch(0.15 0.01 260);
-  --primary: hsl(142.1 76.2% 36.3%);
-  --primary-foreground: oklch(1 0 0);
+  --primary: hsl(28 56% 65%);
+  --primary-foreground: hsl(240 10% 3.9%);
   --secondary: hsl(240 4.8% 95.9%);
   --secondary-foreground: oklch(0.15 0.01 260);
   --muted: hsl(240 4.8% 95.9%);
@@ -22,8 +22,8 @@
   --destructive-foreground: oklch(1 0 0);
   --border: hsl(240 5.9% 90%);
   --input: hsl(240 5.9% 90%);
-  --ring: hsl(142.1 76.2% 36.3%);
-  --chart-1: hsl(142.1 76.2% 36.3%);
+  --ring: hsl(28 56% 65%);
+  --chart-1: hsl(28 56% 65%);
   --chart-2: hsl(159 84% 45%);
   --chart-3: hsl(134 61% 41%);
   --chart-4: hsl(120 100% 25%);

@@ -14,13 +14,15 @@ export interface Region {
 
 export const regionService = {
   async getAll(): Promise<Region[]> {
-    const response = await api.get<Region[]>("/regions");
-    return response.data;
+    const response = await api.get<any>("/regions");
+    if (!response.data) return [];
+    return Array.isArray(response.data) ? response.data : (response.data.data || []);
   },
 
   async getPopular(): Promise<Region[]> {
-    const response = await api.get<Region[]>("/regions/popular");
-    return response.data;
+    const response = await api.get<any>("/regions/popular");
+    if (!response.data) return [];
+    return Array.isArray(response.data) ? response.data : (response.data.data || []);
   },
 
   async getById(id: number): Promise<Region> {
