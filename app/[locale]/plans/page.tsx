@@ -51,33 +51,33 @@ export default function PlansPage() {
   ];
 
   const validityFilterOptions = [
-    { label: t('validity.days', {count: 1}), value: 1 },
-    { label: t('validity.days', {count: 2}), value: 2 },
-    { label: t('validity.days', {count: 3}), value: 3 },
-    { label: t('validity.days', {count: 4}), value: 4 },
-    { label: t('validity.days', {count: 5}), value: 5 },
-    { label: t('validity.days', {count: 6}), value: 6 },
-    { label: t('validity.days', {count: 7}), value: 7 },
-    { label: t('validity.days', {count: 15}), value: 15 },
-    { label: t('validity.days', {count: 30}), value: 30 },
+    { label: t('validity.days', { count: 1 }), value: 1 },
+    { label: t('validity.days', { count: 2 }), value: 2 },
+    { label: t('validity.days', { count: 3 }), value: 3 },
+    { label: t('validity.days', { count: 4 }), value: 4 },
+    { label: t('validity.days', { count: 5 }), value: 5 },
+    { label: t('validity.days', { count: 6 }), value: 6 },
+    { label: t('validity.days', { count: 7 }), value: 7 },
+    { label: t('validity.days', { count: 15 }), value: 15 },
+    { label: t('validity.days', { count: 30 }), value: 30 },
   ];
 
-function parseDataAmount(dataStr: string): number {
-  if (!dataStr) return 0;
-  const lower = dataStr.toLowerCase().replace(/\s/g, "");
-  if (lower.includes("unlimited")) return 999999999;
-  const num = parseFloat(lower);
-  if (isNaN(num)) return 0;
-  if (lower.includes("gb")) return num * 1024;
-  if (lower.includes("mb")) return num;
-  return num;
-}
+  function parseDataAmount(dataStr: string): number {
+    if (!dataStr) return 0;
+    const lower = dataStr.toLowerCase().replace(/\s/g, "");
+    if (lower.includes("unlimited")) return 999999999;
+    const num = parseFloat(lower);
+    if (isNaN(num)) return 0;
+    if (lower.includes("gb")) return num * 1024;
+    if (lower.includes("mb")) return num;
+    return num;
+  }
 
-function parseValidity(validityStr: string): number {
-  if (!validityStr) return 0;
-  const num = parseInt(validityStr);
-  return isNaN(num) ? 0 : num;
-}
+  function parseValidity(validityStr: string): number {
+    if (!validityStr) return 0;
+    const num = parseInt(validityStr);
+    return isNaN(num) ? 0 : num;
+  }
 
   const searchParams = useSearchParams();
   const initialSearch = searchParams.get("search") || "";
@@ -440,13 +440,13 @@ function parseValidity(validityStr: string): number {
                         : (() => {
                           const icon = (item as Region).icon;
                           const isPath = icon && (icon.includes('/') || icon.includes('.'));
-          const url = isPath ? getImageUrl(icon) : null;
-          return url ? (
-            <div className="relative w-6 h-6 rounded-sm overflow-hidden">
-              <Image src={url} alt="" fill className="object-cover" sizes="24px" />
-            </div>
-          ) : (icon || "🌍");
-        })()}
+                          const url = isPath ? getImageUrl(icon) : null;
+                          return url ? (
+                            <div className="relative w-6 h-6 rounded-sm overflow-hidden">
+                              <Image src={url} alt="" fill className="object-cover" sizes="24px" />
+                            </div>
+                          ) : (icon || "🌍");
+                        })()}
                     </span>
                     <div>
                       <div className="font-medium text-foreground">
@@ -719,8 +719,8 @@ function parseValidity(validityStr: string): number {
           {/* Results Count */}
           <p className="text-sm text-muted-foreground mb-6">
             {viewMode === "plans"
-              ? t('results.plansCount', {count: filteredProducts.length})
-              : t('results.regionsCount', {count: filteredRegions.length})}
+              ? t('results.plansCount', { count: filteredProducts.length })
+              : t('results.regionsCount', { count: filteredRegions.length })}
           </p>
 
           {/* Loading State */}
@@ -748,7 +748,7 @@ function parseValidity(validityStr: string): number {
                     return (
                       <div
                         key={product.id}
-                        className="group relative overflow-hidden rounded-2xl border border-border/50 bg-card/30 backdrop-blur-sm transition-all duration-300 hover:border-primary/50 hover:bg-card/50"
+                        className="group relative overflow-hidden rounded-2xl border border-border/50 bg-gray-100/80 dark:bg-gray-900/30 backdrop-blur-sm transition-all duration-300 hover:border-primary/50 hover:bg-gray-200/60 dark:hover:bg-card/50"
                       >
                         {bestSeller && (
                           <div className="absolute top-3 right-3 z-10">
@@ -867,7 +867,7 @@ function parseValidity(validityStr: string): number {
                         {countryCount > 0 && (
                           <div className="flex items-center gap-1 text-sm text-muted-foreground mt-0.5">
                             <MapPin className="w-3 h-3" />
-                            <span>{t('labels.countriesCount', {count: countryCount})}</span>
+                            <span>{t('labels.countriesCount', { count: countryCount })}</span>
                           </div>
                         )}
                       </div>
