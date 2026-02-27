@@ -100,4 +100,10 @@ export const authService = {
 
   checkout: (payload: CheckoutPayload) =>
     api.post('/checkout/execute', payload),
+
+  deactivateAccount: async (): Promise<void> => {
+    await api.delete('/account');
+    setAuthToken(null);
+    setUserToStorage(null);
+  },
 };

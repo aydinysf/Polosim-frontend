@@ -4,13 +4,14 @@ import { useState, useEffect } from "react";
 import {
   User, LogOut, Smartphone, Clock, CheckCircle,
   AlertCircle, ChevronRight, Signal, Calendar,
-  RefreshCw, X, Wifi, Loader2, Copy, Check
+  RefreshCw, X, Wifi, Loader2, Copy, Check, Trash2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { useAuth } from "@/lib/auth-context";
+import { authService } from "@/lib/services/authService";
 import { esimProfileService, type EsimPackageData } from "@/lib/services/esimProfileService";
 import { Link, useRouter } from "@/i18n/routing";
 import { toast } from "sonner";
@@ -41,6 +42,8 @@ export default function ProfilePage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
   const [copied, setCopied] = useState<string | null>(null);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     if (!authLoading && !isAuthenticated) {
@@ -122,6 +125,20 @@ export default function ProfilePage() {
     router.push("/");
   };
 
+  const handleDeleteAccount = async () => {
+    setIsDeleting(true);
+    try {
+      await authService.deactivateAccount();
+      toast.success("Hesabınız devre dışı bırakıldı.");
+      router.push("/");
+    } catch (err) {
+      toast.error("Hesap devre dışı bırakılamadı. Lütfen tekrar deneyin.");
+    } finally {
+      setIsDeleting(false);
+      setShowDeleteConfirm(false);
+    }
+  };
+
   const refreshPackageStatus = async () => {
     await loadPackages();
   };
@@ -173,6 +190,14 @@ export default function ProfilePage() {
               <Button variant="outline" className="bg-transparent border-border/50" onClick={handleLogout}>
                 <LogOut className="w-4 h-4 mr-2" />
                 {t('logout')}
+              </Button>
+              <Button
+                variant="outline"
+                className="bg-transparent border-red-500/40 text-red-500 hover:bg-red-500/10 hover:border-red-500"
+                onClick={() => setShowDeleteConfirm(true)}
+              >
+                <Trash2 className="w-4 h-4 mr-2" />
+                Hesabı Kapat
               </Button>
             </div>
           </div>
@@ -529,6 +554,51 @@ export default function ProfilePage() {
               >
                 {t('modal.close')}
               </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Hesap Deaktivasyon Onay Diyalogu */}
+      {showDeleteConfirm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div
+            className="absolute inset-0 bg-background/90 backdrop-blur-md"
+            onClick={() => !isDeleting && setShowDeleteConfirm(false)}
+          />
+          <div className="relative w-full max-w-md bg-card border border-red-500/20 rounded-3xl shadow-2xl p-8 animate-in fade-in zoom-in duration-300">
+            <div className="flex flex-col items-center text-center gap-4">
+              <div className="w-16 h-16 rounded-2xl bg-red-500/10 border border-red-500/20 flex items-center justify-center">
+                <Trash2 className="w-8 h-8 text-red-500" />
+              </div>
+              <div>
+                <h3 className="text-xl font-bold text-foreground">Hesabı Devre Dışı Bırak</h3>
+                <p className="text-sm text-muted-foreground mt-2 leading-relaxed">
+                  Bu işlem hesabınızı devre dışı bırakır. Tüm aktif oturumlarınız kapatılır.
+                  Hesabınızı yeniden etkinleştirmek için destek ekibiyle iletişime geçebilirsiniz.
+                </p>
+              </div>
+              <div className="flex gap-3 w-full pt-2">
+                <Button
+                  variant="outline"
+                  className="flex-1 bg-transparent"
+                  onClick={() => setShowDeleteConfirm(false)}
+                  disabled={isDeleting}
+                >
+                  İptal
+                </Button>
+                <Button
+                  className="flex-1 bg-red-500 hover:bg-red-600 text-white border-none shadow-lg shadow-red-500/20"
+                  onClick={handleDeleteAccount}
+                  disabled={isDeleting}
+                >
+                  {isDeleting ? (
+                    <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> İşleniyor...</>
+                  ) : (
+                    <><Trash2 className="w-4 h-4 mr-2" /> Onayla</>
+                  )}
+                </Button>
+              </div>
             </div>
           </div>
         </div>
