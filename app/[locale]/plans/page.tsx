@@ -641,8 +641,8 @@ export default function PlansPage() {
                 </div>
               )}
 
-              {/* Pagination */}
-              {totalPages > 1 && (
+              {/* Pagination - only show in plans view */}
+              {viewMode === "plans" && totalPages > 1 && (
                 <div className="flex items-center justify-center gap-2 mt-4">
                   <Button
                     variant="outline"

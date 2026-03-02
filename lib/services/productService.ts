@@ -13,6 +13,7 @@ export interface Product {
   // Data amount - various possible field names from API
   data_amount?: string; // e.g., "10GB", "500 MB"
   data_amount_mb?: number; // raw MB value from web-api
+  data_limit?: string;
   data?: string;
   dataAmount?: string;
 
@@ -43,6 +44,7 @@ export interface Product {
   // Features (can be nested object from API)
   hotspot?: boolean;
   hotspot_allowed?: boolean;
+  allow_hotspot?: boolean | number;
   instant_activation?: boolean;
   instantActivation?: boolean;
   is_featured?: boolean;

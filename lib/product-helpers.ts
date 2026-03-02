@@ -14,7 +14,23 @@ export function getLocalizedText(value: unknown, fallback = "", locale?: string)
 export function getProductData(product: Product): string {
   const features = product.features as Record<string, unknown> | undefined;
   if (features?.data_label) return String(features.data_label);
-  if (features?.data_raw_mb) return `${features.data_raw_mb} MB`;
+  if (product.data_limit) return String(product.data_limit);
+  if (features?.data_raw_mb && typeof features.data_raw_mb === "number") {
+    const mb = features.data_raw_mb;
+    if (mb >= 1024) {
+      const gb = mb / 1024;
+      return `${gb >= 10 ? Math.round(gb) : parseFloat(gb.toFixed(1))}GB`;
+    }
+    return `${mb}MB`;
+  }
+  if (product.data_amount_mb) {
+    const mb = product.data_amount_mb;
+    if (mb >= 1024) {
+      const gb = mb / 1024;
+      return `${gb >= 10 ? Math.round(gb) : parseFloat(gb.toFixed(1))}GB`;
+    }
+    return `${mb}MB`;
+  }
   return product.data_amount || product.data || product.dataAmount || "N/A";
 }
 
@@ -30,6 +46,7 @@ export function getProductValidity(product: Product): string {
   if (product.validityDays) return `${product.validityDays} Days`;
   if (product.day) return `${product.day} Days`;
   if (product.days) return `${product.days} Days`;
+  if (product.duration_days) return `${product.duration_days} Days`;
   return "N/A";
 }
 
@@ -51,8 +68,13 @@ export function getProductThrottleSpeed(product: Product): string | undefined {
 // Helper to check if hotspot is allowed (including nested features)
 export function isHotspotAllowed(product: Product): boolean {
   const features = product.features as Record<string, unknown> | undefined;
-  if (features?.allow_hotspot === true) return true;
-  return product.hotspot === true || product.hotspot_allowed === true;
+  if (features?.allow_hotspot === true || features?.allow_hotspot === 1) return true;
+  return (
+    product.hotspot === true ||
+    product.hotspot_allowed === true ||
+    product.allow_hotspot === true ||
+    product.allow_hotspot === 1
+  );
 }
 
 // Helper to check instant activation

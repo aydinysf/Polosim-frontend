@@ -421,7 +421,7 @@ export function HeroSection() {
                     return (
                       <div
                         key={product.id}
-                        className="relative overflow-hidden rounded-xl border border-border/50 bg-background/50 p-4 transition-all duration-300 hover:border-primary/50"
+                        className="relative overflow-hidden rounded-xl border border-border/50 bg-primary/5 dark:bg-card p-4 transition-all duration-300 hover:border-primary/50"
                       >
                         {bestSeller && (
                           <div className="absolute top-2 right-2">
