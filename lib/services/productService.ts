@@ -36,6 +36,7 @@ export interface Product {
   // Price
   price: number;
   base_price?: number; // web-api uses this
+  base_currency?: string; // web-api uses this
   original_price?: number;
   currency?: string;
 

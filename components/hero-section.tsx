@@ -291,7 +291,7 @@ export function HeroSection() {
       id: product.id,
       name: productName,
       description: getLocalizedText(product.description) || `${productData} Data Plan`,
-      priceInCents: product.price ? Math.round(product.price * 100) : 0,
+      priceInCents: product.base_price ? Math.round(product.base_price * 100) : 0,
       flag: product.flag_url || product.country?.flag_url || "",
       data: productData,
       validity: String(productValidity),
@@ -474,7 +474,9 @@ export function HeroSection() {
 
                         {/* Price and buy button */}
                         <div className="flex items-center justify-between pt-3 border-t border-border/30">
-                          <span className="text-xl font-bold text-foreground">EUR {product.price}</span>
+                          <span className="text-xl font-bold text-foreground">
+                            {product.base_currency || 'EUR'} {product.base_price}
+                          </span>
                           <Button
                             size="sm"
                             className={`transition-all ${addedToCart === product.id ? "bg-emerald-500 hover:bg-emerald-500" : "bg-primary hover:bg-primary/90"} text-primary-foreground`}
