@@ -33,6 +33,7 @@ export interface CheckoutPayload {
   quantity: number;
   guest_name: string;
   guest_surname: string;
+  guest_email: string;
 }
 
 // localStorage İşlemleri

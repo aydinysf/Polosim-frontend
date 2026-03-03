@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Loader2, CheckCircle, AlertCircle } from 'lucide-react';
+import { ApiError } from '@/lib/api-client';
 
 // Props arayüzü
 interface GuestCheckoutFormProps {
@@ -142,11 +143,22 @@ export function GuestCheckoutForm({
         quantity,
         guest_name: firstName,
         guest_surname: lastName,
+        guest_email: email,
       };
       const response = await authService.checkout(payload);
       onCheckoutSuccess(response.data);
       localStorage.removeItem('guest_token'); // Başarılı ödeme sonrası token'ı temizle
     } catch (err: any) {
+      if (err instanceof ApiError) {
+        console.error("Guest checkout error (API):", {
+          endpoint: "/auth/checkout",
+          statusCode: err.statusCode,
+          message: err.message,
+          details: err.details,
+        });
+      } else {
+        console.error("Guest checkout error (Unknown):", err);
+      }
       setError(err.message || 'Ödeme başlatılamadı.');
       onError?.(err);
     } finally {
@@ -189,9 +201,8 @@ export function GuestCheckoutForm({
 
         {/* Adım 2: OTP */}
         <div
-          className={`transition-all duration-300 ease-in-out overflow-hidden ${
-            step === 'otp' ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0'
-          }`}
+          className={`transition-all duration-300 ease-in-out overflow-hidden ${step === 'otp' ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0'
+            }`}
         >
           <div className="space-y-2 pt-4 border-t">
             <Label>Doğrulama Kodu</Label>
@@ -226,9 +237,8 @@ export function GuestCheckoutForm({
 
         {/* Adım 3: Ad/Soyad */}
         <div
-          className={`transition-all duration-300 ease-in-out overflow-hidden ${
-            step === 'info' || step === 'ready' ? 'max-h-60 opacity-100' : 'max-h-0 opacity-0'
-          }`}
+          className={`transition-all duration-300 ease-in-out overflow-hidden ${step === 'info' || step === 'ready' ? 'max-h-60 opacity-100' : 'max-h-0 opacity-0'
+            }`}
         >
           <div className="space-y-4 pt-4 border-t">
             <div className="grid grid-cols-2 gap-4">

@@ -34,16 +34,39 @@ api.interceptors.response.use(
   (error: AxiosError) => {
     if (error.response) {
       const { data, status } = error.response;
+
+      // Token expired or invalid — clear auth state and notify the app
+      if (status === 401) {
+        localStorage.removeItem('auth_token');
+        localStorage.removeItem('user');
+        localStorage.removeItem('guest_token');
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(new CustomEvent('auth:expired'));
+        }
+      }
+
       const message = (data as any)?.message || error.message;
       const details = (data as any)?.errors || null;
 
-      // Detaylı loglama (Hata teşhisi için)
+      // Genel API hata logu (özellikle checkout/sipariş süreçlerinde işe yarar)
+      const safeUrl = error.config?.url || "unknown";
+      const method = (error.config?.method || "GET").toUpperCase();
+      console.error("API Error:", {
+        method,
+        url: safeUrl,
+        status,
+        message,
+        details,
+      });
+
+      // 422 için ekstra detay
       if (status === 422) {
-        console.error('422 Unprocessable Entity - Detaylar:', JSON.stringify(data, null, 2));
+        console.error("422 Unprocessable Entity - Detaylar:", JSON.stringify(data, null, 2));
       }
 
       return Promise.reject(new ApiError(message, status, details));
     }
+    console.error("Network/Unknown API Error:", error.message);
     return Promise.reject(new ApiError(error.message, 500));
   }
 );

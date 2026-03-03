@@ -14,6 +14,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import { StripePaymentForm } from "@/components/stripe-payment-form";
 import { useRouter } from "next/navigation";
 import { Link } from "@/i18n/routing";
+import { ApiError } from "@/lib/api-client";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 const hasStripeKey = !!process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
@@ -61,6 +62,14 @@ export function NewCheckout() {
   const handleAuthenticatedCheckout = async () => {
     if (!isAuthenticated || items.length === 0) return;
 
+    // Defensive: verify token is still present in localStorage
+    const token = localStorage.getItem('auth_token');
+    if (!token) {
+      setErrorMessage("Oturumunuz sona ermiş. Lütfen tekrar giriş yapın.");
+      setPageState(PageState.ERROR);
+      return;
+    }
+
     setPageState(PageState.LOADING);
     try {
       // İlk ürünü kullan (çoklu ürün desteği için genişletilebilir)
@@ -81,7 +90,16 @@ export function NewCheckout() {
         handlePaymentSuccess();
       }
     } catch (err: any) {
-      console.error("Checkout execution error:", err);
+      if (err instanceof ApiError) {
+        console.error("Checkout execution error (API):", {
+          endpoint: "/checkout/execute",
+          statusCode: err.statusCode,
+          message: err.message,
+          details: err.details,
+        });
+      } else {
+        console.error("Checkout execution error (Unknown):", err);
+      }
       setErrorMessage(err.message || "Ödeme işlemi sırasında bir hata oluştu.");
       setPageState(PageState.ERROR);
     }
