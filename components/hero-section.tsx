@@ -111,8 +111,10 @@ export function HeroSection() {
 
   const [selectedCountryId, setSelectedCountryId] = useState<number | null>(null);
   const [selectedRegionId, setSelectedRegionId] = useState<number | null>(null);
+  const [searchSource, setSearchSource] = useState<'search' | 'popular' | 'regions' | null>(null);
 
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const resultsRef = useRef<HTMLDivElement>(null);
   const [isAutoScrolling, setIsAutoScrolling] = useState(true);
 
   useEffect(() => {
@@ -257,10 +259,20 @@ export function HeroSection() {
     fetchProducts();
   }, [selectedItem, regions]);
 
-  const handleSelectSuggestion = (item: { type: string; name: string; flag?: string; region?: string; id?: number }) => {
+  // Handle scrolling to results
+  useEffect(() => {
+    if (showSearchResults && resultsRef.current) {
+      setTimeout(() => {
+        resultsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 100);
+    }
+  }, [showSearchResults, searchSource]);
+
+  const handleSelectSuggestion = (item: { type: string; name: string; flag?: string; region?: string; id?: number }, source: 'search' | 'popular' | 'regions' = 'search') => {
     setSelectedItem(item);
     setSearchQuery(item.name);
     setShowSuggestions(false);
+    setSearchSource(source);
     setShowSearchResults(true);
   };
 
@@ -270,12 +282,12 @@ export function HeroSection() {
         item.name.toLowerCase() === searchQuery.toLowerCase()
       );
       if (found) {
-        handleSelectSuggestion(found);
+        handleSelectSuggestion(found, 'search');
       } else {
         // Partial match
         const partial = filteredSuggestions[0];
         if (partial) {
-          handleSelectSuggestion(partial);
+          handleSelectSuggestion(partial, 'search');
         }
       }
     }
@@ -306,7 +318,124 @@ export function HeroSection() {
   const closeSearchResults = () => {
     setShowSearchResults(false);
     setSelectedItem(null);
+    setSearchSource(null);
     setSearchQuery("");
+  };
+
+  const renderSearchResults = () => {
+    if (!showSearchResults || !selectedItem) return null;
+
+    return (
+      <div ref={resultsRef} className="mt-8 mb-8 bg-card/80 backdrop-blur-xl border border-border/50 rounded-2xl p-6 relative">
+        <button
+          onClick={closeSearchResults}
+          className="absolute top-4 right-4 p-2 rounded-full hover:bg-secondary/50 transition-colors"
+        >
+          <X className="w-5 h-5 text-muted-foreground" />
+        </button>
+
+        <div className="flex items-center gap-3 mb-6">
+          <FlagDisplay flag={selectedItem.flag} name={selectedItem.name} size="lg" />
+          <div>
+            <h2 className="text-2xl font-bold text-foreground">{selectedItem.name}</h2>
+            <p className="text-muted-foreground capitalize">{selectedItem.type === "region" ? t('regionalPlans') : t('countryPlans')}</p>
+          </div>
+        </div>
+
+        {isLoadingProducts ? (
+          <div className="flex items-center justify-center py-12">
+            <Loader2 className="w-8 h-8 animate-spin text-primary" />
+          </div>
+        ) : searchResultProducts.length > 0 ? (
+          <>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-4">
+              {searchResultProducts.map((product) => {
+                const productName = getProductName(product);
+                const productData = getProductData(product);
+                const productValidity = getProductValidity(product);
+                const productSpeed = getProductSpeed(product);
+                const hotspot = isHotspotAllowed(product);
+                const instantActivation = hasInstantActivation(product);
+                const bestSeller = isBestSeller(product);
+
+                return (
+                  <div
+                    key={product.id}
+                    className="relative overflow-hidden rounded-xl border border-border/50 bg-primary/5 dark:bg-card p-4 transition-all duration-300 hover:border-primary/50"
+                  >
+                    {bestSeller && (
+                      <div className="absolute top-2 right-2">
+                        <span className="px-2 py-1 text-xs font-medium bg-primary/20 text-primary rounded-full">{t('bestSeller')}</span>
+                      </div>
+                    )}
+
+                    {/* Header with flag and data */}
+                    <div className="flex items-center gap-2 mb-3">
+                      <FlagDisplay flag={product.flag_url || product.country?.flag_url} name={productName} size="md" />
+                      <div>
+                        <h3 className="font-semibold text-foreground">{productName}</h3>
+                        <p className="text-lg font-bold text-primary">{productData}</p>
+                      </div>
+                    </div>
+
+                    {/* Plan details */}
+                    <div className="space-y-1.5 mb-4 text-sm text-muted-foreground">
+                      <div className="flex items-center gap-2">
+                        <Clock className="w-3 h-3 flex-shrink-0" />
+                        <span>{productValidity}</span>
+                      </div>
+                      {productSpeed && (
+                        <div className="flex items-center gap-2">
+                          <Signal className="w-3 h-3 flex-shrink-0" />
+                          <span>{productSpeed}</span>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Features badges */}
+                    <div className="flex flex-wrap gap-1.5 mb-3">
+                      {hotspot && (
+                        <span className="px-2 py-0.5 text-[10px] font-medium bg-emerald-500/10 text-emerald-500 rounded-full">
+                          Hotspot
+                        </span>
+                      )}
+                      {instantActivation && (
+                        <span className="px-2 py-0.5 text-[10px] font-medium bg-blue-500/10 text-blue-500 rounded-full">
+                          Instant
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Price and buy button */}
+                    <div className="flex items-center justify-between pt-3 border-t border-border/30">
+                      <span className="text-xl font-bold text-foreground">
+                        {product.base_currency || 'EUR'} {product.base_price}
+                      </span>
+                      <Button
+                        size="sm"
+                        className={`transition-all ${addedToCart === product.id ? "bg-emerald-500 hover:bg-emerald-500" : "bg-primary hover:bg-primary/90"} text-primary-foreground`}
+                        onClick={() => handleAddToCart(product)}
+                      >
+                        {addedToCart === product.id ? (
+                          <><Check className="w-4 h-4 mr-1" />Added</>
+                        ) : (
+                          <><ShoppingCart className="w-4 h-4 mr-1" />Buy</>
+                        )}
+                      </Button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </>
+        ) : !isLoadingProducts ? (
+          <div className="text-center py-8">
+            <Globe className="w-12 h-12 text-muted-foreground/30 mx-auto mb-3" />
+            <p className="text-muted-foreground">No plans found for {selectedItem.name}</p>
+          </div>
+        ) : null}
+      </div>
+    );
   };
 
   return (
@@ -383,135 +512,7 @@ export function HeroSection() {
           )}
         </div>
 
-        {/* Search Results Modal/Section */}
-        {showSearchResults && selectedItem && (
-          <div className="mb-8 bg-card/80 backdrop-blur-xl border border-border/50 rounded-2xl p-6 relative">
-            <button
-              onClick={closeSearchResults}
-              className="absolute top-4 right-4 p-2 rounded-full hover:bg-secondary/50 transition-colors"
-            >
-              <X className="w-5 h-5 text-muted-foreground" />
-            </button>
 
-            <div className="flex items-center gap-3 mb-6">
-              <FlagDisplay flag={selectedItem.flag} name={selectedItem.name} size="lg" />
-              <div>
-                <h2 className="text-2xl font-bold text-foreground">{selectedItem.name}</h2>
-                <p className="text-muted-foreground capitalize">{selectedItem.type === "region" ? t('regionalPlans') : t('countryPlans')}</p>
-              </div>
-            </div>
-
-            {isLoadingProducts ? (
-              <div className="flex items-center justify-center py-12">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
-              </div>
-            ) : searchResultProducts.length > 0 ? (
-              <>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-4">
-                  {searchResultProducts.map((product) => {
-                    const productName = getProductName(product);
-                    const productData = getProductData(product);
-                    const productValidity = getProductValidity(product);
-                    const productSpeed = getProductSpeed(product);
-                    const throttleSpeed = getProductThrottleSpeed(product);
-                    const hotspot = isHotspotAllowed(product);
-                    const instantActivation = hasInstantActivation(product);
-                    const bestSeller = isBestSeller(product);
-
-                    return (
-                      <div
-                        key={product.id}
-                        className="relative overflow-hidden rounded-xl border border-border/50 bg-primary/5 dark:bg-card p-4 transition-all duration-300 hover:border-primary/50"
-                      >
-                        {bestSeller && (
-                          <div className="absolute top-2 right-2">
-                            <span className="px-2 py-1 text-xs font-medium bg-primary/20 text-primary rounded-full">{t('bestSeller')}</span>
-                          </div>
-                        )}
-
-                        {/* Header with flag and data */}
-                        <div className="flex items-center gap-2 mb-3">
-                          <FlagDisplay flag={product.flag_url || product.country?.flag_url} name={productName} size="md" />
-                          <div>
-                            <h3 className="font-semibold text-foreground">{productName}</h3>
-                            <p className="text-lg font-bold text-primary">{productData}</p>
-                          </div>
-                        </div>
-
-                        {/* Plan details */}
-                        <div className="space-y-1.5 mb-4 text-sm text-muted-foreground">
-                          <div className="flex items-center gap-2">
-                            <Clock className="w-3 h-3 flex-shrink-0" />
-                            <span>{productValidity}</span>
-                          </div>
-                          {productSpeed && (
-                            <div className="flex items-center gap-2">
-                              <Signal className="w-3 h-3 flex-shrink-0" />
-                              <span>{productSpeed}</span>
-                            </div>
-                          )}
-                          {throttleSpeed && (
-                            <div className="flex items-center gap-2">
-                              <Wifi className="w-3 h-3 flex-shrink-0" />
-                              <span>{throttleSpeed}</span>
-                            </div>
-                          )}
-                        </div>
-
-                        {/* Features badges */}
-                        <div className="flex flex-wrap gap-1.5 mb-3">
-                          {hotspot && (
-                            <span className="px-2 py-0.5 text-[10px] font-medium bg-emerald-500/10 text-emerald-500 rounded-full">
-                              Hotspot
-                            </span>
-                          )}
-                          {instantActivation && (
-                            <span className="px-2 py-0.5 text-[10px] font-medium bg-blue-500/10 text-blue-500 rounded-full">
-                              Instant
-                            </span>
-                          )}
-                        </div>
-
-                        {/* Price and buy button */}
-                        <div className="flex items-center justify-between pt-3 border-t border-border/30">
-                          <span className="text-xl font-bold text-foreground">
-                            {product.base_currency || 'EUR'} {product.base_price}
-                          </span>
-                          <Button
-                            size="sm"
-                            className={`transition-all ${addedToCart === product.id ? "bg-emerald-500 hover:bg-emerald-500" : "bg-primary hover:bg-primary/90"} text-primary-foreground`}
-                            onClick={() => handleAddToCart(product)}
-                          >
-                            {addedToCart === product.id ? (
-                              <><Check className="w-4 h-4 mr-1" />Added</>
-                            ) : (
-                              <><ShoppingCart className="w-4 h-4 mr-1" />Buy</>
-                            )}
-                          </Button>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-                {/* <div className="text-center">
-                  <Button 
-                    variant="outline" 
-                    className="gap-2 bg-transparent"
-                    onClick={() => router.push(`/plans?search=${encodeURIComponent(selectedItem.name)}`)}
-                  >
-                    View All {selectedItem.name} Plans
-                    <ArrowRight className="w-4 h-4" />
-                  </Button>
-                </div> */}
-              </>
-            ) : !isLoadingProducts ? (
-              <div className="text-center py-8">
-                <Globe className="w-12 h-12 text-muted-foreground/30 mx-auto mb-3" />
-                <p className="text-muted-foreground">No plans found for {selectedItem.name}</p>
-              </div>
-            ) : null}
-          </div>
-        )}
 
         {/* Badge - View All Button */}
         <div className="text-center mb-6 relative z-20">
@@ -636,100 +637,95 @@ export function HeroSection() {
                     <button
                       key={regionName}
                       className={`group relative overflow-hidden flex flex-col items-center justify-center gap-3 rounded-2xl bg-gradient-to-br ${gradients[index % 4]} border border-border/40 backdrop-blur-sm ${borderColors[index % 4]} hover:scale-[1.03] transition-all duration-300 cursor-pointer p-5 min-h-[200px] sm:min-h-[230px]`}
-                      onClick={() => {
-                        handleSelectSuggestion({
-                          type: "region",
-                          name: regionName,
-                          flag: regionIcon,
-                          region: region.slug,
-                          id: region.id
-                        });
+                      id:region.id
+                }, 'regions');
                       }}
+
                     >
-                      <span className="text-5xl sm:text-6xl drop-shadow-sm">{regionIcon}</span>
-                      <span className="text-base sm:text-lg font-bold text-foreground group-hover:text-primary transition-colors">{regionName}</span>
-                      {countryCount > 0 && (
-                        <span className="text-xs text-muted-foreground">{countryCount}+ countries</span>
-                      )}
-                      {startingPrice > 0 && (
-                        <span className="text-xs text-primary font-semibold">
-                          From EUR {startingPrice.toFixed(2)}
-                        </span>
-                      )}
-                      {/* Country flags with codes */}
-                      {regionCountries.length > 0 && (
-                        <div className="flex flex-wrap justify-center gap-2 mt-1">
-                          {regionCountries.slice(0, 5).map((country) => {
-                            const cName = getLocalizedText(country.name, "");
-                            const cCode = country.iso_code || cName.substring(0, 2).toUpperCase();
-                            return (
-                              <div key={cName} className="flex flex-col items-center gap-0.5">
-                                <span className="text-[9px] text-muted-foreground/80 font-medium uppercase leading-none">{cCode}</span>
-                                {(() => {
-                                  const raw = country.flag_url;
-                                  const isPath = raw && (raw.includes('.') || raw.includes('/'));
-                                  const url = isPath ? getImageUrl(raw) : getFlagFromISO(country.iso_code);
-                                  return url ? (
-                                    <img
-                                      src={url}
-                                      alt={cName}
-                                      className="w-5 h-3.5 rounded-sm object-cover"
-                                      onError={(e) => {
-                                        (e.target as HTMLImageElement).style.display = 'none';
-                                        (e.target as HTMLImageElement).parentElement!.innerHTML = `<span class="text-xs leading-none">🌍</span>`;
-                                      }}
-                                    />
-                                  ) : (
-                                    <span className="text-xs leading-none">🌍</span>
-                                  );
-                                })()}
-                              </div>
+                <span className="text-5xl sm:text-6xl drop-shadow-sm">{regionIcon}</span>
+                <span className="text-base sm:text-lg font-bold text-foreground group-hover:text-primary transition-colors">{regionName}</span>
+                {countryCount > 0 && (
+                  <span className="text-xs text-muted-foreground">{countryCount}+ countries</span>
+                )}
+                {startingPrice > 0 && (
+                  <span className="text-xs text-primary font-semibold">
+                    From EUR {startingPrice.toFixed(2)}
+                  </span>
+                )}
+                {/* Country flags with codes */}
+                {regionCountries.length > 0 && (
+                  <div className="flex flex-wrap justify-center gap-2 mt-1">
+                    {regionCountries.slice(0, 5).map((country) => {
+                      const cName = getLocalizedText(country.name, "");
+                      const cCode = country.iso_code || cName.substring(0, 2).toUpperCase();
+                      return (
+                        <div key={cName} className="flex flex-col items-center gap-0.5">
+                          <span className="text-[9px] text-muted-foreground/80 font-medium uppercase leading-none">{cCode}</span>
+                          {(() => {
+                            const raw = country.flag_url;
+                            const isPath = raw && (raw.includes('.') || raw.includes('/'));
+                            const url = isPath ? getImageUrl(raw) : getFlagFromISO(country.iso_code);
+                            return url ? (
+                              <img
+                                src={url}
+                                alt={cName}
+                                className="w-5 h-3.5 rounded-sm object-cover"
+                                onError={(e) => {
+                                  (e.target as HTMLImageElement).style.display = 'none';
+                                  (e.target as HTMLImageElement).parentElement!.innerHTML = `<span class="text-xs leading-none">🌍</span>`;
+                                }}
+                              />
+                            ) : (
+                              <span className="text-xs leading-none">🌍</span>
                             );
-                          })}
-                          {regionCountries.length > 5 && (
-                            <div className="flex flex-col items-center gap-0.5">
-                              <span className="text-[9px] text-muted-foreground/60 font-medium leading-none">+{regionCountries.length - 5}</span>
-                              <span className="text-xs text-muted-foreground/60 leading-none">...</span>
-                            </div>
-                          )}
+                          })()}
                         </div>
-                      )}
-                    </button>
-                  );
+                      );
+                    })}
+                    {regionCountries.length > 5 && (
+                      <div className="flex flex-col items-center gap-0.5">
+                        <span className="text-[9px] text-muted-foreground/60 font-medium leading-none">+{regionCountries.length - 5}</span>
+                        <span className="text-xs text-muted-foreground/60 leading-none">...</span>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </button>
+              );
                 })}
-              </div>
+            </div>
 
-              {/* View All Regions Button */}
-              <div className="flex justify-center mt-6">
-                <Button
-                  variant="outline"
-                  className="border-border/50 hover:border-primary hover:bg-primary/10 text-foreground bg-transparent gap-2"
-                  onClick={() => router.push("/plans?view=regions")}
-                >
-                  View All Regions
-                  <ArrowRight className="w-4 h-4" />
-                </Button>
-              </div>
-            </>
+          {/* View All Regions Button */}
+          <div className="flex justify-center mt-6">
+            <Button
+              variant="outline"
+              className="border-border/50 hover:border-primary hover:bg-primary/10 text-foreground bg-transparent gap-2"
+              onClick={() => router.push("/plans?view=regions")}
+            >
+              View All Regions
+              <ArrowRight className="w-4 h-4" />
+            </Button>
+          </div>
+        </>
           )}
-        </div>
+      </div>
 
-        {/* Trust indicators */}
-        <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-4 sm:gap-8 text-xs sm:text-sm text-muted-foreground">
-          <div className="flex items-center gap-2">
-            <div className="w-2 h-2 bg-emerald-500 rounded-full" />
-            <span>Instant Activation</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="w-2 h-2 bg-primary rounded-full" />
-            <span>24/7 Support</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <Smartphone className="w-4 h-4 text-primary" />
-            <span>Works with any eSIM device</span>
-          </div>
+      {/* Trust indicators */}
+      <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-4 sm:gap-8 text-xs sm:text-sm text-muted-foreground">
+        <div className="flex items-center gap-2">
+          <div className="w-2 h-2 bg-emerald-500 rounded-full" />
+          <span>Instant Activation</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="w-2 h-2 bg-primary rounded-full" />
+          <span>24/7 Support</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <Smartphone className="w-4 h-4 text-primary" />
+          <span>Works with any eSIM device</span>
         </div>
       </div>
-    </section>
+    </div>
+    </section >
   );
 }

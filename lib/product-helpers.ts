@@ -42,9 +42,9 @@ export function getProductValidity(product: Product): string {
     if (typeof product.validity === "string") return product.validity;
     if (typeof product.validity === "number") return `${product.validity} Days`;
   }
-  if (product.validity_days) return `${product.validity_days} Days`;   
+  if (product.validity_days) return `${product.validity_days} Days`;
   if (product.validityDays) return `${product.validityDays} Days`;
-  if (product.day) return `${product.day} Days`; 
+  if (product.day) return `${product.day} Days`;
   if (product.days) return `${product.days} Days`;
   if (product.duration_days) return `${product.duration_days} Days`;
   return "N/A";
@@ -91,11 +91,11 @@ export function isBestSeller(product: Product): boolean {
 
 // Helper to get product name
 export function getProductName(product: Product, locale?: string): string {
-  return getLocalizedText(product.country_name, "", locale) || 
-         getLocalizedText(product.country?.name, "", locale) || 
-         getLocalizedText(product.region?.name, "", locale) ||
-         getLocalizedText(product.name, "", locale) || 
-         "eSIM Plan";
+  return getLocalizedText(product.country_name, "", locale) ||
+    getLocalizedText(product.country?.name, "", locale) ||
+    getLocalizedText(product.region?.name, "", locale) ||
+    getLocalizedText(product.name, "", locale) ||
+    "eSIM Plan";
 }
 
 // Helper to get coverage area
