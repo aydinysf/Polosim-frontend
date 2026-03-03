@@ -613,12 +613,15 @@ export function HeroSection() {
                   { id: 3, name: "Americas", icon: "🌎", countries_count: 25, starting_price: 5.99, slug: "americas", countries: [] },
                   { id: 4, name: "Middle East", icon: "🕌", countries_count: 15, starting_price: 5.49, slug: "middle-east", countries: [] },
                 ]).map((region, index) => {
-                  const regionData = 'countries_count' in region ? region : null;
+                  const regionData = "countries_count" in region ? region : null;
                   const regionName = getLocalizedText(regionData?.name || region.name, "Region");
                   const regionIcon = regionData?.icon || (region as { icon?: string }).icon || "🌍";
                   const countryCount = regionData?.countries_count || 0;
                   const startingPrice = regionData?.starting_price || 0;
-                  const regionCountries = regionData?.countries || (region as { countries?: { name: string; iso_code?: string; flag_url?: string }[] }).countries || [];
+                  const regionCountries =
+                    regionData?.countries ||
+                    (region as { countries?: { name: string; iso_code?: string; flag_url?: string }[] }).countries ||
+                    [];
 
                   const gradients = [
                     "from-blue-600/20 via-cyan-500/10 to-teal-400/5",
@@ -637,63 +640,77 @@ export function HeroSection() {
                     <button
                       key={regionName}
                       className={`group relative overflow-hidden flex flex-col items-center justify-center gap-3 rounded-2xl bg-gradient-to-br ${gradients[index % 4]} border border-border/40 backdrop-blur-sm ${borderColors[index % 4]} hover:scale-[1.03] transition-all duration-300 cursor-pointer p-5 min-h-[200px] sm:min-h-[230px]`}
-                      id:region.id
-                }, 'regions');
-                      }}
-
+                      onClick={() =>
+                        handleSelectSuggestion(
+                          {
+                            type: "region",
+                            name: regionName,
+                            flag: regionIcon,
+                            region: (regionData?.slug ?? (region as any).slug) || undefined,
+                            id: regionData?.id ?? (region as any).id,
+                          },
+                          "regions"
+                        )
+                      }
                     >
-                <span className="text-5xl sm:text-6xl drop-shadow-sm">{regionIcon}</span>
-                <span className="text-base sm:text-lg font-bold text-foreground group-hover:text-primary transition-colors">{regionName}</span>
-                {countryCount > 0 && (
-                  <span className="text-xs text-muted-foreground">{countryCount}+ countries</span>
-                )}
-                {startingPrice > 0 && (
-                  <span className="text-xs text-primary font-semibold">
-                    From EUR {startingPrice.toFixed(2)}
-                  </span>
-                )}
-                {/* Country flags with codes */}
-                {regionCountries.length > 0 && (
-                  <div className="flex flex-wrap justify-center gap-2 mt-1">
-                    {regionCountries.slice(0, 5).map((country) => {
-                      const cName = getLocalizedText(country.name, "");
-                      const cCode = country.iso_code || cName.substring(0, 2).toUpperCase();
-                      return (
-                        <div key={cName} className="flex flex-col items-center gap-0.5">
-                          <span className="text-[9px] text-muted-foreground/80 font-medium uppercase leading-none">{cCode}</span>
-                          {(() => {
-                            const raw = country.flag_url;
-                            const isPath = raw && (raw.includes('.') || raw.includes('/'));
-                            const url = isPath ? getImageUrl(raw) : getFlagFromISO(country.iso_code);
-                            return url ? (
-                              <img
-                                src={url}
-                                alt={cName}
-                                className="w-5 h-3.5 rounded-sm object-cover"
-                                onError={(e) => {
-                                  (e.target as HTMLImageElement).style.display = 'none';
-                                  (e.target as HTMLImageElement).parentElement!.innerHTML = `<span class="text-xs leading-none">🌍</span>`;
-                                }}
-                              />
-                            ) : (
-                              <span className="text-xs leading-none">🌍</span>
+                      <span className="text-5xl sm:text-6xl drop-shadow-sm">{regionIcon}</span>
+                      <span className="text-base sm:text-lg font-bold text-foreground group-hover:text-primary transition-colors">
+                        {regionName}
+                      </span>
+                      {countryCount > 0 && (
+                        <span className="text-xs text-muted-foreground">{countryCount}+ countries</span>
+                      )}
+                      {startingPrice > 0 && (
+                        <span className="text-xs text-primary font-semibold">
+                          From EUR {startingPrice.toFixed(2)}
+                        </span>
+                      )}
+                      {regionCountries.length > 0 && (
+                        <div className="flex flex-wrap justify-center gap-2 mt-1">
+                          {regionCountries.slice(0, 5).map((country) => {
+                            const cName = getLocalizedText(country.name, "");
+                            const cCode = country.iso_code || cName.substring(0, 2).toUpperCase();
+                            return (
+                              <div key={cName} className="flex flex-col items-center gap-0.5">
+                                <span className="text-[9px] text-muted-foreground/80 font-medium uppercase leading-none">
+                                  {cCode}
+                                </span>
+                                {(() => {
+                                  const raw = country.flag_url;
+                                  const isPath = raw && (raw.includes(".") || raw.includes("/"));
+                                  const url = isPath ? getImageUrl(raw) : getFlagFromISO(country.iso_code);
+                                  return url ? (
+                                    <img
+                                      src={url}
+                                      alt={cName}
+                                      className="w-5 h-3.5 rounded-sm object-cover"
+                                      onError={(e) => {
+                                        (e.target as HTMLImageElement).style.display = "none";
+                                        (e.target as HTMLImageElement).parentElement!.innerHTML =
+                                          '<span class="text-xs leading-none">🌍</span>';
+                                      }}
+                                    />
+                                  ) : (
+                                    <span className="text-xs leading-none">🌍</span>
+                                  );
+                                })()}
+                              </div>
                             );
-                          })()}
+                          })}
+                          {regionCountries.length > 5 && (
+                            <div className="flex flex-col items-center gap-0.5">
+                              <span className="text-[9px] text-muted-foreground/60 font-medium leading-none">
+                                +{regionCountries.length - 5}
+                              </span>
+                              <span className="text-xs text-muted-foreground/60 leading-none">...</span>
+                            </div>
+                          )}
                         </div>
-                      );
-                    })}
-                    {regionCountries.length > 5 && (
-                      <div className="flex flex-col items-center gap-0.5">
-                        <span className="text-[9px] text-muted-foreground/60 font-medium leading-none">+{regionCountries.length - 5}</span>
-                        <span className="text-xs text-muted-foreground/60 leading-none">...</span>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </button>
-              );
+                      )}
+                    </button>
+                  );
                 })}
-            </div>
+              </div>
 
           {/* View All Regions Button */}
           <div className="flex justify-center mt-6">
