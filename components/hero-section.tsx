@@ -199,6 +199,9 @@ export function HeroSection() {
 
   // Fetch products when selection changes
   useEffect(() => {
+    const controller = new AbortController();
+    const signal = controller.signal;
+
     async function fetchProducts() {
       if (!selectedItem) {
         setSearchResultProducts([]);
@@ -210,12 +213,14 @@ export function HeroSection() {
         let products: Product[] = [];
 
         if (selectedItem.type === "country" && selectedItem.id) {
-          const response = await productService.getByCountry(selectedItem.id);
+          const response = await productService.getByCountry(selectedItem.id, signal);
+          if (signal.aborted) return;
           products = response.data;
         } else if (selectedItem.type === "region") {
           // For regions, try multiple approaches
           if (selectedItem.id) {
-            const response = await productService.getByRegion(selectedItem.id);
+            const response = await productService.getByRegion(selectedItem.id, signal);
+            if (signal.aborted) return;
             products = response.data;
           } else {
             // Try to find region ID from loaded regions
@@ -225,11 +230,13 @@ export function HeroSection() {
             });
 
             if (matchedRegion?.id) {
-              const response = await productService.getByRegion(matchedRegion.id);
+              const response = await productService.getByRegion(matchedRegion.id, signal);
+              if (signal.aborted) return;
               products = response.data;
             } else {
               // Last resort: fetch all and filter
-              const response = await productService.getAll();
+              const response = await productService.getAll(undefined, signal);
+              if (signal.aborted) return;
               products = response.data.filter(p => {
                 const regionName = getLocalizedText(p.region_name || p.region?.name, "").toLowerCase();
                 return regionName.includes(selectedItem.name.toLowerCase());
@@ -238,7 +245,8 @@ export function HeroSection() {
           }
         } else {
           // Fallback to all products filtered by name
-          const response = await productService.getAll();
+          const response = await productService.getAll(undefined, signal);
+          if (signal.aborted) return;
           products = response.data.filter(p => {
             const countryName = getLocalizedText(p.country_name || p.country?.name, "").toLowerCase();
             const regionName = getLocalizedText(p.region_name || p.region?.name, "").toLowerCase();
@@ -248,15 +256,28 @@ export function HeroSection() {
         }
 
         setSearchResultProducts(products);
-      } catch (error) {
+      } catch (error: any) {
+        // Silently ignore aborted/canceled requests (AbortController + axios)
+        if (
+          error?.name === "AbortError" ||
+          error?.name === "CanceledError" ||
+          error?.code === "ERR_CANCELED" ||
+          signal.aborted
+        ) return;
         console.error("Error fetching products:", error);
         setSearchResultProducts([]);
       } finally {
-        setIsLoadingProducts(false);
+        if (!signal.aborted) {
+          setIsLoadingProducts(false);
+        }
       }
     }
 
     fetchProducts();
+
+    return () => {
+      controller.abort();
+    };
   }, [selectedItem, regions]);
 
   // Handle scrolling to results
@@ -597,6 +618,9 @@ export function HeroSection() {
           </div>
         </div>
 
+        {/* Search Results */}
+        {renderSearchResults()}
+
         {/* Popular Regions - Large Gradient Cards */}
         <div className="mb-10">
           <h3 className="text-sm font-medium text-muted-foreground mb-4 px-2">Popular Regions</h3>
@@ -712,37 +736,37 @@ export function HeroSection() {
                 })}
               </div>
 
-          {/* View All Regions Button */}
-          <div className="flex justify-center mt-6">
-            <Button
-              variant="outline"
-              className="border-border/50 hover:border-primary hover:bg-primary/10 text-foreground bg-transparent gap-2"
-              onClick={() => router.push("/plans?view=regions")}
-            >
-              View All Regions
-              <ArrowRight className="w-4 h-4" />
-            </Button>
-          </div>
-        </>
+              {/* View All Regions Button */}
+              <div className="flex justify-center mt-6">
+                <Button
+                  variant="outline"
+                  className="border-border/50 hover:border-primary hover:bg-primary/10 text-foreground bg-transparent gap-2"
+                  onClick={() => router.push("/plans?view=regions")}
+                >
+                  View All Regions
+                  <ArrowRight className="w-4 h-4" />
+                </Button>
+              </div>
+            </>
           )}
-      </div>
+        </div>
 
-      {/* Trust indicators */}
-      <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-4 sm:gap-8 text-xs sm:text-sm text-muted-foreground">
-        <div className="flex items-center gap-2">
-          <div className="w-2 h-2 bg-emerald-500 rounded-full" />
-          <span>Instant Activation</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="w-2 h-2 bg-primary rounded-full" />
-          <span>24/7 Support</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <Smartphone className="w-4 h-4 text-primary" />
-          <span>Works with any eSIM device</span>
+        {/* Trust indicators */}
+        <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-4 sm:gap-8 text-xs sm:text-sm text-muted-foreground">
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 bg-emerald-500 rounded-full" />
+            <span>Instant Activation</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 bg-primary rounded-full" />
+            <span>24/7 Support</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Smartphone className="w-4 h-4 text-primary" />
+            <span>Works with any eSIM device</span>
+          </div>
         </div>
       </div>
-    </div>
     </section >
   );
 }

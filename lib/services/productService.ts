@@ -127,7 +127,7 @@ export interface PaginatedResponse<T> {
 }
 
 export const productService = {
-  async getAll(filters?: ProductFilters): Promise<PaginatedResponse<Product>> {
+  async getAll(filters?: ProductFilters, signal?: AbortSignal): Promise<PaginatedResponse<Product>> {
     const params = new URLSearchParams();
 
     if (filters) {
@@ -146,7 +146,7 @@ export const productService = {
     const queryString = params.toString();
     const endpoint = queryString ? `/products?${queryString}` : "/products";
 
-    const response = await api.get<any>(endpoint);
+    const response = await api.get<any>(endpoint, { signal });
     const resultData = response.data;
     return {
       data: Array.isArray(resultData) ? resultData : (resultData?.data || []),
@@ -154,8 +154,8 @@ export const productService = {
     };
   },
 
-  async getByCountry(countryId: number, page: number = 1): Promise<PaginatedResponse<Product>> {
-    const response = await api.get<any>(`/products?country_id=${countryId}&page=${page}`);
+  async getByCountry(countryId: number, signal?: AbortSignal, page: number = 1): Promise<PaginatedResponse<Product>> {
+    const response = await api.get<any>(`/products?country_id=${countryId}&page=${page}`, { signal });
     const resultData = response.data;
     return {
       data: Array.isArray(resultData) ? resultData : (resultData?.data || []),
@@ -163,8 +163,8 @@ export const productService = {
     };
   },
 
-  async getByRegion(regionId: number, page: number = 1): Promise<PaginatedResponse<Product>> {
-    const response = await api.get<any>(`/products?region_id=${regionId}&page=${page}`);
+  async getByRegion(regionId: number, signal?: AbortSignal, page: number = 1): Promise<PaginatedResponse<Product>> {
+    const response = await api.get<any>(`/products?region_id=${regionId}&page=${page}`, { signal });
     const resultData = response.data;
     return {
       data: Array.isArray(resultData) ? resultData : (resultData?.data || []),

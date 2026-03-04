@@ -32,6 +32,11 @@ export const webApi = axios.create({
 api.interceptors.response.use(
   (response) => response,
   (error: AxiosError) => {
+    // Silently ignore aborted requests (AbortController)
+    if (axios.isCancel(error)) {
+      return Promise.reject(error);
+    }
+
     if (error.response) {
       const { data, status } = error.response;
 
