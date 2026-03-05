@@ -138,6 +138,112 @@
       "description": "İhtiyacınız olduğunda uzman yardımı"
     }
   },
+  "Support": {
+    "hero": {
+      "badge": "Destek Merkezi",
+      "title": "Size Nasıl Yardımcı Olabiliriz?",
+      "subtitle": "Kurulum, bağlantı ve paket yönetimi için hızlı cevaplar alın. Küresel destek ekibimiz 7/24 yanınızda.",
+      "searchPlaceholder": "Örn. iPhone'da nasıl kurarım...",
+      "searchButton": "Ara",
+      "installationLink": "Kurulum ve Başlangıç rehberine git"
+    },
+    "sections": {
+      "browseByCategory": "Kategorilere Göre İncele",
+      "commonQuestions": "Sık Sorulan Sorular",
+      "popularArticles": "Popüler Makaleler"
+    },
+    "categories": {
+      "installation": {
+        "title": "Kurulum ve Başlangıç",
+        "description": "eSIM aktivasyonu için adım adım rehberler"
+      },
+      "connectivity": {
+        "title": "Bağlantı",
+        "description": "Şebeke ve hız sorunlarını çözme"
+      },
+      "billing": {
+        "title": "Ödemeler ve Paketler",
+        "description": "Ödemeler, iadeler ve veri kullanımı"
+      },
+      "coverage": {
+        "title": "Kapsama Alanı",
+        "description": "Dünya çapında destinasyonlar ve operatörler"
+      },
+      "account": {
+        "title": "Hesabım",
+        "description": "Siparişleri ve profil ayarlarını yönet"
+      },
+      "troubleshooting": {
+        "title": "Sorun Giderme",
+        "description": "Teknik sorunlar ve hata kayıtları"
+      }
+    },
+    "faq": {
+      "general": {
+        "title": "Genel",
+        "q1": {
+          "question": "eSIM nedir ve nasıl çalışır?",
+          "answer": "eSIM (embedded SIM), fiziksel bir SIM karta ihtiyaç duymadan mobil hat tanımlamanıza izin veren dijital bir SIM’dir. Cihazınızın içine gömülüdür ve farklı operatör profilleriyle uzaktan programlanabilir."
+        },
+        "q2": {
+          "question": "Cihazım eSIM ile uyumlu mu?",
+          "answer": "2018 sonrası çıkan çoğu akıllı telefon eSIM destekler; örneğin iPhone XS ve üzeri, Samsung Galaxy S20+ ve Google Pixel 3+. Cihaz ayarlarında “eSIM” veya “Hücresel Plan Ekle” seçeneklerini kontrol edebilirsiniz."
+        },
+        "q3": {
+          "question": "eSIM’i ne kadar sürede alırım?",
+          "answer": "Ödemeniz onaylanır onaylanmaz eSIM QR kodunuz birkaç saniye içinde e-posta adresinize gönderilir. Fiziksel teslimat beklemeniz gerekmez."
+        }
+      },
+      "technical": {
+        "title": "Teknik",
+        "q1": {
+          "question": "eSIM için dolaşımı nasıl aktif ederim?",
+          "answer": "Cihaz ayarlarına giderek POLO SIM profili üzerine tıklayın ve “Veri Dolaşımı” seçeneğinin açık olduğundan emin olun. Küresel veri paketlerimizin çalışması için dolaşımın aktif olması gerekir."
+        },
+        "q2": {
+          "question": "eSIM’i birden fazla cihazda kullanabilir miyim?",
+          "answer": "Hayır, çoğu eSIM profili yalnızca bir kez kurulabilir ve tek bir cihazla eşleşir. Profili silmek genellikle tekrar kullanılamaz hale getirir. Bu yüzden en çok kullanacağınız cihazda kurmanız önerilir."
+        }
+      }
+    },
+    "contact": {
+      "title": "Hâlâ yardıma mı ihtiyacınız var?",
+      "subtitle": "Destek ekibimiz 12 dilde size yardımcı olmak için çevrimiçi.",
+      "whatsappUrl": "https://wa.me/000000000000",
+      "methods": {
+        "liveChat": {
+          "title": "WhatsApp ile 7/24 Destek",
+          "badge": "Anında WhatsApp üzerinden destek",
+          "action": "WhatsApp'ı Aç"
+        },
+        "email": {
+          "title": "E-posta Desteği",
+          "badge": "< 2 saat içinde yanıt",
+          "action": "E-posta Gönder"
+        },
+        "phone": {
+          "title": "Telefon Desteği",
+          "badge": "VIP Hat",
+          "action": "Hemen Ara"
+        }
+      }
+    },
+    "status": {
+      "title": "Sistem Durumu",
+      "subtitle": "Tüm Sistemler Çalışır Durumda",
+      "esimActivation": "eSIM Aktivasyonu",
+      "paymentProcessing": "Ödeme İşlemleri",
+      "viewDetails": "Detaylı Durum Sayfasını Görüntüle"
+    },
+    "popular": {
+      "installIphone": "iPhone'da eSIM nasıl kurulur?",
+      "installAndroid": "Android'de eSIM nasıl kurulur?",
+      "notConnecting": "eSIM'im ağa bağlanmıyor",
+      "checkBalance": "Kalan veri bakiyesini nasıl kontrol ederim?",
+      "dualSim": "eSIM ve fiziksel SIM'i birlikte kullanabilir miyim?",
+      "topUp": "Mevcut eSIM'e nasıl yükleme yaparım?"
+    }
+  },
   "Profile": {
     "title": "Profil",
     "myPackages": "eSIM Paketlerim",

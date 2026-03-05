@@ -1,6 +1,7 @@
 import { Twitter, Instagram, Facebook, Linkedin } from "lucide-react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/routing";
 
 const socialLinks = [
   { name: "Twitter", icon: Twitter, href: "#", hoverColor: "hover:bg-sky-500/25 hover:text-sky-300 hover:border-sky-500/50" },
@@ -32,20 +33,20 @@ export function Footer() {
       { name: t('links.deviceCompatibility'), href: "#" },
     ],
     legal: [
-      { name: t('links.privacyPolicy'), href: "#" },
-      { name: t('links.termsOfService'), href: "#" },
-      { name: t('links.refundPolicy'), href: "#" },
+      { name: t('links.privacyPolicy'), href: "/privacy" },
+      { name: t('links.termsOfService'), href: "/terms-of-service" },
+      { name: t('links.refundPolicy'), href: "/refund-policy" },
     ],
   };
 
   return (
     <footer className="relative overflow-hidden bg-[hsl(215_40%_14%)]">
       <div className="max-w-7xl mx-auto px-4 py-10 sm:py-16">
-        
+
         <div className="grid grid-cols-2 md:grid-cols-6 gap-6 sm:gap-8">
           {/* Brand column */}
           <div className="col-span-2">
-            <a href="/" className="flex items-center mb-4 cursor-pointer">
+            <Link href="/" className="flex items-center mb-4 cursor-pointer">
               <Image
                 src="/logo.png"
                 alt="POLO SIM - One Sim One World"
@@ -53,7 +54,7 @@ export function Footer() {
                 height={120}
                 className="h-16 sm:h-20 md:h-28 w-auto brightness-110"
               />
-            </a>
+            </Link>
             <p className="text-[hsl(215_20%_60%)] text-sm mb-6 max-w-xs leading-relaxed">
               {t('description')}
             </p>
@@ -77,9 +78,15 @@ export function Footer() {
             <ul className="space-y-2 sm:space-y-3">
               {footerLinks.product.map((link) => (
                 <li key={link.name}>
-                  <a href={link.href} className="text-xs sm:text-sm text-[hsl(215_20%_55%)] hover:text-white cursor-pointer transition-colors">
-                    {link.name}
-                  </a>
+                  {link.href.startsWith('http') || link.href === '#' ? (
+                    <a href={link.href} className="text-xs sm:text-sm text-[hsl(215_20%_55%)] hover:text-white cursor-pointer transition-colors">
+                      {link.name}
+                    </a>
+                  ) : (
+                    <Link href={link.href} className="text-xs sm:text-sm text-[hsl(215_20%_55%)] hover:text-white cursor-pointer transition-colors">
+                      {link.name}
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>
@@ -90,9 +97,15 @@ export function Footer() {
             <ul className="space-y-2 sm:space-y-3">
               {footerLinks.company.map((link) => (
                 <li key={link.name}>
-                  <a href={link.href} className="text-xs sm:text-sm text-[hsl(215_20%_55%)] hover:text-white cursor-pointer transition-colors">
-                    {link.name}
-                  </a>
+                  {link.href.startsWith('http') || link.href === '#' ? (
+                    <a href={link.href} className="text-xs sm:text-sm text-[hsl(215_20%_55%)] hover:text-white cursor-pointer transition-colors">
+                      {link.name}
+                    </a>
+                  ) : (
+                    <Link href={link.href} className="text-xs sm:text-sm text-[hsl(215_20%_55%)] hover:text-white cursor-pointer transition-colors">
+                      {link.name}
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>
@@ -103,9 +116,15 @@ export function Footer() {
             <ul className="space-y-2 sm:space-y-3">
               {footerLinks.support.map((link) => (
                 <li key={link.name}>
-                  <a href={link.href} className="text-xs sm:text-sm text-[hsl(215_20%_55%)] hover:text-white cursor-pointer transition-colors">
-                    {link.name}
-                  </a>
+                  {link.href.startsWith('http') || link.href === '#' ? (
+                    <a href={link.href} className="text-xs sm:text-sm text-[hsl(215_20%_55%)] hover:text-white cursor-pointer transition-colors">
+                      {link.name}
+                    </a>
+                  ) : (
+                    <Link href={link.href} className="text-xs sm:text-sm text-[hsl(215_20%_55%)] hover:text-white cursor-pointer transition-colors">
+                      {link.name}
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>
@@ -116,9 +135,15 @@ export function Footer() {
             <ul className="space-y-2 sm:space-y-3">
               {footerLinks.legal.map((link) => (
                 <li key={link.name}>
-                  <a href={link.href} className="text-xs sm:text-sm text-[hsl(215_20%_55%)] hover:text-white cursor-pointer transition-colors">
-                    {link.name}
-                  </a>
+                  {link.href.startsWith('http') || link.href === '#' ? (
+                    <a href={link.href} className="text-xs sm:text-sm text-[hsl(215_20%_55%)] hover:text-white cursor-pointer transition-colors">
+                      {link.name}
+                    </a>
+                  ) : (
+                    <Link href={link.href} className="text-xs sm:text-sm text-[hsl(215_20%_55%)] hover:text-white cursor-pointer transition-colors">
+                      {link.name}
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>

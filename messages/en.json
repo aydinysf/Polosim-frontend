@@ -138,6 +138,112 @@
       "description": "Expert help whenever you need it"
     }
   },
+  "Support": {
+    "hero": {
+      "badge": "Support Center",
+      "title": "How Can We Help You?",
+      "subtitle": "Get instant answers to setup guides, network troubleshooting, and plan management. Our global team is here 24/7.",
+      "searchPlaceholder": "E.g. How to install on iPhone...",
+      "searchButton": "Search",
+      "installationLink": "Go to Installation & Setup guide"
+    },
+    "sections": {
+      "browseByCategory": "Browse by Category",
+      "commonQuestions": "Common Questions",
+      "popularArticles": "Popular Articles"
+    },
+    "categories": {
+      "installation": {
+        "title": "Installation & Setup",
+        "description": "Step-by-step guides for eSIM activation"
+      },
+      "connectivity": {
+        "title": "Connectivity",
+        "description": "Troubleshoot network and speed problems"
+      },
+      "billing": {
+        "title": "Billing & Plans",
+        "description": "Payments, refunds, and data usage"
+      },
+      "coverage": {
+        "title": "Coverage",
+        "description": "Global destinations and network partners"
+      },
+      "account": {
+        "title": "My Account",
+        "description": "Manage orders and profile settings"
+      },
+      "troubleshooting": {
+        "title": "Troubleshooting",
+        "description": "Technical issues and bug reports"
+      }
+    },
+    "faq": {
+      "general": {
+        "title": "General",
+        "q1": {
+          "question": "What is an eSIM and how does it work?",
+          "answer": "An eSIM (embedded SIM) is a digital SIM that allows you to activate a cellular plan without using a physical SIM card. It's built into your device and can be programmed with different carrier profiles."
+        },
+        "q2": {
+          "question": "Is my device compatible with eSIM?",
+          "answer": "Most smartphones released after 2018 support eSIM, including iPhone XS and newer, Samsung Galaxy S20+, and Google Pixel 3+. Check your device settings for 'eSIM' or 'Add Cellular Plan'."
+        },
+        "q3": {
+          "question": "How quickly will I receive my eSIM?",
+          "answer": "Your eSIM QR code is delivered instantly via email immediately after your purchase is confirmed. No waiting for physical delivery."
+        }
+      },
+      "technical": {
+        "title": "Technical",
+        "q1": {
+          "question": "How do I activate roaming for my eSIM?",
+          "answer": "Go to your device settings, select the POLO SIM profile, and ensure 'Data Roaming' is toggled ON. This is required for our global data plans to function."
+        },
+        "q2": {
+          "question": "Can I use my eSIM on multiple devices?",
+          "answer": "No, an eSIM profile can typically only be installed once. Deleting it from a device usually renders the profile invalid. Please install it on the primary device you intend to use."
+        }
+      }
+    },
+    "contact": {
+      "title": "Still need help?",
+      "subtitle": "Our support rockstars are online and ready to assist you in 12 languages.",
+      "whatsappUrl": "https://wa.me/000000000000",
+      "methods": {
+        "liveChat": {
+          "title": "24/7 WhatsApp Support",
+          "badge": "Instant help on WhatsApp",
+          "action": "Open WhatsApp"
+        },
+        "email": {
+          "title": "Email Support",
+          "badge": "< 2h response",
+          "action": "Send Email"
+        },
+        "phone": {
+          "title": "Direct Call",
+          "badge": "VIP Line",
+          "action": "Call Now"
+        }
+      }
+    },
+    "status": {
+      "title": "System Status",
+      "subtitle": "All Systems Operational",
+      "esimActivation": "eSIM Activation",
+      "paymentProcessing": "Payment Processing",
+      "viewDetails": "View Detailed Status Page"
+    },
+    "popular": {
+      "installIphone": "How to install an eSIM on iPhone",
+      "installAndroid": "How to install an eSIM on Android",
+      "notConnecting": "My eSIM is not connecting to the network",
+      "checkBalance": "How to check remaining data balance",
+      "dualSim": "Can I use eSIM and physical SIM together?",
+      "topUp": "How to top up my existing eSIM"
+    }
+  },
   "Profile": {
     "title": "Profile",
     "myPackages": "My eSIM Packages",
