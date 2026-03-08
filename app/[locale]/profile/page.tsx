@@ -197,7 +197,7 @@ export default function ProfilePage() {
                 onClick={() => setShowDeleteConfirm(true)}
               >
                 <Trash2 className="w-4 h-4 mr-2" />
-                Hesabı Kapat
+                {t('deleteAccount.button')}
               </Button>
             </div>
           </div>
@@ -559,7 +559,6 @@ export default function ProfilePage() {
         </div>
       )}
 
-      {/* Hesap Deaktivasyon Onay Diyalogu */}
       {showDeleteConfirm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div
@@ -572,10 +571,11 @@ export default function ProfilePage() {
                 <Trash2 className="w-8 h-8 text-red-500" />
               </div>
               <div>
-                <h3 className="text-xl font-bold text-foreground">Hesabı Devre Dışı Bırak</h3>
+                <h3 className="text-xl font-bold text-foreground">
+                  {t('deleteAccount.dialogTitle')}
+                </h3>
                 <p className="text-sm text-muted-foreground mt-2 leading-relaxed">
-                  Bu işlem hesabınızı devre dışı bırakır. Tüm aktif oturumlarınız kapatılır.
-                  Hesabınızı yeniden etkinleştirmek için destek ekibiyle iletişime geçebilirsiniz.
+                  {t('deleteAccount.dialogMessage')}
                 </p>
               </div>
               <div className="flex gap-3 w-full pt-2">
@@ -585,7 +585,7 @@ export default function ProfilePage() {
                   onClick={() => setShowDeleteConfirm(false)}
                   disabled={isDeleting}
                 >
-                  İptal
+                  {t('deleteAccount.cancel')}
                 </Button>
                 <Button
                   className="flex-1 bg-red-500 hover:bg-red-600 text-white border-none shadow-lg shadow-red-500/20"
@@ -593,9 +593,15 @@ export default function ProfilePage() {
                   disabled={isDeleting}
                 >
                   {isDeleting ? (
-                    <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> İşleniyor...</>
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      {t('deleteAccount.processing')}
+                    </>
                   ) : (
-                    <><Trash2 className="w-4 h-4 mr-2" /> Onayla</>
+                    <>
+                      <Trash2 className="w-4 h-4 mr-2" />
+                      {t('deleteAccount.confirm')}
+                    </>
                   )}
                 </Button>
               </div>

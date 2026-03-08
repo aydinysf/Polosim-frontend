@@ -322,6 +322,14 @@
       "close": "Close",
       "generating": "Generating...",
       "order": "Order #"
+    },
+    "deleteAccount": {
+      "button": "Delete Account",
+      "dialogTitle": "Deactivate Account",
+      "dialogMessage": "This will deactivate your account and sign you out on all devices. To reactivate, please contact our support team.",
+      "cancel": "Cancel",
+      "confirm": "Confirm",
+      "processing": "Processing..."
     }
   }
 }

@@ -322,6 +322,14 @@
       "close": "Kapat",
       "generating": "Oluşturuluyor...",
       "order": "Sipariş #"
+    },
+    "deleteAccount": {
+      "button": "Hesabı Kapat",
+      "dialogTitle": "Hesabı Devre Dışı Bırak",
+      "dialogMessage": "Bu işlem hesabınızı devre dışı bırakır ve tüm aktif oturumlarınızı kapatır. Hesabınızı yeniden etkinleştirmek için destek ekibiyle iletişime geçebilirsiniz.",
+      "cancel": "İptal",
+      "confirm": "Onayla",
+      "processing": "İşleniyor..."
     }
   }
 }
