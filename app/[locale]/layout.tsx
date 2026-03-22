@@ -5,6 +5,7 @@ import { routing } from '@/i18n/routing';
 
 import React from "react"
 import type { Metadata } from 'next'
+import Script from 'next/script'
 import { Geist, Geist_Mono } from 'next/font/google'
 import { CartProvider } from '@/lib/cart-context'
 import { AuthProvider } from '@/lib/auth-context'
@@ -44,6 +45,20 @@ export default async function RootLayout({
  
   return (
     <html lang={locale}>
+      <head>
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-0X4LE3ZSWD"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-0X4LE3ZSWD');
+          `}
+        </Script>
+      </head>
       <body className={`font-sans antialiased`}>
         <NextIntlClientProvider messages={messages}>
           <AuthProvider>
