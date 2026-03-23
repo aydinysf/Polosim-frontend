@@ -12,7 +12,7 @@ import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { useAuth } from "@/lib/auth-context";
 import { authService } from "@/lib/services/authService";
-import { esimProfileService, type EsimPackageData } from "@/lib/services/esimProfileService";
+import { esimProfileService, type EsimPackageData, type EsimUsageResponse } from "@/lib/services/esimProfileService";
 import { Link, useRouter } from "@/i18n/routing";
 import { toast } from "sonner";
 import { getFlagFromISO } from "@/lib/api-client";
@@ -44,6 +44,8 @@ export default function ProfilePage() {
   const [copied, setCopied] = useState<string | null>(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [usageDetails, setUsageDetails] = useState<EsimUsageResponse | null>(null);
+  const [isUsageLoading, setIsUsageLoading] = useState(false);
 
   useEffect(() => {
     if (!authLoading && !isAuthenticated) {
@@ -57,6 +59,25 @@ export default function ProfilePage() {
     }
   }, [isAuthenticated]);
 
+  useEffect(() => {
+    if (selectedPackage && selectedPackage.iccid && selectedPackage.status === "active") {
+      fetchUsage(selectedPackage.iccid);
+    } else {
+      setUsageDetails(null);
+    }
+  }, [selectedPackage]);
+
+  const fetchUsage = async (iccid: string) => {
+    setIsUsageLoading(true);
+    try {
+      const usage = await esimProfileService.getEsimUsage(iccid);
+      setUsageDetails(usage);
+    } catch (err) {
+      console.error("Failed to fetch usage:", err);
+    } finally {
+      setIsUsageLoading(false);
+    }
+  };
 
   const loadPackages = async () => {
     setIsLoading(true);
@@ -517,21 +538,77 @@ export default function ProfilePage() {
 
             {/* Package Stats Summary */}
             <div className="grid grid-cols-2 gap-4 mb-10">
-              <div className="bg-background border border-border/50 p-5 rounded-3xl">
+              <div className="bg-background border border-border/50 p-5 rounded-3xl relative overflow-hidden">
                 <div className="flex items-center gap-3 mb-1">
                   <Signal className="w-4 h-4 text-primary" />
                   <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider">{t('modal.planData')}</span>
                 </div>
-                <p className="text-xl font-black text-foreground">{selectedPackage.data}</p>
+                {isUsageLoading ? (
+                  <Loader2 className="w-4 h-4 animate-spin text-primary mt-2" />
+                ) : usageDetails ? (
+                  <>
+                    <p className="text-xl font-black text-foreground">
+                      {(usageDetails.data.remaining_data_mb / 1024).toFixed(2)} GB
+                    </p>
+                    <p className="text-[10px] text-muted-foreground mt-1">
+                      {usageDetails.data.used_data_mb.toFixed(0)} MB {t('card.used')} / {(usageDetails.data.total_data_mb / 1024).toFixed(1)} GB
+                    </p>
+                    {/* Tiny Progress Bar in Card */}
+                    <div className="absolute bottom-0 left-0 w-full h-1 bg-muted">
+                        <div 
+                            className="h-full bg-primary" 
+                            style={{ width: `${Math.min(100, (usageDetails.data.used_data_mb / usageDetails.data.total_data_mb) * 100)}%` }}
+                        />
+                    </div>
+                  </>
+                ) : (
+                  <p className="text-xl font-black text-foreground">{selectedPackage.data}</p>
+                )}
               </div>
               <div className="bg-background border border-border/50 p-5 rounded-3xl">
                 <div className="flex items-center gap-3 mb-1">
                   <Calendar className="w-4 h-4 text-emerald-500" />
                   <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider">{t('modal.validity')}</span>
                 </div>
-                <p className="text-xl font-black text-foreground">{selectedPackage.validity}</p>
+                {isUsageLoading ? (
+                  <Loader2 className="w-4 h-4 animate-spin text-emerald-500 mt-2" />
+                ) : usageDetails && usageDetails.data.expiration_date ? (
+                  <>
+                    <p className="text-xl font-black text-foreground">
+                      {new Date(usageDetails.data.expiration_date).toLocaleDateString()}
+                    </p>
+                    <p className="text-[10px] text-muted-foreground mt-1">
+                      {usageDetails.data.status_text}
+                    </p>
+                  </>
+                ) : (
+                  <p className="text-xl font-black text-foreground">{selectedPackage.validity}</p>
+                )}
               </div>
             </div>
+
+            {/* Live Progress Section */}
+            {usageDetails && (
+              <div className="mb-10 p-6 bg-primary/5 rounded-[2rem] border border-primary/10">
+                <div className="flex justify-between items-end mb-3">
+                  <div>
+                    <h4 className="text-sm font-bold text-foreground">Live Consumption</h4>
+                    <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">Real-time status: {usageDetails.data.status_text}</p>
+                  </div>
+                  <div className="text-right">
+                    <span className="text-lg font-black text-primary">
+                      {Math.round((usageDetails.data.used_data_mb / usageDetails.data.total_data_mb) * 100)}%
+                    </span>
+                  </div>
+                </div>
+                <div className="h-3 bg-primary/10 rounded-full overflow-hidden">
+                  <div 
+                    className="h-full bg-primary shadow-[0_0_12px_rgba(var(--primary),0.5)] transition-all duration-1000"
+                    style={{ width: `${(usageDetails.data.used_data_mb / usageDetails.data.total_data_mb) * 100}%` }}
+                  />
+                </div>
+              </div>
+            )}
 
             {/* Actions */}
             <div className="flex gap-4">

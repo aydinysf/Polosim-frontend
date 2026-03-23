@@ -25,6 +25,21 @@ export interface EsimPackageData {
     }[];
 }
 
+export interface EsimUsageResponse {
+    status: "success" | "error";
+    data: {
+        iccid: string;
+        provider: string;
+        used_data_mb: number;
+        total_data_mb: number;
+        remaining_data_mb: number;
+        status_code: number;
+        status_text: string;
+        start_date: string | null;
+        expiration_date: string | null;
+    };
+}
+
 interface RawEsim {
     id: number;
     iccid: string;
@@ -119,6 +134,16 @@ export const esimProfileService = {
             });
         } catch {
             return [];
+        }
+    },
+
+    async getEsimUsage(iccid: string): Promise<EsimUsageResponse | null> {
+        try {
+            const response = await webApi.get<EsimUsageResponse>(`/esim/usage/${iccid}`);
+            return response.data;
+        } catch (error) {
+            console.error("Failed to fetch eSIM usage:", error);
+            return null;
         }
     },
 };
