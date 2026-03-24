@@ -11,7 +11,8 @@
     "bayi-girisi": "Bayi Girişi",
     "login": "Giriş Yap",
     "myProfile": "Profilim",
-    "logout": "Çıkış Yap"
+    "logout": "Çıkış Yap",
+    "getStarted": "Hemen Başla"
   },
   "Hero": {
     "title": "",
@@ -47,7 +48,11 @@
       "termsOfService": "Kullanım Koşulları",
       "refundPolicy": "İade Politikası"
     },
-    "copyright": "© {year} POLO SIM. Tüm hakları saklıdır."
+    "copyright": "© {year} POLO SIM. Tüm hakları saklıdır.",
+    "bottom": {
+      "available": "200'den fazla ülkede kullanılabilir",
+      "secure": "Güvenli ödemeler"
+    }
   },
   "Plans": {
     "hero": {
@@ -330,6 +335,49 @@
       "cancel": "İptal",
       "confirm": "Onayla",
       "processing": "İşleniyor..."
+    }
+  },
+  "Checkout": {
+    "title": "Ödemeyi Tamamla",
+    "emptyCart": "Sepetiniz boş",
+    "addPlans": "Başlamak için birkaç eSIM planı ekleyin",
+    "browsePlans": "Planları İncele",
+    "backToCart": "Sepete Geri Dön",
+    "success": {
+      "title": "Ödeme Başarılı!",
+      "description": "eSIM QR kodunuz e-posta adresinize gönderildi.",
+      "backToHome": "Ana Sayfaya Dön",
+      "needHelp": "Yardıma mı ihtiyacınız var?"
+    },
+    "error": {
+      "sessionExpired": "Oturumunuz sona ermiş. Lütfen tekrar giriş yapın.",
+      "general": "Ödeme işlemi sırasında bir hata oluştu.",
+      "guestError": "Misafir ödemesi sırasında bir hata oluştu.",
+      "stripeKeyMissing": "Stripe public anahtar yapılandırılmamış.",
+      "failed": "Ödeme Başarısız",
+      "failedDescription": "Ödeme işlemi tamamlanamadı. Lütfen tekrar deneyin."
+    },
+    "ready": {
+      "continueAs": "{name} olarak devam ediliyor",
+      "continueAsGuest": "Misafir Olarak Devam Et",
+      "orderSummary": "Sipariş Özeti",
+      "total": "Toplam",
+      "pay": "Ödeme Yap ({amount})",
+      "processing": "İşleniyor..."
+    }
+  },
+  "Legal": {
+    "lastUpdated": "Son güncelleme: {date}",
+    "downloadLabel": "PDF / DOCX İndir",
+    "backLabel": "Ana Sayfaya Dön",
+    "termsOfService": {
+      "title": "Kullanım Koşulları"
+    },
+    "privacyPolicy": {
+      "title": "Gizlilik Politikası"
+    },
+    "refundPolicy": {
+      "title": "İade Politikası"
     }
   }
 }

@@ -11,7 +11,8 @@
     "bayi-girisi": "Reseller Login",
     "login": "Login",
     "myProfile": "My Profile",
-    "logout": "Logout"
+    "logout": "Logout",
+    "getStarted": "Get Started"
   },
   "Hero": {
     "title": "",
@@ -47,7 +48,11 @@
       "termsOfService": "Terms of Service",
       "refundPolicy": "Refund Policy"
     },
-    "copyright": "© {year} POLO SIM. All rights reserved."
+    "copyright": "© {year} POLO SIM. All rights reserved.",
+    "bottom": {
+      "available": "Available in 200+ countries",
+      "secure": "Secure payments"
+    }
   },
   "Plans": {
     "hero": {
@@ -330,6 +335,49 @@
       "cancel": "Cancel",
       "confirm": "Confirm",
       "processing": "Processing..."
+    }
+  },
+  "Checkout": {
+    "title": "Complete Payment",
+    "emptyCart": "Your cart is empty",
+    "addPlans": "Add some eSIM plans to get started",
+    "browsePlans": "Browse Plans",
+    "backToCart": "Back to Cart",
+    "success": {
+      "title": "Payment Successful!",
+      "description": "Your eSIM QR code has been sent to your email address.",
+      "backToHome": "Back to Home",
+      "needHelp": "Need help?"
+    },
+    "error": {
+      "sessionExpired": "Your session has expired. Please log in again.",
+      "general": "An error occurred during payment processing.",
+      "guestError": "An error occurred during guest checkout.",
+      "stripeKeyMissing": "Stripe public key is not configured.",
+      "failed": "Payment Failed",
+      "failedDescription": "Payment could not be completed. Please try again."
+    },
+    "ready": {
+      "continueAs": "Continuing as {name}",
+      "continueAsGuest": "Continue as Guest",
+      "orderSummary": "Order Summary",
+      "total": "Total",
+      "pay": "Pay ({amount})",
+      "processing": "Processing..."
+    }
+  },
+  "Legal": {
+    "lastUpdated": "Last updated: {date}",
+    "downloadLabel": "Download PDF / DOCX",
+    "backLabel": "Back to Home",
+    "termsOfService": {
+      "title": "Terms of Service"
+    },
+    "privacyPolicy": {
+      "title": "Privacy Policy"
+    },
+    "refundPolicy": {
+      "title": "Refund Policy"
     }
   }
 }

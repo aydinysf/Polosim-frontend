@@ -16,6 +16,8 @@ import { useRouter } from "next/navigation";
 import { Link } from "@/i18n/routing";
 import { ApiError } from "@/lib/api-client";
 
+import { useLocale, useTranslations } from "next-intl";
+
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 const hasStripeKey = !!process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
 
@@ -30,6 +32,8 @@ enum PageState {
 }
 
 export function NewCheckout() {
+  const t = useTranslations('Checkout');
+  const locale = useLocale();
   const { isAuthenticated, user } = useAuth();
   const { items, clearCart, isLoaded } = useCart();
   const router = useRouter();
@@ -65,7 +69,7 @@ export function NewCheckout() {
     // Defensive: verify token is still present in localStorage
     const token = localStorage.getItem('auth_token');
     if (!token) {
-      setErrorMessage("Oturumunuz sona ermiş. Lütfen tekrar giriş yapın.");
+      setErrorMessage(t('error.sessionExpired'));
       setPageState(PageState.ERROR);
       return;
     }
@@ -100,7 +104,7 @@ export function NewCheckout() {
       } else {
         console.error("Checkout execution error (Unknown):", err);
       }
-      setErrorMessage(err.message || "Ödeme işlemi sırasında bir hata oluştu.");
+      setErrorMessage(err.message || t('error.general'));
       setPageState(PageState.ERROR);
     }
   };
@@ -116,17 +120,17 @@ export function NewCheckout() {
   const renderError = () => (
     <div className="text-center text-destructive">
       <p>{errorMessage}</p>
-      <Button onClick={() => router.push('/cart')} className="mt-4">Sepete Geri Dön</Button>
+      <Button onClick={() => router.push('/cart')} className="mt-4">{t('backToCart')}</Button>
     </div>
   );
 
   const renderEmptyCart = () => (
     <div className="text-center py-12">
       <ShoppingBag className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-      <h2 className="text-xl font-semibold mb-2">Sepetiniz boş</h2>
-      <p className="text-muted-foreground mb-6">Başlamak için birkaç eSIM planı ekleyin</p>
+      <h2 className="text-xl font-semibold mb-2">{t('emptyCart')}</h2>
+      <p className="text-muted-foreground mb-6">{t('addPlans')}</p>
       <Link href="/plans">
-        <Button>Planları İncele</Button>
+        <Button>{t('browsePlans')}</Button>
       </Link>
     </div>
   );
@@ -136,13 +140,13 @@ export function NewCheckout() {
       <div className="w-20 h-20 rounded-full bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center mx-auto mb-6">
         <CheckCircle className="w-10 h-10 text-emerald-500" />
       </div>
-      <h1 className="text-3xl font-bold text-foreground mb-4">Ödeme Başarılı!</h1>
+      <h1 className="text-3xl font-bold text-foreground mb-4">{t('success.title')}</h1>
       <p className="text-muted-foreground mb-8">
-        eSIM QR kodunuz e-posta adresinize gönderildi.
+        {t('success.description')}
       </p>
       <div className="flex flex-col sm:flex-row gap-3 justify-center">
-        <Link href="/"><Button>Ana Sayfaya Dön</Button></Link>
-        <Link href="/support"><Button variant="outline">Yardıma mı ihtiyacınız var?</Button></Link>
+        <Link href="/"><Button>{t('success.backToHome')}</Button></Link>
+        <Link href="/support"><Button variant="outline">{t('success.needHelp')}</Button></Link>
       </div>
     </div>
   );
@@ -153,11 +157,11 @@ export function NewCheckout() {
         <Button variant="ghost" size="icon" onClick={() => setPageState(PageState.CHECKOUT_READY)}>
           <ArrowLeft className="w-5 h-5" />
         </Button>
-        <h1 className="text-2xl font-bold">Ödemeyi Tamamla</h1>
+        <h1 className="text-2xl font-bold">{t('title')}</h1>
       </div>
       {!hasStripeKey ? (
         <div className="rounded-2xl border border-destructive/50 bg-destructive/10 p-4 text-destructive">
-          Stripe public anahtar yapılandırılmamış.
+          {t('error.stripeKeyMissing')}
         </div>
       ) : clientSecret ? (
         <div className="rounded-2xl border border-border/50 bg-card/30 backdrop-blur-sm overflow-hidden p-6">
@@ -190,7 +194,7 @@ export function NewCheckout() {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            {isAuthenticated ? <><User className="w-5 h-5" /> {user?.name} olarak devam ediliyor</> : "Misafir Olarak Devam Et"}
+            {isAuthenticated ? t('ready.continueAs', { name: user?.name || '' }) : t('ready.continueAsGuest')}
           </CardTitle>
         </CardHeader>
       </Card>
@@ -206,7 +210,7 @@ export function NewCheckout() {
             setPageState(PageState.STRIPE_PAYMENT);
           }}
           onError={(err) => {
-            setErrorMessage(err.message || "Misafir ödemesi sırasında bir hata oluştu.");
+            setErrorMessage(err.message || t('error.guestError'));
             setPageState(PageState.ERROR);
           }}
         />
@@ -222,7 +226,7 @@ export function NewCheckout() {
             walletBalance={user?.wallet_balance}
           />
           <Card>
-            <CardHeader><CardTitle>Sipariş Özeti</CardTitle></CardHeader>
+            <CardHeader><CardTitle>{t('ready.orderSummary')}</CardTitle></CardHeader>
             <CardContent>
               <div className="space-y-2">
                 {items.map((item) => (
@@ -233,7 +237,7 @@ export function NewCheckout() {
                 ))}
                 <div className="border-t pt-2 mt-2">
                   <div className="flex justify-between font-bold">
-                    <span>Toplam</span>
+                    <span>{t('ready.total')}</span>
                     <span>€{(items.reduce((sum, item) => sum + ((item.priceInCents / 100) * item.quantity), 0) || 0).toFixed(2)}</span>
                   </div>
                 </div>
@@ -242,7 +246,7 @@ export function NewCheckout() {
           </Card>
           <Button onClick={handleAuthenticatedCheckout} disabled={pageState === PageState.LOADING} className="w-full" size="lg">
             {pageState === PageState.LOADING ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : (selectedMethod === 'wallet' ? <Wallet className="w-4 h-4 mr-2" /> : <CreditCard className="w-4 h-4 mr-2" />)}
-            {pageState === PageState.LOADING ? "İşleniyor..." : `Ödeme Yap (€${(items.reduce((sum, item) => sum + ((item.priceInCents / 100) * item.quantity), 0) || 0).toFixed(2)})`}
+            {pageState === PageState.LOADING ? t('ready.processing') : t('ready.pay', { amount: `€${(items.reduce((sum, item) => sum + ((item.priceInCents / 100) * item.quantity), 0) || 0).toFixed(2)}` })}
           </Button>
         </>
       )}

@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { Link } from "@/i18n/routing";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 const content = {
     en: {
@@ -101,6 +101,7 @@ const content = {
 };
 
 export default function RefundPolicyPage() {
+    const t = useTranslations('Legal');
     const locale = useLocale();
     const c = content[locale as "en" | "tr"] ?? content.en;
 
@@ -109,20 +110,20 @@ export default function RefundPolicyPage() {
             <Navbar />
 
             {/* Hero */}
-            <section className="pt-40 pb-12 px-4 relative overflow-hidden bg-gray-100">
+            <section className="pt-40 pb-12 px-4 relative overflow-hidden bg-gray-100 dark:bg-zinc-950">
                 <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(14,116,144,0.04)_1px,transparent_1px),linear-gradient(to_bottom,rgba(14,116,144,0.04)_1px,transparent_1px)] bg-[size:40px_40px]" />
                 <div className="absolute top-20 left-10 w-48 h-48 bg-primary/10 rounded-full blur-3xl" />
                 <div className="relative max-w-4xl mx-auto text-center">
                     <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-card/50 border border-border/50 backdrop-blur-sm mb-6">
                         <RotateCcw className="w-4 h-4 text-primary" />
-                        <span className="text-sm text-muted-foreground">{c.title}</span>
+                        <span className="text-sm text-muted-foreground">{t('refundPolicy.title')}</span>
                     </div>
-                    <h1 className="text-4xl font-bold text-foreground mb-3">{c.title}</h1>
-                    <p className="text-muted-foreground mb-6">{c.lastUpdated}</p>
+                    <h1 className="text-4xl font-bold text-foreground mb-3">{t('refundPolicy.title')}</h1>
+                    <p className="text-muted-foreground mb-6">{t('lastUpdated', { date: c.lastUpdated.split(': ')[1] })}</p>
                     <a href={c.downloadHref} download>
                         <Button variant="outline" className="gap-2">
                             <Download className="w-4 h-4" />
-                            {c.downloadLabel}
+                            {t('downloadLabel')}
                         </Button>
                     </a>
                 </div>
@@ -144,7 +145,7 @@ export default function RefundPolicyPage() {
                         <Link href="/">
                             <Button variant="ghost" className="gap-2 text-primary">
                                 <ArrowLeft className="w-4 h-4" />
-                                {c.backLabel}
+                                {t('backLabel')}
                             </Button>
                         </Link>
                     </div>

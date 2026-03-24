@@ -93,7 +93,7 @@ export function Footer() {
           </div>
 
           <div>
-            <h4 className="font-semibold mb-3 sm:mb-4 text-sm sm:text-base text-cyan-400">Company</h4>
+            <h4 className="font-semibold mb-3 sm:mb-4 text-sm sm:text-base text-cyan-400">{t('company')}</h4>
             <ul className="space-y-2 sm:space-y-3">
               {footerLinks.company.map((link) => (
                 <li key={link.name}>
@@ -112,7 +112,7 @@ export function Footer() {
           </div>
 
           <div>
-            <h4 className="font-semibold mb-3 sm:mb-4 text-sm sm:text-base text-cyan-400">Support</h4>
+            <h4 className="font-semibold mb-3 sm:mb-4 text-sm sm:text-base text-cyan-400">{t('support')}</h4>
             <ul className="space-y-2 sm:space-y-3">
               {footerLinks.support.map((link) => (
                 <li key={link.name}>
@@ -153,17 +153,17 @@ export function Footer() {
         {/* Bottom bar */}
         <div className="mt-10 sm:mt-16 pt-6 sm:pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-3 sm:gap-4">
           <p className="text-xs sm:text-sm text-[hsl(215_20%_45%)] text-center md:text-left">
-            &copy; 2026 POLO SIM. All rights reserved.
+            {t('copyright', { year: new Date().getFullYear() })}
           </p>
           <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4 text-xs sm:text-sm text-[hsl(215_20%_45%)]">
             <span className="flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-              Available in 200+ countries
+              {t('bottom.available')}
             </span>
             <span className="hidden sm:inline text-white/15">|</span>
             <span className="flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
-              Secure payments
+              {t('bottom.secure')}
             </span>
           </div>
         </div>

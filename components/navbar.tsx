@@ -214,7 +214,7 @@ export function Navbar() {
                     </Link>
                     <Link href="/get-started">
                       <Button className="bg-primary text-primary-foreground hover:bg-primary/90">
-                        Get Started
+                        {t('getStarted')}
                       </Button>
                     </Link>
                   </>
