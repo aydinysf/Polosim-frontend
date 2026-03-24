@@ -102,6 +102,8 @@ function emojiToISO(emoji: string): string | null {
 
 export function HeroSection() {
   const t = useTranslations('Hero');
+  const tc = useTranslations('Common');
+  const tp = useTranslations('Plans');
   const [searchQuery, setSearchQuery] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [showSearchResults, setShowSearchResults] = useState(false);
@@ -317,7 +319,7 @@ export function HeroSection() {
   const handleAddToCart = (product: Product) => {
     const productName = getProductName(product);
     const productData = getProductData(product);
-    const productValidity = getProductValidity(product);
+    const productValidity = getProductValidity(product, tp);
     const productSpeed = getProductSpeed(product);
 
     const cartItem = {
@@ -373,7 +375,7 @@ export function HeroSection() {
               {searchResultProducts.map((product) => {
                 const productName = getProductName(product);
                 const productData = getProductData(product);
-                const productValidity = getProductValidity(product);
+                const productValidity = getProductValidity(product, tp);
                 const productSpeed = getProductSpeed(product);
                 const hotspot = isHotspotAllowed(product);
                 const instantActivation = hasInstantActivation(product);
@@ -417,12 +419,12 @@ export function HeroSection() {
                     <div className="flex flex-wrap gap-1.5 mb-3">
                       {hotspot && (
                         <span className="px-2 py-0.5 text-[10px] font-medium bg-emerald-500/10 text-emerald-500 rounded-full">
-                          Hotspot
+                          {tc('hotspot')}
                         </span>
                       )}
                       {instantActivation && (
                         <span className="px-2 py-0.5 text-[10px] font-medium bg-blue-500/10 text-blue-500 rounded-full">
-                          Instant
+                          {tc('instant')}
                         </span>
                       )}
                     </div>
@@ -438,9 +440,9 @@ export function HeroSection() {
                         onClick={() => handleAddToCart(product)}
                       >
                         {addedToCart === product.id ? (
-                          <><Check className="w-4 h-4 mr-1" />Added</>
+                          <><Check className="w-4 h-4 mr-1" />{tc('added')}</>
                         ) : (
-                          <><ShoppingCart className="w-4 h-4 mr-1" />Buy</>
+                          <><ShoppingCart className="w-4 h-4 mr-1" />{tc('buy')}</>
                         )}
                       </Button>
                     </div>
@@ -507,7 +509,7 @@ export function HeroSection() {
                   onClick={handleSearch}
                 >
                   <Globe className="w-4 h-4 mr-2" />
-                  Search
+                  {t('searchButton')}
                 </Button>
               </div>
             </div>
@@ -544,7 +546,7 @@ export function HeroSection() {
             onClick={() => router.push("/plans")}
           >
             <Wifi className="w-4 h-4 text-primary" />
-            View All 200+ Destinations
+            {t('viewAllDestinations')}
             <ArrowRight className="w-4 h-4 ml-1" />
           </Button>
         </div>
@@ -559,7 +561,7 @@ export function HeroSection() {
               className="text-primary p-0 h-auto"
               onClick={() => router.push("/plans")}
             >
-              View All <ArrowRight className="w-3 h-3 ml-1" />
+              {t('viewAll')} <ArrowRight className="w-3 h-3 ml-1" />
             </Button>
           </div>
           <div
@@ -600,7 +602,7 @@ export function HeroSection() {
                     <FlagDisplay flag={country.flag_url || country.iso_code} name={countryName} size="md" />
                     <div className="text-left">
                       <span className="block text-sm font-medium text-foreground group-hover:text-primary transition-colors">{countryName}</span>
-                      <span className="block text-xs text-muted-foreground">eSIM Plans Available</span>
+                      <span className="block text-xs text-muted-foreground">{t('plansAvailable')}</span>
                     </div>
                   </button>
                 );
@@ -623,7 +625,7 @@ export function HeroSection() {
 
         {/* Popular Regions - Large Gradient Cards */}
         <div className="mb-10">
-          <h3 className="text-sm font-medium text-muted-foreground mb-4 px-2">Popular Regions</h3>
+          <h3 className="text-sm font-medium text-muted-foreground mb-4 px-2">{t('popularRegions')}</h3>
           {isLoading ? (
             <div className="flex items-center justify-center py-8">
               <Loader2 className="w-6 h-6 animate-spin text-primary" />
@@ -682,7 +684,7 @@ export function HeroSection() {
                         {regionName}
                       </span>
                       {countryCount > 0 && (
-                        <span className="text-xs text-muted-foreground">{countryCount}+ countries</span>
+                        <span className="text-xs text-muted-foreground">{t('countriesCount', { count: countryCount })}</span>
                       )}
                       {startingPrice > 0 && (
                         <span className="text-xs text-primary font-semibold">
@@ -743,7 +745,7 @@ export function HeroSection() {
                   className="border-border/50 hover:border-primary hover:bg-primary/10 text-foreground bg-transparent gap-2"
                   onClick={() => router.push("/plans?view=regions")}
                 >
-                  View All Regions
+                  {t('viewAllRegions')}
                   <ArrowRight className="w-4 h-4" />
                 </Button>
               </div>
@@ -755,15 +757,15 @@ export function HeroSection() {
         <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-4 sm:gap-8 text-xs sm:text-sm text-muted-foreground">
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 bg-emerald-500 rounded-full" />
-            <span>Instant Activation</span>
+            <span>{tc('instantActivation')}</span>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 bg-primary rounded-full" />
-            <span>24/7 Support</span>
+            <span>{tc('support247')}</span>
           </div>
           <div className="flex items-center gap-2">
             <Smartphone className="w-4 h-4 text-primary" />
-            <span>Works with any eSIM device</span>
+            <span>{tc('deviceCompatibility')}</span>
           </div>
         </div>
       </div>

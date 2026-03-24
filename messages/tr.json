@@ -23,7 +23,62 @@
     "regionalPlans": "Bölgesel Planlar",
     "countryPlans": "Ülke Planları",
     "buyNow": "Satın Al",
-    "popularDestinations": "Popüler Destinasyonlar"
+    "popularDestinations": "Popüler Destinasyonlar",
+    "viewAllDestinations": "200'den Fazla Destinasyonu Gör",
+    "viewAll": "Hepsini Gör",
+    "popularRegions": "Popüler Bölgeler",
+    "viewAllRegions": "Tüm Bölgeleri Gör",
+    "plansAvailable": "eSIM Planları Mevcut",
+    "countriesCount": "{count}+ ülke"
+  },
+  "Common": {
+    "instantActivation": "Anında Aktivasyon",
+    "support247": "7/24 Destek",
+    "deviceCompatibility": "Tüm eSIM cihazlarıyla çalışır",
+    "daysLeft": "{count} Gün Kaldı",
+    "hotspot": "Hotspot",
+    "instant": "Anında",
+    "buy": "Satın Al",
+    "added": "Eklendi",
+    "details": "Detaylar",
+    "dataUsed": "Kullanılan Veri",
+    "getPlan": "Plan Al",
+    "noActiveEsim": "Aktif eSIM Yok"
+  },
+  "AccountBenefits": {
+    "title": "Neden Hesap Oluşturmalısınız?",
+    "subtitle": "Ücretsiz bir hesapla özel avantajların kilidini açın ve eSIM'lerinizi kolayca yönetin.",
+    "trackOrders": {
+      "title": "Siparişlerinizi Takip Edin",
+      "description": "Tüm satın alımlarınızı ve eSIM aktivasyonlarınızı dilediğiniz zaman profil sayfanızdan görüntüleyin."
+    },
+    "monitorUsage": {
+      "title": "Kullanımı İzleyin",
+      "description": "Veri kullanımınızı ve kalan bakiyenizi kontrol panelinizden gerçek zamanlı olarak kontrol edin."
+    },
+    "affiliateProgram": {
+      "title": "Ortaklık Programı",
+      "description": "Arkadaşlarınızı önererek ve benzersiz yönlendirme bağlantınızı paylaşarak komisyon kazanın."
+    },
+    "exclusiveCampaigns": {
+      "title": "Özel Kampanyalar",
+      "description": "Yıl boyunca özel indirimlere, promosyonlara ve üyelere özel fırsatlara erişin."
+    },
+    "createAccount": "Ücretsiz Hesap Oluştur"
+  },
+  "Legal": {
+    "lastUpdated": "Son güncelleme: {date}",
+    "downloadLabel": "PDF / DOCX İndir",
+    "backLabel": "Ana Sayfaya Dön",
+    "termsOfService": {
+      "title": "Kullanım Koşulları"
+    },
+    "privacyPolicy": {
+      "title": "Gizlilik Politikası"
+    },
+    "refundPolicy": {
+      "title": "İade Politikası"
+    }
   },
   "Footer": {
     "description": "Tek Sim, Tek Dünya. 200'den fazla ülkede anında aktivasyon ve roaming ücreti olmadan bağlı kalın.",
@@ -71,6 +126,7 @@
     },
     "filters": {
       "title": "Filtreler",
+      "all": "Tüm Planlar",
       "bestSellers": "Çok Satanlar",
       "dataAmount": "Veri Miktarı",
       "duration": "Süre",
@@ -364,20 +420,6 @@
       "total": "Toplam",
       "pay": "Ödeme Yap ({amount})",
       "processing": "İşleniyor..."
-    }
-  },
-  "Legal": {
-    "lastUpdated": "Son güncelleme: {date}",
-    "downloadLabel": "PDF / DOCX İndir",
-    "backLabel": "Ana Sayfaya Dön",
-    "termsOfService": {
-      "title": "Kullanım Koşulları"
-    },
-    "privacyPolicy": {
-      "title": "Gizlilik Politikası"
-    },
-    "refundPolicy": {
-      "title": "İade Politikası"
     }
   }
 }

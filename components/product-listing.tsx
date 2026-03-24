@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Signal, Clock, ShoppingCart, Star, ArrowUpDown, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { useTranslations } from "next-intl";
 
 type SortOption = "popular" | "price-low" | "price-high" | "data-high" | "name-az";
 
@@ -101,9 +102,21 @@ const plans = [
 type FilterType = "all" | "bestSeller" | "europe" | "asia";
 
 export function ProductListing() {
+  const t = useTranslations('Plans');
+  const th = useTranslations('Hero');
+  const tc = useTranslations('Common');
+  
   const [filter, setFilter] = useState<FilterType>("all");
   const [sortBy, setSortBy] = useState<SortOption>("popular");
   const [sortMenuOpen, setSortMenuOpen] = useState(false);
+
+  const sortOptions: { key: SortOption; label: string }[] = [
+    { key: "popular", label: t('sort.popular') },
+    { key: "price-low", label: t('sort.priceLow') },
+    { key: "price-high", label: t('sort.priceHigh') },
+    { key: "data-high", label: t('sort.dataHigh') },
+    { key: "name-az", label: t('sort.nameAz') },
+  ];
 
   const filteredPlans = plans
     .filter((plan) => {
@@ -136,10 +149,10 @@ export function ProductListing() {
         <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-8 sm:mb-12 gap-4 sm:gap-6">
           <div>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-2 sm:mb-4 text-foreground">
-              Data Plans
+              {tc('hotspot')} {t('labels.dataPlan')}
             </h2>
             <p className="text-muted-foreground text-base sm:text-lg">
-              Find the perfect plan for your next adventure.
+              {t('hero.plansDescription')}
             </p>
           </div>
 
@@ -148,8 +161,8 @@ export function ProductListing() {
             {/* Filters - horizontal scroll on mobile */}
             <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
               {[
-                { key: "all", label: "All Plans" },
-                { key: "bestSeller", label: "Best Sellers" },
+                { key: "all", label: t('filters.all') },
+                { key: "bestSeller", label: t('filters.bestSellers') },
                 { key: "europe", label: "Europe" },
                 { key: "asia", label: "Asia" },
               ].map((item) => (
@@ -212,7 +225,7 @@ export function ProductListing() {
                 <div className="absolute top-3 right-3 z-10">
                   <Badge className="bg-primary/20 text-primary border-primary/30 hover:bg-primary/30">
                     <Star className="w-3 h-3 mr-1 fill-primary" />
-                    Best Seller
+                    {t('labels.bestSeller')}
                   </Badge>
                 </div>
               )}
@@ -231,7 +244,7 @@ export function ProductListing() {
                 <div className="space-y-2 mb-5">
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
                     <Clock className="w-4 h-4" />
-                    <span>{plan.validity}</span>
+                    <span>{t('validity.days', { count: parseInt(plan.validity) })}</span>
                   </div>
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
                     <Signal className="w-4 h-4" />
@@ -249,7 +262,7 @@ export function ProductListing() {
                     className="bg-primary text-primary-foreground hover:bg-primary/90"
                   >
                     <ShoppingCart className="w-4 h-4 mr-2" />
-                    Buy Now
+                    {t('cta.buy')}
                   </Button>
                 </div>
               </div>
@@ -260,7 +273,7 @@ export function ProductListing() {
         {/* View all link */}
         <div className="text-center mt-12">
           <Button variant="outline" size="lg" className="border-border/50 hover:border-primary hover:bg-primary/10 text-foreground bg-transparent">
-            View All 200+ Destinations
+            {th('viewAllDestinations')}
           </Button>
         </div>
       </div>

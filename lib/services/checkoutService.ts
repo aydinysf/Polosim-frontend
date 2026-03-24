@@ -5,7 +5,7 @@ interface CheckoutItem {
   quantity: number;
 }
 
-interface CheckoutPreviewPayload {
+export interface CheckoutPreviewPayload {
   items?: CheckoutItem[];
   session_id?: string;
 }
@@ -19,7 +19,7 @@ export interface CheckoutPreviewResponse {
   discount?: any;
 }
 
-interface CheckoutExecutePayload {
+export interface CheckoutExecutePayload {
   payment_method: 'stripe' | 'wallet';
   session_id?: string;
   guest_email?: string;
@@ -29,7 +29,7 @@ interface CheckoutExecutePayload {
   quantity?: number;
 }
 
-interface CheckoutExecuteResponse {
+export interface CheckoutExecuteResponse {
   client_secret: string;
   order_id: number;
   status: string;

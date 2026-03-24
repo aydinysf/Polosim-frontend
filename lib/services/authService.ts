@@ -107,4 +107,12 @@ export const authService = {
     setAuthToken(null);
     setUserToStorage(null);
   },
+
+  verifyEmail: async (email: string, code: string): Promise<any> => {
+    return api.post('/register/verify', { email, code });
+  },
+
+  resendVerificationEmail: async (email: string): Promise<any> => {
+    return api.post('/register/resend-verification', { email });
+  },
 };

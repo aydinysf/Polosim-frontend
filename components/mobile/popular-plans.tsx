@@ -1,13 +1,14 @@
 "use client";
 
 import { ChevronRight, Star } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 const popularPlans = [
-  { flag: "TR", name: "Turkey", data: "10GB", validity: "30 Days", price: 14.99, rating: 4.8 },
-  { flag: "EU", name: "Europe", data: "20GB", validity: "30 Days", price: 29.99, rating: 4.9 },
-  { flag: "JP", name: "Japan", data: "15GB", validity: "15 Days", price: 24.99, rating: 4.7 },
-  { flag: "US", name: "USA", data: "30GB", validity: "30 Days", price: 34.99, rating: 4.8 },
-  { flag: "TH", name: "Thailand", data: "8GB", validity: "15 Days", price: 11.99, rating: 4.6 },
+  { flag: "TR", name: "Turkey", data: "10GB", validity: 30, price: 14.99, rating: 4.8 },
+  { flag: "EU", name: "Europe", data: "20GB", validity: 30, price: 29.99, rating: 4.9 },
+  { flag: "JP", name: "Japan", data: "15GB", validity: 15, price: 24.99, rating: 4.7 },
+  { flag: "US", name: "USA", data: "30GB", validity: 30, price: 34.99, rating: 4.8 },
+  { flag: "TH", name: "Thailand", data: "8GB", validity: 15, price: 11.99, rating: 4.6 },
 ];
 
 const flagEmojis: Record<string, string> = {
@@ -19,13 +20,16 @@ const flagEmojis: Record<string, string> = {
 };
 
 export function PopularPlans() {
+  const t = useTranslations('Hero');
+  const tp = useTranslations('Plans');
+
   return (
     <div className="py-4">
       {/* Header */}
       <div className="flex items-center justify-between px-4 mb-3">
-        <h2 className="text-base font-semibold text-foreground">Popular Plans</h2>
+        <h2 className="text-base font-semibold text-foreground">{t('popularRegions')}</h2>
         <button className="flex items-center gap-1 text-xs text-primary font-medium">
-          See All
+          {t('viewAll')}
           <ChevronRight className="w-3 h-3" />
         </button>
       </div>
@@ -51,7 +55,7 @@ export function PopularPlans() {
 
             {/* Info */}
             <p className="text-sm font-semibold text-foreground">{plan.name}</p>
-            <p className="text-xs text-muted-foreground mt-0.5">{plan.data} / {plan.validity}</p>
+            <p className="text-xs text-muted-foreground mt-0.5">{plan.data} / {tp('validity.days', { count: plan.validity })}</p>
 
             {/* Price */}
             <div className="mt-2 pt-2 border-t border-border/50">

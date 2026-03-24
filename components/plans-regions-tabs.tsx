@@ -3,9 +3,11 @@
 import { Smartphone, Signal, Globe, Wifi, ArrowRight, Users, Gift } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "@/i18n/routing";
+import { useTranslations } from "next-intl";
 
 export function PlansRegionsTabs() {
   const router = useRouter();
+  const t = useTranslations('AccountBenefits');
 
   return (
     <section className="py-16 sm:py-24 px-4 relative bg-gray-300">
@@ -16,10 +18,10 @@ export function PlansRegionsTabs() {
         {/* Section header */}
         <div className="text-center mb-10 sm:mb-12">
           <h2 className="text-3xl sm:text-4xl font-bold mb-3 sm:mb-4 text-foreground">
-            Why Create an Account?
+            {t('title')}
           </h2>
           <p className="text-muted-foreground text-base sm:text-lg max-w-2xl mx-auto px-4">
-            Unlock exclusive benefits and manage your eSIMs easily with a free account.
+            {t('subtitle')}
           </p>
         </div>
 
@@ -32,8 +34,8 @@ export function PlansRegionsTabs() {
               <div className="w-12 h-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
                 <Smartphone className="w-6 h-6 text-primary" />
               </div>
-              <h3 className="text-base font-semibold mb-2 text-foreground">Track Your Orders</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">View all your purchases and eSIM activations from your profile page anytime.</p>
+              <h3 className="text-base font-semibold mb-2 text-foreground">{t('trackOrders.title')}</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">{t('trackOrders.description')}</p>
             </div>
           </div>
 
@@ -44,8 +46,8 @@ export function PlansRegionsTabs() {
               <div className="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mb-4 group-hover:bg-emerald-500/20 transition-colors">
                 <Signal className="w-6 h-6 text-emerald-500" />
               </div>
-              <h3 className="text-base font-semibold mb-2 text-foreground">Monitor Usage</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">Check your data usage and remaining balance in real-time from your dashboard.</p>
+              <h3 className="text-base font-semibold mb-2 text-foreground">{t('monitorUsage.title')}</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">{t('monitorUsage.description')}</p>
             </div>
           </div>
 
@@ -56,8 +58,8 @@ export function PlansRegionsTabs() {
               <div className="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center mb-4 group-hover:bg-amber-500/20 transition-colors">
                 <Users className="w-6 h-6 text-amber-500" />
               </div>
-              <h3 className="text-base font-semibold mb-2 text-foreground">Affiliate Program</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">Earn commissions by referring friends and sharing your unique referral link.</p>
+              <h3 className="text-base font-semibold mb-2 text-foreground">{t('affiliateProgram.title')}</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">{t('affiliateProgram.description')}</p>
             </div>
           </div>
 
@@ -68,8 +70,8 @@ export function PlansRegionsTabs() {
               <div className="w-12 h-12 rounded-xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center mb-4 group-hover:bg-rose-500/20 transition-colors">
                 <Gift className="w-6 h-6 text-rose-500" />
               </div>
-              <h3 className="text-base font-semibold mb-2 text-foreground">Exclusive Campaigns</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">Access special discounts, promotions and member-only deals throughout the year.</p>
+              <h3 className="text-base font-semibold mb-2 text-foreground">{t('exclusiveCampaigns.title')}</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">{t('exclusiveCampaigns.description')}</p>
             </div>
           </div>
         </div>
@@ -81,7 +83,7 @@ export function PlansRegionsTabs() {
             className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 gap-2"
             onClick={() => router.push("/sign-in")}
           >
-            Create Free Account
+            {t('createAccount')}
             <ArrowRight className="w-4 h-4" />
           </Button>
         </div>

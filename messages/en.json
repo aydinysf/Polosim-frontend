@@ -23,7 +23,62 @@
     "regionalPlans": "Regional Plans",
     "countryPlans": "Country Plans",
     "buyNow": "Buy Now",
-    "popularDestinations": "Popular Destinations"
+    "popularDestinations": "Popular Destinations",
+    "viewAllDestinations": "View All 200+ Destinations",
+    "viewAll": "View All",
+    "popularRegions": "Popular Regions",
+    "viewAllRegions": "View All Regions",
+    "plansAvailable": "eSIM Plans Available",
+    "countriesCount": "{count}+ countries"
+  },
+  "Common": {
+    "instantActivation": "Instant Activation",
+    "support247": "24/7 Support",
+    "deviceCompatibility": "Works with any eSIM device",
+    "daysLeft": "{count} Days Left",
+    "hotspot": "Hotspot",
+    "instant": "Instant",
+    "buy": "Buy",
+    "added": "Added",
+    "details": "Details",
+    "dataUsed": "Data Used",
+    "getPlan": "Get Plan",
+    "noActiveEsim": "No Active eSIM"
+  },
+  "AccountBenefits": {
+    "title": "Why Create an Account?",
+    "subtitle": "Unlock exclusive benefits and manage your eSIMs easily with a free account.",
+    "trackOrders": {
+      "title": "Track Your Orders",
+      "description": "View all your purchases and eSIM activations from your profile page anytime."
+    },
+    "monitorUsage": {
+      "title": "Monitor Usage",
+      "description": "Check your data usage and remaining balance in real-time from your dashboard."
+    },
+    "affiliateProgram": {
+      "title": "Affiliate Program",
+      "description": "Earn commissions by referring friends and sharing your unique referral link."
+    },
+    "exclusiveCampaigns": {
+      "title": "Exclusive Campaigns",
+      "description": "Access special discounts, promotions and member-only deals throughout the year."
+    },
+    "createAccount": "Create Free Account"
+  },
+  "Legal": {
+    "lastUpdated": "Last updated: {date}",
+    "downloadLabel": "Download PDF / DOCX",
+    "backLabel": "Back to Home",
+    "termsOfService": {
+      "title": "Terms of Service"
+    },
+    "privacyPolicy": {
+      "title": "Privacy Policy"
+    },
+    "refundPolicy": {
+      "title": "Refund Policy"
+    }
   },
   "Footer": {
     "description": "One Sim, One World. Stay connected in 200+ countries with instant activation and no roaming fees.",
@@ -71,6 +126,7 @@
     },
     "filters": {
       "title": "Filters",
+      "all": "All Plans",
       "bestSellers": "Best Sellers",
       "dataAmount": "Data Amount",
       "duration": "Duration",
@@ -364,20 +420,6 @@
       "total": "Total",
       "pay": "Pay ({amount})",
       "processing": "Processing..."
-    }
-  },
-  "Legal": {
-    "lastUpdated": "Last updated: {date}",
-    "downloadLabel": "Download PDF / DOCX",
-    "backLabel": "Back to Home",
-    "termsOfService": {
-      "title": "Terms of Service"
-    },
-    "privacyPolicy": {
-      "title": "Privacy Policy"
-    },
-    "refundPolicy": {
-      "title": "Refund Policy"
     }
   }
 }

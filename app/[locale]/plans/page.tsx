@@ -738,7 +738,7 @@ export default function PlansPage() {
                   {paginatedProducts.map((product) => {
                     const name = getProductName(product, locale);
                     const data = getProductData(product);
-                    const validity = getProductValidity(product);
+                    const validity = getProductValidity(product, t);
                     const speed = getProductSpeed(product);
                     const throttle = getProductThrottleSpeed(product);
                     const hotspot = isHotspotAllowed(product);

@@ -39,20 +39,18 @@ export function getProductValidity(product: Product, t?: any): string {
     const features = product.features as Record<string, unknown> | undefined;
     const days = features?.duration_days || product.duration_days || product.validity_days || product.validityDays || product.day || product.days;
 
-    if (t && days) {
-        return t('validity.days', { count: Number(days) });
+    if (days) {
+        if (t) {
+            return t('validity.days', { count: Number(days) });
+        }
+        return `${days} Days`;
     }
 
-    if (features?.duration_days) return `${features.duration_days} Days`;
     if (product.validity) {
         if (typeof product.validity === "string") return product.validity;
         if (typeof product.validity === "number") return `${product.validity} Days`;
     }
-    if (product.validity_days) return `${product.validity_days} Days`;
-    if (product.validityDays) return `${product.validityDays} Days`;
-    if (product.day) return `${product.day} Days`;
-    if (product.days) return `${product.days} Days`;
-    if (product.duration_days) return `${product.duration_days} Days`;
+    
     return "N/A";
 }
 

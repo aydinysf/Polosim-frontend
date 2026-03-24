@@ -15,7 +15,7 @@ export { cartService } from "./cartService";
 export type { Cart, CartItem } from "./cartService";
 
 export { checkoutService } from "./checkoutService";
-export type { CheckoutPreviewRequest, CheckoutPreviewResponse, CheckoutExecuteRequest, CheckoutExecuteResponse } from "./checkoutService";
+export type { CheckoutPreviewPayload, CheckoutPreviewResponse, CheckoutExecutePayload, CheckoutExecuteResponse } from "./checkoutService";
 
 export { orderService } from "./orderService";
 export type { Order, OrderItem, EsimDetails } from "./orderService";
