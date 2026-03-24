@@ -88,6 +88,21 @@ api.interceptors.request.use((config) => {
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
+
+  // Locale detection from URL path or Cookie
+  if (typeof window !== 'undefined') {
+    let locale = window.location.pathname.split('/')[1];
+    if (!locale || !['en', 'tr'].includes(locale)) {
+      // Fallback: Check NEXT_LOCALE cookie or Default to 'en'
+      const match = document.cookie.match(/NEXT_LOCALE=([^;]+)/);
+      locale = match ? match[1] : 'en';
+    }
+    
+    if (locale && ['en', 'tr'].includes(locale)) {
+      config.headers['x-lang'] = locale;
+    }
+  }
+
   return config;
 });
 
@@ -96,6 +111,21 @@ webApi.interceptors.request.use((config) => {
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
+
+  // Locale detection from URL path or Cookie
+  if (typeof window !== 'undefined') {
+    let locale = window.location.pathname.split('/')[1];
+    if (!locale || !['en', 'tr'].includes(locale)) {
+      // Fallback: Check NEXT_LOCALE cookie or Default to 'en'
+      const match = document.cookie.match(/NEXT_LOCALE=([^;]+)/);
+      locale = match ? match[1] : 'en';
+    }
+    
+    if (locale && ['en', 'tr'].includes(locale)) {
+      config.headers['x-lang'] = locale;
+    }
+  }
+
   return config;
 });
 
