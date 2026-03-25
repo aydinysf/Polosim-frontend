@@ -12,10 +12,11 @@ import { useRouter } from "@/i18n/routing";
 import { useSearchParams } from "next/navigation";
 import { Link } from "@/i18n/routing";
 import Image from "next/image";
-
+import { useTranslations } from "next-intl";
 import { Suspense } from "react";
 
 function VerifyEmailForm() {
+    const t = useTranslations('VerifyEmail');
     const router = useRouter();
     const searchParams = useSearchParams();
     const [email, setEmail] = useState(searchParams.get("email") || "");
@@ -33,7 +34,7 @@ function VerifyEmailForm() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (code.length < 4) {
-            setError("Please enter a valid verification code");
+            setError(t('validCodeRequired'));
             return;
         }
 
@@ -43,7 +44,7 @@ function VerifyEmailForm() {
 
         try {
             await authService.verifyEmail(email, code);
-            setMessage("Email verified successfully! Redirecting to sign in...");
+            setMessage(t('verifySuccess'));
             setTimeout(() => {
                 router.push("/sign-in");
             }, 2000);
@@ -51,7 +52,7 @@ function VerifyEmailForm() {
             if (err instanceof ApiError) {
                 setError(err.message);
             } else {
-                setError("Verification failed. Please check your code and try again.");
+                setError(t('verifyError'));
             }
         } finally {
             setIsLoading(false);
@@ -60,7 +61,7 @@ function VerifyEmailForm() {
 
     const handleResend = async () => {
         if (!email) {
-            setError("Please enter your email to resend the code");
+            setError(t('emailRequiredResend'));
             return;
         }
 
@@ -70,12 +71,12 @@ function VerifyEmailForm() {
 
         try {
             await authService.resendVerificationEmail(email);
-            setMessage("Verification code has been resent to your email.");
+            setMessage(t('resendSuccess'));
         } catch (err) {
             if (err instanceof ApiError) {
                 setError(err.message);
             } else {
-                setError("Failed to resend code. Please try again later.");
+                setError(t('resendError'));
             }
         } finally {
             setIsResending(false);
@@ -101,8 +102,8 @@ function VerifyEmailForm() {
                             className="h-16 w-auto mx-auto"
                         />
                     </Link>
-                    <h1 className="text-2xl font-bold text-foreground mt-6">Verify Your Email</h1>
-                    <p className="text-muted-foreground mt-2">Enter the code sent to your email address</p>
+                    <h1 className="text-2xl font-bold text-foreground mt-6">{t('title')}</h1>
+                    <p className="text-muted-foreground mt-2">{t('subtitle')}</p>
                 </div>
 
                 <div className="bg-card/60 backdrop-blur-xl border border-border/50 rounded-2xl p-8">
@@ -119,7 +120,7 @@ function VerifyEmailForm() {
                         )}
 
                         <div className="space-y-2">
-                            <label className="text-sm font-medium text-foreground">Email Address</label>
+                            <label className="text-sm font-medium text-foreground">{t('emailLabel')}</label>
                             <div className="relative">
                                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                                 <Input
@@ -134,12 +135,12 @@ function VerifyEmailForm() {
                         </div>
 
                         <div className="space-y-2">
-                            <label className="text-sm font-medium text-foreground">Verification Code</label>
+                            <label className="text-sm font-medium text-foreground">{t('codeLabel')}</label>
                             <div className="relative">
                                 <ShieldCheck className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                                 <Input
                                     type="text"
-                                    placeholder="Enter 6-digit code"
+                                    placeholder={t('codePlaceholder')}
                                     value={code}
                                     onChange={(e) => setCode(e.target.value.replace(/[^0-9]/g, "").slice(0, 6))}
                                     className="pl-10 tracking-[0.5em] text-center text-lg font-bold bg-background/50 border-border/50 focus:border-primary placeholder:tracking-normal placeholder:font-normal"
@@ -156,11 +157,11 @@ function VerifyEmailForm() {
                             {isLoading ? (
                                 <div className="flex items-center gap-2">
                                     <div className="w-4 h-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
-                                    Verifying...
+                                    {t('verifying')}
                                 </div>
                             ) : (
                                 <div className="flex items-center gap-2">
-                                    Verify Email
+                                    {t('verifyButton')}
                                     <ArrowRight className="w-4 h-4" />
                                 </div>
                             )}
@@ -171,7 +172,7 @@ function VerifyEmailForm() {
                                 <span className="w-full border-t border-border/50" />
                             </div>
                             <div className="relative flex justify-center text-xs uppercase">
-                                <span className="bg-card px-2 text-muted-foreground">Didn't get a code?</span>
+                                <span className="bg-card px-2 text-muted-foreground">{t('noCode')}</span>
                             </div>
                         </div>
 
@@ -185,18 +186,17 @@ function VerifyEmailForm() {
                             {isResending ? (
                                 <div className="flex items-center gap-2">
                                     <RefreshCw className="w-4 h-4 animate-spin" />
-                                    Resending...
+                                    {t('resending')}
                                 </div>
                             ) : (
-                                "Resend Code"
+                                t('resendCode')
                             )}
                         </Button>
                     </form>
 
                     <p className="text-center text-sm text-muted-foreground mt-6">
-                        Back to{" "}
                         <Link href="/sign-in" className="text-primary hover:underline font-medium">
-                            Sign In
+                            {t('backToSignIn')}
                         </Link>
                     </p>
                 </div>

@@ -23,18 +23,12 @@ const languages = [
   { code: "tr", label: "Türkçe" },
 ];
 
-const currencies = [
-  { code: "EUR", symbol: "€", label: "Euro" },
-  { code: "TRY", symbol: "₺", label: "Turkish Lira" },
-];
 
 export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const locale = useLocale();
   const t = useTranslations('Navbar');
-  const [currentCurrency, setCurrentCurrency] = useState("EUR");
   const [langMenuOpen, setLangMenuOpen] = useState(false);
-  const [currencyMenuOpen, setCurrencyMenuOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const { totalItems } = useCart();
   const { user, isAuthenticated, logout, isLoading } = useAuth();
@@ -101,34 +95,7 @@ export function Navbar() {
 
               {/* Desktop CTA */}
               <div className="flex items-center gap-3">
-                {/* Currency Switcher */}
-                <div className="relative">
-                  <button
-                    onClick={() => setCurrencyMenuOpen(!currencyMenuOpen)}
-                    onBlur={() => setTimeout(() => setCurrencyMenuOpen(false), 150)}
-                    className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-secondary/50 transition-colors"
-                  >
-                    <span className="font-semibold">{currencies.find(c => c.code === currentCurrency)?.symbol}</span>
-                    {currentCurrency}
-                  </button>
-                  {currencyMenuOpen && (
-                    <div className="absolute top-full right-0 mt-2 bg-card/95 backdrop-blur-xl border border-border/50 rounded-xl overflow-hidden z-50 min-w-[140px]">
-                      {currencies.map((currency) => (
-                        <button
-                          key={currency.code}
-                          onClick={() => {
-                            setCurrentCurrency(currency.code);
-                            setCurrencyMenuOpen(false);
-                          }}
-                          className={`w-full px-4 py-2.5 text-left text-sm hover:bg-secondary/50 transition-colors ${currentCurrency === currency.code ? "text-primary font-medium" : "text-foreground"
-                            }`}
-                        >
-                          {currency.symbol} {currency.code} - {currency.label}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
+
                 {/* Language Switcher */}
                 <div className="relative">
                   <button
@@ -272,22 +239,7 @@ export function Navbar() {
                   )
                 )}
                 <div className="flex flex-col gap-2 mt-4 pt-4 border-t border-border/50">
-                  {/* Mobile Currency Switcher */}
-                  <div className="flex items-center gap-2 px-4 py-2">
-                    <span className="text-sm text-muted-foreground">Currency:</span>
-                    {currencies.map((currency) => (
-                      <button
-                        key={currency.code}
-                        onClick={() => setCurrentCurrency(currency.code)}
-                        className={`px-3 py-1 rounded-md text-sm ${currentCurrency === currency.code
-                            ? "bg-primary text-primary-foreground"
-                            : "bg-secondary/50 text-muted-foreground"
-                          }`}
-                      >
-                        {currency.symbol} {currency.code}
-                      </button>
-                    ))}
-                  </div>
+
                   {/* Mobile Language Switcher */}
                   <div className="flex items-center gap-2 px-4 py-2">
                     <Globe className="w-4 h-4 text-muted-foreground" />

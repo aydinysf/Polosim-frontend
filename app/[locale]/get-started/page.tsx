@@ -12,8 +12,10 @@ import { useAuth } from "@/lib/auth-context";
 import { ApiError } from "@/lib/api-client";
 import { useRouter, Link } from "@/i18n/routing";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 export default function GetStartedPage() {
+  const t = useTranslations('GetStarted');
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     firstName: "",
@@ -43,7 +45,7 @@ export default function GetStartedPage() {
 
     if (step === 1) {
       if (!formData.firstName || !formData.lastName || !formData.email) {
-        setError("Please fill in all fields");
+        setError(t('error.fillAll'));
         return;
       }
       setError("");
@@ -52,17 +54,17 @@ export default function GetStartedPage() {
     }
 
     if (formData.password !== formData.confirmPassword) {
-      setError("Passwords do not match");
+      setError(t('error.match'));
       return;
     }
 
     if (formData.password.length < 8) {
-      setError("Password must be at least 8 characters");
+      setError(t('error.length'));
       return;
     }
 
     if (!formData.acceptTerms) {
-      setError("Please accept the terms and conditions");
+      setError(t('error.terms'));
       return;
     }
 
@@ -88,7 +90,7 @@ export default function GetStartedPage() {
       if (err instanceof ApiError) {
         setError(err.message);
       } else {
-        setError("An error occurred. Please try again.");
+        setError(t('error.general'));
       }
     }
     finally {
@@ -134,8 +136,8 @@ export default function GetStartedPage() {
                 className="h-16 w-auto mx-auto"
               />
             </Link>
-            <h1 className="text-2xl font-bold text-foreground mt-6">Create Your Account</h1>
-            <p className="text-muted-foreground mt-2">Start your global connectivity journey</p>
+            <h1 className="text-2xl font-bold text-foreground mt-6">{t('title')}</h1>
+            <p className="text-muted-foreground mt-2">{t('subtitle')}</p>
           </div>
 
           {/* Progress Steps */}
@@ -165,13 +167,13 @@ export default function GetStartedPage() {
                   {/* Name fields */}
                   <div className="grid grid-cols-2 gap-3">
                     <div className="space-y-2">
-                      <label className="text-sm font-medium text-foreground">First Name</label>
+                      <label className="text-sm font-medium text-foreground">{t('firstName')}</label>
                       <div className="relative">
                         <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                         <Input
                           type="text"
                           name="firstName"
-                          placeholder="John"
+                          placeholder={t('firstNamePlaceholder')}
                           value={formData.firstName}
                           onChange={handleChange}
                           className="pl-10 bg-background/50 border-border/50 focus:border-primary"
@@ -180,11 +182,11 @@ export default function GetStartedPage() {
                       </div>
                     </div>
                     <div className="space-y-2">
-                      <label className="text-sm font-medium text-foreground">Last Name</label>
+                      <label className="text-sm font-medium text-foreground">{t('lastName')}</label>
                       <Input
                         type="text"
                         name="lastName"
-                        placeholder="Doe"
+                        placeholder={t('lastNamePlaceholder')}
                         value={formData.lastName}
                         onChange={handleChange}
                         className="bg-background/50 border-border/50 focus:border-primary"
@@ -195,13 +197,13 @@ export default function GetStartedPage() {
 
                   {/* Email */}
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-foreground">Email</label>
+                    <label className="text-sm font-medium text-foreground">{t('email')}</label>
                     <div className="relative">
                       <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                       <Input
                         type="email"
                         name="email"
-                        placeholder="you@example.com"
+                        placeholder={t('emailPlaceholder')}
                         value={formData.email}
                         onChange={handleChange}
                         className="pl-10 bg-background/50 border-border/50 focus:border-primary"
@@ -212,7 +214,7 @@ export default function GetStartedPage() {
 
                   {/* Continue Button */}
                   <Button type="submit" className="w-full bg-primary text-primary-foreground hover:bg-primary/90">
-                    Continue
+                    {t('continue')}
                     <ArrowRight className="w-4 h-4 ml-2" />
                   </Button>
                 </>
@@ -220,13 +222,13 @@ export default function GetStartedPage() {
                 <>
                   {/* Password */}
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-foreground">Password</label>
+                    <label className="text-sm font-medium text-foreground">{t('password')}</label>
                     <div className="relative">
                       <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                       <Input
                         type={showPassword ? "text" : "password"}
                         name="password"
-                        placeholder="Create a password"
+                        placeholder={t('passwordPlaceholder')}
                         value={formData.password}
                         onChange={handleChange}
                         className="pl-10 pr-10 bg-background/50 border-border/50 focus:border-primary"
@@ -252,7 +254,7 @@ export default function GetStartedPage() {
                           ))}
                         </div>
                         <p className="text-xs text-muted-foreground">
-                          Password strength: {strengthLabels[passwordStrength() - 1] || "Too weak"}
+                          {t('passwordStrength')} {t(`strength.${["weak", "fair", "good", "strong"][passwordStrength() - 1] || "weak"}`)}
                         </p>
                       </div>
                     )}
@@ -260,13 +262,13 @@ export default function GetStartedPage() {
 
                   {/* Confirm Password */}
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-foreground">Confirm Password</label>
+                    <label className="text-sm font-medium text-foreground">{t('confirmPassword')}</label>
                     <div className="relative">
                       <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                       <Input
                         type={showPassword ? "text" : "password"}
                         name="confirmPassword"
-                        placeholder="Confirm your password"
+                        placeholder={t('confirmPasswordPlaceholder')}
                         value={formData.confirmPassword}
                         onChange={handleChange}
                         className="pl-10 bg-background/50 border-border/50 focus:border-primary"
@@ -287,10 +289,11 @@ export default function GetStartedPage() {
                         className="w-4 h-4 mt-0.5 rounded border-border/50 bg-background/50 text-primary focus:ring-primary"
                       />
                       <label htmlFor="acceptTerms" className="text-sm text-muted-foreground">
-                        I agree to the{" "}
-                        <Link href="/terms" className="text-primary hover:underline">Terms of Service</Link>
-                        {" "}and{" "}
-                        <Link href="/privacy" className="text-primary hover:underline">Privacy Policy</Link>
+                        {t('agreeTo')}
+                        <Link href="/terms" className="text-primary hover:underline">{t('termsAgreement')}</Link>
+                        {t('and')}
+                        <Link href="/privacy" className="text-primary hover:underline">{t('privacyAgreement')}</Link>
+                        {t('agreeToPost') || ""}
                       </label>
                     </div>
                     <div className="flex items-start gap-2">
@@ -303,7 +306,7 @@ export default function GetStartedPage() {
                         className="w-4 h-4 mt-0.5 rounded border-border/50 bg-background/50 text-primary focus:ring-primary"
                       />
                       <label htmlFor="acceptMarketing" className="text-sm text-muted-foreground">
-                        Send me news, offers and updates (optional)
+                        {t('marketingConsent')}
                       </label>
                     </div>
                   </div>
@@ -316,7 +319,7 @@ export default function GetStartedPage() {
                       onClick={() => setStep(1)}
                       className="flex-1 bg-transparent border-border/50"
                     >
-                      Back
+                      {t('back')}
                     </Button>
                     <Button
                       type="submit"
@@ -326,10 +329,10 @@ export default function GetStartedPage() {
                       {isLoading ? (
                         <div className="flex items-center gap-2">
                           <div className="w-4 h-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
-                          Creating...
+                          {t('creating')}
                         </div>
                       ) : (
-                        "Create Account"
+                        t('createAccount')
                       )}
                     </Button>
                   </div>
@@ -345,7 +348,7 @@ export default function GetStartedPage() {
                     <div className="w-full border-t border-border/50" />
                   </div>
                   <div className="relative flex justify-center text-xs uppercase">
-                    <span className="bg-card px-2 text-muted-foreground">Or continue with</span>
+                    <span className="bg-card px-2 text-muted-foreground">{t('orContinueWith')}</span>
                   </div>
                 </div>
 
@@ -372,9 +375,8 @@ export default function GetStartedPage() {
 
             {/* Sign In Link */}
             <p className="text-center text-sm text-muted-foreground mt-6">
-              Already have an account?{" "}
               <Link href="/sign-in" className="text-primary hover:underline font-medium">
-                Sign In
+                {t('signIn')}
               </Link>
             </p>
           </div>
@@ -385,19 +387,19 @@ export default function GetStartedPage() {
               <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-2">
                 <Smartphone className="w-5 h-5 text-primary" />
               </div>
-              <p className="text-xs text-muted-foreground">Instant<br />Activation</p>
+              <p className="text-xs text-muted-foreground break-words max-w-[100px] mx-auto leading-tight">{t('benefits.instantActivation')}</p>
             </div>
             <div>
               <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-2">
                 <Check className="w-5 h-5 text-primary" />
               </div>
-              <p className="text-xs text-muted-foreground">No Hidden<br />Fees</p>
+              <p className="text-xs text-muted-foreground break-words max-w-[100px] mx-auto leading-tight">{t('benefits.noHiddenFees')}</p>
             </div>
             <div>
               <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-2">
                 <Lock className="w-5 h-5 text-primary" />
               </div>
-              <p className="text-xs text-muted-foreground">Secure<br />Payment</p>
+              <p className="text-xs text-muted-foreground break-words max-w-[100px] mx-auto leading-tight">{t('benefits.securePayment')}</p>
             </div>
           </div>
         </div>

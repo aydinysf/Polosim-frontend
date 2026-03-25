@@ -19,19 +19,23 @@ export function getProductData(product: Product): string {
     const mb = features.data_raw_mb;
     if (mb >= 1024) {
       const gb = mb / 1024;
-      return `${gb >= 10 ? Math.round(gb) : parseFloat(gb.toFixed(1))}GB`;
+      return `${gb >= 10 ? Math.round(gb) : parseFloat(gb.toFixed(1))} GB`;
     }
-    return `${mb}MB`;
+    return `${mb} MB`;
   }
   if (product.data_amount_mb) {
     const mb = product.data_amount_mb;
     if (mb >= 1024) {
       const gb = mb / 1024;
-      return `${gb >= 10 ? Math.round(gb) : parseFloat(gb.toFixed(1))}GB`;
+      return `${gb >= 10 ? Math.round(gb) : parseFloat(gb.toFixed(1))} GB`;
     }
-    return `${mb}MB`;
+    return `${mb} MB`;
   }
-  return product.data_amount || product.data || product.dataAmount || "N/A";
+  const fallbackData = product.data_amount || product.data || product.dataAmount || "N/A";
+  if (typeof fallbackData === 'string') {
+     return fallbackData.replace(/(\d+)(GB|MB)/i, '$1 $2');
+  }
+  return String(fallbackData);
 }
 
 // Helper to extract validity from various API field names (including nested features)

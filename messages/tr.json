@@ -309,6 +309,7 @@
     "title": "Profil",
     "myPackages": "eSIM Paketlerim",
     "logout": "Çıkış Yap",
+    "memberSince": "{date} tarihinden beri üye",
     "tabs": {
       "all": "Tümü",
       "active": "Aktif",
@@ -420,6 +421,70 @@
       "total": "Toplam",
       "pay": "Ödeme Yap ({amount})",
       "processing": "İşleniyor..."
+    }
+  },
+  "VerifyEmail": {
+    "title": "E-postanızı Doğrulayın",
+    "subtitle": "E-posta adresinize gönderilen kodu girin",
+    "emailLabel": "E-posta Adresi",
+    "codeLabel": "Doğrulama Kodu",
+    "codePlaceholder": "6 haneli kodu girin",
+    "verifyButton": "E-postayı Doğrula",
+    "verifying": "Doğrulanıyor...",
+    "noCode": "Kod gelmedi mi?",
+    "resendCode": "Kodu Tekrar Gönder",
+    "resending": "Tekrar Gönderiliyor...",
+    "backToSignIn": "Giriş Yap'a geri dön",
+    "validCodeRequired": "Lütfen geçerli bir doğrulama kodu girin",
+    "verifySuccess": "E-posta başarıyla doğrulandı! Giriş sayfasına yönlendiriliyorsunuz...",
+    "verifyError": "Doğrulama başarısız. Lütfen kodunuzu kontrol edip tekrar deneyin.",
+    "emailRequiredResend": "Kodu tekrar göndermek için lütfen e-postanızı girin",
+    "resendSuccess": "Doğrulama kodu e-postanıza tekrar gönderildi.",
+    "resendError": "Kod gönderilemedi. Lütfen daha sonra tekrar deneyin."
+  },
+  "GetStarted": {
+    "title": "Hesabınızı Oluşturun",
+    "subtitle": "Küresel bağlantı yolculuğunuza başlayın",
+    "firstName": "Ad",
+    "firstNamePlaceholder": "Ahmet",
+    "lastName": "Soyad",
+    "lastNamePlaceholder": "Yılmaz",
+    "email": "E-posta",
+    "emailPlaceholder": "eposta@ornek.com",
+    "password": "Şifre",
+    "passwordPlaceholder": "Bir şifre oluşturun",
+    "confirmPassword": "Şifreyi Onayla",
+    "confirmPasswordPlaceholder": "Şifrenizi onaylayın",
+    "passwordStrength": "Şifre gücü:",
+    "strength": {
+      "weak": "Çok zayıf",
+      "fair": "Orta",
+      "good": "İyi",
+      "strong": "Güçlü"
+    },
+    "termsAgreement": "Kullanım Koşulları",
+    "privacyAgreement": "Gizlilik Politikası",
+    "agreeTo": "",
+    "and": "'nı ve ",
+    "agreeToPost": "'nı kabul ediyorum",
+    "marketingConsent": "Haberler, teklifler ve güncellemeler gönderilsin (isteğe bağlı)",
+    "continue": "Devam Et",
+    "back": "Geri",
+    "createAccount": "Hesap Oluştur",
+    "creating": "Oluşturuluyor...",
+    "orContinueWith": "Veya şununla devam edin",
+    "signIn": "Giriş Yap",
+    "benefits": {
+      "instantActivation": "Anında Aktivasyon",
+      "noHiddenFees": "Gizli Ücret Yok",
+      "securePayment": "Güvenli Ödeme"
+    },
+    "error": {
+      "fillAll": "Lütfen tüm alanları doldurun",
+      "match": "Şifreler eşleşmiyor",
+      "length": "Şifre en az 8 karakter olmalıdır",
+      "terms": "Lütfen kullanım koşullarını kabul edin",
+      "general": "Bir hata oluştu. Lütfen tekrar deneyin."
     }
   }
 }

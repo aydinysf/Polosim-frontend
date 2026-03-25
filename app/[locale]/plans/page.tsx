@@ -86,7 +86,7 @@ export default function PlansPage() {
 
   const [viewMode, setViewMode] = useState<ViewMode>(initialView);
   const [searchQuery, setSearchQuery] = useState(initialSearch);
-  const [sortBy, setSortBy] = useState<SortOption>("popular");
+  const [sortBy, setSortBy] = useState<SortOption>("data-low");
   const [sortMenuOpen, setSortMenuOpen] = useState(false);
   const [showBestSellers, setShowBestSellers] = useState(false);
 

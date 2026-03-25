@@ -16,7 +16,7 @@ import { esimProfileService, type EsimPackageData, type EsimUsageResponse } from
 import { Link, useRouter } from "@/i18n/routing";
 import { toast } from "sonner";
 import { getFlagFromISO } from "@/lib/api-client";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 type PackageStatus = "all" | "active" | "upcoming" | "expired";
 
@@ -34,6 +34,7 @@ type EsimPackage = EsimPackageData & {
 
 export default function ProfilePage() {
   const t = useTranslations('Profile');
+  const locale = useLocale();
   const { user, isLoading: authLoading, isAuthenticated, logout } = useAuth();
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<PackageStatus>("all");
@@ -203,7 +204,7 @@ export default function ProfilePage() {
                 </h1>
                 <p className="text-muted-foreground">{user?.email}</p>
                 <p className="text-sm text-muted-foreground mt-1">
-                  Member since {user?.created_at ? new Date(user.created_at).toLocaleDateString("en-US", { month: "long", year: "numeric" }) : "N/A"}
+                  {user?.created_at ? t('memberSince', { date: new Date(user.created_at).toLocaleDateString(locale === 'tr' ? 'tr-TR' : 'en-US', { month: "long", year: "numeric" }) }) : "N/A"}
                 </p>
               </div>
             </div>
