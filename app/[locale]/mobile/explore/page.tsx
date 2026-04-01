@@ -43,7 +43,7 @@ export default function ExplorePage() {
   const [activeRegion, setActiveRegion] = useState("all");
 
   const filteredCountries = countries.filter((country) =>
-    country.name.toLowerCase().includes(searchQuery.toLowerCase())
+    country.name.toLowerCase().startsWith(searchQuery.toLowerCase())
   );
 
   return (

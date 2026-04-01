@@ -195,8 +195,8 @@ export default function PlansPage() {
 
   // Filter countries and regions for autocomplete
   const filteredSuggestions = searchQuery ? [
-    ...countries.filter(c => c.name.toLowerCase().includes(searchQuery.toLowerCase())).map(c => ({ type: 'country' as const, ...c })),
-    ...regions.filter(r => getLocalizedText(r.name, "", locale).toLowerCase().includes(searchQuery.toLowerCase())).map(r => ({ type: 'region' as const, ...r }))
+    ...countries.filter(c => c.name.toLowerCase().startsWith(searchQuery.toLowerCase())).map(c => ({ type: 'country' as const, ...c })),
+    ...regions.filter(r => getLocalizedText(r.name, "", locale).toLowerCase().startsWith(searchQuery.toLowerCase())).map(r => ({ type: 'region' as const, ...r }))
   ].slice(0, 10) : [];
 
   // Fetch products on mount and when filters change
@@ -284,7 +284,7 @@ export default function PlansPage() {
       const countryName = getLocalizedText(product.country?.name).toLowerCase();
       const matchesSearch = !searchQuery ||
         name.includes(searchQuery.toLowerCase()) ||
-        countryName.includes(searchQuery.toLowerCase());
+        countryName.startsWith(searchQuery.toLowerCase());
 
       // Best seller filter
       const matchesBestSeller = !showBestSellers || isBestSeller(product);
@@ -339,7 +339,7 @@ export default function PlansPage() {
   const filteredRegions = regions
     .filter(r => {
       if (!searchQuery) return true;
-      return getLocalizedText(r.name, "", locale).toLowerCase().includes(searchQuery.toLowerCase());
+      return getLocalizedText(r.name, "", locale).toLowerCase().startsWith(searchQuery.toLowerCase());
     })
     .sort((a, b) => {
       switch (sortBy) {

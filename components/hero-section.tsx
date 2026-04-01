@@ -196,7 +196,7 @@ export function HeroSection() {
   ];
 
   const filteredSuggestions = searchableItems.filter((item) =>
-    item.name && typeof item.name === "string" && item.name.toLowerCase().includes(searchQuery.toLowerCase())
+    item.name && typeof item.name === "string" && item.name.toLowerCase().startsWith(searchQuery.toLowerCase())
   );
 
   // Fetch products when selection changes

@@ -54,7 +54,16 @@ export function StripePaymentForm({ onSuccess }: StripePaymentFormProps) {
         <form onSubmit={handleSubmit} className="space-y-6">
             <PaymentElement
                 options={{
-                    layout: "tabs",
+                    layout: {
+                        type: "accordion",
+                        defaultCollapsed: false,
+                        radios: false,
+                        spacedAccordionItems: true,
+                    },
+                    wallets: {
+                        applePay: "auto",
+                        googlePay: "auto",
+                    },
                 }}
             />
 
