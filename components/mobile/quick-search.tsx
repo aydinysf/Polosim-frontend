@@ -3,10 +3,10 @@
 import { Search, MapPin } from "lucide-react";
 import { useState } from "react";
 
-const recentSearches = ["Turkey", "Europe", "Japan"];
-
 export function QuickSearch() {
+  const [recentSearches, setRecentSearches] = useState<string[]>([]);
   const [focused, setFocused] = useState(false);
+  const [query, setQuery] = useState("");
 
   return (
     <div className="px-4 py-4">
@@ -19,6 +19,8 @@ export function QuickSearch() {
           type="text"
           placeholder="Where are you traveling?"
           className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
           onFocus={() => setFocused(true)}
           onBlur={() => setFocused(false)}
         />
@@ -28,20 +30,22 @@ export function QuickSearch() {
         </button>
       </div>
 
-      {/* Recent searches */}
-      <div className="flex items-center gap-2 mt-3">
-        <span className="text-xs text-muted-foreground">Recent:</span>
-        <div className="flex gap-2 overflow-x-auto">
-          {recentSearches.map((search) => (
-            <button
-              key={search}
-              className="px-3 py-1.5 rounded-full bg-secondary/50 text-xs font-medium text-foreground hover:bg-secondary transition-colors shrink-0"
-            >
-              {search}
-            </button>
-          ))}
+      {/* Popular destinations */}
+      {recentSearches.length > 0 && (
+        <div className="flex items-center gap-2 mt-3">
+          <span className="text-xs text-muted-foreground">Recent:</span>
+          <div className="flex gap-2 overflow-x-auto scrollbar-hide">
+            {recentSearches.map((search) => (
+              <button
+                key={search}
+                className="px-3 py-1.5 rounded-full bg-secondary/50 text-xs font-medium text-foreground hover:bg-secondary transition-colors shrink-0"
+              >
+                {search}
+              </button>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

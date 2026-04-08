@@ -16,9 +16,9 @@ export interface AuthResponse {
 }
 
 export interface LoginRequest {
-  email: string;
-  password?: string; // OTP için şifre opsiyonel olabilir
-  code?: string;     // OTP kodu
+  identifier: string; // 🔥 E-posta veya Telefon
+  password?: string;
+  code?: string;
 }
 
 export interface RegisterRequest {
@@ -29,12 +29,12 @@ export interface RegisterRequest {
 }
 
 export interface CheckoutPayload {
-  payment_method: 'stripe';
+  payment_method: 'stripe' | 'paypal' | 'wallet';
   product_id: number;
   quantity: number;
-  guest_name: string;
-  guest_surname: string;
-  guest_email: string;
+  guest_name?: string;     // 🔥 ARTIK OPSIYONEL
+  guest_surname?: string;  // 🔥 ARTIK OPSIYONEL
+  guest_email?: string;    // 🔥 OPSIYONEL (Eğer giriş yapılmışsa)
 }
 
 // localStorage İşlemleri
@@ -44,6 +44,7 @@ export const setAuthToken = (token: string | null) => {
     localStorage.setItem('auth_token', token);
   } else {
     localStorage.removeItem('auth_token');
+    localStorage.removeItem('user');
   }
 };
 
@@ -69,7 +70,9 @@ export const getUserFromStorage = (): User | null => {
 
 // Servis Fonksiyonları
 export const authService = {
+  // 🔥 YENİ: Şifresiz identifier tabanlı giriş
   login: async (credentials: LoginRequest): Promise<AuthResponse> => {
+    // Eğer sadece identifier varsa v1/login'e salla
     const response = await api.post<AuthResponse>('/login', credentials);
     if (response.data.token && response.data.user) {
       setAuthToken(response.data.token);
@@ -90,12 +93,13 @@ export const authService = {
   logout: () => {
     setAuthToken(null);
     setUserToStorage(null);
-    // Gerekirse sunucuya da logout isteği gönderilebilir
-    // api.post('/logout');
+    localStorage.removeItem('auth_token');
+    localStorage.removeItem('user');
   },
 
+  // Legacy/Compatibility
   requestOtp: (email: string) =>
-    api.post('/login', { email }),
+    api.post('/login', { identifier: email }),
 
   verifyOtp: (email: string, code: string) =>
     api.post('/login/verify', { email, code }),
@@ -117,3 +121,4 @@ export const authService = {
     return api.post('/register/resend-verification', { email });
   },
 };
+

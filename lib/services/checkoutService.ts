@@ -20,7 +20,7 @@ export interface CheckoutPreviewResponse {
 }
 
 export interface CheckoutExecutePayload {
-  payment_method: 'stripe' | 'wallet';
+  payment_method: 'stripe' | 'wallet' | 'paypal';
   session_id?: string;
   guest_email?: string;
   guest_name?: string;
@@ -30,9 +30,14 @@ export interface CheckoutExecutePayload {
 }
 
 export interface CheckoutExecuteResponse {
-  client_secret: string;
+  client_secret?: string;
   order_id: number;
   status: string;
+  redirect_url?: string;
+  message?: string;
+  action?: string;
+  url?: string;
+  data?: any;
 }
 
 export const checkoutService = {

@@ -1,25 +1,27 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { toast } from "sonner";
 import { useAuth } from "@/lib/auth-context";
 import { useCart } from "@/lib/cart-context";
-import { checkoutService } from "@/lib/services/checkoutService";
+import { checkoutService, type CheckoutExecutePayload } from "@/lib/services/checkoutService";
 import { GuestCheckoutForm } from "@/components/guest-checkout-form";
 import { PaymentMethodSelector } from "@/components/payment-method-selector";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2, CreditCard, Wallet, User, CheckCircle, ArrowLeft, ShoppingBag } from "lucide-react";
-import { Elements } from "@stripe/react-stripe-js";
-import { loadStripe } from "@stripe/stripe-js";
+import { Loader2, CreditCard, Wallet, User, CheckCircle, ArrowLeft, ShoppingBag, Send } from "lucide-react";
+import { StripeProvider } from "@/components/stripe-provider";
 import { StripePaymentForm } from "@/components/stripe-payment-form";
+import { WalletPaymentButton } from "@/components/wallet-payment-button";
+import { PendingPaymentBanner } from "@/components/pending-payment-banner";
+import { PayPalPayment } from "@/components/paypal-payment";
+import { useWalletPayment } from "@/hooks/use-wallet-payment";
 import { useRouter } from "next/navigation";
 import { Link } from "@/i18n/routing";
 import { ApiError } from "@/lib/api-client";
+import { PENDING_INTENT_KEY } from "@/lib/types/payment";
 
 import { useLocale, useTranslations } from "next-intl";
-
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
-const hasStripeKey = !!process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
 
 // Bileşenin genel durumlarını yönetmek için bir enum
 enum PageState {
@@ -27,6 +29,8 @@ enum PageState {
   EMPTY_CART,
   CHECKOUT_READY,
   STRIPE_PAYMENT,
+  WALLET_PAYMENT,
+  PAYPAL_PAYMENT,
   PAYMENT_SUCCESS,
   ERROR,
 }
@@ -40,15 +44,23 @@ export function NewCheckout() {
 
   const [pageState, setPageState] = useState<PageState>(PageState.LOADING);
   const [errorMessage, setErrorMessage] = useState<string>("");
-  const [selectedMethod, setSelectedMethod] = useState<'wallet' | 'stripe'>('stripe');
+  const [selectedMethod, setSelectedMethod] = useState<'wallet' | 'stripe' | 'paypal'>('stripe');
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [orderId, setOrderId] = useState<number | null>(null);
+
+  // Wallet payment hook for Apple Pay / Google Pay
+  const totalAmountCents = items.reduce(
+    (sum, item) => sum + (((item as any).price || (item as any).base_price || 0) * item.quantity),
+    0,
+  ) * 100;
+
+  const walletPayment = useWalletPayment(totalAmountCents, 'eur', orderId ?? undefined);
 
   // Ödeme başarılı olduğunda çalışacak fonksiyon
   const handlePaymentSuccess = useCallback(() => {
     clearCart();
+    localStorage.removeItem(PENDING_INTENT_KEY);
     setPageState(PageState.PAYMENT_SUCCESS);
-    // Burada e-posta gönderme gibi işlemler yapılabilir.
   }, [clearCart]);
 
   // Sadece cart kontrolü yap
@@ -74,40 +86,78 @@ export function NewCheckout() {
       return;
     }
 
+    if (selectedMethod === 'paypal') {
+      // Proceed to execute instead of setting PageState.PAYPAL_PAYMENT
+    }
+
     setPageState(PageState.LOADING);
     try {
-      // İlk ürünü kullan (çoklu ürün desteği için genişletilebilir)
       const firstItem = items[0];
-      const payload = {
+      const payload: CheckoutExecutePayload = {
         payment_method: selectedMethod,
         product_id: firstItem.id,
-        quantity: firstItem.quantity
+        quantity: firstItem.quantity,
+        guest_email: user?.email || undefined
       };
+
       const result = await checkoutService.execute(payload);
 
       setOrderId(result.order_id);
 
+      // PayPal veya Stripe Redirect Kontrolü
+      const redirectUrl = result.redirect_url || result.url;
+      if (redirectUrl) {
+        window.location.href = redirectUrl;
+        return;
+      }
+
+
       if (selectedMethod === 'stripe' && result.client_secret) {
         setClientSecret(result.client_secret);
         setPageState(PageState.STRIPE_PAYMENT);
+      } else if (selectedMethod === 'paypal') {
+        // Switch to PayPal button view (Eğer direkt redirect olmadıysa)
+        setPageState(PageState.PAYPAL_PAYMENT);
       } else {
         handlePaymentSuccess();
       }
     } catch (err: any) {
+      console.error("❌ Checkout ERROR:", err);
+
+      let errorMsg = "Sipariş oluşturulurken bir hata oluştu.";
+      let technicalDetail = "";
+
       if (err instanceof ApiError) {
-        console.error("Checkout execution error (API):", {
-          endpoint: "/checkout/execute",
-          statusCode: err.statusCode,
-          message: err.message,
-          details: err.details,
-        });
-      } else {
-        console.error("Checkout execution error (Unknown):", err);
+        errorMsg = err.message || errorMsg;
+        technicalDetail = err.details ? JSON.stringify(err.details) : "";
+      } else if (err.response?.data) {
+        errorMsg = err.response.data.message || errorMsg;
+        technicalDetail = err.response.data.error_detail || "";
       }
-      setErrorMessage(err.message || t('error.general'));
+
+      setErrorMessage(errorMsg + (technicalDetail ? ` [${technicalDetail}]` : ""));
       setPageState(PageState.ERROR);
+      toast.error(errorMsg);
     }
   };
+
+  // Initiate wallet payment (Apple Pay / Google Pay)
+  const handleWalletCheckout = async () => {
+    await walletPayment.initiate();
+  };
+
+  // Once walletPayment has a clientSecret, transition to wallet payment view
+  useEffect(() => {
+    if (walletPayment.clientSecret && walletPayment.status === 'processing') {
+      setClientSecret(walletPayment.clientSecret);
+      setPageState(PageState.WALLET_PAYMENT);
+    }
+    if (walletPayment.error) {
+      setErrorMessage(walletPayment.error.message);
+      setPageState(PageState.ERROR);
+      toast.error(walletPayment.error.message);
+    }
+  }, [walletPayment.clientSecret, walletPayment.status, walletPayment.error]);
 
   // --- RENDER FONKSİYONLARI ---
 
@@ -159,27 +209,15 @@ export function NewCheckout() {
         </Button>
         <h1 className="text-2xl font-bold">{t('title')}</h1>
       </div>
-      {!hasStripeKey ? (
-        <div className="rounded-2xl border border-destructive/50 bg-destructive/10 p-4 text-destructive">
-          {t('error.stripeKeyMissing')}
-        </div>
-      ) : clientSecret ? (
+      {clientSecret ? (
         <div className="rounded-2xl border border-border/50 bg-card/30 backdrop-blur-sm overflow-hidden p-6">
-          <Elements
-            stripe={stripePromise}
-            options={{
-              clientSecret,
-              appearance: {
-                theme: 'stripe',
-                variables: {
-                  colorPrimary: '#c9a84c',
-                  borderRadius: '8px',
-                },
-              },
-            }}
-          >
-            <StripePaymentForm onSuccess={handlePaymentSuccess} />
-          </Elements>
+          <StripeProvider clientSecret={clientSecret}>
+            <StripePaymentForm
+              onSuccess={handlePaymentSuccess}
+              amount={totalAmountCents}
+              clientSecret={clientSecret}
+            />
+          </StripeProvider>
         </div>
       ) : (
         <div className="flex items-center justify-center min-h-32">
@@ -188,6 +226,69 @@ export function NewCheckout() {
       )}
     </div>
   );
+
+  const renderWalletPayment = () => (
+    <div className="max-w-2xl mx-auto space-y-6">
+      <div className="flex items-center gap-3 mb-4">
+        <Button variant="ghost" size="icon" onClick={() => setPageState(PageState.CHECKOUT_READY)}>
+          <ArrowLeft className="w-5 h-5" />
+        </Button>
+        <h1 className="text-2xl font-bold">{t('title')}</h1>
+      </div>
+      {clientSecret ? (
+        <div className="rounded-2xl border border-border/50 bg-card/30 backdrop-blur-sm overflow-hidden p-6">
+          <StripeProvider clientSecret={clientSecret}>
+            <WalletPaymentButton
+              amount={totalAmountCents}
+              currency="eur"
+              orderId={orderId ?? undefined}
+              onSuccess={(oid) => {
+                setOrderId(oid);
+                handlePaymentSuccess();
+              }}
+              onError={(err) => {
+                setErrorMessage(err.message);
+                toast.error(err.message);
+              }}
+            />
+          </StripeProvider>
+        </div>
+      ) : (
+        <div className="flex items-center justify-center min-h-32">
+          <Loader2 className="w-8 h-8 animate-spin" />
+        </div>
+      )}
+    </div>
+  );
+
+  const renderPaypalPayment = () => {
+    const totalAmount = items.reduce((sum, item) => sum + (((item as any).price || (item as any).base_price || 0) * item.quantity), 0).toFixed(2);
+
+    return (
+      <div className="max-w-2xl mx-auto space-y-6">
+        <div className="flex items-center gap-3 mb-4">
+          <Button variant="ghost" size="icon" onClick={() => setPageState(PageState.CHECKOUT_READY)}>
+            <ArrowLeft className="w-5 h-5" />
+          </Button>
+          <h1 className="text-2xl font-bold">{t('title')}</h1>
+        </div>
+        <Card className="rounded-2xl p-6">
+          <PayPalPayment
+            amount={totalAmount}
+            currency="EUR"
+            onSuccess={(details) => {
+              console.log("PayPal Success:", details);
+              handlePaymentSuccess();
+            }}
+            onError={(err) => {
+              setErrorMessage(err);
+              setPageState(PageState.ERROR);
+            }}
+          />
+        </Card>
+      </div>
+    );
+  };
 
   const renderCheckoutReady = () => (
     <div className="max-w-4xl mx-auto space-y-6">
@@ -204,10 +305,16 @@ export function NewCheckout() {
         <GuestCheckoutForm
           productId={items[0].id}
           quantity={items[0].quantity}
+          paymentMethod={selectedMethod === 'paypal' ? 'paypal' : 'stripe'}
           onCheckoutSuccess={(data) => {
-            setClientSecret(data.client_secret);
             setOrderId(data.order_id);
-            setPageState(PageState.STRIPE_PAYMENT);
+            if (selectedMethod === 'stripe') {
+              setClientSecret(data.client_secret);
+              setPageState(PageState.STRIPE_PAYMENT);
+            }
+            else if (selectedMethod === 'paypal') {
+              setPageState(PageState.PAYPAL_PAYMENT);
+            }
           }}
           onError={(err) => {
             setErrorMessage(err.message || t('error.guestError'));
@@ -216,15 +323,18 @@ export function NewCheckout() {
         />
       )}
 
-      {/* Giriş yapmış kullanıcı ise, ödeme yöntemini ve özetini göster */}
+      <PaymentMethodSelector
+        isGuest={!isAuthenticated}
+        selectedMethod={selectedMethod}
+        onMethodChange={(method) => {
+          setSelectedMethod(method as any);
+        }}
+        walletBalance={user?.wallet_balance}
+      />
+
+      {/* Giriş yapmış kullanıcı ise, özetini göster */}
       {isAuthenticated && (
         <>
-          <PaymentMethodSelector
-            isGuest={false}
-            selectedMethod={selectedMethod}
-            onMethodChange={setSelectedMethod}
-            walletBalance={user?.wallet_balance}
-          />
           <Card>
             <CardHeader><CardTitle>{t('ready.orderSummary')}</CardTitle></CardHeader>
             <CardContent>
@@ -232,21 +342,25 @@ export function NewCheckout() {
                 {items.map((item) => (
                   <div key={item.id} className="flex justify-between">
                     <span>{item.name} × {item.quantity}</span>
-                    <span>€{((item.priceInCents / 100) * item.quantity || 0).toFixed(2)}</span>
+                    <span>€{(((item as any).price || (item as any).base_price || 0) * item.quantity || 0).toFixed(2)}</span>
                   </div>
                 ))}
                 <div className="border-t pt-2 mt-2">
                   <div className="flex justify-between font-bold">
                     <span>{t('ready.total')}</span>
-                    <span>€{(items.reduce((sum, item) => sum + ((item.priceInCents / 100) * item.quantity), 0) || 0).toFixed(2)}</span>
+                    <span>€{(items.reduce((sum, item) => sum + (((item as any).price || (item as any).base_price || 0) * item.quantity), 0) || 0).toFixed(2)}</span>
                   </div>
                 </div>
               </div>
             </CardContent>
           </Card>
           <Button onClick={handleAuthenticatedCheckout} disabled={pageState === PageState.LOADING} className="w-full" size="lg">
-            {pageState === PageState.LOADING ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : (selectedMethod === 'wallet' ? <Wallet className="w-4 h-4 mr-2" /> : <CreditCard className="w-4 h-4 mr-2" />)}
-            {pageState === PageState.LOADING ? t('ready.processing') : t('ready.pay', { amount: `€${(items.reduce((sum, item) => sum + ((item.priceInCents / 100) * item.quantity), 0) || 0).toFixed(2)}` })}
+            {pageState === PageState.LOADING ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : (
+              selectedMethod === 'wallet' ? <Wallet className="w-4 h-4 mr-2" /> :
+                selectedMethod === 'paypal' ? <Send className="w-4 h-4 mr-2" /> :
+                  <CreditCard className="w-4 h-4 mr-2" />
+            )}
+            {pageState === PageState.LOADING ? t('ready.processing') : t('ready.pay', { amount: `€${(items.reduce((sum, item) => sum + (((item as any).price || (item as any).base_price || 0) * item.quantity), 0) || 0).toFixed(2)}` })}
           </Button>
         </>
       )}
@@ -254,20 +368,34 @@ export function NewCheckout() {
   );
 
   // Ana render mantığı
-  switch (pageState) {
-    case PageState.LOADING:
-      return renderLoading();
-    case PageState.ERROR:
-      return renderError();
-    case PageState.EMPTY_CART:
-      return renderEmptyCart();
-    case PageState.PAYMENT_SUCCESS:
-      return renderPaymentSuccess();
-    case PageState.STRIPE_PAYMENT:
-      return renderStripePayment();
-    case PageState.CHECKOUT_READY:
-      return renderCheckoutReady();
-    default:
-      return renderLoading();
-  }
+  return (
+    <>
+      {/* Pending payment recovery banner — shown on all states */}
+      <PendingPaymentBanner />
+
+      {/* Main content */}
+      {(() => {
+        switch (pageState) {
+          case PageState.LOADING:
+            return renderLoading();
+          case PageState.ERROR:
+            return renderError();
+          case PageState.EMPTY_CART:
+            return renderEmptyCart();
+          case PageState.PAYMENT_SUCCESS:
+            return renderPaymentSuccess();
+          case PageState.STRIPE_PAYMENT:
+            return renderStripePayment();
+          case PageState.WALLET_PAYMENT:
+            return renderWalletPayment();
+          case PageState.PAYPAL_PAYMENT:
+            return renderPaypalPayment();
+          case PageState.CHECKOUT_READY:
+            return renderCheckoutReady();
+          default:
+            return renderLoading();
+        }
+      })()}
+    </>
+  );
 }

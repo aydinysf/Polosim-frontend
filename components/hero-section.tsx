@@ -633,12 +633,7 @@ export function HeroSection() {
           ) : (
             <>
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-                {(regions.length > 0 ? regions.slice(0, 8) : [
-                  { id: 1, name: "Europe", icon: "🇪🇺", countries_count: 40, starting_price: 4.99, slug: "europe", countries: [] },
-                  { id: 2, name: "Asia", icon: "🌏", countries_count: 30, starting_price: 3.99, slug: "asia", countries: [] },
-                  { id: 3, name: "Americas", icon: "🌎", countries_count: 25, starting_price: 5.99, slug: "americas", countries: [] },
-                  { id: 4, name: "Middle East", icon: "🕌", countries_count: 15, starting_price: 5.49, slug: "middle-east", countries: [] },
-                ]).map((region, index) => {
+                {(regions.length > 0 ? regions.slice(0, 8) : []).map((region, index) => {
                   const regionData = "countries_count" in region ? region : null;
                   const regionName = getLocalizedText(regionData?.name || region.name, "Region");
                   const regionIcon = regionData?.icon || (region as { icon?: string }).icon || "🌍";

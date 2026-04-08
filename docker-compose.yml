@@ -7,4 +7,13 @@ services:
     restart: always
     environment:
       - NODE_ENV=production
-      - NEXT_PUBLIC_API_URL=https://web-api.polosim.com/api/V1/
+      - NEXT_PUBLIC_API_URL=https://esim-projects-web-test-api.bhnrgc.easypanel.host/api/V1
+      # - NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_live_51T1PqbGpFfMpIDIY8Qn2FTBR0svsEveJxDhsHA4aDhAXlLgF8cdpiI79GtR8FFgDMlf4cEd3gkVm9EtK8qlaWOun00XDdFgBwC
+      - NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=${NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY}
+      - STRIPE_SECRET=${STRIPE_SECRET}
+      - STRIPE_WEBHOOK_SECRET=${STRIPE_WEBHOOK_SECRET}
+      - NEXT_PUBLIC_PAYPAL_CLIENT_ID=ARKUA3xKljlw3xrNY198tvsWWwaQBsX1eL6W9yjSvm2y_A5nNvrO_2aOnUKoLkOi-w4Wd3jZsL3VWSlE
+      - PAYPAL_MODE=sandbox
+      - PAYPAL_CLIENT_SECRET=ELCpxMZ9TRfIoywyAd4jtG4WlsXntkT9FaU330L3pR0yrsCsjt2esFd0YjkkIVw87xo8bki5AkZuh-ki
+    security_opt:
+      - apparmor:unconfined

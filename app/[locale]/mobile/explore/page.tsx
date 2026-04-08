@@ -1,50 +1,58 @@
 "use client";
 
-import { useState } from "react";
-import { Search, Filter, ChevronRight, Star, Signal } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Search, Filter, ChevronRight, Star, Signal, Loader2, Globe } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { MobileHeader } from "@/components/mobile/mobile-header";
 import { BottomNav } from "@/components/mobile/bottom-nav";
-
-const regions = [
-  { id: "all", name: "All" },
-  { id: "europe", name: "Europe" },
-  { id: "asia", name: "Asia" },
-  { id: "americas", name: "Americas" },
-  { id: "africa", name: "Africa" },
-  { id: "oceania", name: "Oceania" },
-];
-
-const countries = [
-  { flag: "TR", name: "Turkey", plans: 12, startPrice: 4.99, popular: true },
-  { flag: "DE", name: "Germany", plans: 8, startPrice: 5.99, popular: true },
-  { flag: "FR", name: "France", plans: 10, startPrice: 5.49, popular: true },
-  { flag: "IT", name: "Italy", plans: 9, startPrice: 4.99, popular: false },
-  { flag: "ES", name: "Spain", plans: 11, startPrice: 4.49, popular: true },
-  { flag: "GB", name: "United Kingdom", plans: 7, startPrice: 6.99, popular: false },
-  { flag: "JP", name: "Japan", plans: 15, startPrice: 7.99, popular: true },
-  { flag: "KR", name: "South Korea", plans: 8, startPrice: 6.99, popular: false },
-  { flag: "TH", name: "Thailand", plans: 10, startPrice: 3.99, popular: true },
-  { flag: "US", name: "United States", plans: 20, startPrice: 8.99, popular: true },
-  { flag: "AU", name: "Australia", plans: 6, startPrice: 9.99, popular: false },
-  { flag: "BR", name: "Brazil", plans: 5, startPrice: 7.49, popular: false },
-];
-
-const getFlagEmoji = (countryCode: string) => {
-  const flags: Record<string, string> = {
-    TR: "🇹🇷", DE: "🇩🇪", FR: "🇫🇷", IT: "🇮🇹", ES: "🇪🇸", GB: "🇬🇧",
-    JP: "🇯🇵", KR: "🇰🇷", TH: "🇹🇭", US: "🇺🇸", AU: "🇦🇺", BR: "🇧🇷"
-  };
-  return flags[countryCode] || "🏳️";
-};
+import { countryService, type Country } from "@/lib/services/countryService";
+import { regionService, type Region } from "@/lib/services/regionService";
+import { getLocalizedText } from "@/lib/product-helpers";
+import { getImageUrl, getFlagFromISO } from "@/lib/api-client";
+import { useLocale } from "next-intl";
 
 export default function ExplorePage() {
+  const locale = useLocale();
   const [searchQuery, setSearchQuery] = useState("");
   const [activeRegion, setActiveRegion] = useState("all");
+  const [countries, setCountries] = useState<Country[]>([]);
+  const [regions, setRegions] = useState<Region[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const filteredCountries = countries.filter((country) =>
-    country.name.toLowerCase().startsWith(searchQuery.toLowerCase())
-  );
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        setIsLoading(true);
+        const [countriesData, regionsData] = await Promise.all([
+          countryService.getAll(),
+          regionService.getAll(),
+        ]);
+        setCountries(countriesData);
+        setRegions(regionsData);
+      } catch (error) {
+        console.error("Failed to fetch explore data:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    fetchData();
+  }, []);
+
+  const filteredCountries = countries.filter((country) => {
+    const name = getLocalizedText(country.name, "", locale).toLowerCase();
+    const matchesSearch = name.startsWith(searchQuery.toLowerCase());
+    if (activeRegion === "all") return matchesSearch;
+    return matchesSearch && country.region_id?.toString() === activeRegion;
+  });
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background flex flex-col items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+        <p className="mt-2 text-sm text-muted-foreground">Loading destinations...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -71,66 +79,67 @@ export default function ExplorePage() {
         {/* Region Tabs */}
         <div className="px-4 mb-4">
           <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide" style={{ scrollbarWidth: 'none' }}>
+            <button
+              onClick={() => setActiveRegion("all")}
+              className={`flex-shrink-0 px-4 py-2 rounded-full text-xs font-medium transition-all ${
+                activeRegion === "all"
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-secondary/50 text-muted-foreground"
+              }`}
+            >
+              All
+            </button>
             {regions.map((region) => (
               <button
                 key={region.id}
-                onClick={() => setActiveRegion(region.id)}
+                onClick={() => setActiveRegion(region.id.toString())}
                 className={`flex-shrink-0 px-4 py-2 rounded-full text-xs font-medium transition-all ${
-                  activeRegion === region.id
+                  activeRegion === region.id.toString()
                     ? "bg-primary text-primary-foreground"
                     : "bg-secondary/50 text-muted-foreground"
                 }`}
               >
-                {region.name}
+                {getLocalizedText(region.name, region.slug, locale)}
               </button>
             ))}
-          </div>
-        </div>
-
-        {/* Regional Plans Banner */}
-        <div className="px-4 mb-4">
-          <div className="bg-gradient-to-r from-primary/20 to-primary/5 rounded-xl p-4 border border-primary/20">
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="font-semibold text-sm text-foreground">Regional Plans</h3>
-                <p className="text-xs text-muted-foreground mt-1">One plan, multiple countries</p>
-              </div>
-              <ChevronRight className="w-5 h-5 text-primary" />
-            </div>
           </div>
         </div>
 
         {/* Countries List */}
         <div className="px-4">
           <div className="flex items-center justify-between mb-3">
-            <h2 className="font-semibold text-foreground">All Countries</h2>
-            <span className="text-xs text-muted-foreground">{filteredCountries.length} destinations</span>
+            <h2 className="font-semibold text-foreground">Destinations</h2>
+            <span className="text-xs text-muted-foreground">{filteredCountries.length} countries</span>
           </div>
 
           <div className="space-y-2">
-            {filteredCountries.map((country) => (
-              <button
-                key={country.flag}
-                className="w-full flex items-center gap-3 p-3 rounded-xl bg-card/50 border border-border/50 hover:bg-card hover:border-primary/30 transition-all"
-              >
-                <span className="text-3xl">{getFlagEmoji(country.flag)}</span>
-                <div className="flex-1 text-left">
-                  <div className="flex items-center gap-2">
-                    <span className="font-medium text-sm text-foreground">{country.name}</span>
-                    {country.popular && <Star className="w-3 h-3 text-primary fill-primary" />}
+            {filteredCountries.map((country) => {
+              const name = getLocalizedText(country.name, "", locale);
+              const flagUrl = country.flag_url ? getImageUrl(country.flag_url) : getFlagFromISO(country.iso_code);
+              
+              return (
+                <button
+                  key={country.id}
+                  className="w-full flex items-center gap-3 p-3 rounded-xl bg-card/50 border border-border/50 hover:bg-card hover:border-primary/30 transition-all"
+                  onClick={() => window.location.href = `/${locale}/plans?country=${country.id}`}
+                >
+                  <div className="w-10 h-7 rounded overflow-hidden bg-secondary flex items-center justify-center">
+                    {flagUrl ? (
+                      <img src={flagUrl} alt={name} className="w-full h-full object-cover" />
+                    ) : (
+                      <Globe className="w-5 h-5 text-muted-foreground" />
+                    )}
                   </div>
-                  <div className="flex items-center gap-2 mt-0.5">
-                    <Signal className="w-3 h-3 text-muted-foreground" />
-                    <span className="text-xs text-muted-foreground">{country.plans} plans available</span>
+                  <div className="flex-1 text-left">
+                    <div className="flex items-center gap-2">
+                      <span className="font-medium text-sm text-foreground">{name}</span>
+                    </div>
+                    <p className="text-[10px] text-muted-foreground mt-0.5">Explore available plans</p>
                   </div>
-                </div>
-                <div className="text-right">
-                  <p className="text-xs text-muted-foreground">From</p>
-                  <p className="font-semibold text-sm text-primary">${country.startPrice}</p>
-                </div>
-                <ChevronRight className="w-4 h-4 text-muted-foreground" />
-              </button>
-            ))}
+                  <ChevronRight className="w-4 h-4 text-muted-foreground" />
+                </button>
+              );
+            })}
           </div>
         </div>
       </main>

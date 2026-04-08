@@ -12,6 +12,7 @@ import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { useAuth } from "@/lib/auth-context";
 import { authService } from "@/lib/services/authService";
+import { walletService } from "@/lib/services/walletService";
 import { esimProfileService, type EsimPackageData, type EsimUsageResponse } from "@/lib/services/esimProfileService";
 import { Link, useRouter } from "@/i18n/routing";
 import { toast } from "sonner";
@@ -47,6 +48,9 @@ export default function ProfilePage() {
   const [isDeleting, setIsDeleting] = useState(false);
   const [usageDetails, setUsageDetails] = useState<EsimUsageResponse | null>(null);
   const [isUsageLoading, setIsUsageLoading] = useState(false);
+  const [isTopupLoading, setIsTopupLoading] = useState(false);
+  const [showTopupModal, setShowTopupModal] = useState(false);
+  const [topupAmount, setTopupAmount] = useState("10"); // Default 10 EUR
 
   useEffect(() => {
     if (!authLoading && !isAuthenticated) {
@@ -163,6 +167,31 @@ export default function ProfilePage() {
 
   const refreshPackageStatus = async () => {
     await loadPackages();
+  };
+
+  const handleTopup = async () => {
+    setIsTopupLoading(true);
+    try {
+      const amount = parseFloat(topupAmount);
+      if (isNaN(amount) || amount <= 0) {
+        toast.error("Lütfen geçerli bir tutar girin.");
+        return;
+      }
+
+      const response = await walletService.topup({
+        amount: amount,
+        currency: "EUR",
+        provider: "paypal",
+      });
+
+      if (response.action === "redirect") {
+        window.location.href = response.url;
+      }
+    } catch (err: any) {
+      toast.error(err.message || "Yükleme başlatılamadı.");
+    } finally {
+      setIsTopupLoading(false);
+    }
   };
 
   const filteredPackages = packages.filter((pkg) => {
@@ -614,7 +643,10 @@ export default function ProfilePage() {
             {/* Actions */}
             <div className="flex gap-4">
               {selectedPackage.status === "active" && (
-                <Button className="flex-1 h-14 rounded-2xl text-lg font-bold shadow-xl shadow-primary/20">
+                <Button 
+                  className="flex-1 h-14 rounded-2xl text-lg font-bold shadow-xl shadow-primary/20"
+                  onClick={() => setShowTopupModal(true)}
+                >
                   {t('modal.topUp')}
                 </Button>
               )}
@@ -633,6 +665,70 @@ export default function ProfilePage() {
                 {t('modal.close')}
               </Button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {showTopupModal && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
+          <div
+            className="absolute inset-0 bg-background/90 backdrop-blur-md"
+            onClick={() => !isTopupLoading && setShowTopupModal(false)}
+          />
+          <div className="relative w-full max-w-md bg-card border border-border/50 rounded-3xl shadow-2xl p-8 animate-in fade-in zoom-in duration-300">
+            <h3 className="text-2xl font-bold text-foreground mb-6">Bakiye Yükle (PayPal)</h3>
+            
+            <div className="space-y-4 mb-8">
+              <label className="text-sm font-medium text-muted-foreground">Tutar Seçin (EUR)</label>
+              <div className="grid grid-cols-3 gap-2">
+                {["10", "20", "50", "100"].map((amount) => (
+                  <button
+                    key={amount}
+                    onClick={() => setTopupAmount(amount)}
+                    className={`h-12 rounded-xl border-2 transition-all font-bold ${
+                      topupAmount === amount
+                        ? "border-primary bg-primary/10 text-primary"
+                        : "border-border hover:border-primary/50"
+                    }`}
+                  >
+                    €{amount}
+                  </button>
+                ))}
+              </div>
+              
+              <div className="relative pt-2">
+                <input
+                  type="number"
+                  value={topupAmount}
+                  onChange={(e) => setTopupAmount(e.target.value)}
+                  placeholder="Özel tutar girin"
+                  className="w-full h-14 px-4 bg-secondary/20 border border-border rounded-2xl focus:ring-2 focus:ring-primary outline-none text-lg font-bold"
+                />
+                <span className="absolute right-4 top-1/2 -translate-y-1/2 font-bold text-muted-foreground pt-2">EUR</span>
+              </div>
+            </div>
+
+            <div className="flex gap-4">
+              <Button
+                variant="outline"
+                className="flex-1 h-14 rounded-2xl"
+                onClick={() => setShowTopupModal(false)}
+                disabled={isTopupLoading}
+              >
+                Vazgeç
+              </Button>
+              <Button
+                className="flex-1 h-14 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-bold"
+                onClick={handleTopup}
+                disabled={isTopupLoading || !topupAmount}
+              >
+                {isTopupLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Şimdi Yükle"}
+              </Button>
+            </div>
+            
+            <p className="text-[10px] text-center text-muted-foreground mt-4">
+              Ödeme işlemine devam ettiğinizde PayPal'a yönlendirileceksiniz.
+            </p>
           </div>
         </div>
       )}

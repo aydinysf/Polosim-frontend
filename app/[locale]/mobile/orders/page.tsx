@@ -1,100 +1,81 @@
 "use client";
 
-import { useState } from "react";
-import { Package, Clock, CheckCircle, AlertCircle, ChevronRight, Download, RefreshCw } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Package, Clock, CheckCircle, AlertCircle, ChevronRight, Download, RefreshCw, Loader2 } from "lucide-react";
 import { MobileHeader } from "@/components/mobile/mobile-header";
 import { BottomNav } from "@/components/mobile/bottom-nav";
 import { Button } from "@/components/ui/button";
-
-type OrderStatus = "active" | "completed" | "expired";
-
-const orders = [
-  {
-    id: "ORD-2024-001",
-    country: "Turkey",
-    flag: "🇹🇷",
-    plan: "10GB - 30 Days",
-    price: 14.99,
-    status: "active" as OrderStatus,
-    purchaseDate: "2024-01-15",
-    expiryDate: "2024-02-14",
-    dataUsed: 3.2,
-    dataTotal: 10,
-  },
-  {
-    id: "ORD-2024-002",
-    country: "Europe",
-    flag: "🇪🇺",
-    plan: "20GB - 30 Days",
-    price: 29.99,
-    status: "active" as OrderStatus,
-    purchaseDate: "2024-01-20",
-    expiryDate: "2024-02-19",
-    dataUsed: 8.5,
-    dataTotal: 20,
-  },
-  {
-    id: "ORD-2023-089",
-    country: "Japan",
-    flag: "🇯🇵",
-    plan: "15GB - 14 Days",
-    price: 24.99,
-    status: "completed" as OrderStatus,
-    purchaseDate: "2023-12-01",
-    expiryDate: "2023-12-15",
-    dataUsed: 15,
-    dataTotal: 15,
-  },
-  {
-    id: "ORD-2023-076",
-    country: "Thailand",
-    flag: "🇹🇭",
-    plan: "8GB - 7 Days",
-    price: 11.99,
-    status: "expired" as OrderStatus,
-    purchaseDate: "2023-11-10",
-    expiryDate: "2023-11-17",
-    dataUsed: 5.2,
-    dataTotal: 8,
-  },
-];
-
-const tabs = [
-  { id: "all", label: "All" },
-  { id: "active", label: "Active" },
-  { id: "completed", label: "Completed" },
-  { id: "expired", label: "Expired" },
-];
-
-const getStatusIcon = (status: OrderStatus) => {
-  switch (status) {
-    case "active":
-      return <Clock className="w-4 h-4 text-primary" />;
-    case "completed":
-      return <CheckCircle className="w-4 h-4 text-emerald-500" />;
-    case "expired":
-      return <AlertCircle className="w-4 h-4 text-muted-foreground" />;
-  }
-};
-
-const getStatusBadge = (status: OrderStatus) => {
-  switch (status) {
-    case "active":
-      return "bg-primary/10 text-primary";
-    case "completed":
-      return "bg-emerald-500/10 text-emerald-500";
-    case "expired":
-      return "bg-muted text-muted-foreground";
-  }
-};
+import { orderService, type Order } from "@/lib/services/orderService";
+import { useLocale, useTranslations } from "next-intl";
+import { getLocalizedText } from "@/lib/product-helpers";
 
 export default function OrdersPage() {
+  const locale = useLocale();
+  const t = useTranslations('Common');
   const [activeTab, setActiveTab] = useState("all");
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchOrders() {
+      try {
+        setIsLoading(true);
+        const data = await orderService.getAll();
+        setOrders(data);
+      } catch (error) {
+        console.error("Failed to fetch orders:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    fetchOrders();
+  }, []);
+
+  const tabs = [
+    { id: "all", label: "All" },
+    { id: "paid", label: "Paid" },
+    { id: "pending", label: "Pending" },
+  ];
+
+  const getStatusIcon = (order: Order) => {
+    switch (order.status) {
+      case "paid":
+      case "completed":
+        return <CheckCircle className="w-4 h-4 text-emerald-500" />;
+      case "pending":
+      case "processing":
+        return <Clock className="w-4 h-4 text-primary" />;
+      default:
+        return <AlertCircle className="w-4 h-4 text-muted-foreground" />;
+    }
+  };
+
+  const getStatusBadge = (order: Order) => {
+    switch (order.status) {
+      case "paid":
+      case "completed":
+        return "bg-emerald-500/10 text-emerald-500";
+      case "pending":
+      case "processing":
+        return "bg-primary/10 text-primary";
+      default:
+        return "bg-muted text-muted-foreground";
+    }
+  };
 
   const filteredOrders = orders.filter((order) => {
     if (activeTab === "all") return true;
     return order.status === activeTab;
   });
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background flex flex-col items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+        <p className="mt-2 text-sm text-muted-foreground">Loading your orders...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -142,59 +123,39 @@ export default function OrdersPage() {
                 {/* Order Header */}
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-center gap-3">
-                    <span className="text-3xl">{order.flag}</span>
+                    <div className="w-10 h-10 rounded-lg bg-secondary flex items-center justify-center text-xl">
+                      📦
+                    </div>
                     <div>
-                      <h3 className="font-semibold text-sm text-foreground">{order.country}</h3>
-                      <p className="text-xs text-muted-foreground">{order.plan}</p>
+                      <h3 className="font-semibold text-sm text-foreground">Order #{order.order_number || order.id}</h3>
+                      <p className="text-xs text-muted-foreground">
+                        {order.items?.length || 0} items • {new Date(order.created_at).toLocaleDateString()}
+                      </p>
                     </div>
                   </div>
-                  <div className={`flex items-center gap-1.5 px-2 py-1 rounded-full text-xs font-medium ${getStatusBadge(order.status)}`}>
-                    {getStatusIcon(order.status)}
+                  <div className={`flex items-center gap-1.5 px-2 py-1 rounded-full text-xs font-medium ${getStatusBadge(order)}`}>
+                    {getStatusIcon(order)}
                     <span className="capitalize">{order.status}</span>
                   </div>
                 </div>
 
-                {/* Data Usage (for active orders) */}
-                {order.status === "active" && (
-                  <div className="mb-3">
-                    <div className="flex items-center justify-between text-xs mb-1.5">
-                      <span className="text-muted-foreground">Data Usage</span>
-                      <span className="font-medium text-foreground">{order.dataUsed}GB / {order.dataTotal}GB</span>
-                    </div>
-                    <div className="h-2 bg-secondary rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-primary rounded-full transition-all"
-                        style={{ width: `${(order.dataUsed / order.dataTotal) * 100}%` }}
-                      />
-                    </div>
-                  </div>
-                )}
-
                 {/* Order Details */}
                 <div className="flex items-center justify-between text-xs text-muted-foreground mb-3">
-                  <span>Order: {order.id}</span>
-                  <span>${order.price.toFixed(2)}</span>
+                  <span>Total</span>
+                  <span className="font-bold text-foreground">€{(order.total_amount || order.total || 0).toFixed(2)}</span>
                 </div>
 
                 {/* Action Buttons */}
                 <div className="flex gap-2">
-                  {order.status === "active" ? (
-                    <>
-                      <Button size="sm" variant="outline" className="flex-1 text-xs h-9 bg-transparent">
-                        <Download className="w-3.5 h-3.5 mr-1.5" />
-                        View QR
-                      </Button>
-                      <Button size="sm" className="flex-1 text-xs h-9 bg-primary text-primary-foreground">
-                        <RefreshCw className="w-3.5 h-3.5 mr-1.5" />
-                        Top Up
-                      </Button>
-                    </>
-                  ) : (
-                    <Button size="sm" variant="outline" className="flex-1 text-xs h-9 bg-transparent">
-                      <ChevronRight className="w-3.5 h-3.5 mr-1.5" />
-                      Buy Again
-                    </Button>
-                  )}
+                  <Button 
+                    size="sm" 
+                    variant="outline" 
+                    className="flex-1 text-xs h-9 bg-transparent"
+                    onClick={() => window.location.href = `/${locale}/orders/${order.id}`}
+                  >
+                    <ChevronRight className="w-3.5 h-3.5 mr-1.5" />
+                    View Details
+                  </Button>
                 </div>
               </div>
             ))

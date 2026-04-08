@@ -31,3 +31,6 @@ export type { Faq, FaqCategory } from "./faqService";
 
 export { affiliateService } from "./affiliateService";
 export type { AffiliateDashboard, AffiliateLedger, AffiliateCoupon } from "./affiliateService";
+
+export { walletService } from "./walletService";
+export type { WalletTopupPayload, WalletTopupResponse } from "./walletService";
