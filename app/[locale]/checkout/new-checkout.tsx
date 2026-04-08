@@ -39,7 +39,7 @@ export function NewCheckout() {
   const t = useTranslations('Checkout');
   const locale = useLocale();
   const { isAuthenticated, user } = useAuth();
-  const { items, clearCart, isLoaded } = useCart();
+  const { items, clearCart, isLoaded, totalPrice } = useCart();
   const router = useRouter();
 
   const [pageState, setPageState] = useState<PageState>(PageState.LOADING);
@@ -49,10 +49,7 @@ export function NewCheckout() {
   const [orderId, setOrderId] = useState<number | null>(null);
 
   // Wallet payment hook for Apple Pay / Google Pay
-  const totalAmountCents = items.reduce(
-    (sum, item) => sum + (((item as any).price || (item as any).base_price || 0) * item.quantity),
-    0,
-  ) * 100;
+  const totalAmountCents = totalPrice;
 
   const walletPayment = useWalletPayment(totalAmountCents, 'eur', orderId ?? undefined);
 
@@ -262,7 +259,7 @@ export function NewCheckout() {
   );
 
   const renderPaypalPayment = () => {
-    const totalAmount = items.reduce((sum, item) => sum + (((item as any).price || (item as any).base_price || 0) * item.quantity), 0).toFixed(2);
+    const totalAmount = (totalPrice / 100).toFixed(2);
 
     return (
       <div className="max-w-2xl mx-auto space-y-6">
@@ -342,13 +339,13 @@ export function NewCheckout() {
                 {items.map((item) => (
                   <div key={item.id} className="flex justify-between">
                     <span>{item.name} × {item.quantity}</span>
-                    <span>€{(((item as any).price || (item as any).base_price || 0) * item.quantity || 0).toFixed(2)}</span>
+                    <span>€{((item.priceInCents || 0) * item.quantity / 100).toFixed(2)}</span>
                   </div>
                 ))}
                 <div className="border-t pt-2 mt-2">
                   <div className="flex justify-between font-bold">
                     <span>{t('ready.total')}</span>
-                    <span>€{(items.reduce((sum, item) => sum + (((item as any).price || (item as any).base_price || 0) * item.quantity), 0) || 0).toFixed(2)}</span>
+                    <span>€{(totalPrice / 100).toFixed(2)}</span>
                   </div>
                 </div>
               </div>
@@ -360,7 +357,7 @@ export function NewCheckout() {
                 selectedMethod === 'paypal' ? <Send className="w-4 h-4 mr-2" /> :
                   <CreditCard className="w-4 h-4 mr-2" />
             )}
-            {pageState === PageState.LOADING ? t('ready.processing') : t('ready.pay', { amount: `€${(items.reduce((sum, item) => sum + (((item as any).price || (item as any).base_price || 0) * item.quantity), 0) || 0).toFixed(2)}` })}
+            {pageState === PageState.LOADING ? t('ready.processing') : t('ready.pay', { amount: `€${(totalPrice / 100).toFixed(2)}` })}
           </Button>
         </>
       )}
