@@ -18,7 +18,7 @@ import { PayPalPayment } from "@/components/paypal-payment";
 import { useWalletPayment } from "@/hooks/use-wallet-payment";
 import { useRouter } from "next/navigation";
 import { Link } from "@/i18n/routing";
-import { ApiError } from "@/lib/api-client";
+import { ApiError, getCartSessionId } from "@/lib/api-client";
 import { PENDING_INTENT_KEY } from "@/lib/types/payment";
 
 import { useLocale, useTranslations } from "next-intl";
@@ -90,8 +90,11 @@ export function NewCheckout() {
     setPageState(PageState.LOADING);
     try {
       const firstItem = items[0];
+      const sessionId = getCartSessionId();
+
       const payload: CheckoutExecutePayload = {
         payment_method: selectedMethod,
+        session_id: sessionId,
         product_id: firstItem.id,
         quantity: firstItem.quantity,
         guest_email: user?.email || undefined

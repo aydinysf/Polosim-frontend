@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Loader2, CheckCircle, AlertCircle } from 'lucide-react';
-import { ApiError } from '@/lib/api-client';
+import { ApiError, getCartSessionId } from '@/lib/api-client';
 
 // Props arayüzü
 interface GuestCheckoutFormProps {
@@ -58,8 +58,11 @@ export function GuestCheckoutForm({
     setLoading(true);
     setError('');
     try {
+      const sessionId = getCartSessionId();
+
       const payload: CheckoutPayload = {
         payment_method: paymentMethod, // 🔥 ARTIK DIREKT KULLANABİLİRİZ
+        session_id: sessionId,
         product_id: productId,
         quantity,
         guest_name: firstName || undefined,
@@ -67,7 +70,7 @@ export function GuestCheckoutForm({
         guest_email: email,
       };
       const response = await authService.checkout(payload);
-      
+
       // PayPal redirect handling
       if (paymentMethod === 'paypal' && (response.data.redirect_url || response.data.url)) {
         window.location.href = response.data.redirect_url || response.data.url;
@@ -78,11 +81,11 @@ export function GuestCheckoutForm({
       localStorage.removeItem('guest_token'); // Başarılı ödeme sonrası token'ı temizle
     } catch (err: any) {
       let errorMessage = err.message || 'Ödeme başlatılamadı.';
-      
+
       // Use details if it's an ApiError from Laravel 422 Unprocessable Entity
       if (err instanceof ApiError && err.details) {
-        errorMessage = typeof err.details === 'object' 
-          ? Object.values(err.details).flat().join(', ') 
+        errorMessage = typeof err.details === 'object'
+          ? Object.values(err.details).flat().join(', ')
           : typeof err.details === 'string' ? err.details : errorMessage;
       }
 

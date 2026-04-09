@@ -30,8 +30,9 @@ export interface RegisterRequest {
 
 export interface CheckoutPayload {
   payment_method: 'stripe' | 'paypal' | 'wallet';
-  product_id: number;
-  quantity: number;
+  session_id?: string;     // 🔥 EKLENDİ
+  product_id?: number;     // 🔥 ARTIK OPSIYONEL
+  quantity?: number;       // 🔥 ARTIK OPSIYONEL
   guest_name?: string;     // 🔥 ARTIK OPSIYONEL
   guest_surname?: string;  // 🔥 ARTIK OPSIYONEL
   guest_email?: string;    // 🔥 OPSIYONEL (Eğer giriş yapılmışsa)
