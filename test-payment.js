@@ -31,6 +31,10 @@ async function testPaymentMethod(method) {
       return false;
     }
     console.log(`[ERROR] method '${method}':`, error.message);
+    if (error.response) {
+      console.log('Response status:', error.response.status);
+      console.log('Response data:', error.response.data);
+    }
     return false;
   }
 }
@@ -40,10 +44,8 @@ const delay = ms => new Promise(res => setTimeout(res, ms));
 async function runTests() {
   const methodsToTest = [
     'stripe',
-    'balance',
     'wallet',
-    'bank_transfer',
-    'crypto'
+    'paypal'
   ];
 
   for (const method of methodsToTest) {
