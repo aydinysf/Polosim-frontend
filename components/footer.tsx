@@ -19,10 +19,11 @@ export function Footer() {
   const [dynamicLinks, setDynamicLinks] = useState<MenuItem[]>([]);
 
   useEffect(() => {
-    menuService.getMenu('footer-menu', locale)
-      .then((data) => {
-        if (data?.items?.length > 0) {
-          setDynamicLinks(data.items);
+    menuService.getMenu('footer', locale)
+      .then((data: any) => {
+        const items = data?.items || data?.data?.items;
+        if (items?.length > 0) {
+          setDynamicLinks(items);
         }
       })
       .catch((err) => console.log('Footer menu fetch failed:', err.message));

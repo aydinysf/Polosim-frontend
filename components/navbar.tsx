@@ -41,10 +41,12 @@ export function Navbar() {
   const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
-    menuService.getMenu('header-menu', locale)
-      .then((data) => {
-        if (data?.items?.length > 0) {
-          setDynamicLinks(data.items);
+    menuService.getMenu('main-menu', locale)
+      .then((data: any) => {
+        console.log('Main menu data received:', data);
+        const items = data?.items || data?.data?.items;
+        if (items?.length > 0) {
+          setDynamicLinks(items);
         }
       })
       .catch((err: Error) => console.log('Menu fetch failed:', err.message));
