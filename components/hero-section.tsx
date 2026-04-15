@@ -9,6 +9,7 @@ import { useRouter, Link } from "@/i18n/routing";
 import Image from "next/image";
 import { countryService, type Country } from "@/lib/services/countryService";
 import { regionService, type Region } from "@/lib/services/regionService";
+import { bannerService, type Banner } from "@/lib/services";
 import { productService, type Product } from "@/lib/services/productService";
 import { getLocalizedText, getProductData, getProductValidity, getProductSpeed, getProductThrottleSpeed, isHotspotAllowed, hasInstantActivation, isBestSeller, getProductName } from "@/lib/product-helpers";
 import { getImageUrl, getFlagFromISO } from "@/lib/api-client";
@@ -151,6 +152,7 @@ export function HeroSection() {
   const [searchResultProducts, setSearchResultProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingProducts, setIsLoadingProducts] = useState(false);
+  const [heroBanner, setHeroBanner] = useState<Banner | null>(null);
 
   const { addItem } = useCart();
   const router = useRouter();
@@ -160,14 +162,18 @@ export function HeroSection() {
     async function fetchInitialData() {
       try {
         setIsLoading(true);
-        const [countriesResponse, regionsData, popularData] = await Promise.all([
+        const [countriesResponse, regionsData, popularData, banners] = await Promise.all([
           countryService.getAll(),
           regionService.getAll(),
           countryService.getPopular(),
+          bannerService.getByPosition("hero")
         ]);
         setCountries(Array.isArray(countriesResponse) ? countriesResponse : (countriesResponse as any).data);
         setRegions(Array.isArray(regionsData) ? regionsData : (regionsData as any).data);
         setPopularCountries(popularData);
+        if (banners && banners.length > 0) {
+          setHeroBanner(banners[0]);
+        }
       } catch (error) {
         console.error("Failed to fetch initial data:", error);
       } finally {
@@ -474,10 +480,10 @@ export function HeroSection() {
       <div className="relative z-10 w-full max-w-7xl mx-auto px-4">
         <div className="text-center mb-8 sm:mb-12">
           <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black text-foreground tracking-tight mb-4 sm:mb-6">
-            {t('title')}
+            {heroBanner?.title || t('title')}
           </h1>
           <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto px-4">
-            {t('subtitle')}
+            {heroBanner?.subtitle || t('subtitle')}
           </p>
         </div>
 

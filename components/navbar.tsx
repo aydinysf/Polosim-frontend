@@ -8,7 +8,7 @@ import { useAuth } from "@/lib/auth-context";
 import Image from "next/image";
 import { Link, usePathname, useRouter } from "@/i18n/routing";
 import { useLocale, useTranslations } from "next-intl";
-import { webApi } from "@/lib/api-client";
+import { menuService, type MenuItem } from "@/lib/services";
 
 // Nav links will be translated in the component
 const defaultNavLinks = [
@@ -32,7 +32,7 @@ export function Navbar() {
   const [langMenuOpen, setLangMenuOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
-  const [dynamicLinks, setDynamicLinks] = useState<any[]>(defaultNavLinks);
+  const [dynamicLinks, setDynamicLinks] = useState<MenuItem[]>(defaultNavLinks as MenuItem[]);
 
   const { totalItems } = useCart();
   const { user, isAuthenticated, logout, isLoading } = useAuth();
@@ -41,13 +41,15 @@ export function Navbar() {
   const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
-    webApi.get(`/menus/header-menu`, { headers: { 'x-lang': locale } })
-      .then((res) => {
-        if (res.data?.items?.length > 0) {
-          setDynamicLinks(res.data.items);
+    menuService.getMenu('main-menu', locale)
+      .then((data: any) => {
+        console.log('Main menu data received:', data);
+        const items = data?.items || data?.data?.items;
+        if (items?.length > 0) {
+          setDynamicLinks(items);
         }
       })
-      .catch((err) => console.log('Menu fetch failed:', err.message));
+      .catch((err: Error) => console.log('Menu fetch failed:', err.message));
   }, [locale]);
 
   const handleLogout = async () => {

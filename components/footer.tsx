@@ -1,7 +1,10 @@
+"use client";
+import { useState, useEffect } from "react";
 import { Twitter, Instagram, Facebook, Linkedin } from "lucide-react";
 import Image from "next/image";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { Link } from "@/i18n/routing";
+import { menuService, type MenuItem } from "@/lib/services";
 
 const socialLinks = [
   { name: "Twitter", icon: Twitter, href: "#", hoverColor: "hover:bg-sky-500/25 hover:text-sky-300 hover:border-sky-500/50" },
@@ -12,8 +15,21 @@ const socialLinks = [
 
 export function Footer() {
   const t = useTranslations('Footer');
+  const locale = useLocale();
+  const [dynamicLinks, setDynamicLinks] = useState<MenuItem[]>([]);
 
-  const footerLinks = {
+  useEffect(() => {
+    menuService.getMenu('footer', locale)
+      .then((data: any) => {
+        const items = data?.items || data?.data?.items;
+        if (items?.length > 0) {
+          setDynamicLinks(items);
+        }
+      })
+      .catch((err) => console.log('Footer menu fetch failed:', err.message));
+  }, [locale]);
+
+  const defaultFooterLinks = {
     product: [
       { name: t('links.destinations'), href: "/plans" },
       { name: t('links.dataPlans'), href: "/plans" },
@@ -38,6 +54,10 @@ export function Footer() {
       { name: t('links.refundPolicy'), href: "/refund-policy" },
     ],
   };
+
+  // If we have dynamic links, we might want to prioritize them or merge them.
+  // For now, if dynamicLinks has children (categories), we'll use them.
+  const categories = dynamicLinks.length > 0 ? dynamicLinks : null;
 
   return (
     <footer className="relative overflow-hidden bg-[hsl(215_40%_14%)]">
@@ -72,82 +92,80 @@ export function Footer() {
             </div>
           </div>
 
-          {/* Links columns */}
-          <div>
-            <h4 className="font-semibold mb-3 sm:mb-4 text-sm sm:text-base text-cyan-400">{t('product')}</h4>
-            <ul className="space-y-2 sm:space-y-3">
-              {footerLinks.product.map((link) => (
-                <li key={link.name}>
-                  {link.href.startsWith('http') || link.href === '#' ? (
-                    <a href={link.href} className="text-xs sm:text-sm text-[hsl(215_20%_55%)] hover:text-white cursor-pointer transition-colors">
-                      {link.name}
-                    </a>
-                  ) : (
-                    <Link href={link.href} className="text-xs sm:text-sm text-[hsl(215_20%_55%)] hover:text-white cursor-pointer transition-colors">
-                      {link.name}
-                    </Link>
-                  )}
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="font-semibold mb-3 sm:mb-4 text-sm sm:text-base text-cyan-400">{t('company')}</h4>
-            <ul className="space-y-2 sm:space-y-3">
-              {footerLinks.company.map((link) => (
-                <li key={link.name}>
-                  {link.href.startsWith('http') || link.href === '#' ? (
-                    <a href={link.href} className="text-xs sm:text-sm text-[hsl(215_20%_55%)] hover:text-white cursor-pointer transition-colors">
-                      {link.name}
-                    </a>
-                  ) : (
-                    <Link href={link.href} className="text-xs sm:text-sm text-[hsl(215_20%_55%)] hover:text-white cursor-pointer transition-colors">
-                      {link.name}
-                    </Link>
-                  )}
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="font-semibold mb-3 sm:mb-4 text-sm sm:text-base text-cyan-400">{t('support')}</h4>
-            <ul className="space-y-2 sm:space-y-3">
-              {footerLinks.support.map((link) => (
-                <li key={link.name}>
-                  {link.href.startsWith('http') || link.href === '#' ? (
-                    <a href={link.href} className="text-xs sm:text-sm text-[hsl(215_20%_55%)] hover:text-white cursor-pointer transition-colors">
-                      {link.name}
-                    </a>
-                  ) : (
-                    <Link href={link.href} className="text-xs sm:text-sm text-[hsl(215_20%_55%)] hover:text-white cursor-pointer transition-colors">
-                      {link.name}
-                    </Link>
-                  )}
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="font-semibold mb-3 sm:mb-4 text-sm sm:text-base text-cyan-400">{t('legal')}</h4>
-            <ul className="space-y-2 sm:space-y-3">
-              {footerLinks.legal.map((link) => (
-                <li key={link.name}>
-                  {link.href.startsWith('http') || link.href === '#' ? (
-                    <a href={link.href} className="text-xs sm:text-sm text-[hsl(215_20%_55%)] hover:text-white cursor-pointer transition-colors">
-                      {link.name}
-                    </a>
-                  ) : (
-                    <Link href={link.href} className="text-xs sm:text-sm text-[hsl(215_20%_55%)] hover:text-white cursor-pointer transition-colors">
-                      {link.name}
-                    </Link>
-                  )}
-                </li>
-              ))}
-            </ul>
-          </div>
+          {/* Dynamic Links columns or Defaults */}
+          {categories ? (
+            categories.map((category) => (
+              <div key={category.id}>
+                <h4 className="font-semibold mb-3 sm:mb-4 text-sm sm:text-base text-cyan-400">{category.title}</h4>
+                <ul className="space-y-2 sm:space-y-3">
+                  {category.children?.map((link) => (
+                    <li key={link.id}>
+                      {link.url.startsWith('http') ? (
+                        <a href={link.url} target={link.target} className="text-xs sm:text-sm text-[hsl(215_20%_55%)] hover:text-white cursor-pointer transition-colors">
+                          {link.title}
+                        </a>
+                      ) : (
+                        <Link href={link.url} className="text-xs sm:text-sm text-[hsl(215_20%_55%)] hover:text-white cursor-pointer transition-colors">
+                          {link.title}
+                        </Link>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))
+          ) : (
+            <>
+              <div>
+                <h4 className="font-semibold mb-3 sm:mb-4 text-sm sm:text-base text-cyan-400">{t('product')}</h4>
+                <ul className="space-y-2 sm:space-y-3">
+                  {defaultFooterLinks.product.map((link) => (
+                    <li key={link.name}>
+                      <Link href={link.href} className="text-xs sm:text-sm text-[hsl(215_20%_55%)] hover:text-white cursor-pointer transition-colors">
+                        {link.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div>
+                <h4 className="font-semibold mb-3 sm:mb-4 text-sm sm:text-base text-cyan-400">{t('company')}</h4>
+                <ul className="space-y-2 sm:space-y-3">
+                  {defaultFooterLinks.company.map((link) => (
+                    <li key={link.name}>
+                      <Link href={link.href} className="text-xs sm:text-sm text-[hsl(215_20%_55%)] hover:text-white cursor-pointer transition-colors">
+                        {link.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div>
+                <h4 className="font-semibold mb-3 sm:mb-4 text-sm sm:text-base text-cyan-400">{t('support')}</h4>
+                <ul className="space-y-2 sm:space-y-3">
+                  {defaultFooterLinks.support.map((link) => (
+                    <li key={link.name}>
+                      <Link href={link.href} className="text-xs sm:text-sm text-[hsl(215_20%_55%)] hover:text-white cursor-pointer transition-colors">
+                        {link.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div>
+                <h4 className="font-semibold mb-3 sm:mb-4 text-sm sm:text-base text-cyan-400">{t('legal')}</h4>
+                <ul className="space-y-2 sm:space-y-3">
+                  {defaultFooterLinks.legal.map((link) => (
+                    <li key={link.name}>
+                      <Link href={link.href} className="text-xs sm:text-sm text-[hsl(215_20%_55%)] hover:text-white cursor-pointer transition-colors">
+                        {link.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </>
+          )}
         </div>
 
         {/* Bottom bar */}

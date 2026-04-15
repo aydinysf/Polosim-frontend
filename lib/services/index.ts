@@ -34,3 +34,15 @@ export type { AffiliateDashboard, AffiliateLedger, AffiliateCoupon } from "./aff
 
 export { walletService } from "./walletService";
 export type { WalletTopupPayload, WalletTopupResponse } from "./walletService";
+
+export { pageService } from "./pageService";
+export type { Page } from "./pageService";
+
+export { menuService } from "./menuService";
+export type { Menu, MenuItem } from "./menuService";
+
+export { galleryService } from "./galleryService";
+export type { Gallery, GalleryItem } from "./galleryService";
+
+export { reviewService } from "./reviewService";
+export type { ReviewPayload } from "./reviewService";
