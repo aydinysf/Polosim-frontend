@@ -6,6 +6,9 @@ import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { Link } from "@/i18n/routing";
 import { useLocale, useTranslations } from "next-intl";
+import { useEffect, useState } from "react";
+import { pageService, type Page } from "@/lib/services";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const content = {
     en: {
@@ -111,7 +114,53 @@ const content = {
 export default function TermsOfServicePage() {
     const t = useTranslations('Legal');
     const locale = useLocale();
+    const [pageData, setPageData] = useState<Page | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        setIsLoading(true);
+        pageService.getPage('terms-of-service', locale)
+            .then(data => setPageData(data))
+            .catch(err => console.log('CMS Page fetch failed:', err.message))
+            .finally(() => setIsLoading(false));
+    }, [locale]);
+
     const c = content[locale as "en" | "tr"] ?? content.en;
+
+    const renderContent = () => {
+        if (isLoading) {
+            return (
+                <div className="space-y-6">
+                    <Skeleton className="h-8 w-1/2" />
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-4 w-3/4" />
+                </div>
+            );
+        }
+
+        if (pageData?.content) {
+            // Simplified rendering of HTML content if provided
+            return (
+                <div 
+                    className="prose dark:prose-invert max-w-none text-muted-foreground leading-relaxed"
+                    dangerouslySetInnerHTML={{ __html: pageData.content }}
+                />
+            );
+        }
+
+        // Fallback to static content
+        return (
+            <div className="space-y-8">
+                {c.sections.map((section) => (
+                    <div key={section.heading}>
+                        <h2 className="text-xl font-semibold text-foreground mb-3">{section.heading}</h2>
+                        <p className="text-muted-foreground leading-relaxed">{section.text}</p>
+                    </div>
+                ))}
+            </div>
+        );
+    };
 
     return (
         <main className="min-h-screen bg-background">
@@ -124,10 +173,15 @@ export default function TermsOfServicePage() {
                 <div className="relative max-w-4xl mx-auto text-center">
                     <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-card/50 border border-border/50 backdrop-blur-sm mb-6">
                         <FileText className="w-4 h-4 text-primary" />
-                        <span className="text-sm text-muted-foreground">{t('termsOfService.title')}</span>
+                        <span className="text-sm text-muted-foreground">{pageData?.title || t('termsOfService.title')}</span>
                     </div>
-                    <h1 className="text-4xl font-bold text-foreground mb-3">{t('termsOfService.title')}</h1>
-                    <p className="text-muted-foreground mb-6">{t('lastUpdated', { date: c.lastUpdated.split(': ')[1] })}</p>
+                    <h1 className="text-4xl font-bold text-foreground mb-3">{pageData?.title || t('termsOfService.title')}</h1>
+                    <p className="text-muted-foreground mb-6">
+                        {pageData?.updated_at 
+                            ? t('lastUpdated', { date: new Date(pageData.updated_at).toLocaleDateString(locale) })
+                            : t('lastUpdated', { date: c.lastUpdated.split(': ')[1] })
+                        }
+                    </p>
                     <a href={c.downloadHref} download>
                         <Button variant="outline" className="gap-2">
                             <Download className="w-4 h-4" />
@@ -140,14 +194,7 @@ export default function TermsOfServicePage() {
             {/* Content */}
             <section className="py-12 px-4">
                 <div className="max-w-3xl mx-auto">
-                    <div className="space-y-8">
-                        {c.sections.map((section) => (
-                            <div key={section.heading}>
-                                <h2 className="text-xl font-semibold text-foreground mb-3">{section.heading}</h2>
-                                <p className="text-muted-foreground leading-relaxed">{section.text}</p>
-                            </div>
-                        ))}
-                    </div>
+                    {renderContent()}
 
                     <div className="mt-12 pt-8 border-t border-border/50">
                         <Link href="/">

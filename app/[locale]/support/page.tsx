@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import {
   MessageCircle, Mail, Phone, FileText, HelpCircle,
   ChevronDown, ChevronRight, Search, Clock,
@@ -12,7 +11,10 @@ import { Input } from "@/components/ui/input";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { Link } from "@/i18n/routing";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
+import { useEffect, useState } from "react";
+import { faqService, type Faq } from "@/lib/services";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const supportCategories = [
   {
@@ -142,11 +144,144 @@ const contactMethods = [
 
 export default function SupportPage() {
   const t = useTranslations("Support");
+  const locale = useLocale();
   const [searchQuery, setSearchQuery] = useState("");
   const [expandedFaq, setExpandedFaq] = useState<string | null>(null);
+  const [dynamicFaqs, setDynamicFaqs] = useState<Faq[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    setIsLoading(true);
+    faqService.getFaqs(locale)
+      .then(data => setDynamicFaqs(data))
+      .catch(err => console.error("Failed to fetch FAQs:", err))
+      .finally(() => setIsLoading(false));
+  }, [locale]);
 
   const toggleFaq = (key: string) => {
     setExpandedFaq(expandedFaq === key ? null : key);
+  };
+
+  const renderFaqs = () => {
+    if (isLoading) {
+      return (
+        <div className="space-y-4">
+          {[1, 2, 3, 4, 5].map(i => (
+            <Skeleton key={i} className="h-16 w-full rounded-2xl" />
+          ))}
+        </div>
+      );
+    }
+
+    if (dynamicFaqs.length > 0) {
+      return (
+        <div className="space-y-4">
+          {dynamicFaqs.map((faq, index) => {
+             const key = `faq-dynamic-${faq.id}`;
+             const isExpanded = expandedFaq === key;
+             return (
+               <div
+                 key={key}
+                 className={`rounded-2xl border transition-all duration-300 ${
+                   isExpanded
+                     ? "border-primary/40 bg-card/80"
+                     : "border-border/50 bg-card/60"
+                 }`}
+               >
+                 <button
+                   onClick={() => toggleFaq(key)}
+                   className="w-full flex items-center justify-between p-6 text-left"
+                 >
+                   <span
+                     className={`font-semibold text-lg ${
+                       isExpanded ? "text-primary" : "text-foreground"
+                     }`}
+                   >
+                     {faq.question}
+                   </span>
+                   <div
+                     className={`w-8 h-8 rounded-full border flex items-center justify-center transition-all ${
+                       isExpanded
+                         ? "bg-primary border-primary rotate-180"
+                         : "border-border/50 bg-card"
+                     }`}
+                   >
+                     <ChevronDown
+                       className={`w-4 h-4 ${
+                         isExpanded ? "text-primary-foreground" : "text-muted-foreground"
+                       }`}
+                     />
+                   </div>
+                 </button>
+                 {isExpanded && (
+                   <div className="px-6 pb-6 animate-in slide-in-from-top-2 duration-300">
+                     <div 
+                        className="text-muted-foreground leading-relaxed text-base prose prose-sm dark:prose-invert max-w-none"
+                        dangerouslySetInnerHTML={{ __html: faq.answer }}
+                      />
+                   </div>
+                 )}
+               </div>
+             );
+          })}
+        </div>
+      );
+    }
+
+    // Fallback to static
+    return (
+      <div className="space-y-4">
+        {["general.q1", "general.q2", "general.q3", "technical.q1", "technical.q2"].map(
+          (faqKey, index) => {
+            const key = `faq-static-${index}`;
+            const isExpanded = expandedFaq === key;
+            return (
+              <div
+                key={key}
+                className={`rounded-2xl border transition-all duration-300 ${
+                  isExpanded
+                    ? "border-primary/40 bg-card/80"
+                    : "border-border/50 bg-card/60"
+                }`}
+              >
+                <button
+                  onClick={() => toggleFaq(key)}
+                  className="w-full flex items-center justify-between p-6 text-left"
+                >
+                  <span
+                    className={`font-semibold text-lg ${
+                      isExpanded ? "text-primary" : "text-foreground"
+                    }`}
+                  >
+                    {t(`faq.${faqKey}.question`)}
+                  </span>
+                  <div
+                    className={`w-8 h-8 rounded-full border flex items-center justify-center transition-all ${
+                      isExpanded
+                        ? "bg-primary border-primary rotate-180"
+                        : "border-border/50 bg-card"
+                    }`}
+                  >
+                    <ChevronDown
+                      className={`w-4 h-4 ${
+                        isExpanded ? "text-primary-foreground" : "text-muted-foreground"
+                      }`}
+                    />
+                  </div>
+                </button>
+                {isExpanded && (
+                  <div className="px-6 pb-6 animate-in slide-in-from-top-2 duration-300">
+                    <p className="text-muted-foreground leading-relaxed text-base">
+                      {t(`faq.${faqKey}.answer`)}
+                    </p>
+                  </div>
+                )}
+              </div>
+            );
+          }
+        )}
+      </div>
+    );
   };
 
   return (
@@ -218,55 +353,7 @@ export default function SupportPage() {
                   {t("sections.commonQuestions")}
                 </h2>
                 <div className="space-y-4">
-                  {["general.q1", "general.q2", "general.q3", "technical.q1", "technical.q2"].map(
-                    (faqKey, index) => {
-                      const key = `faq-${index}`;
-                      const isExpanded = expandedFaq === key;
-                      return (
-                        <div
-                          key={key}
-                          className={`rounded-2xl border transition-all duration-300 ${
-                            isExpanded
-                              ? "border-primary/40 bg-card/80"
-                              : "border-border/50 bg-card/60"
-                          }`}
-                        >
-                          <button
-                            onClick={() => toggleFaq(key)}
-                            className="w-full flex items-center justify-between p-6 text-left"
-                          >
-                            <span
-                              className={`font-semibold text-lg ${
-                                isExpanded ? "text-primary" : "text-foreground"
-                              }`}
-                            >
-                              {t(`faq.${faqKey}.question`)}
-                            </span>
-                            <div
-                              className={`w-8 h-8 rounded-full border flex items-center justify-center transition-all ${
-                                isExpanded
-                                  ? "bg-primary border-primary rotate-180"
-                                  : "border-border/50 bg-card"
-                              }`}
-                            >
-                              <ChevronDown
-                                className={`w-4 h-4 ${
-                                  isExpanded ? "text-primary-foreground" : "text-muted-foreground"
-                                }`}
-                              />
-                            </div>
-                          </button>
-                          {isExpanded && (
-                            <div className="px-6 pb-6 animate-in slide-in-from-top-2 duration-300">
-                              <p className="text-muted-foreground leading-relaxed text-base">
-                                {t(`faq.${faqKey}.answer`)}
-                              </p>
-                            </div>
-                          )}
-                        </div>
-                      );
-                    }
-                  )}
+                  {renderFaqs()}
                 </div>
               </div>
             </div>
