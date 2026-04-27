@@ -22,8 +22,12 @@ export const menuService = {
   async getMenu(handle: string, lang: string = "en"): Promise<Menu> {
     const response = await api.get<Menu>(`/menus/${handle}`, {
       headers: {
-        'x-lang': lang
-      }
+        'x-lang': lang,
+        'Cache-Control': 'no-cache',
+      },
+      params: {
+        _t: Date.now(), // Cache buster — her istekte taze veri al
+      },
     });
     return (response.data as any).data;
   }
