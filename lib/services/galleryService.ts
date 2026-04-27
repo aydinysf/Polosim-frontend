@@ -18,11 +18,11 @@ export interface Gallery {
 export const galleryService = {
   async getAllGalleries(): Promise<Gallery[]> {
     const response = await api.get<Gallery[]>("/galleries");
-    return response.data;
+    return (response.data as any).data;
   },
 
   async getGallery(slug: string): Promise<Gallery> {
     const response = await api.get<Gallery>(`/galleries/${slug}`);
-    return response.data;
+    return (response.data as any).data;
   }
 };

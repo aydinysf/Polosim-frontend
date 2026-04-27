@@ -18,12 +18,12 @@ export interface Banner {
 export const bannerService = {
   async getAll(): Promise<Banner[]> {
     const response = await api.get<Banner[]>("/banners");
-    return response.data;
+    return (response.data as any).data;
   },
 
   async getByPosition(position: Banner["position"]): Promise<Banner[]> {
     const response = await api.get<Banner[]>(`/banners?position=${position}`);
-    return response.data;
+    return (response.data as any).data;
   },
 
   async getHeroBanners(): Promise<Banner[]> {

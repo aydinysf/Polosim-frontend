@@ -14,7 +14,7 @@ export interface Page {
 export const pageService = {
   async getPage(slug: string, lang: string = "en"): Promise<Page> {
     const response = await api.get<Page>(`/pages/${slug}?lang=${lang}`);
-    return response.data;
+    return (response.data as any).data;
   },
 
   async getAllPages(): Promise<Page[]> {
