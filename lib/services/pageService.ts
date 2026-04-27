@@ -13,7 +13,15 @@ export interface Page {
 
 export const pageService = {
   async getPage(slug: string, lang: string = "en"): Promise<Page> {
-    const response = await api.get<Page>(`/pages/${slug}?lang=${lang}`);
+    const response = await api.get<Page>(`/pages/${slug}`, {
+      params: {
+        lang,
+        _t: Date.now(), // Cache buster
+      },
+      headers: {
+        'Cache-Control': 'no-cache',
+      },
+    });
     return (response.data as any).data;
   },
 
