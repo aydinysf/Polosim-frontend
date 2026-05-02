@@ -7,10 +7,10 @@ import { Link } from "@/i18n/routing";
 import { menuService, type MenuItem } from "@/lib/services";
 
 const socialLinks = [
-  { name: "Twitter", icon: Twitter, href: "#", hoverColor: "hover:bg-sky-500/25 hover:text-sky-300 hover:border-sky-500/50" },
-  { name: "Instagram", icon: Instagram, href: "#", hoverColor: "hover:bg-rose-500/25 hover:text-rose-300 hover:border-rose-500/50" },
-  { name: "Facebook", icon: Facebook, href: "#", hoverColor: "hover:bg-blue-500/25 hover:text-blue-300 hover:border-blue-500/50" },
-  { name: "LinkedIn", icon: Linkedin, href: "#", hoverColor: "hover:bg-cyan-500/25 hover:text-cyan-300 hover:border-cyan-500/50" },
+  { name: "Twitter", icon: Twitter, href: "#" },
+  { name: "Instagram", icon: Instagram, href: "#" },
+  { name: "Facebook", icon: Facebook, href: "#" },
+  { name: "LinkedIn", icon: Linkedin, href: "#" },
 ];
 
 export function Footer() {
@@ -43,10 +43,10 @@ export function Footer() {
       { name: t('links.press'), href: "#" },
     ],
     support: [
-      { name: t('links.helpCenter'), href: "#" },
-      { name: t('links.contactUs'), href: "#" },
-      { name: t('links.setupGuide'), href: "#" },
-      { name: t('links.deviceCompatibility'), href: "#" },
+      { name: t('links.helpCenter'), href: "/support" },
+      { name: t('links.contactUs'), href: "/support" },
+      { name: t('links.setupGuide'), href: "/how-it-works" },
+      { name: t('links.deviceCompatibility'), href: "/how-it-works" },
     ],
     legal: [
       { name: t('links.privacyPolicy'), href: "/privacy" },
@@ -59,11 +59,25 @@ export function Footer() {
   // For now, if dynamicLinks has children (categories), we'll use them.
   const categories = dynamicLinks.length > 0 ? dynamicLinks : null;
 
-  return (
-    <footer className="relative overflow-hidden bg-[hsl(215_40%_14%)]">
-      <div className="max-w-7xl mx-auto px-4 py-10 sm:py-16">
+  const renderColumn = (title: string, links: { name: string; href: string }[]) => (
+    <div>
+      <h5 className="text-[13px] font-bold text-white mb-4">{title}</h5>
+      <ul className="flex flex-col gap-2.5">
+        {links.map((link) => (
+          <li key={link.name}>
+            <Link href={link.href} className="text-[13px] text-white/50 hover:text-[var(--gold)] cursor-pointer transition-colors">
+              {link.name}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
 
-        <div className="grid grid-cols-2 md:grid-cols-6 gap-6 sm:gap-8">
+  return (
+    <footer className="bg-[var(--navy)]">
+      <div className="max-w-7xl mx-auto px-[5%] pt-14 pb-8">
+        <div className="grid grid-cols-2 md:grid-cols-6 gap-6 sm:gap-10 pb-10 border-b border-white/10 mb-7">
           {/* Brand column */}
           <div className="col-span-2">
             <Link href="/" className="flex items-center mb-4 cursor-pointer">
@@ -72,18 +86,18 @@ export function Footer() {
                 alt="POLO SIM - One Sim One World"
                 width={360}
                 height={120}
-                className="h-16 sm:h-20 md:h-28 w-auto brightness-110"
+                className="h-14 sm:h-16 w-auto brightness-110"
               />
             </Link>
-            <p className="text-[hsl(215_20%_60%)] text-sm mb-6 max-w-xs leading-relaxed">
+            <p className="text-[13px] text-white/50 leading-[1.7] mb-6 max-w-[220px]">
               {t('description')}
             </p>
-            <div className="flex gap-3">
+            <div className="flex gap-2.5">
               {socialLinks.map((social) => (
                 <a
                   key={social.name}
                   href={social.href}
-                  className={`w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-[hsl(215_20%_55%)] cursor-pointer transition-all ${social.hoverColor}`}
+                  className="w-[34px] h-[34px] rounded-lg bg-white/[0.08] flex items-center justify-center text-white/60 cursor-pointer transition-all hover:bg-[var(--gold)] hover:text-white"
                   aria-label={social.name}
                 >
                   <social.icon className="w-4 h-4" />
@@ -96,16 +110,16 @@ export function Footer() {
           {categories ? (
             categories.map((category) => (
               <div key={category.id}>
-                <h4 className="font-semibold mb-3 sm:mb-4 text-sm sm:text-base text-cyan-400">{category.title}</h4>
-                <ul className="space-y-2 sm:space-y-3">
+                <h5 className="text-[13px] font-bold text-white mb-4">{category.title}</h5>
+                <ul className="flex flex-col gap-2.5">
                   {category.children?.map((link) => (
                     <li key={link.id}>
                       {link.url.startsWith('http') ? (
-                        <a href={link.url} target={link.target} className="text-xs sm:text-sm text-[hsl(215_20%_55%)] hover:text-white cursor-pointer transition-colors">
+                        <a href={link.url} target={link.target} className="text-[13px] text-white/50 hover:text-[var(--gold)] cursor-pointer transition-colors">
                           {link.title}
                         </a>
                       ) : (
-                        <Link href={link.url} className="text-xs sm:text-sm text-[hsl(215_20%_55%)] hover:text-white cursor-pointer transition-colors">
+                        <Link href={link.url} className="text-[13px] text-white/50 hover:text-[var(--gold)] cursor-pointer transition-colors">
                           {link.title}
                         </Link>
                       )}
@@ -116,71 +130,26 @@ export function Footer() {
             ))
           ) : (
             <>
-              <div>
-                <h4 className="font-semibold mb-3 sm:mb-4 text-sm sm:text-base text-cyan-400">{t('product')}</h4>
-                <ul className="space-y-2 sm:space-y-3">
-                  {defaultFooterLinks.product.map((link) => (
-                    <li key={link.name}>
-                      <Link href={link.href} className="text-xs sm:text-sm text-[hsl(215_20%_55%)] hover:text-white cursor-pointer transition-colors">
-                        {link.name}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div>
-                <h4 className="font-semibold mb-3 sm:mb-4 text-sm sm:text-base text-cyan-400">{t('company')}</h4>
-                <ul className="space-y-2 sm:space-y-3">
-                  {defaultFooterLinks.company.map((link) => (
-                    <li key={link.name}>
-                      <Link href={link.href} className="text-xs sm:text-sm text-[hsl(215_20%_55%)] hover:text-white cursor-pointer transition-colors">
-                        {link.name}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div>
-                <h4 className="font-semibold mb-3 sm:mb-4 text-sm sm:text-base text-cyan-400">{t('support')}</h4>
-                <ul className="space-y-2 sm:space-y-3">
-                  {defaultFooterLinks.support.map((link) => (
-                    <li key={link.name}>
-                      <Link href={link.href} className="text-xs sm:text-sm text-[hsl(215_20%_55%)] hover:text-white cursor-pointer transition-colors">
-                        {link.name}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div>
-                <h4 className="font-semibold mb-3 sm:mb-4 text-sm sm:text-base text-cyan-400">{t('legal')}</h4>
-                <ul className="space-y-2 sm:space-y-3">
-                  {defaultFooterLinks.legal.map((link) => (
-                    <li key={link.name}>
-                      <Link href={link.href} className="text-xs sm:text-sm text-[hsl(215_20%_55%)] hover:text-white cursor-pointer transition-colors">
-                        {link.name}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              {renderColumn(t('product'), defaultFooterLinks.product)}
+              {renderColumn(t('company'), defaultFooterLinks.company)}
+              {renderColumn(t('support'), defaultFooterLinks.support)}
+              {renderColumn(t('legal'), defaultFooterLinks.legal)}
             </>
           )}
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-10 sm:mt-16 pt-6 sm:pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-3 sm:gap-4">
-          <p className="text-xs sm:text-sm text-[hsl(215_20%_45%)] text-center md:text-left">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-3">
+          <p className="text-[12px] text-white/35">
             {t('copyright', { year: new Date().getFullYear() })}
           </p>
-          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4 text-xs sm:text-sm text-[hsl(215_20%_45%)]">
+          <div className="flex flex-wrap items-center justify-center gap-4 text-[12px] text-white/40">
             <span className="flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+              <span className="text-[var(--gold)] text-[8px]">●</span>
               {t('bottom.available')}
             </span>
-            <span className="hidden sm:inline text-white/15">|</span>
             <span className="flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
+              <span className="text-[var(--gold)] text-[8px]">●</span>
               {t('bottom.secure')}
             </span>
           </div>

@@ -1,7 +1,6 @@
 "use client";
 
-import { Smartphone, Signal, Globe, Wifi, ArrowRight, Users, Gift } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Smartphone, Signal, Users, Gift, ArrowRight } from "lucide-react";
 import { useRouter } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
 
@@ -9,84 +8,67 @@ export function PlansRegionsTabs() {
   const router = useRouter();
   const t = useTranslations('AccountBenefits');
 
+  const benefits = [
+    {
+      icon: "📦",
+      title: t('trackOrders.title'),
+      description: t('trackOrders.description'),
+      iconBg: "bg-[#FFF0E0]",
+    },
+    {
+      icon: "📊",
+      title: t('monitorUsage.title'),
+      description: t('monitorUsage.description'),
+      iconBg: "bg-[#E0F5F0]",
+    },
+    {
+      icon: "🤝",
+      title: t('affiliateProgram.title'),
+      description: t('affiliateProgram.description'),
+      iconBg: "bg-[#EDE8FF]",
+    },
+    {
+      icon: "🎁",
+      title: t('exclusiveCampaigns.title'),
+      description: t('exclusiveCampaigns.description'),
+      iconBg: "bg-[#FFE8EE]",
+    },
+  ];
+
   return (
-    <section className="py-16 sm:py-24 px-4 relative bg-gray-300">
-      {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background via-card/20 to-background" />
-      
-      <div className="relative max-w-5xl mx-auto">
+    <section className="py-16 sm:py-[72px] px-[5%] bg-white text-center">
+      <div className="max-w-[900px] mx-auto">
         {/* Section header */}
-        <div className="text-center mb-10 sm:mb-12">
-          <h2 className="text-3xl sm:text-4xl font-bold mb-3 sm:mb-4 text-foreground">
-            {t('title')}
-          </h2>
-          <p className="text-muted-foreground text-base sm:text-lg max-w-2xl mx-auto px-4">
-            {t('subtitle')}
-          </p>
-        </div>
+        <h2 className="text-[32px] font-extrabold mb-3 text-[var(--text-dark)]">
+          {t('title')}
+        </h2>
+        <p className="text-[var(--gray-text)] text-base max-w-[480px] mx-auto mb-12 leading-[1.6]">
+          {t('subtitle')}
+        </p>
 
         {/* Benefits Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8">
-          {/* Track Orders */}
-          <div className="group relative overflow-hidden rounded-xl sm:rounded-2xl border border-border/50 bg-card/30 backdrop-blur-sm p-5 sm:p-6 transition-all duration-300 hover:border-primary/50 hover:bg-card/50">
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-            <div className="relative z-10">
-              <div className="w-12 h-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
-                <Smartphone className="w-6 h-6 text-primary" />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
+          {benefits.map((benefit) => (
+            <div
+              key={benefit.title}
+              className="bg-[var(--gray-bg)] rounded-2xl p-6 text-left"
+            >
+              <div className={`w-11 h-11 rounded-xl ${benefit.iconBg} flex items-center justify-center text-xl mb-3.5`}>
+                {benefit.icon}
               </div>
-              <h3 className="text-base font-semibold mb-2 text-foreground">{t('trackOrders.title')}</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">{t('trackOrders.description')}</p>
+              <h4 className="text-sm font-bold text-[var(--text-dark)] mb-2 font-['Sora']">{benefit.title}</h4>
+              <p className="text-[13px] text-[var(--gray-text)] leading-[1.6]">{benefit.description}</p>
             </div>
-          </div>
-
-          {/* Monitor Usage */}
-          <div className="group relative overflow-hidden rounded-xl sm:rounded-2xl border border-border/50 bg-card/30 backdrop-blur-sm p-5 sm:p-6 transition-all duration-300 hover:border-emerald-500/50 hover:bg-card/50">
-            <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-            <div className="relative z-10">
-              <div className="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mb-4 group-hover:bg-emerald-500/20 transition-colors">
-                <Signal className="w-6 h-6 text-emerald-500" />
-              </div>
-              <h3 className="text-base font-semibold mb-2 text-foreground">{t('monitorUsage.title')}</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">{t('monitorUsage.description')}</p>
-            </div>
-          </div>
-
-          {/* Affiliate Program */}
-          <div className="group relative overflow-hidden rounded-xl sm:rounded-2xl border border-border/50 bg-card/30 backdrop-blur-sm p-5 sm:p-6 transition-all duration-300 hover:border-amber-500/50 hover:bg-card/50">
-            <div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-            <div className="relative z-10">
-              <div className="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center mb-4 group-hover:bg-amber-500/20 transition-colors">
-                <Users className="w-6 h-6 text-amber-500" />
-              </div>
-              <h3 className="text-base font-semibold mb-2 text-foreground">{t('affiliateProgram.title')}</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">{t('affiliateProgram.description')}</p>
-            </div>
-          </div>
-
-          {/* Exclusive Campaigns */}
-          <div className="group relative overflow-hidden rounded-xl sm:rounded-2xl border border-border/50 bg-card/30 backdrop-blur-sm p-5 sm:p-6 transition-all duration-300 hover:border-rose-500/50 hover:bg-card/50">
-            <div className="absolute inset-0 bg-gradient-to-br from-rose-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-            <div className="relative z-10">
-              <div className="w-12 h-12 rounded-xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center mb-4 group-hover:bg-rose-500/20 transition-colors">
-                <Gift className="w-6 h-6 text-rose-500" />
-              </div>
-              <h3 className="text-base font-semibold mb-2 text-foreground">{t('exclusiveCampaigns.title')}</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">{t('exclusiveCampaigns.description')}</p>
-            </div>
-          </div>
+          ))}
         </div>
 
         {/* CTA Button */}
-        <div className="flex justify-center">
-          <Button 
-            size="lg"
-            className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 gap-2"
-            onClick={() => router.push("/sign-in")}
-          >
-            {t('createAccount')}
-            <ArrowRight className="w-4 h-4" />
-          </Button>
-        </div>
+        <button
+          className="inline-flex items-center gap-2 bg-[var(--gold)] text-white border-none rounded-3xl px-8 py-3.5 font-['Sora'] font-bold text-[15px] cursor-pointer hover:bg-[var(--gold-light)] hover:translate-y-[-2px] hover:shadow-[0_8px_24px_rgba(201,168,76,0.3)] transition-all"
+          onClick={() => router.push("/sign-in")}
+        >
+          {t('createAccount')} ›
+        </button>
       </div>
     </section>
   );

@@ -1,12 +1,8 @@
 "use client";
 
 import {
-  MessageCircle, Mail, Phone, FileText, HelpCircle,
-  ChevronDown, ChevronRight, Search, Clock,
-  Wifi, Smartphone, CreditCard, Globe, Settings,
-  AlertCircle, Sparkles, ArrowRight, Activity
+  MessageCircle, Search, ChevronDown, ChevronRight,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
@@ -16,130 +12,11 @@ import { useEffect, useState } from "react";
 import { faqService, type Faq } from "@/lib/services";
 import { Skeleton } from "@/components/ui/skeleton";
 
-const supportCategories = [
-  {
-    icon: Smartphone,
-    title: "Installation & Setup",
-    description: "Step-by-step guides for eSIM activation",
-    articles: 12,
-    color: "from-blue-500/20 to-cyan-500/20",
-    borderColor: "group-hover:border-cyan-500/50",
-    iconColor: "text-cyan-400"
-  },
-  {
-    icon: Wifi,
-    title: "Connectivity",
-    description: "Troubleshoot network and speed problems",
-    articles: 8,
-    color: "from-emerald-500/20 to-teal-500/20",
-    borderColor: "group-hover:border-emerald-500/50",
-    iconColor: "text-emerald-400"
-  },
-  {
-    icon: CreditCard,
-    title: "Billing & Plans",
-    description: "Payments, refunds, and data usage",
-    articles: 10,
-    color: "from-purple-500/20 to-indigo-500/20",
-    borderColor: "group-hover:border-purple-500/50",
-    iconColor: "text-purple-400"
-  },
-  {
-    icon: Globe,
-    title: "Coverage",
-    description: "Global destinations and network partners",
-    articles: 15,
-    color: "from-orange-500/20 to-amber-500/20",
-    borderColor: "group-hover:border-orange-500/50",
-    iconColor: "text-orange-400"
-  },
-  {
-    icon: Settings,
-    title: "My Account",
-    description: "Manage orders and profile settings",
-    articles: 6,
-    color: "from-rose-500/20 to-pink-500/20",
-    borderColor: "group-hover:border-rose-500/50",
-    iconColor: "text-rose-400"
-  },
-  {
-    icon: AlertCircle,
-    title: "Troubleshooting",
-    description: "Technical issues and bug reports",
-    articles: 4,
-    color: "from-sky-500/20 to-blue-500/20",
-    borderColor: "group-hover:border-sky-500/50",
-    iconColor: "text-sky-400"
-  },
-];
-
-const popularArticles = [
-  { title: "How to install an eSIM on iPhone", icon: Smartphone },
-  { title: "How to install an eSIM on Android", icon: Smartphone },
-  { title: "My eSIM is not connecting to the network", icon: Wifi },
-  { title: "How to check remaining data balance", icon: FileText },
-  { title: "Can I use eSIM and physical SIM together?", icon: Sparkles },
-  { title: "How to top up my existing eSIM", icon: CreditCard },
-];
-
-const faqs = [
-  {
-    category: "General",
-    questions: [
-      {
-        q: "What is an eSIM and how does it work?",
-        a: "An eSIM (embedded SIM) is a digital SIM that allows you to activate a cellular plan without using a physical SIM card. It's built into your device and can be programmed with different carrier profiles.",
-      },
-      {
-        q: "Is my device compatible with eSIM?",
-        a: "Most smartphones released after 2018 support eSIM, including iPhone XS and newer, Samsung Galaxy S20+, and Google Pixel 3+. Check your device settings for 'eSIM' or 'Add Cellular Plan'.",
-      },
-      {
-        q: "How quickly will I receive my eSIM?",
-        a: "Your eSIM QR code is delivered instantly via email immediately after your purchase is confirmed. No waiting for physical delivery.",
-      },
-    ],
-  },
-  {
-    category: "Technical",
-    questions: [
-      {
-        q: "How do I activate roaming for my eSIM?",
-        a: "Go to your device settings, select the POLO SIM profile, and ensure 'Data Roaming' is toggled ON. This is required for our global data plans to function.",
-      },
-      {
-        q: "Can I use my eSIM on multiple devices?",
-        a: "No, an eSIM profile can typically only be installed once. Deleting it from a device usually renders the profile invalid. Please install it on the primary device you intend to use.",
-      },
-    ],
-  },
-];
-
-const contactMethods = [
-  {
-    icon: MessageCircle,
-    title: "24/7 Live Chat",
-    description: "Real-time support via chat",
-    badge: "Fastest",
-    action: "Launch Chat",
-    primary: true,
-  },
-  {
-    icon: Mail,
-    title: "Email Support",
-    description: "support@polosim.com",
-    badge: "< 2h response",
-    action: "Send Email",
-    primary: false,
-  },
-  {
-    icon: Phone,
-    title: "Direct Call",
-    description: "+1 (800) POLO-SIM",
-    badge: "VIP Line",
-    action: "Call Now",
-    primary: false,
-  },
+const quickLinks = [
+  { icon: "📖", title: "Kurulum Rehberi", desc: "eSIM nasıl kurulur adım adım", href: "/how-it-works" },
+  { icon: "📦", title: "Sipariş Durumu", desc: "Siparişinizi takip edin", href: "#" },
+  { icon: "📶", title: "Bağlantı Sorunu", desc: "Bağlantı sorunlarını giderin", href: "#" },
+  { icon: "💳", title: "Ödeme ve İade", desc: "Ödeme ve iade politikası", href: "#" },
 ];
 
 export default function SupportPage() {
@@ -152,9 +29,9 @@ export default function SupportPage() {
 
   useEffect(() => {
     setIsLoading(true);
-    faqService.getFaqs(locale)
-      .then(data => setDynamicFaqs(data))
-      .catch(err => console.error("Failed to fetch FAQs:", err))
+    faqService.getAll(locale)
+      .then((data: Faq[]) => setDynamicFaqs(data))
+      .catch((err: Error) => console.error("Failed to fetch FAQs:", err))
       .finally(() => setIsLoading(false));
   }, [locale]);
 
@@ -165,236 +42,135 @@ export default function SupportPage() {
   const renderFaqs = () => {
     if (isLoading) {
       return (
-        <div className="space-y-4">
+        <div className="flex flex-col gap-2">
           {[1, 2, 3, 4, 5].map(i => (
-            <Skeleton key={i} className="h-16 w-full rounded-2xl" />
+            <Skeleton key={i} className="h-16 w-full rounded-xl" />
           ))}
         </div>
       );
     }
 
-    if (dynamicFaqs.length > 0) {
-      return (
-        <div className="space-y-4">
-          {dynamicFaqs.map((faq, index) => {
-             const key = `faq-dynamic-${faq.id}`;
-             const isExpanded = expandedFaq === key;
-             return (
-               <div
-                 key={key}
-                 className={`rounded-2xl border transition-all duration-300 ${
-                   isExpanded
-                     ? "border-primary/40 bg-card/80"
-                     : "border-border/50 bg-card/60"
-                 }`}
-               >
-                 <button
-                   onClick={() => toggleFaq(key)}
-                   className="w-full flex items-center justify-between p-6 text-left"
-                 >
-                   <span
-                     className={`font-semibold text-lg ${
-                       isExpanded ? "text-primary" : "text-foreground"
-                     }`}
-                   >
-                     {faq.question}
-                   </span>
-                   <div
-                     className={`w-8 h-8 rounded-full border flex items-center justify-center transition-all ${
-                       isExpanded
-                         ? "bg-primary border-primary rotate-180"
-                         : "border-border/50 bg-card"
-                     }`}
-                   >
-                     <ChevronDown
-                       className={`w-4 h-4 ${
-                         isExpanded ? "text-primary-foreground" : "text-muted-foreground"
-                       }`}
-                     />
-                   </div>
-                 </button>
-                 {isExpanded && (
-                   <div className="px-6 pb-6 animate-in slide-in-from-top-2 duration-300">
-                     <div 
-                        className="text-muted-foreground leading-relaxed text-base prose prose-sm dark:prose-invert max-w-none"
-                        dangerouslySetInnerHTML={{ __html: faq.answer }}
-                      />
-                   </div>
-                 )}
-               </div>
-             );
-          })}
-        </div>
-      );
-    }
+    const faqItems = dynamicFaqs.length > 0
+      ? dynamicFaqs.map((faq, index) => ({
+          key: `faq-dynamic-${faq.id}`,
+          question: faq.question,
+          answer: faq.answer,
+          isHtml: true,
+        }))
+      : ["general.q1", "general.q2", "general.q3", "technical.q1", "technical.q2"].map((faqKey, index) => ({
+          key: `faq-static-${index}`,
+          question: t(`faq.${faqKey}.question`),
+          answer: t(`faq.${faqKey}.answer`),
+          isHtml: false,
+        }));
 
-    // Fallback to static
     return (
-      <div className="space-y-4">
-        {["general.q1", "general.q2", "general.q3", "technical.q1", "technical.q2"].map(
-          (faqKey, index) => {
-            const key = `faq-static-${index}`;
-            const isExpanded = expandedFaq === key;
-            return (
-              <div
-                key={key}
-                className={`rounded-2xl border transition-all duration-300 ${
-                  isExpanded
-                    ? "border-primary/40 bg-card/80"
-                    : "border-border/50 bg-card/60"
-                }`}
+      <div className="max-w-[760px] mx-auto flex flex-col gap-2">
+        {faqItems.map((faq) => {
+          const isExpanded = expandedFaq === faq.key;
+          return (
+            <div
+              key={faq.key}
+              className={`bg-white rounded-xl border overflow-hidden ${
+                isExpanded ? "border-[var(--gold)]/30" : "border-[var(--gray-mid)]"
+              }`}
+            >
+              <button
+                onClick={() => toggleFaq(faq.key)}
+                className="w-full text-left bg-transparent border-none py-[18px] px-5 font-['Sora'] text-[15px] font-semibold text-[var(--text-dark)] cursor-pointer flex justify-between items-center gap-4"
               >
-                <button
-                  onClick={() => toggleFaq(key)}
-                  className="w-full flex items-center justify-between p-6 text-left"
-                >
-                  <span
-                    className={`font-semibold text-lg ${
-                      isExpanded ? "text-primary" : "text-foreground"
-                    }`}
-                  >
-                    {t(`faq.${faqKey}.question`)}
-                  </span>
-                  <div
-                    className={`w-8 h-8 rounded-full border flex items-center justify-center transition-all ${
-                      isExpanded
-                        ? "bg-primary border-primary rotate-180"
-                        : "border-border/50 bg-card"
-                    }`}
-                  >
-                    <ChevronDown
-                      className={`w-4 h-4 ${
-                        isExpanded ? "text-primary-foreground" : "text-muted-foreground"
-                      }`}
-                    />
-                  </div>
-                </button>
-                {isExpanded && (
-                  <div className="px-6 pb-6 animate-in slide-in-from-top-2 duration-300">
-                    <p className="text-muted-foreground leading-relaxed text-base">
-                      {t(`faq.${faqKey}.answer`)}
-                    </p>
-                  </div>
-                )}
-              </div>
-            );
-          }
-        )}
+                {faq.question}
+                <span className={`w-6 h-6 rounded-full bg-[var(--gray-bg)] flex items-center justify-center text-[12px] shrink-0 transition-transform ${isExpanded ? "rotate-180" : ""}`}>
+                  ▾
+                </span>
+              </button>
+              {isExpanded && (
+                <div className="px-5 pb-[18px] text-sm text-[var(--gray-text)] leading-[1.7]">
+                  {faq.isHtml ? (
+                    <div dangerouslySetInnerHTML={{ __html: faq.answer }} />
+                  ) : (
+                    <p>{faq.answer}</p>
+                  )}
+                </div>
+              )}
+            </div>
+          );
+        })}
       </div>
     );
   };
 
   return (
-    <main className="min-h-screen bg-slate-100">
+    <main className="min-h-screen bg-white">
       <Navbar />
 
       {/* Hero Section */}
-      <section className="pt-40 pb-20 px-4 relative overflow-hidden bg-gray-100">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(14,116,144,0.04)_1px,transparent_1px),linear-gradient(to_bottom,rgba(14,116,144,0.04)_1px,transparent_1px)] bg-[size:40px_40px]" />
-        <div className="absolute top-20 left-10 w-48 h-48 bg-primary/10 rounded-full blur-3xl" />
+      <section className="bg-[var(--navy)] pt-14 pb-12 px-[5%] text-center relative overflow-hidden">
+        <div className="inline-block bg-[rgba(201,168,76,0.15)] text-[var(--gold)] border border-[rgba(201,168,76,0.3)] rounded-full px-4 py-1.5 text-[12px] font-bold tracking-[0.5px] uppercase mb-5">
+          {t("hero.badge")}
+        </div>
+        <h1 className="text-4xl md:text-[36px] font-extrabold text-white mb-2 tracking-tight">{t("hero.title")}</h1>
+        <p className="text-[15px] text-white/60 mb-8 leading-[1.6] max-w-lg mx-auto">
+          {t("hero.subtitle")}
+        </p>
 
-        <div className="relative z-10 max-w-4xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-card/50 border border-border/50 backdrop-blur-sm mb-6">
-            <Sparkles className="w-4 h-4 text-primary" />
-            <span className="text-sm font-medium text-muted-foreground">
-              {t("hero.badge")}
-            </span>
-          </div>
-          <h1 className="text-4xl md:text-6xl font-black text-foreground mb-6 tracking-tight">
-            {t("hero.title")}
-          </h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed">
-            {t("hero.subtitle")}
-          </p>
-
-          {/* Search Bar */}
-          <div className="max-w-2xl mx-auto group">
-            <div className="relative bg-card/80 backdrop-blur-xl border border-border/50 rounded-2xl p-2 transition-all duration-300 group-focus-within:border-primary/50 group-focus-within:bg-card shadow-2xl overflow-hidden">
-              <div className="absolute inset-x-0 h-[1px] top-0 bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
-              <div className="flex items-center gap-3">
-                <div className="flex items-center gap-3 flex-1 pl-4">
-                  <Search className="w-5 h-5 text-muted-foreground" />
-                  <Input
-                    type="text"
-                    placeholder={t("hero.searchPlaceholder")}
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="border-0 bg-transparent focus-visible:ring-0 text-foreground placeholder:text-muted-foreground text-lg py-6"
-                  />
-                </div>
-                <Button className="bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-6 rounded-xl font-bold transition-transform active:scale-95 shadow-lg shadow-primary/20">
-                  {t("hero.searchButton")}
-                </Button>
-              </div>
-            </div>
-          </div>
-          <div className="mt-6 flex justify-center">
-            <Link
-              href="/how-it-works"
-              className="inline-flex items-center gap-2 text-sm font-semibold text-amber-600 hover:text-amber-700"
-            >
-              {t("hero.installationLink")}
-              <ChevronRight className="w-4 h-4" />
-            </Link>
-          </div>
+        {/* Search Bar */}
+        <div className="max-w-[520px] mx-auto flex items-center bg-white rounded-3xl pl-5 pr-1.5 py-1.5 gap-2">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="text-[#9CA3AF] shrink-0"><circle cx="6.5" cy="6.5" r="5" stroke="currentColor" strokeWidth="1.5"/><path d="M11 11l3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
+          <Input
+            type="text"
+            placeholder={t("hero.searchPlaceholder")}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="border-0 bg-transparent focus-visible:ring-0 text-[var(--text-dark)] placeholder:text-[#9CA3AF] text-[15px] flex-1"
+          />
+          <button className="bg-[var(--gold)] text-white border-none rounded-2xl px-6 py-2.5 font-['Sora'] font-bold text-sm cursor-pointer whitespace-nowrap hover:bg-[var(--gold-light)] transition-colors">
+            {t("hero.searchButton")}
+          </button>
         </div>
       </section>
 
-      {/* Main Content Grid */}
-      <section className="relative z-10 py-20 px-4">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-
-            {/* Left Column: FAQ */}
-            <div className="lg:col-span-8 space-y-16">
-              <div className="pt-8">
-                <h2 className="text-2xl font-bold text-foreground mb-8 flex items-center gap-3">
-                  <div className="w-1 h-8 bg-primary rounded-full" />
-                  {t("sections.commonQuestions")}
-                </h2>
-                <div className="space-y-4">
-                  {renderFaqs()}
-                </div>
+      {/* Quick Links */}
+      <section className="bg-white py-8 px-[5%] border-b border-[var(--gray-mid)]">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 max-w-7xl mx-auto">
+          {quickLinks.map((ql) => (
+            <Link
+              key={ql.title}
+              href={ql.href}
+              className="flex items-center gap-3 bg-[var(--gray-bg)] rounded-xl p-4 cursor-pointer transition-all border-[1.5px] border-transparent hover:border-[var(--gold)] hover:bg-white no-underline"
+            >
+              <div className="text-[22px] w-10 h-10 bg-white rounded-lg flex items-center justify-center shrink-0">
+                {ql.icon}
               </div>
-            </div>
-
-            {/* Right Column: Sidebar */}
-            <div className="lg:col-span-4 space-y-8">
-              <div className="p-8 rounded-3xl bg-gradient-to-br from-primary/10 via-primary/5 to-white border border-primary/10 backdrop-blur-xl relative overflow-hidden group">
-                <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:animate-pulse">
-                  <MessageCircle className="w-24 h-24 text-primary" />
-                </div>
-                <h3 className="text-2xl font-bold text-foreground mb-2 italic">
-                  {t("contact.title")}
-                </h3>
-                <p className="text-muted-foreground mb-8">{t("contact.subtitle")}</p>
-
-                <div className="space-y-4">
-                  <a
-                    href={t("contact.whatsappUrl")}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="w-full flex items-center gap-4 p-4 rounded-xl border bg-primary border-primary text-primary-foreground hover:scale-[1.02] shadow-xl shadow-primary/20 transition-all duration-300"
-                    aria-label={t("contact.methods.liveChat.action")}
-                  >
-                    <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-white/20">
-                      <MessageCircle className="w-5 h-5 text-white" />
-                    </div>
-                    <div className="text-left flex-1">
-                      <div className="text-sm font-bold">
-                        {t("contact.methods.liveChat.title")}
-                      </div>
-                      <div className="text-[10px] font-medium opacity-70 text-blue-100">
-                        {t("contact.methods.liveChat.badge")}
-                      </div>
-                    </div>
-                    <ArrowRight className="w-4 h-4 opacity-50" />
-                  </a>
-                </div>
+              <div>
+                <h4 className="text-sm font-bold text-[var(--text-dark)] mb-0.5">{ql.title}</h4>
+                <p className="text-[12px] text-[var(--gray-text)]">{ql.desc}</p>
               </div>
+            </Link>
+          ))}
+        </div>
+      </section>
 
-            </div>
-          </div>
+      {/* FAQ Section */}
+      <section className="bg-[var(--gray-bg)] py-16 px-[5%]">
+        <h2 className="text-[26px] font-extrabold text-center mb-10 text-[var(--text-dark)]">
+          {t("sections.commonQuestions")}
+        </h2>
+        {renderFaqs()}
+
+        {/* WhatsApp Card */}
+        <div className="bg-white border-[1.5px] border-[var(--gray-mid)] rounded-3xl p-8 text-center max-w-[480px] mx-auto mt-10">
+          <span className="text-[40px] block mb-3">💬</span>
+          <h3 className="text-[18px] font-bold mb-2 text-[var(--text-dark)]">{t("contact.title")}</h3>
+          <p className="text-sm text-[var(--gray-text)] mb-6 leading-[1.6]">{t("contact.subtitle")}</p>
+          <a
+            href={t("contact.whatsappUrl")}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-2 bg-[#25D366] text-white border-none rounded-3xl px-7 py-3 font-['Sora'] font-bold text-sm cursor-pointer hover:bg-[#1ebe5b] hover:translate-y-[-2px] transition-all no-underline"
+          >
+            {t("contact.methods.liveChat.title")}
+          </a>
         </div>
       </section>
 

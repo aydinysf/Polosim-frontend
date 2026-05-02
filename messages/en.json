@@ -29,7 +29,12 @@
     "popularRegions": "Popular Regions",
     "viewAllRegions": "View All Regions",
     "plansAvailable": "eSIM Plans Available",
-    "countriesCount": "{count}+ countries"
+    "countriesCount": "{count}+ countries",
+    "mainHeading": "Explore the World with <gold>eSIM</gold> Freedom, Say Goodbye to <gold>Roaming</gold> Fees.",
+    "searchResultsTitle": "Results for \"{query}\"",
+    "loadingPlans": "Loading plans...",
+    "noResultsFound": "No matching plans found.",
+    "viewAllPlans": "View all plans"
   },
   "Common": {
     "instantActivation": "Instant Activation",
@@ -420,8 +425,19 @@
       "orderSummary": "Order Summary",
       "total": "Total",
       "pay": "Pay ({amount})",
-      "processing": "Processing..."
+      "processing": "Processing...",
+      "checkout": "Checkout"
     }
+  },
+  "Cart": {
+    "title": "Your Shopping Cart",
+    "empty": "Your cart is empty",
+    "backToPlans": "Back to Plans",
+    "total": "Total Amount",
+    "checkout": "Proceed to Checkout",
+    "items": "Items",
+    "summary": "Order Summary",
+    "secureCheckout": "Secure Checkout • SSL Encrypted"
   },
   "VerifyEmail": {
     "title": "Verify Your Email",

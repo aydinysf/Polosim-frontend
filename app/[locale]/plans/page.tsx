@@ -368,31 +368,27 @@ export default function PlansPage() {
       <Navbar />
 
       {/* Hero Section */}
-      <section className="pt-40 pb-12 px-4 relative overflow-hidden">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(14,116,144,0.04)_1px,transparent_1px),linear-gradient(to_bottom,rgba(14,116,144,0.04)_1px,transparent_1px)] bg-[size:40px_40px]" />
-        <div className="absolute top-20 left-10 w-48 h-48 bg-primary/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 right-10 w-64 h-64 bg-primary/5 rounded-full blur-3xl" />
+      <section className="bg-[var(--navy)] pt-14 pb-12 px-[5%] relative overflow-hidden text-center">
+
 
         <div className="relative max-w-7xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-card/50 border border-border/50 backdrop-blur-sm mb-6">
-            <Globe className="w-4 h-4 text-primary" />
-            <span className="text-sm text-muted-foreground">{t('hero.destinationsAvailable')}</span>
+          <div className="inline-block bg-[rgba(201,168,76,0.15)] text-[var(--gold)] border border-[rgba(201,168,76,0.3)] rounded-full px-4 py-1.5 text-[12px] font-bold tracking-[0.5px] uppercase mb-5">
+            {t('hero.destinationsAvailable')}
           </div>
-          <h1 className="text-4xl sm:text-5xl font-bold text-foreground mb-4 text-balance">
+          <h1 className="text-[38px] font-extrabold text-white mb-3 tracking-tight">
             {viewMode === "regions" ? t('hero.browseRegions') : t('hero.browsePlans')}
           </h1>
-          <p className="text-muted-foreground max-w-2xl mx-auto mb-8 text-lg">
+          <p className="text-[15px] text-white/60 max-w-[520px] mx-auto mb-8 leading-[1.6]">
             {viewMode === "regions"
               ? t('hero.regionsDescription')
               : t('hero.plansDescription')}
           </p>
 
           {/* Search Bar */}
-          <div className="max-w-xl mx-auto relative z-50">
-            <div className="relative bg-card/80 backdrop-blur-xl border border-border/50 rounded-2xl p-2">
-              <div className="flex items-center gap-3">
-                <div className="flex items-center gap-3 flex-1 pl-4">
-                  <Search className="w-5 h-5 text-muted-foreground" />
+          <div className="max-w-[560px] mx-auto relative z-50">
+            <div className="relative flex items-center bg-white rounded-3xl pl-5 pr-1.5 py-1.5 gap-2">
+                <div className="flex items-center gap-3 flex-1">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="text-[#9CA3AF] shrink-0"><circle cx="6.5" cy="6.5" r="5" stroke="currentColor" strokeWidth="1.5"/><path d="M11 11l3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
                   <Input
                     type="text"
                     placeholder={viewMode === "regions" ? t('search.regionsPlaceholder') : t('search.plansPlaceholder')}
@@ -402,7 +398,7 @@ export default function PlansPage() {
                       setOpenCombobox(true);
                     }}
                     onFocus={() => setOpenCombobox(true)}
-                    className="border-0 bg-transparent focus-visible:ring-0 text-foreground placeholder:text-muted-foreground text-lg"
+                    className="border-0 bg-transparent focus-visible:ring-0 text-[var(--text-dark)] placeholder:text-[#9CA3AF] text-[15px] flex-1"
                   />
                 </div>
               </div>
@@ -748,12 +744,12 @@ export default function PlansPage() {
                     return (
                       <div
                         key={product.id}
-                        className="group relative overflow-hidden rounded-2xl border border-border/50 bg-gray-100/80 dark:bg-gray-900/30 backdrop-blur-sm transition-all duration-300 hover:border-primary/50 hover:bg-gray-200/60 dark:hover:bg-card/50"
+                        className="group relative overflow-hidden rounded-2xl border-[1.5px] border-[var(--gray-mid)] bg-white transition-all duration-200 hover:border-[var(--gold)] hover:translate-y-[-2px] hover:shadow-md cursor-pointer"
                       >
                         {bestSeller && (
                           <div className="absolute top-3 right-3 z-10">
-                            <Badge className="bg-primary/20 text-primary border-primary/30">
-                              <Star className="w-3 h-3 mr-1 fill-primary" />
+                            <Badge className="bg-[rgba(201,168,76,0.15)] text-[var(--gold)] border border-[rgba(201,168,76,0.3)] hover:bg-[rgba(201,168,76,0.2)]">
+                              <Star className="w-3 h-3 mr-1 fill-[var(--gold)]" />
                               {t('labels.bestSeller')}
                             </Badge>
                           </div>
@@ -778,25 +774,25 @@ export default function PlansPage() {
                               );
                             })()}
                             <div>
-                              <h3 className="font-semibold text-foreground">{name}</h3>
-                              <p className="text-2xl font-bold text-primary">{data}</p>
+                              <h3 className="font-bold text-[var(--text-dark)] leading-tight">{name}</h3>
+                              <p className="text-2xl font-extrabold text-[var(--gold)] tracking-tight">{data}</p>
                             </div>
                           </div>
 
                           <div className="space-y-2 mb-4">
-                            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                              <Clock className="w-4 h-4 flex-shrink-0" />
+                            <div className="flex items-center gap-2 text-sm text-[var(--gray-text)] font-medium">
+                              <Clock className="w-4 h-4 text-[var(--gold)] flex-shrink-0" />
                               <span>{validity}</span>
                             </div>
                             {speed && (
-                              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                                <Signal className="w-4 h-4 flex-shrink-0" />
+                              <div className="flex items-center gap-2 text-sm text-[var(--gray-text)] font-medium">
+                                <Signal className="w-4 h-4 text-[var(--gold)] flex-shrink-0" />
                                 <span>{speed}</span>
                               </div>
                             )}
                             {throttle && (
-                              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                                <Wifi className="w-4 h-4 flex-shrink-0" />
+                              <div className="flex items-center gap-2 text-sm text-[var(--gray-text)] font-medium">
+                                <Wifi className="w-4 h-4 text-[var(--gold)] flex-shrink-0" />
                                 <span>{throttle}</span>
                               </div>
                             )}
@@ -812,17 +808,17 @@ export default function PlansPage() {
                             )}
                           </div>
 
-                          <div className="flex items-center justify-between pt-4 border-t border-border/30">
-                            <span className="text-2xl font-bold text-foreground">EUR {product.price}</span>
+                          <div className="flex items-center justify-between pt-4 border-t border-[var(--gray-mid)]">
+                            <span className="text-2xl font-extrabold text-[var(--text-dark)]">€{product.price}</span>
                             <Button
                               size="sm"
-                              className={`transition-all ${addedToCart === product.id ? "bg-emerald-500 hover:bg-emerald-500" : "bg-primary hover:bg-primary/90"} text-primary-foreground`}
+                              className={`rounded-xl px-5 h-10 font-bold transition-all shadow-sm ${addedToCart === product.id ? "bg-emerald-500 hover:bg-emerald-600 text-white" : "bg-[var(--gold)] hover:bg-[var(--gold-light)] text-white"}`}
                               onClick={() => handleAddToCart(product)}
                             >
                               {addedToCart === product.id ? (
-                                <><Check className="w-4 h-4 mr-1" />{t('cta.added')}</>
+                                <><Check className="w-4 h-4 mr-1.5" />{t('cta.added')}</>
                               ) : (
-                                <><ShoppingCart className="w-4 h-4 mr-1" />{t('cta.buy')}</>
+                                <><ShoppingCart className="w-4 h-4 mr-1.5" />{t('cta.buy')}</>
                               )}
                             </Button>
                           </div>
@@ -847,7 +843,7 @@ export default function PlansPage() {
                 return (
                   <button
                     key={region.id}
-                    className={`group relative overflow-hidden rounded-2xl border border-border/40 bg-gradient-to-br ${gradients[index % 4]} backdrop-blur-sm ${borderColors[index % 4]} p-6 text-left transition-all duration-300 hover:scale-[1.02]`}
+                    className="group relative overflow-hidden rounded-2xl border-[1.5px] border-[var(--gray-mid)] bg-white p-6 text-left transition-all duration-200 hover:border-[var(--gold)] hover:translate-y-[-2px] hover:shadow-md cursor-pointer"
                     onClick={() => {
                       setViewMode("plans");
                       setSelectedRegionId(region.id);
@@ -863,11 +859,11 @@ export default function PlansPage() {
                         })()}
                       </span>
                       <div>
-                        <h3 className="text-lg font-bold text-foreground">{regionName}</h3>
+                        <h3 className="text-lg font-bold text-[var(--text-dark)] font-['Sora'] leading-tight">{regionName}</h3>
                         {countryCount > 0 && (
                           <div className="flex items-center gap-1 text-sm text-muted-foreground mt-0.5">
-                            <MapPin className="w-3 h-3" />
-                            <span>{t('labels.countriesCount', { count: countryCount })}</span>
+                            <MapPin className="w-3 h-3 text-[var(--gold)]" />
+                            <span className="text-[var(--gray-text)] font-medium">{t('labels.countriesCount', { count: countryCount })}</span>
                           </div>
                         )}
                       </div>
@@ -904,18 +900,18 @@ export default function PlansPage() {
                       </div>
                     )}
 
-                    <div className="flex items-end justify-between">
+                    <div className="flex items-end justify-between mt-auto">
                       <div>
                         {startingPrice > 0 && (
                           <>
-                            <span className="text-xs text-muted-foreground">{t('labels.from')}</span>
-                            <p className="text-2xl font-bold text-primary">EUR {startingPrice.toFixed(2)}</p>
+                            <span className="text-[11px] text-[var(--gray-text)] font-bold uppercase tracking-wider">{t('labels.from')}</span>
+                            <p className="text-2xl font-extrabold text-[var(--gold)] tracking-tight">€{startingPrice.toFixed(2)}</p>
                           </>
                         )}
                       </div>
-                      <span className="text-sm text-primary font-medium flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                        {t('cta.viewPlans')} <ArrowRight className="w-4 h-4" />
-                      </span>
+                      <div className="w-9 h-9 rounded-full bg-[var(--gray-bg)] flex items-center justify-center text-[var(--gold)] group-hover:bg-[var(--gold)] group-hover:text-white transition-all">
+                        <ArrowRight className="w-4 h-4" />
+                      </div>
                     </div>
                   </button>
                 );

@@ -1,6 +1,6 @@
 "use client";
 
-import { Download, RotateCcw, ArrowLeft } from "lucide-react";
+import { Download, RotateCcw, ArrowLeft, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
@@ -8,7 +8,6 @@ import { Link } from "@/i18n/routing";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { pageService, type Page } from "@/lib/services";
-import { Skeleton } from "@/components/ui/skeleton";
 
 const content = {
     en: {
@@ -122,11 +121,8 @@ export default function RefundPolicyPage() {
     const renderContent = () => {
         if (isLoading) {
             return (
-                <div className="space-y-6">
-                    <Skeleton className="h-8 w-1/2" />
-                    <Skeleton className="h-4 w-full" />
-                    <Skeleton className="h-4 w-full" />
-                    <Skeleton className="h-4 w-3/4" />
+                <div className="flex items-center justify-center py-20">
+                    <Loader2 className="w-8 h-8 animate-spin text-[var(--gold)]" />
                 </div>
             );
         }
@@ -134,18 +130,18 @@ export default function RefundPolicyPage() {
         if (pageData?.content) {
             return (
                 <div 
-                    className="prose dark:prose-invert max-w-none text-muted-foreground leading-relaxed"
+                    className="prose max-w-none prose-h2:text-[var(--text-dark)] prose-h2:text-xl prose-h2:font-bold prose-h2:mt-8 prose-h2:mb-4 prose-p:text-[var(--gray-text)] prose-p:leading-relaxed prose-p:mb-4 font-['DM_Sans']"
                     dangerouslySetInnerHTML={{ __html: pageData.content }}
                 />
             );
         }
 
         return (
-            <div className="space-y-8">
+            <div className="space-y-10">
                 {c.sections.map((section) => (
                     <div key={section.heading}>
-                        <h2 className="text-xl font-semibold text-foreground mb-3">{section.heading}</h2>
-                        <p className="text-muted-foreground leading-relaxed">{section.text}</p>
+                        <h2 className="text-xl font-bold text-[var(--text-dark)] mb-3.5 font-['Sora']">{section.heading}</h2>
+                        <p className="text-[var(--gray-text)] leading-relaxed text-[15px]">{section.text}</p>
                     </div>
                 ))}
             </div>
@@ -153,27 +149,26 @@ export default function RefundPolicyPage() {
     };
 
     return (
-        <main className="min-h-screen bg-background">
+        <main className="min-h-screen bg-white">
             <Navbar />
 
             {/* Hero */}
-            <section className="pt-40 pb-12 px-4 relative overflow-hidden bg-gray-100 dark:bg-zinc-950">
-                <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(14,116,144,0.04)_1px,transparent_1px),linear-gradient(to_bottom,rgba(14,116,144,0.04)_1px,transparent_1px)] bg-[size:40px_40px]" />
-                <div className="absolute top-20 left-10 w-48 h-48 bg-primary/10 rounded-full blur-3xl" />
-                <div className="relative max-w-4xl mx-auto text-center">
-                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-card/50 border border-border/50 backdrop-blur-sm mb-6">
-                        <RotateCcw className="w-4 h-4 text-primary" />
-                        <span className="text-sm text-muted-foreground">{pageData?.title || t('refundPolicy.title')}</span>
-                    </div>
-                    <h1 className="text-4xl font-bold text-foreground mb-3">{pageData?.title || t('refundPolicy.title')}</h1>
-                    <p className="text-muted-foreground mb-6">
-                        {pageData?.updated_at 
-                            ? t('lastUpdated', { date: new Date(pageData.updated_at).toLocaleDateString(locale) })
-                            : t('lastUpdated', { date: c.lastUpdated.split(': ')[1] })
-                        }
-                    </p>
-                    <a href={c.downloadHref} download>
-                        <Button variant="outline" className="gap-2">
+            <section className="bg-[var(--navy)] pt-14 pb-12 px-[5%] text-center">
+                <div className="inline-block bg-[rgba(201,168,76,0.15)] text-[var(--gold)] border border-[rgba(201,168,76,0.3)] rounded-full px-4 py-1.5 text-[12px] font-bold tracking-[0.5px] uppercase mb-5">
+                    Legal Policy
+                </div>
+                <h1 className="text-[38px] font-extrabold text-white mb-3 tracking-tight">
+                    {pageData?.title || t('refundPolicy.title')}
+                </h1>
+                <p className="text-[15px] text-white/60 mb-8">
+                    {pageData?.updated_at 
+                        ? t('lastUpdated', { date: new Date(pageData.updated_at).toLocaleDateString(locale) })
+                        : c.lastUpdated
+                    }
+                </p>
+                <div className="flex justify-center">
+                    <a href={c.downloadHref} download className="no-underline">
+                        <Button className="bg-[var(--gold)] hover:bg-[var(--gold-light)] text-white border-none rounded-3xl px-8 h-12 font-bold transition-all shadow-lg flex items-center gap-2">
                             <Download className="w-4 h-4" />
                             {t('downloadLabel')}
                         </Button>
@@ -182,16 +177,14 @@ export default function RefundPolicyPage() {
             </section>
 
             {/* Content */}
-            <section className="py-12 px-4">
+            <section className="py-16 px-[5%]">
                 <div className="max-w-3xl mx-auto">
                     {renderContent()}
 
-                    <div className="mt-12 pt-8 border-t border-border/50">
-                        <Link href="/">
-                            <Button variant="ghost" className="gap-2 text-primary">
-                                <ArrowLeft className="w-4 h-4" />
-                                {t('backLabel')}
-                            </Button>
+                    <div className="mt-16 pt-8 border-t border-[var(--gray-mid)] text-center">
+                        <Link href="/" className="inline-flex items-center gap-2 text-[var(--gold)] font-bold hover:opacity-70 transition-all no-underline">
+                            <ArrowLeft className="w-4 h-4" />
+                            {t('backLabel')}
                         </Link>
                     </div>
                 </div>

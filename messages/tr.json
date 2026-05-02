@@ -29,7 +29,12 @@
     "popularRegions": "Popüler Bölgeler",
     "viewAllRegions": "Tüm Bölgeleri Gör",
     "plansAvailable": "eSIM Planları Mevcut",
-    "countriesCount": "{count}+ ülke"
+    "countriesCount": "{count}+ ülke",
+    "mainHeading": "Dünyayı <gold>eSIM</gold> Özgürlüğüyle Keşfedin, <gold>Roaming</gold> Ücretlerine Elveda Deyin.",
+    "searchResultsTitle": "\"{query}\" için Sonuçlar",
+    "loadingPlans": "Planlar yükleniyor...",
+    "noResultsFound": "Eşleşen plan bulunamadı.",
+    "viewAllPlans": "Tüm planları gör"
   },
   "Common": {
     "instantActivation": "Anında Aktivasyon",
@@ -420,8 +425,19 @@
       "orderSummary": "Sipariş Özeti",
       "total": "Toplam",
       "pay": "Ödeme Yap ({amount})",
-      "processing": "İşleniyor..."
+      "processing": "İşleniyor...",
+      "checkout": "Ödeme"
     }
+  },
+  "Cart": {
+    "title": "Alışveriş Sepetiniz",
+    "empty": "Sepetiniz boş",
+    "backToPlans": "Planlara Geri Dön",
+    "total": "Toplam Tutar",
+    "checkout": "Ödemeye Devam Et",
+    "items": "Ürünler",
+    "summary": "Sipariş Özeti",
+    "secureCheckout": "Güvenli Ödeme • SSL Şifreleme"
   },
   "VerifyEmail": {
     "title": "E-postanızı Doğrulayın",

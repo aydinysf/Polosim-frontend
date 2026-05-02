@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import {
   User, LogOut, Smartphone, Clock, CheckCircle,
   AlertCircle, ChevronRight, Signal, Calendar,
-  RefreshCw, X, Wifi, Loader2, Copy, Check, Trash2
+  RefreshCw, X, Wifi, Loader2, Copy, Check, Trash2, ArrowRight
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -138,7 +138,6 @@ export default function ProfilePage() {
     }
   };
 
-
   const copyToClipboard = (text: string, type: string) => {
     navigator.clipboard.writeText(text);
     setCopied(type);
@@ -200,15 +199,16 @@ export default function ProfilePage() {
   });
 
   const statusConfig = {
-    active: { label: t('status.active'), color: "bg-emerald-500/10 text-emerald-500 border-emerald-500/20" },
-    upcoming: { label: t('status.upcoming'), color: "bg-amber-500/10 text-amber-500 border-amber-500/20" },
-    expired: { label: t('status.expired'), color: "bg-muted text-muted-foreground border-border/50" },
+    active: { label: t('status.active'), color: "bg-emerald-50 text-emerald-600 border-emerald-200" },
+    upcoming: { label: t('status.upcoming'), color: "bg-amber-50 text-amber-600 border-amber-200" },
+    expired: { label: t('status.expired'), color: "bg-gray-50 text-gray-500 border-gray-200" },
   };
 
   if (authLoading) {
     return (
-      <main className="min-h-screen bg-background flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      <main className="min-h-screen bg-white flex flex-col items-center justify-center gap-4">
+        <Loader2 className="w-10 h-10 animate-spin text-[var(--gold)]" />
+        <p className="text-[var(--gray-text)] font-bold uppercase tracking-widest text-[10px]">Profiliniz Hazırlanıyor...</p>
       </main>
     );
   }
@@ -216,59 +216,68 @@ export default function ProfilePage() {
   if (!isAuthenticated) return null;
 
   return (
-    <main className="min-h-screen bg-background">
+    <main className="min-h-screen bg-white">
       <Navbar />
 
-      <section className="pt-40 pb-20 px-4">
-        <div className="max-w-6xl mx-auto">
-          {/* Profile Header */}
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 mb-10">
-            <div className="flex items-center gap-4">
-              <div className="w-16 h-16 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center">
-                <User className="w-8 h-8 text-primary" />
-              </div>
-              <div>
-                <h1 className="text-2xl font-bold text-foreground">
-                  {user?.name || "User"}
-                </h1>
-                <p className="text-muted-foreground">{user?.email}</p>
-                <p className="text-sm text-muted-foreground mt-1">
+      {/* Hero Header */}
+      <section className="bg-[var(--navy)] pt-14 pb-12 px-[5%]">
+        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
+          <div className="flex items-center gap-5">
+            <div className="w-20 h-20 rounded-full bg-white/10 border-2 border-[var(--gold)]/30 flex items-center justify-center shadow-[0_0_20px_rgba(201,168,76,0.1)]">
+              <User className="w-10 h-10 text-[var(--gold)]" />
+            </div>
+            <div>
+              <h1 className="text-[32px] font-extrabold text-white leading-tight font-['Sora'] tracking-tight">
+                {user?.name || "User"}
+              </h1>
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-1">
+                <p className="text-white/60 font-medium">{user?.email}</p>
+                <span className="w-1 h-1 rounded-full bg-white/30 hidden sm:block" />
+                <p className="text-xs text-[var(--gold)] font-bold uppercase tracking-widest">
                   {user?.created_at ? t('memberSince', { date: new Date(user.created_at).toLocaleDateString(locale === 'tr' ? 'tr-TR' : 'en-US', { month: "long", year: "numeric" }) }) : "N/A"}
                 </p>
               </div>
             </div>
-            <div className="flex items-center gap-3">
-              <Button variant="outline" className="bg-transparent border-border/50" onClick={handleLogout}>
-                <LogOut className="w-4 h-4 mr-2" />
-                {t('logout')}
-              </Button>
-              <Button
-                variant="outline"
-                className="bg-transparent border-red-500/40 text-red-500 hover:bg-red-500/10 hover:border-red-500"
-                onClick={() => setShowDeleteConfirm(true)}
-              >
-                <Trash2 className="w-4 h-4 mr-2" />
-                {t('deleteAccount.button')}
-              </Button>
-            </div>
           </div>
+          <div className="flex items-center gap-3">
+            <Button 
+              variant="outline" 
+              className="bg-transparent border-white/20 text-white hover:bg-white/10 hover:border-white/40 rounded-2xl px-6 h-12 font-bold transition-all" 
+              onClick={handleLogout}
+            >
+              <LogOut className="w-4 h-4 mr-2" />
+              {t('logout')}
+            </Button>
+            <Button
+              variant="outline"
+              className="bg-transparent border-red-500/40 text-red-500 hover:bg-red-500/10 hover:border-red-500 rounded-2xl px-6 h-12 font-bold transition-all"
+              onClick={() => setShowDeleteConfirm(true)}
+            >
+              <Trash2 className="w-4 h-4 mr-2" />
+              {t('deleteAccount.button')}
+            </Button>
+          </div>
+        </div>
+      </section>
 
+      <section className="py-12 px-[5%]">
+        <div className="max-w-6xl mx-auto">
           {/* Verification Warning */}
           {user && !user.email_verified_at && (
-            <div className="mb-8 p-4 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-              <div className="flex items-start gap-3">
-                <div className="p-2 rounded-full bg-amber-500/20 text-amber-500 mt-1">
-                  <AlertCircle className="w-5 h-5" />
+            <div className="mb-10 p-6 rounded-3xl bg-amber-50 border-[1.5px] border-amber-200 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-sm">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-2xl bg-white border border-amber-200 flex items-center justify-center text-amber-500 shadow-sm">
+                  <AlertCircle className="w-6 h-6" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-foreground">{t('verification.title')}</h3>
-                  <p className="text-sm text-muted-foreground mt-1">
+                  <h3 className="font-bold text-[var(--text-dark)] font-['Sora']">{t('verification.title')}</h3>
+                  <p className="text-sm text-[var(--gray-text)] font-medium mt-0.5">
                     {t('verification.message')}
                   </p>
                 </div>
               </div>
-              <Link href={`/verify-email?email=${encodeURIComponent(user.email)}`}>
-                <Button className="bg-amber-500 hover:bg-amber-600 text-white border-none shadow-lg shadow-amber-500/20 whitespace-nowrap">
+              <Link href={`/verify-email?email=${encodeURIComponent(user.email)}`} className="no-underline">
+                <Button className="bg-amber-500 hover:bg-amber-600 text-white border-none rounded-2xl px-8 h-12 font-bold shadow-lg shadow-amber-500/20 whitespace-nowrap">
                   {t('verification.button')}
                 </Button>
               </Link>
@@ -276,66 +285,66 @@ export default function ProfilePage() {
           )}
 
           {/* Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-            <div className="bg-card/60 backdrop-blur-sm border border-border/50 rounded-2xl p-6">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
-                  <Smartphone className="w-6 h-6 text-primary" />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            <div className="bg-white border-[1.5px] border-[var(--gray-mid)] rounded-3xl p-6 shadow-sm hover:border-[var(--gold)]/50 transition-all group">
+              <div className="flex items-center gap-5">
+                <div className="w-14 h-14 rounded-2xl bg-[var(--gray-bg)] flex items-center justify-center text-[var(--gold)] group-hover:bg-[var(--gold)] group-hover:text-white transition-all">
+                  <Smartphone className="w-7 h-7" />
                 </div>
                 <div>
-                  <p className="text-3xl font-bold text-foreground">{packages.length}</p>
-                  <p className="text-sm text-muted-foreground">{t('stats.totalPackages')}</p>
+                  <p className="text-3xl font-extrabold text-[var(--text-dark)] leading-none">{packages.length}</p>
+                  <p className="text-[11px] text-[var(--gray-text)] font-bold uppercase tracking-wider mt-2">{t('stats.totalPackages')}</p>
                 </div>
               </div>
             </div>
-            <div className="bg-card/60 backdrop-blur-sm border border-border/50 rounded-2xl p-6">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl bg-emerald-500/10 flex items-center justify-center">
-                  <CheckCircle className="w-6 h-6 text-emerald-500" />
+            <div className="bg-white border-[1.5px] border-[var(--gray-mid)] rounded-3xl p-6 shadow-sm hover:border-emerald-500/50 transition-all group">
+              <div className="flex items-center gap-5">
+                <div className="w-14 h-14 rounded-2xl bg-emerald-50 flex items-center justify-center text-emerald-500 group-hover:bg-emerald-500 group-hover:text-white transition-all">
+                  <CheckCircle className="w-7 h-7" />
                 </div>
                 <div>
-                  <p className="text-3xl font-bold text-foreground">
+                  <p className="text-3xl font-extrabold text-[var(--text-dark)] leading-none">
                     {packages.filter((p) => p.status === "active").length}
                   </p>
-                  <p className="text-sm text-muted-foreground">{t('stats.activeUnits')}</p>
+                  <p className="text-[11px] text-[var(--gray-text)] font-bold uppercase tracking-wider mt-2">{t('stats.activeUnits')}</p>
                 </div>
               </div>
             </div>
-            <div className="bg-card/60 backdrop-blur-sm border border-border/50 rounded-2xl p-6">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center">
-                  <Wifi className="w-6 h-6 text-blue-500" />
+            <div className="bg-white border-[1.5px] border-[var(--gray-mid)] rounded-3xl p-6 shadow-sm hover:border-blue-500/50 transition-all group">
+              <div className="flex items-center gap-5">
+                <div className="w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center text-blue-500 group-hover:bg-blue-500 group-hover:text-white transition-all">
+                  <Wifi className="w-7 h-7" />
                 </div>
                 <div>
-                  <p className="text-3xl font-bold text-foreground">
-                    ${(user as any)?.wallet_balance || "0.00"}
+                  <p className="text-3xl font-extrabold text-[var(--text-dark)] leading-none">
+                    €{(user as any)?.wallet_balance || "0.00"}
                   </p>
-                  <p className="text-sm text-muted-foreground">{t('stats.walletBalance')}</p>
+                  <p className="text-[11px] text-[var(--gray-text)] font-bold uppercase tracking-wider mt-2">{t('stats.walletBalance')}</p>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Packages Section */}
-          <div className="bg-card/40 backdrop-blur-sm border border-border/50 rounded-3xl p-8">
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 mb-8">
+          <div className="bg-[var(--gray-bg)] rounded-[40px] border-[1.5px] border-[var(--gray-mid)] p-8 sm:p-10">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 mb-10">
               <div>
-                <h2 className="text-2xl font-bold text-foreground">{t('assets.title')}</h2>
-                <p className="text-sm text-muted-foreground mt-1">{t('assets.subtitle')}</p>
+                <h2 className="text-[28px] font-extrabold text-[var(--text-dark)] font-['Sora'] tracking-tight">{t('assets.title')}</h2>
+                <p className="text-[var(--gray-text)] font-medium mt-1">{t('assets.subtitle')}</p>
               </div>
               <div className="flex items-center gap-3">
                 <Button
                   variant="outline"
                   size="sm"
-                  className="bg-transparent"
+                  className="bg-white border-[1.5px] border-[var(--gray-mid)] hover:border-[var(--gold)] hover:text-[var(--gold)] rounded-xl px-5 h-11 font-bold transition-all"
                   onClick={refreshPackageStatus}
                   disabled={isLoading}
                 >
                   <RefreshCw className={`w-4 h-4 mr-2 ${isLoading ? "animate-spin" : ""}`} />
                   {t('assets.refresh')}
                 </Button>
-                <Link href="/plans">
-                  <Button className="bg-primary text-primary-foreground hover:bg-primary/90">
+                <Link href="/plans" className="no-underline">
+                  <Button className="bg-[var(--gold)] hover:bg-[var(--gold-light)] text-white border-none rounded-xl px-6 h-11 font-bold shadow-lg shadow-gold/20 transition-all">
                     {t('assets.buyNewPlan')}
                   </Button>
                 </Link>
@@ -343,25 +352,25 @@ export default function ProfilePage() {
             </div>
 
             {error && (
-              <div className="p-4 rounded-xl bg-destructive/10 border border-destructive/20 text-destructive text-sm mb-6 flex items-center gap-3">
+              <div className="p-4 rounded-2xl bg-red-50 border border-red-100 text-red-500 text-sm mb-8 flex items-center gap-3 font-semibold">
                 <AlertCircle className="w-5 h-5" />
                 {error}
               </div>
             )}
 
             {/* Filter Tabs */}
-            <div className="flex gap-2 mb-8 overflow-x-auto pb-2 scrollbar-none">
+            <div className="flex gap-2.5 mb-10 overflow-x-auto pb-4 scrollbar-none">
               {(["all", "active", "upcoming", "expired"] as PackageStatus[]).map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
-                  className={`px-6 py-2.5 rounded-xl text-sm font-semibold capitalize whitespace-nowrap transition-all duration-200 ${activeTab === tab
-                    ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
-                    : "bg-secondary/40 text-muted-foreground hover:bg-secondary/60"
+                  className={`px-7 py-3 rounded-2xl text-[13px] font-bold uppercase tracking-wider whitespace-nowrap transition-all duration-300 ${activeTab === tab
+                    ? "bg-[var(--gold)] text-white shadow-lg shadow-gold/20"
+                    : "bg-white border-[1.5px] border-[var(--gray-mid)] text-[var(--gray-text)] hover:border-[var(--gold)]/50 hover:text-[var(--text-dark)]"
                     }`}
                 >
                   {t(`tabs.${tab}`)}
-                  <span className={`ml-3 px-2 py-0.5 rounded-lg text-xs ${activeTab === tab ? "bg-white/20" : "bg-muted"}`}>
+                  <span className={`ml-3 px-2 py-0.5 rounded-lg text-[10px] font-extrabold ${activeTab === tab ? "bg-white/20 text-white" : "bg-[var(--gray-bg)] text-[var(--gray-text)]"}`}>
                     {tab === "all" ? packages.length : packages.filter((p) => p.status === tab).length}
                   </span>
                 </button>
@@ -372,16 +381,18 @@ export default function ProfilePage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {isLoading ? (
                 <div className="col-span-full text-center py-20">
-                  <Loader2 className="w-12 h-12 animate-spin text-primary mx-auto mb-4" />
-                  <p className="text-muted-foreground font-medium">{t('messages.loading')}</p>
+                  <Loader2 className="w-12 h-12 animate-spin text-[var(--gold)] mx-auto mb-4" />
+                  <p className="text-[var(--gray-text)] font-bold uppercase tracking-widest text-[10px]">{t('messages.loading')}</p>
                 </div>
               ) : filteredPackages.length === 0 ? (
-                <div className="col-span-full text-center py-20 bg-secondary/20 rounded-3xl border border-dashed border-border/50">
-                  <Smartphone className="w-16 h-16 text-muted-foreground/30 mx-auto mb-4" />
-                  <p className="text-xl font-bold text-foreground">{t('emptyState.title')}</p>
-                  <p className="text-muted-foreground mt-2 max-w-xs mx-auto">{t('emptyState.description')}</p>
-                  <Link href="/plans" className="mt-6 inline-block">
-                    <Button>{t('emptyState.button')}</Button>
+                <div className="col-span-full text-center py-20 bg-white rounded-[32px] border-[1.5px] border-[var(--gray-mid)] shadow-sm">
+                  <Smartphone className="w-16 h-16 text-[var(--gray-text)]/20 mx-auto mb-6" />
+                  <p className="text-xl font-bold text-[var(--text-dark)] font-['Sora']">{t('emptyState.title')}</p>
+                  <p className="text-[var(--gray-text)] mt-2 max-w-xs mx-auto font-medium">{t('emptyState.description')}</p>
+                  <Link href="/plans" className="mt-8 inline-block no-underline">
+                    <Button className="bg-[var(--gold)] hover:bg-[var(--gold-light)] text-white rounded-xl px-8 h-12 font-bold transition-all shadow-lg shadow-gold/20">
+                      {t('emptyState.button')}
+                    </Button>
                   </Link>
                 </div>
               ) : (
@@ -389,12 +400,12 @@ export default function ProfilePage() {
                   <div
                     key={pkg.id}
                     onClick={() => setSelectedPackage(pkg)}
-                    className="group relative flex flex-col p-6 rounded-3xl bg-background/50 border border-border/50 hover:border-primary/40 hover:bg-card/60 transition-all duration-300 cursor-pointer overflow-hidden"
+                    className="group relative flex flex-col p-7 rounded-[32px] bg-white border-[1.5px] border-[var(--gray-mid)] hover:border-[var(--gold)] transition-all duration-300 cursor-pointer shadow-sm hover:shadow-xl hover:translate-y-[-4px] overflow-hidden"
                   >
-                    <div className="flex items-start justify-between mb-6">
+                    <div className="flex items-start justify-between mb-8">
                       <div className="flex items-center gap-4">
                         {pkg.flagUrl ? (
-                          <div className="w-12 h-8 rounded-md overflow-hidden border border-border/50 shadow-sm flex-shrink-0">
+                          <div className="w-14 h-10 rounded-xl overflow-hidden border border-[var(--gray-mid)] shadow-sm flex-shrink-0">
                             <img
                               src={pkg.flagUrl}
                               alt={pkg.name}
@@ -409,44 +420,44 @@ export default function ProfilePage() {
                           <span className="text-4xl filter drop-shadow-md">🌍</span>
                         )}
                         <div>
-                          <h3 className="font-bold text-lg text-foreground leading-tight">{pkg.name}</h3>
-                          <Badge variant="outline" className={`mt-1.5 px-2 py-0 h-5 text-[10px] uppercase font-bold tracking-wider ${statusConfig[pkg.status].color}`}>
+                          <h3 className="font-extrabold text-[var(--text-dark)] leading-tight font-['Sora']">{pkg.name}</h3>
+                          <Badge variant="outline" className={`mt-2 px-3 py-0.5 h-6 text-[9px] uppercase font-extrabold tracking-widest rounded-full ${statusConfig[pkg.status].color}`}>
                             {statusConfig[pkg.status].label}
                           </Badge>
                         </div>
                       </div>
-                      <div className="p-2 rounded-full bg-secondary/50 group-hover:bg-primary/10 group-hover:text-primary transition-colors">
+                      <div className="w-10 h-10 rounded-full bg-[var(--gray-bg)] flex items-center justify-center text-[var(--gray-text)] group-hover:bg-[var(--gold)] group-hover:text-white transition-all">
                         <ChevronRight className="w-5 h-5" />
                       </div>
                     </div>
 
                     <div className="space-y-4">
-                      <div className="flex justify-between text-sm">
-                        <span className="text-muted-foreground">{t('card.dataVolume')}</span>
-                        <span className="font-bold text-foreground">{pkg.data}</span>
+                      <div className="flex justify-between items-center text-sm">
+                        <span className="text-[var(--gray-text)] font-bold uppercase tracking-wider text-[10px]">{t('card.dataVolume')}</span>
+                        <span className="font-extrabold text-[var(--text-dark)]">{pkg.data}</span>
                       </div>
-                      <div className="flex justify-between text-sm">
-                        <span className="text-muted-foreground">{t('card.validityPeriod')}</span>
-                        <span className="font-bold text-foreground">{pkg.validity}</span>
+                      <div className="flex justify-between items-center text-sm">
+                        <span className="text-[var(--gray-text)] font-bold uppercase tracking-wider text-[10px]">{t('card.validityPeriod')}</span>
+                        <span className="font-extrabold text-[var(--text-dark)]">{pkg.validity}</span>
                       </div>
 
                       {/* Date Range */}
-                      <div className="flex items-center gap-2 pt-2 border-t border-border/20">
-                        <Calendar className="w-3.5 h-3.5 text-muted-foreground" />
-                        <span className="text-xs text-muted-foreground">
+                      <div className="flex items-center gap-2 pt-4 border-t border-[var(--gray-mid)]">
+                        <Calendar className="w-4 h-4 text-[var(--gold)]" />
+                        <span className="text-xs text-[var(--gray-text)] font-bold uppercase tracking-[0.5px]">
                           {new Date(pkg.startDate).toLocaleDateString()} - {pkg.endDate ? new Date(pkg.endDate).toLocaleDateString() : "—"}
                         </span>
                       </div>
 
                       {/* Progress Bar */}
-                      <div className="pt-2">
-                        <div className="flex justify-between text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-1.5">
+                      <div className="pt-4">
+                        <div className="flex justify-between text-[10px] font-extrabold uppercase tracking-widest text-[var(--gray-text)] mb-2">
                           <span>{t('card.timelineProgress')}</span>
-                          <span>{Math.round(pkg.timeProgress)}%</span>
+                          <span className="text-[var(--gold)]">{Math.round(pkg.timeProgress)}%</span>
                         </div>
-                        <div className="h-2 bg-muted/50 rounded-full overflow-hidden">
+                        <div className="h-2.5 bg-[var(--gray-bg)] rounded-full overflow-hidden border border-[var(--gray-mid)]">
                           <div
-                            className={`h-full rounded-full transition-all duration-500 ${pkg.status === 'active' ? 'bg-primary shadow-[0_0_8px_rgba(var(--primary),0.4)]' : 'bg-muted-foreground/30'}`}
+                            className={`h-full rounded-full transition-all duration-700 ${pkg.status === 'active' ? 'bg-[var(--gold)] shadow-[0_0_10px_rgba(201,168,76,0.3)]' : 'bg-[var(--gray-text)]/30'}`}
                             style={{ width: `${pkg.timeProgress}%` }}
                           />
                         </div>
@@ -464,21 +475,21 @@ export default function ProfilePage() {
       {selectedPackage && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div
-            className="absolute inset-0 bg-background/90 backdrop-blur-md"
+            className="absolute inset-0 bg-[var(--navy)]/80 backdrop-blur-md"
             onClick={() => setSelectedPackage(null)}
           />
-          <div className="relative w-full max-w-xl bg-card border border-border/50 rounded-[2.5rem] shadow-2xl p-10 max-h-[90vh] overflow-y-auto animate-in fade-in zoom-in duration-300">
+          <div className="relative w-full max-w-xl bg-white border border-[var(--gray-mid)] rounded-[40px] shadow-2xl p-8 sm:p-12 max-h-[90vh] overflow-y-auto animate-in fade-in zoom-in duration-300">
             <button
               onClick={() => setSelectedPackage(null)}
-              className="absolute top-6 right-6 p-3 rounded-2xl hover:bg-secondary/80 text-muted-foreground transition-colors"
+              className="absolute top-8 right-8 w-12 h-12 rounded-full bg-[var(--gray-bg)] hover:bg-[var(--gold)] hover:text-white text-[var(--gray-text)] transition-all flex items-center justify-center border-none cursor-pointer"
             >
               <X className="w-6 h-6" />
             </button>
 
             {/* Modal Header */}
-            <div className="flex items-center gap-6 mb-10">
+            <div className="flex items-center gap-6 mb-12">
               {selectedPackage.flagUrl ? (
-                <div className="w-24 h-16 rounded-lg overflow-hidden border-2 border-primary/20 shadow-2xl flex-shrink-0">
+                <div className="w-20 h-14 rounded-xl overflow-hidden border-2 border-[var(--gray-mid)] shadow-lg flex-shrink-0">
                   <img
                     src={selectedPackage.flagUrl}
                     alt={selectedPackage.name}
@@ -486,27 +497,26 @@ export default function ProfilePage() {
                   />
                 </div>
               ) : (
-                <div className="text-7xl filter drop-shadow-xl">🌍</div>
+                <div className="text-6xl">🌍</div>
               )}
               <div>
-                <h2 className="text-3xl font-black text-foreground tracking-tight">{selectedPackage.name}</h2>
-                <div className="flex items-center gap-3 mt-2">
-                  <Badge variant="outline" className={`px-3 py-0.5 text-xs font-bold ${statusConfig[selectedPackage.status].color}`}>
+                <h2 className="text-[32px] font-extrabold text-[var(--text-dark)] tracking-tight font-['Sora'] leading-tight">{selectedPackage.name}</h2>
+                <div className="flex items-center gap-3 mt-3">
+                  <Badge variant="outline" className={`px-4 py-1 text-[10px] font-extrabold uppercase tracking-widest rounded-full ${statusConfig[selectedPackage.status].color}`}>
                     {statusConfig[selectedPackage.status].label}
                   </Badge>
-                  <span className="text-sm text-muted-foreground font-medium">{t('modal.order')} {selectedPackage.orderId}</span>
+                  <span className="text-[11px] text-[var(--gray-text)] font-bold uppercase tracking-wider">{t('modal.order')} #{selectedPackage.orderId}</span>
                 </div>
               </div>
             </div>
 
             {/* Main Content Sections */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 mb-12">
               {/* Visual Info - QR or Placeholder */}
-              <div className="bg-secondary/30 rounded-[2rem] p-8 flex flex-col items-center justify-center text-center">
+              <div className="bg-[var(--gray-bg)] rounded-[32px] p-8 flex flex-col items-center justify-center text-center border border-[var(--gray-mid)] shadow-inner">
                 {selectedPackage.status === "active" || selectedPackage.status === "upcoming" ? (
                   selectedPackage.qrCodeData ? (
-                    <div className="p-4 bg-white rounded-3xl mb-4 shadow-xl">
-                      {/* Using API fallback for stable QR generation */}
+                    <div className="p-4 bg-white rounded-3xl mb-6 shadow-xl border border-[var(--gray-mid)] transition-transform hover:scale-105">
                       <img
                         src={`https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(selectedPackage.qrCodeData)}`}
                         alt="eSIM QR Code"
@@ -516,32 +526,32 @@ export default function ProfilePage() {
                       />
                     </div>
                   ) : (
-                    <div className="w-32 h-32 rounded-3xl bg-amber-500/10 flex items-center justify-center mb-4">
+                    <div className="w-32 h-32 rounded-3xl bg-amber-50 flex items-center justify-center mb-6">
                       <Clock className="w-16 h-16 text-amber-500 animate-pulse" />
                     </div>
                   )
                 ) : (
-                  <div className="w-32 h-32 rounded-3xl bg-muted flex items-center justify-center mb-4">
-                    <AlertCircle className="w-16 h-16 text-muted-foreground" />
+                  <div className="w-32 h-32 rounded-3xl bg-gray-100 flex items-center justify-center mb-6">
+                    <AlertCircle className="w-16 h-16 text-gray-400" />
                   </div>
                 )}
 
-                <h4 className="font-bold text-foreground">{t('modal.activationInfo')}</h4>
-                <p className="text-xs text-muted-foreground mt-1 max-w-[160px]">
+                <h4 className="font-extrabold text-[var(--text-dark)] font-['Sora'] text-sm">{t('modal.activationInfo')}</h4>
+                <p className="text-[11px] text-[var(--gray-text)] mt-2 font-medium max-w-[160px] leading-relaxed">
                   {selectedPackage.qrCodeData ? t('modal.installByScanning') : t('modal.processing')}
                 </p>
               </div>
 
               {/* Technical Data */}
               <div className="space-y-4">
-                <div className="bg-secondary/20 p-4 rounded-2xl border border-border/40">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground block mb-2">{t('modal.iccidAddress')}</label>
-                  <div className="flex items-center justify-between gap-2">
-                    <code className="text-sm font-bold text-foreground truncate">{selectedPackage.iccid || t('modal.generating')}</code>
+                <div className="bg-white p-5 rounded-3xl border-[1.5px] border-[var(--gray-mid)] shadow-sm">
+                  <label className="text-[9px] font-extrabold uppercase tracking-widest text-[var(--gray-text)] block mb-3">{t('modal.iccidAddress')}</label>
+                  <div className="flex items-center justify-between gap-3">
+                    <code className="text-sm font-extrabold text-[var(--text-dark)] truncate">{selectedPackage.iccid || t('modal.generating')}</code>
                     {selectedPackage.iccid && (
                       <button
                         onClick={() => copyToClipboard(selectedPackage.iccid!, "ICCID")}
-                        className="p-2 hover:bg-primary/10 rounded-lg text-muted-foreground hover:text-primary transition-colors"
+                        className="w-10 h-10 rounded-xl hover:bg-[var(--gold)]/10 text-[var(--gray-text)] hover:text-[var(--gold)] transition-all flex items-center justify-center border-none cursor-pointer"
                       >
                         {copied === "ICCID" ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
                       </button>
@@ -549,14 +559,14 @@ export default function ProfilePage() {
                   </div>
                 </div>
 
-                <div className="bg-secondary/20 p-4 rounded-2xl border border-border/40">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground block mb-2">{t('modal.activationCode')}</label>
-                  <div className="flex items-center justify-between gap-2">
-                    <code className="text-sm font-bold text-foreground truncate">{selectedPackage.activationCode || "N/A"}</code>
+                <div className="bg-white p-5 rounded-3xl border-[1.5px] border-[var(--gray-mid)] shadow-sm">
+                  <label className="text-[9px] font-extrabold uppercase tracking-widest text-[var(--gray-text)] block mb-3">{t('modal.activationCode')}</label>
+                  <div className="flex items-center justify-between gap-3">
+                    <code className="text-sm font-extrabold text-[var(--text-dark)] truncate">{selectedPackage.activationCode || "N/A"}</code>
                     {selectedPackage.activationCode && (
                       <button
                         onClick={() => copyToClipboard(selectedPackage.activationCode!, "Activation Code")}
-                        className="p-2 hover:bg-primary/10 rounded-lg text-muted-foreground hover:text-primary transition-colors"
+                        className="w-10 h-10 rounded-xl hover:bg-[var(--gold)]/10 text-[var(--gray-text)] hover:text-[var(--gold)] transition-all flex items-center justify-center border-none cursor-pointer"
                       >
                         {copied === "Activation Code" ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
                       </button>
@@ -567,73 +577,72 @@ export default function ProfilePage() {
             </div>
 
             {/* Package Stats Summary */}
-            <div className="grid grid-cols-2 gap-4 mb-10">
-              <div className="bg-background border border-border/50 p-5 rounded-3xl relative overflow-hidden">
-                <div className="flex items-center gap-3 mb-1">
-                  <Signal className="w-4 h-4 text-primary" />
-                  <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider">{t('modal.planData')}</span>
+            <div className="grid grid-cols-2 gap-5 mb-12">
+              <div className="bg-[var(--gray-bg)] border-[1.5px] border-[var(--gray-mid)] p-6 rounded-[32px] relative overflow-hidden group shadow-sm">
+                <div className="flex items-center gap-3 mb-2">
+                  <Signal className="w-4 h-4 text-[var(--gold)]" />
+                  <span className="text-[10px] font-extrabold text-[var(--gray-text)] uppercase tracking-wider">{t('modal.planData')}</span>
                 </div>
                 {isUsageLoading ? (
-                  <Loader2 className="w-4 h-4 animate-spin text-primary mt-2" />
+                  <Loader2 className="w-4 h-4 animate-spin text-[var(--gold)] mt-2" />
                 ) : usageDetails ? (
                   <>
-                    <p className="text-xl font-black text-foreground">
+                    <p className="text-2xl font-extrabold text-[var(--text-dark)] font-['Sora'] leading-tight">
                       {(usageDetails.data.remaining_data_mb / 1024).toFixed(2)} GB
                     </p>
-                    <p className="text-[10px] text-muted-foreground mt-1">
+                    <p className="text-[10px] text-[var(--gray-text)] mt-2 font-bold uppercase tracking-wider">
                       {usageDetails.data.used_data_mb.toFixed(0)} MB {t('card.used')} / {(usageDetails.data.total_data_mb / 1024).toFixed(1)} GB
                     </p>
-                    {/* Tiny Progress Bar in Card */}
-                    <div className="absolute bottom-0 left-0 w-full h-1 bg-muted">
+                    <div className="absolute bottom-0 left-0 w-full h-1.5 bg-white/50">
                         <div 
-                            className="h-full bg-primary" 
+                            className="h-full bg-[var(--gold)] shadow-[0_0_8px_rgba(201,168,76,0.4)]" 
                             style={{ width: `${Math.min(100, (usageDetails.data.used_data_mb / usageDetails.data.total_data_mb) * 100)}%` }}
                         />
                     </div>
                   </>
                 ) : (
-                  <p className="text-xl font-black text-foreground">{selectedPackage.data}</p>
+                  <p className="text-2xl font-extrabold text-[var(--text-dark)] font-['Sora']">{selectedPackage.data}</p>
                 )}
               </div>
-              <div className="bg-background border border-border/50 p-5 rounded-3xl">
-                <div className="flex items-center gap-3 mb-1">
+              <div className="bg-[var(--gray-bg)] border-[1.5px] border-[var(--gray-mid)] p-6 rounded-[32px] shadow-sm">
+                <div className="flex items-center gap-3 mb-2">
                   <Calendar className="w-4 h-4 text-emerald-500" />
-                  <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider">{t('modal.validity')}</span>
+                  <span className="text-[10px] font-extrabold text-[var(--gray-text)] uppercase tracking-wider">{t('modal.validity')}</span>
                 </div>
                 {isUsageLoading ? (
                   <Loader2 className="w-4 h-4 animate-spin text-emerald-500 mt-2" />
                 ) : usageDetails && usageDetails.data.expiration_date ? (
                   <>
-                    <p className="text-xl font-black text-foreground">
+                    <p className="text-2xl font-extrabold text-[var(--text-dark)] font-['Sora'] leading-tight">
                       {new Date(usageDetails.data.expiration_date).toLocaleDateString()}
                     </p>
-                    <p className="text-[10px] text-muted-foreground mt-1">
+                    <p className="text-[10px] text-[var(--gray-text)] mt-2 font-bold uppercase tracking-wider">
                       {usageDetails.data.status_text}
                     </p>
                   </>
                 ) : (
-                  <p className="text-xl font-black text-foreground">{selectedPackage.validity}</p>
+                  <p className="text-2xl font-extrabold text-[var(--text-dark)] font-['Sora']">{selectedPackage.validity}</p>
                 )}
               </div>
             </div>
 
             {/* Live Progress Section */}
             {usageDetails && (
-              <div className="mb-10 p-6 bg-primary/5 rounded-[2rem] border border-primary/10">
-                <div className="flex justify-between items-end mb-3">
+              <div className="mb-12 p-8 bg-[var(--navy)] rounded-[40px] border border-white/10 shadow-2xl">
+                <div className="flex justify-between items-end mb-4">
                   <div>
-                    <h4 className="text-sm font-bold text-foreground">Live Consumption</h4>
-                    <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">Real-time status: {usageDetails.data.status_text}</p>
+                    <h4 className="text-base font-extrabold text-white font-['Sora']">Canlı Tüketim Durumu</h4>
+                    <p className="text-[10px] text-white/50 uppercase tracking-widest font-extrabold mt-1">Gerçek zamanlı: {usageDetails.data.status_text}</p>
                   </div>
                   <div className="text-right">
-                    <span className="text-lg font-black text-primary">
+                    <span className="text-[28px] font-black text-[var(--gold)] font-['Sora']">
                       {Math.round((usageDetails.data.used_data_mb / usageDetails.data.total_data_mb) * 100)}%
                     </span>
                   </div>
                 </div>
-                <div className="h-3 bg-primary/10 rounded-full overflow-hidden">
+                <div className="h-4 bg-white/10 rounded-full overflow-hidden border border-white/10 p-0.5">
                   <div 
-                    className="h-full bg-primary shadow-[0_0_12px_rgba(var(--primary),0.5)] transition-all duration-1000"
+                    className="h-full bg-[var(--gold)] shadow-[0_0_15px_rgba(201,168,76,0.6)] transition-all duration-1000 rounded-full"
                     style={{ width: `${(usageDetails.data.used_data_mb / usageDetails.data.total_data_mb) * 100}%` }}
                   />
                 </div>
@@ -641,25 +650,26 @@ export default function ProfilePage() {
             )}
 
             {/* Actions */}
-            <div className="flex gap-4">
+            <div className="flex flex-col sm:flex-row gap-4">
               {selectedPackage.status === "active" && (
                 <Button 
-                  className="flex-1 h-14 rounded-2xl text-lg font-bold shadow-xl shadow-primary/20"
+                  className="flex-1 h-16 rounded-[20px] text-lg font-extrabold bg-[var(--gold)] hover:bg-[var(--gold-light)] text-white shadow-xl shadow-gold/20 transition-all flex items-center justify-center gap-3"
                   onClick={() => setShowTopupModal(true)}
                 >
                   {t('modal.topUp')}
+                  <ArrowRight className="w-5 h-5" />
                 </Button>
               )}
               {selectedPackage.status === "expired" && (
-                <Link href="/plans" className="flex-1">
-                  <Button className="w-full h-14 rounded-2xl text-lg font-bold">
+                <Link href="/plans" className="flex-1 no-underline">
+                  <Button className="w-full h-16 rounded-[20px] text-lg font-extrabold bg-[var(--gold)] hover:bg-[var(--gold-light)] text-white shadow-xl shadow-gold/20 transition-all">
                     {t('modal.renew')}
                   </Button>
                 </Link>
               )}
               <Button
                 variant="outline"
-                className="flex-1 h-14 rounded-2xl text-lg font-bold bg-transparent border-border hover:bg-secondary/50"
+                className="flex-1 h-16 rounded-[20px] text-lg font-bold bg-white border-[1.5px] border-[var(--text-dark)] text-[var(--text-dark)] hover:bg-[var(--text-dark)] hover:text-white transition-all"
                 onClick={() => setSelectedPackage(null)}
               >
                 {t('modal.close')}
@@ -669,26 +679,27 @@ export default function ProfilePage() {
         </div>
       )}
 
+      {/* Topup Modal Redesign */}
       {showTopupModal && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
           <div
-            className="absolute inset-0 bg-background/90 backdrop-blur-md"
+            className="absolute inset-0 bg-[var(--navy)]/80 backdrop-blur-md"
             onClick={() => !isTopupLoading && setShowTopupModal(false)}
           />
-          <div className="relative w-full max-w-md bg-card border border-border/50 rounded-3xl shadow-2xl p-8 animate-in fade-in zoom-in duration-300">
-            <h3 className="text-2xl font-bold text-foreground mb-6">Bakiye Yükle (PayPal)</h3>
+          <div className="relative w-full max-w-md bg-white border border-[var(--gray-mid)] rounded-[40px] shadow-2xl p-10 animate-in fade-in zoom-in duration-300">
+            <h3 className="text-2xl font-extrabold text-[var(--text-dark)] mb-8 font-['Sora'] tracking-tight">Bakiye Yükle <span className="text-[var(--gold)]">(PayPal)</span></h3>
             
-            <div className="space-y-4 mb-8">
-              <label className="text-sm font-medium text-muted-foreground">Tutar Seçin (EUR)</label>
-              <div className="grid grid-cols-3 gap-2">
+            <div className="space-y-6 mb-10">
+              <label className="text-xs font-extrabold text-[var(--gray-text)] uppercase tracking-widest ml-1">Tutar Seçin (EUR)</label>
+              <div className="grid grid-cols-2 gap-3">
                 {["10", "20", "50", "100"].map((amount) => (
                   <button
                     key={amount}
                     onClick={() => setTopupAmount(amount)}
-                    className={`h-12 rounded-xl border-2 transition-all font-bold ${
+                    className={`h-16 rounded-2xl border-[2px] transition-all font-extrabold text-lg flex items-center justify-center gap-1 cursor-pointer ${
                       topupAmount === amount
-                        ? "border-primary bg-primary/10 text-primary"
-                        : "border-border hover:border-primary/50"
+                        ? "border-[var(--gold)] bg-[var(--gold)]/5 text-[var(--gold)]"
+                        : "border-[var(--gray-mid)] bg-white text-[var(--gray-text)] hover:border-[var(--gold)]/50"
                     }`}
                   >
                     €{amount}
@@ -696,87 +707,91 @@ export default function ProfilePage() {
                 ))}
               </div>
               
-              <div className="relative pt-2">
+              <div className="relative group pt-2">
                 <input
                   type="number"
                   value={topupAmount}
                   onChange={(e) => setTopupAmount(e.target.value)}
                   placeholder="Özel tutar girin"
-                  className="w-full h-14 px-4 bg-secondary/20 border border-border rounded-2xl focus:ring-2 focus:ring-primary outline-none text-lg font-bold"
+                  className="w-full h-16 px-6 bg-[var(--gray-bg)] border-[2px] border-transparent rounded-2xl focus:border-[var(--gold)] focus:bg-white outline-none text-xl font-extrabold text-[var(--text-dark)] transition-all"
                 />
-                <span className="absolute right-4 top-1/2 -translate-y-1/2 font-bold text-muted-foreground pt-2">EUR</span>
+                <span className="absolute right-6 top-[28px] font-extrabold text-[var(--gold)]">EUR</span>
               </div>
             </div>
 
-            <div className="flex gap-4">
+            <div className="flex flex-col gap-4">
+              <Button
+                className="w-full h-16 rounded-[20px] bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-lg transition-all shadow-lg shadow-blue-600/20 flex items-center justify-center gap-3"
+                onClick={handleTopup}
+                disabled={isTopupLoading || !topupAmount}
+              >
+                {isTopupLoading ? <Loader2 className="w-6 h-6 animate-spin" /> : (
+                  <>
+                    <span className="font-black">PayPal</span> ile Şimdi Yükle
+                  </>
+                )}
+              </Button>
               <Button
                 variant="outline"
-                className="flex-1 h-14 rounded-2xl"
+                className="w-full h-16 rounded-[20px] border-[1.5px] border-[var(--gray-mid)] text-[var(--gray-text)] font-bold hover:bg-[var(--gray-bg)] transition-all"
                 onClick={() => setShowTopupModal(false)}
                 disabled={isTopupLoading}
               >
                 Vazgeç
               </Button>
-              <Button
-                className="flex-1 h-14 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-bold"
-                onClick={handleTopup}
-                disabled={isTopupLoading || !topupAmount}
-              >
-                {isTopupLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Şimdi Yükle"}
-              </Button>
             </div>
             
-            <p className="text-[10px] text-center text-muted-foreground mt-4">
-              Ödeme işlemine devam ettiğinizde PayPal'a yönlendirileceksiniz.
+            <p className="text-[10px] text-center text-[var(--gray-text)] mt-6 font-bold uppercase tracking-wider">
+              {tc('securePayment') || 'Güvenli Ödeme • PayPal ile yönlendirileceksiniz'}
             </p>
           </div>
         </div>
       )}
 
+      {/* Delete Account Modal Redesign */}
       {showDeleteConfirm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div
-            className="absolute inset-0 bg-background/90 backdrop-blur-md"
+            className="absolute inset-0 bg-red-950/80 backdrop-blur-md"
             onClick={() => !isDeleting && setShowDeleteConfirm(false)}
           />
-          <div className="relative w-full max-w-md bg-card border border-red-500/20 rounded-3xl shadow-2xl p-8 animate-in fade-in zoom-in duration-300">
-            <div className="flex flex-col items-center text-center gap-4">
-              <div className="w-16 h-16 rounded-2xl bg-red-500/10 border border-red-500/20 flex items-center justify-center">
-                <Trash2 className="w-8 h-8 text-red-500" />
+          <div className="relative w-full max-w-md bg-white border border-red-100 rounded-[40px] shadow-2xl p-10 animate-in fade-in zoom-in duration-300">
+            <div className="flex flex-col items-center text-center gap-6">
+              <div className="w-20 h-20 rounded-[28px] bg-red-50 border border-red-100 flex items-center justify-center shadow-sm">
+                <Trash2 className="w-10 h-10 text-red-500" />
               </div>
               <div>
-                <h3 className="text-xl font-bold text-foreground">
+                <h3 className="text-2xl font-extrabold text-[var(--text-dark)] font-['Sora'] tracking-tight">
                   {t('deleteAccount.dialogTitle')}
                 </h3>
-                <p className="text-sm text-muted-foreground mt-2 leading-relaxed">
+                <p className="text-[var(--gray-text)] font-medium mt-3 leading-relaxed">
                   {t('deleteAccount.dialogMessage')}
                 </p>
               </div>
-              <div className="flex gap-3 w-full pt-2">
+              <div className="flex flex-col gap-3 w-full pt-4">
                 <Button
-                  variant="outline"
-                  className="flex-1 bg-transparent"
-                  onClick={() => setShowDeleteConfirm(false)}
-                  disabled={isDeleting}
-                >
-                  {t('deleteAccount.cancel')}
-                </Button>
-                <Button
-                  className="flex-1 bg-red-500 hover:bg-red-600 text-white border-none shadow-lg shadow-red-500/20"
+                  className="h-16 rounded-[20px] bg-red-500 hover:bg-red-600 text-white border-none shadow-xl shadow-red-500/20 font-extrabold text-lg transition-all flex items-center justify-center gap-3"
                   onClick={handleDeleteAccount}
                   disabled={isDeleting}
                 >
                   {isDeleting ? (
                     <>
-                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      <Loader2 className="w-6 h-6 animate-spin" />
                       {t('deleteAccount.processing')}
                     </>
                   ) : (
                     <>
-                      <Trash2 className="w-4 h-4 mr-2" />
                       {t('deleteAccount.confirm')}
                     </>
                   )}
+                </Button>
+                <Button
+                  variant="outline"
+                  className="h-16 rounded-[20px] bg-white border-[1.5px] border-[var(--gray-mid)] text-[var(--gray-text)] font-bold transition-all"
+                  onClick={() => setShowDeleteConfirm(false)}
+                  disabled={isDeleting}
+                >
+                  {t('deleteAccount.cancel')}
                 </Button>
               </div>
             </div>

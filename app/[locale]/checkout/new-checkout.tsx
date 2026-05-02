@@ -162,15 +162,22 @@ export function NewCheckout() {
   // --- RENDER FONKSİYONLARI ---
 
   const renderLoading = () => (
-    <div className="flex items-center justify-center min-h-64">
-      <Loader2 className="w-8 h-8 animate-spin" />
+    <div className="flex flex-col items-center justify-center min-h-[300px] gap-4">
+      <Loader2 className="w-10 h-10 animate-spin text-[var(--gold)]" />
+      <p className="text-[var(--gray-text)] font-bold uppercase tracking-widest text-[10px]">İşlem Yapılıyor...</p>
     </div>
   );
 
   const renderError = () => (
-    <div className="text-center text-destructive">
-      <p>{errorMessage}</p>
-      <Button onClick={() => router.push('/cart')} className="mt-4">{t('backToCart')}</Button>
+    <div className="text-center py-16 bg-red-50 rounded-3xl border border-red-100 px-6">
+      <div className="w-16 h-16 rounded-full bg-white flex items-center justify-center mx-auto mb-6 shadow-sm">
+        <X className="w-8 h-8 text-red-500" />
+      </div>
+      <h2 className="text-xl font-bold text-[var(--text-dark)] mb-2 font-['Sora']">Bir Hata Oluştu</h2>
+      <p className="text-red-500/80 font-medium max-w-md mx-auto">{errorMessage}</p>
+      <Button onClick={() => router.push('/cart')} className="mt-8 bg-[var(--navy)] text-white hover:bg-[var(--text-dark)] rounded-2xl px-8 h-12 font-bold">
+        {t('backToCart')}
+      </Button>
     </div>
   );
 
@@ -186,17 +193,21 @@ export function NewCheckout() {
   );
 
   const renderPaymentSuccess = () => (
-    <div className="max-w-lg mx-auto text-center py-12">
-      <div className="w-20 h-20 rounded-full bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center mx-auto mb-6">
-        <CheckCircle className="w-10 h-10 text-emerald-500" />
+    <div className="max-w-2xl mx-auto text-center py-16 bg-[var(--gray-bg)] rounded-[32px] border-[1.5px] border-[var(--gray-mid)] px-8 shadow-sm">
+      <div className="w-24 h-24 rounded-full bg-white flex items-center justify-center mx-auto mb-8 shadow-lg">
+        <CheckCircle className="w-12 h-12 text-emerald-500" />
       </div>
-      <h1 className="text-3xl font-bold text-foreground mb-4">{t('success.title')}</h1>
-      <p className="text-muted-foreground mb-8">
+      <h1 className="text-[32px] font-extrabold text-[var(--text-dark)] mb-4 font-['Sora'] tracking-tight">{t('success.title')}</h1>
+      <p className="text-[var(--gray-text)] text-lg font-medium mb-10 max-w-md mx-auto leading-relaxed">
         {t('success.description')}
       </p>
-      <div className="flex flex-col sm:flex-row gap-3 justify-center">
-        <Link href="/"><Button>{t('success.backToHome')}</Button></Link>
-        <Link href="/support"><Button variant="outline">{t('success.needHelp')}</Button></Link>
+      <div className="flex flex-col sm:flex-row gap-4 justify-center">
+        <Link href="/" className="no-underline">
+          <Button className="bg-[var(--gold)] hover:bg-[var(--gold-light)] text-white h-14 px-10 rounded-2xl font-extrabold shadow-lg transition-all">{t('success.backToHome')}</Button>
+        </Link>
+        <Link href="/support" className="no-underline">
+          <Button variant="outline" className="border-[var(--text-dark)] text-[var(--text-dark)] hover:bg-[var(--text-dark)] hover:text-white h-14 px-10 rounded-2xl font-bold transition-all">{t('success.needHelp')}</Button>
+        </Link>
       </div>
     </div>
   );
@@ -334,35 +345,42 @@ export function NewCheckout() {
 
       {/* Giriş yapmış kullanıcı ise, özetini göster */}
       {isAuthenticated && (
-        <>
-          <Card>
-            <CardHeader><CardTitle>{t('ready.orderSummary')}</CardTitle></CardHeader>
-            <CardContent>
-              <div className="space-y-2">
-                {items.map((item) => (
-                  <div key={item.id} className="flex justify-between">
-                    <span>{item.name} × {item.quantity}</span>
-                    <span>€{((item.priceInCents || 0) * item.quantity / 100).toFixed(2)}</span>
-                  </div>
-                ))}
-                <div className="border-t pt-2 mt-2">
-                  <div className="flex justify-between font-bold">
-                    <span>{t('ready.total')}</span>
-                    <span>€{(totalPrice / 100).toFixed(2)}</span>
-                  </div>
+        <div className="space-y-6">
+          <div className="bg-white border-[1.5px] border-[var(--gray-mid)] rounded-3xl p-8 shadow-sm">
+            <h3 className="text-lg font-bold text-[var(--text-dark)] mb-5 font-['Sora']">{t('ready.orderSummary')}</h3>
+            <div className="space-y-4">
+              {items.map((item) => (
+                <div key={item.id} className="flex justify-between items-center">
+                  <span className="text-[var(--gray-text)] font-bold">{item.name} <span className="text-[var(--gold)] ml-1">× {item.quantity}</span></span>
+                  <span className="text-[var(--text-dark)] font-extrabold text-lg">€{((item.priceInCents || (item.price ? item.price * 100 : 0)) * item.quantity / 100).toFixed(2)}</span>
+                </div>
+              ))}
+              <div className="border-t border-[var(--gray-mid)] pt-5 mt-5">
+                <div className="flex justify-between items-center">
+                  <span className="text-[var(--text-dark)] font-extrabold text-xl font-['Sora']">{t('ready.total')}</span>
+                  <span className="text-[var(--gold)] font-extrabold text-3xl">€{(totalPrice / 100).toFixed(2)}</span>
                 </div>
               </div>
-            </CardContent>
-          </Card>
-          <Button onClick={handleAuthenticatedCheckout} disabled={pageState === PageState.LOADING} className="w-full" size="lg">
-            {pageState === PageState.LOADING ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : (
-              selectedMethod === 'wallet' ? <Wallet className="w-4 h-4 mr-2" /> :
-                selectedMethod === 'paypal' ? <Send className="w-4 h-4 mr-2" /> :
-                  <CreditCard className="w-4 h-4 mr-2" />
+            </div>
+          </div>
+          
+          <Button 
+            onClick={handleAuthenticatedCheckout} 
+            disabled={pageState === PageState.LOADING} 
+            className="w-full bg-[var(--gold)] hover:bg-[var(--gold-light)] text-white h-16 rounded-3xl font-extrabold text-xl transition-all shadow-lg shadow-gold/20 flex items-center justify-center gap-3"
+          >
+            {pageState === PageState.LOADING ? <Loader2 className="w-6 h-6 animate-spin" /> : (
+              selectedMethod === 'wallet' ? <Wallet className="w-6 h-6" /> :
+                selectedMethod === 'paypal' ? <Send className="w-6 h-6" /> :
+                  <CreditCard className="w-6 h-6" />
             )}
             {pageState === PageState.LOADING ? t('ready.processing') : t('ready.pay', { amount: `€${(totalPrice / 100).toFixed(2)}` })}
           </Button>
-        </>
+          
+          <p className="text-[11px] text-[var(--gray-text)] text-center font-bold uppercase tracking-widest">
+            {tc('secureCheckout') || 'Güvenli Ödeme • 256-bit SSL'}
+          </p>
+        </div>
       )}
     </div>
   );

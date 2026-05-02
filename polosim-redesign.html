@@ -1,0 +1,2188 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POLO SIM - One Sim One World</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #E8C96A;
+    --gold-pale: #F5E8C0;
+    --navy: #0D1B2A;
+    --navy-mid: #162436;
+    --navy-light: #1E3448;
+    --white: #FFFFFF;
+    --gray-bg: #F4F5F7;
+    --gray-mid: #E8E9EC;
+    --gray-text: #6B7280;
+    --text-dark: #1A2332;
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 24px;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+    --shadow-md: 0 4px 16px rgba(0,0,0,0.10);
+    --shadow-lg: 0 8px 32px rgba(0,0,0,0.14);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--white);
+    color: var(--text-dark);
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4, h5 {
+    font-family: 'Sora', sans-serif;
+  }
+
+  /* ===== PAGE ROUTER ===== */
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* ===== NAVBAR ===== */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--white);
+    border-bottom: 1px solid var(--gray-mid);
+    padding: 0 5%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 68px;
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    cursor: pointer;
+    text-decoration: none;
+  }
+
+  .nav-logo .logo-polo {
+    font-family: 'Sora', sans-serif;
+    font-weight: 800;
+    font-size: 22px;
+    color: var(--gold);
+    letter-spacing: -0.5px;
+  }
+
+  .nav-logo .logo-sim-box {
+    background: var(--gold);
+    color: var(--white);
+    font-family: 'Sora', sans-serif;
+    font-weight: 800;
+    font-size: 16px;
+    padding: 3px 10px;
+    border-radius: var(--radius-sm);
+    margin-left: 6px;
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    text-decoration: none;
+    color: var(--text-dark);
+    font-size: 14px;
+    font-weight: 500;
+    transition: color 0.2s;
+    cursor: pointer;
+  }
+
+  .nav-links a:hover { color: var(--gold); }
+  .nav-links a.active-link { color: var(--gold); }
+
+  .nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .btn-outline {
+    padding: 8px 20px;
+    border: 1.5px solid var(--text-dark);
+    border-radius: var(--radius-md);
+    background: transparent;
+    font-family: 'Sora', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    color: var(--text-dark);
+    transition: all 0.2s;
+  }
+
+  .btn-outline:hover {
+    background: var(--text-dark);
+    color: var(--white);
+  }
+
+  .btn-gold {
+    padding: 8px 20px;
+    border: none;
+    border-radius: var(--radius-md);
+    background: var(--gold);
+    font-family: 'Sora', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    color: var(--white);
+    transition: all 0.2s;
+  }
+
+  .btn-gold:hover {
+    background: var(--gold-light);
+    transform: translateY(-1px);
+  }
+
+  .lang-badge {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--gray-text);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  /* ===== HERO ===== */
+  .hero {
+    background: var(--navy);
+    padding: 80px 5% 64px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -100px;
+    left: -100px;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(201,168,76,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -80px;
+    right: -60px;
+    width: 350px;
+    height: 350px;
+    background: radial-gradient(circle, rgba(201,168,76,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero h1 {
+    font-size: clamp(28px, 4vw, 50px);
+    font-weight: 800;
+    color: var(--white);
+    line-height: 1.2;
+    max-width: 780px;
+    margin: 0 auto 32px;
+    letter-spacing: -0.5px;
+  }
+
+  .hero h1 .accent-esim { color: var(--gold); }
+  .hero h1 .accent-roaming { color: var(--gold); }
+
+  .hero-search {
+    display: flex;
+    align-items: center;
+    max-width: 560px;
+    margin: 0 auto 20px;
+    background: var(--white);
+    border-radius: var(--radius-xl);
+    padding: 6px 6px 6px 20px;
+    gap: 8px;
+  }
+
+  .hero-search input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 15px;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text-dark);
+    background: transparent;
+  }
+
+  .hero-search input::placeholder { color: #9CA3AF; }
+
+  .btn-search {
+    background: var(--gold);
+    color: var(--white);
+    border: none;
+    border-radius: var(--radius-lg);
+    padding: 10px 24px;
+    font-family: 'Sora', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s;
+  }
+
+  .btn-search:hover { background: var(--gold-light); }
+
+  .btn-destinations {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    border: 1.5px solid rgba(255,255,255,0.3);
+    color: var(--white);
+    border-radius: 100px;
+    padding: 10px 24px;
+    font-family: 'Sora', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 40px;
+  }
+
+  .btn-destinations:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+
+  .hero-badges {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 32px;
+    margin-top: 8px;
+  }
+
+  .hero-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: rgba(255,255,255,0.7);
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  .hero-badge-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--gold);
+  }
+
+  /* ===== SECTION COMMONS ===== */
+  section {
+    padding: 64px 5%;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 28px;
+  }
+
+  .section-header h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-dark);
+  }
+
+  .see-all {
+    color: var(--gold);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+
+  .see-all:hover { opacity: 0.7; }
+
+  /* ===== POPULAR DESTINATIONS ===== */
+  .destinations-section {
+    background: var(--navy);
+    padding: 0 5% 48px;
+  }
+
+  .section-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.5);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+  }
+
+  .section-label-link {
+    color: var(--gold);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .dest-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .dest-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 100px;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+  }
+
+  .dest-chip:hover {
+    background: rgba(201,168,76,0.15);
+    border-color: var(--gold);
+  }
+
+  .dest-chip span {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--white);
+  }
+
+  .dest-chip .flag {
+    font-size: 18px;
+    line-height: 1;
+  }
+
+  /* ===== REGIONS SECTION ===== */
+  .regions-section {
+    background: var(--gray-bg);
+    padding: 64px 5%;
+  }
+
+  .regions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 12px;
+  }
+
+  .region-card {
+    background: var(--white);
+    border: 1.5px solid var(--gray-mid);
+    border-radius: var(--radius-lg);
+    padding: 20px 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+    text-decoration: none;
+    display: block;
+  }
+
+  .region-card:hover {
+    border-color: var(--gold);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .region-card.featured {
+    background: var(--navy);
+    border-color: var(--navy);
+  }
+
+  .region-icon {
+    font-size: 32px;
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .region-name {
+    font-family: 'Sora', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 6px;
+  }
+
+  .region-card.featured .region-name { color: var(--white); }
+
+  .region-meta {
+    font-size: 12px;
+    color: var(--gray-text);
+  }
+
+  .region-card.featured .region-meta { color: rgba(255,255,255,0.6); }
+
+  .region-meta span { color: var(--gold); font-weight: 600; }
+
+  /* ===== WHY ACCOUNT ===== */
+  .why-account-section {
+    background: var(--white);
+    text-align: center;
+    padding: 72px 5%;
+  }
+
+  .why-account-section h2 {
+    font-size: 32px;
+    font-weight: 800;
+    margin-bottom: 12px;
+  }
+
+  .why-account-section .subtitle {
+    color: var(--gray-text);
+    font-size: 16px;
+    max-width: 480px;
+    margin: 0 auto 48px;
+    line-height: 1.6;
+  }
+
+  .benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    max-width: 900px;
+    margin: 0 auto 40px;
+  }
+
+  .benefit-card {
+    background: var(--gray-bg);
+    border-radius: var(--radius-lg);
+    padding: 24px 20px;
+    text-align: left;
+  }
+
+  .benefit-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    margin-bottom: 14px;
+  }
+
+  .benefit-icon.orange { background: #FFF0E0; }
+  .benefit-icon.teal   { background: #E0F5F0; }
+  .benefit-icon.purple { background: #EDE8FF; }
+  .benefit-icon.pink   { background: #FFE8EE; }
+
+  .benefit-card h4 {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--text-dark);
+  }
+
+  .benefit-card p {
+    font-size: 13px;
+    color: var(--gray-text);
+    line-height: 1.6;
+  }
+
+  .btn-gold-large {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--gold);
+    color: var(--white);
+    border: none;
+    border-radius: var(--radius-xl);
+    padding: 14px 32px;
+    font-family: 'Sora', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+  }
+
+  .btn-gold-large:hover {
+    background: var(--gold-light);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(201,168,76,0.3);
+  }
+
+  /* ===== WHY POLOSIM ===== */
+  .why-polo-section {
+    background: var(--gray-bg);
+    padding: 72px 5%;
+    text-align: center;
+  }
+
+  .why-polo-section h2 {
+    font-size: 32px;
+    font-weight: 800;
+    margin-bottom: 12px;
+  }
+
+  .why-polo-section .subtitle {
+    color: var(--gray-text);
+    font-size: 16px;
+    margin-bottom: 48px;
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .feature-card {
+    background: var(--navy);
+    border-radius: var(--radius-lg);
+    padding: 28px 24px;
+    text-align: left;
+  }
+
+  .feature-card-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: var(--radius-md);
+    background: rgba(201,168,76,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    margin-bottom: 16px;
+  }
+
+  .feature-card h3 {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+
+  .feature-card p {
+    font-size: 13px;
+    color: rgba(255,255,255,0.65);
+    line-height: 1.6;
+  }
+
+  .mini-features {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+
+  .mini-feature {
+    background: var(--white);
+    border-radius: var(--radius-md);
+    padding: 18px 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    text-align: left;
+  }
+
+  .mini-feature-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  .mini-feature-icon.purple { background: #EDE8FF; }
+  .mini-feature-icon.pink   { background: #FFE8EE; }
+  .mini-feature-icon.blue   { background: #E0EEFF; }
+
+  .mini-feature h4 {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 3px;
+  }
+
+  .mini-feature p {
+    font-size: 12px;
+    color: var(--gray-text);
+  }
+
+  /* ===== FOOTER ===== */
+  footer {
+    background: var(--navy);
+    padding: 56px 5% 32px;
+  }
+
+  .footer-top {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr;
+    gap: 40px;
+    padding-bottom: 40px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    margin-bottom: 28px;
+  }
+
+  .footer-brand p {
+    font-size: 13px;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.7;
+    margin: 16px 0 24px;
+    max-width: 220px;
+  }
+
+  .footer-social {
+    display: flex;
+    gap: 10px;
+  }
+
+  .social-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: var(--radius-sm);
+    background: rgba(255,255,255,0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 14px;
+    color: rgba(255,255,255,0.6);
+    transition: all 0.2s;
+    text-decoration: none;
+  }
+
+  .social-btn:hover {
+    background: var(--gold);
+    color: var(--white);
+  }
+
+  .footer-col h5 {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 16px;
+  }
+
+  .footer-col ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .footer-col ul li a {
+    font-size: 13px;
+    color: rgba(255,255,255,0.5);
+    text-decoration: none;
+    cursor: pointer;
+    transition: color 0.2s;
+  }
+
+  .footer-col ul li a:hover { color: var(--gold); }
+
+  .footer-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .footer-bottom p {
+    font-size: 12px;
+    color: rgba(255,255,255,0.35);
+  }
+
+  .footer-bottom-badges {
+    display: flex;
+    gap: 16px;
+  }
+
+  .footer-bottom-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.4);
+  }
+
+  .footer-bottom-badge::before {
+    content: '●';
+    color: var(--gold);
+    font-size: 8px;
+  }
+
+  /* ===== PLANS PAGE ===== */
+  .page-hero {
+    background: var(--navy);
+    padding: 56px 5% 48px;
+    text-align: center;
+  }
+
+  .page-hero .tag {
+    display: inline-block;
+    background: rgba(201,168,76,0.15);
+    color: var(--gold);
+    border: 1px solid rgba(201,168,76,0.3);
+    border-radius: 100px;
+    padding: 6px 16px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .page-hero h1 {
+    font-size: 38px;
+    font-weight: 800;
+    color: var(--white);
+    margin-bottom: 12px;
+    letter-spacing: -0.5px;
+  }
+
+  .page-hero .desc {
+    font-size: 15px;
+    color: rgba(255,255,255,0.6);
+    max-width: 520px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  .plans-filters {
+    background: var(--white);
+    padding: 24px 5%;
+    border-bottom: 1px solid var(--gray-mid);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .filter-btn {
+    padding: 8px 20px;
+    border-radius: 100px;
+    border: 1.5px solid var(--gray-mid);
+    background: var(--white);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: var(--text-dark);
+  }
+
+  .filter-btn.active, .filter-btn:hover {
+    background: var(--navy);
+    border-color: var(--navy);
+    color: var(--white);
+  }
+
+  .plans-section {
+    background: var(--gray-bg);
+    padding: 48px 5%;
+  }
+
+  .plans-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+  }
+
+  .plan-card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    border: 1.5px solid var(--gray-mid);
+    overflow: hidden;
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+
+  .plan-card:hover {
+    border-color: var(--gold);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .plan-card.popular {
+    border-color: var(--gold);
+    position: relative;
+  }
+
+  .plan-card-header {
+    padding: 20px 20px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--gray-mid);
+  }
+
+  .plan-country {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .plan-flag { font-size: 28px; }
+
+  .plan-country-name {
+    font-family: 'Sora', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-dark);
+  }
+
+  .plan-badge {
+    background: var(--gold-pale);
+    color: var(--gold);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 100px;
+    text-transform: uppercase;
+  }
+
+  .plan-card-body {
+    padding: 16px 20px 20px;
+  }
+
+  .plan-specs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .plan-spec {
+    text-align: center;
+    padding: 10px;
+    background: var(--gray-bg);
+    border-radius: var(--radius-md);
+  }
+
+  .plan-spec-value {
+    font-family: 'Sora', sans-serif;
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--text-dark);
+    display: block;
+  }
+
+  .plan-spec-label {
+    font-size: 11px;
+    color: var(--gray-text);
+    margin-top: 2px;
+    display: block;
+  }
+
+  .plan-price-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .plan-price {
+    font-family: 'Sora', sans-serif;
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--text-dark);
+  }
+
+  .plan-price span {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--gray-text);
+  }
+
+  .btn-buy {
+    background: var(--navy);
+    color: var(--white);
+    border: none;
+    border-radius: var(--radius-md);
+    padding: 10px 20px;
+    font-family: 'Sora', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-buy:hover {
+    background: var(--gold);
+  }
+
+  /* ===== HOW IT WORKS PAGE ===== */
+  .steps-section {
+    background: var(--white);
+    padding: 72px 5%;
+  }
+
+  .steps-container {
+    max-width: 760px;
+    margin: 0 auto;
+  }
+
+  .step-item {
+    display: flex;
+    gap: 28px;
+    margin-bottom: 48px;
+    position: relative;
+  }
+
+  .step-item:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 23px;
+    top: 52px;
+    width: 2px;
+    height: calc(100% - 20px);
+    background: var(--gray-mid);
+  }
+
+  .step-num {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--navy);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Sora', sans-serif;
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--gold);
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  .step-content h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 8px;
+    padding-top: 10px;
+  }
+
+  .step-content p {
+    font-size: 15px;
+    color: var(--gray-text);
+    line-height: 1.7;
+  }
+
+  .why-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-top: 48px;
+  }
+
+  .why-card {
+    background: var(--gray-bg);
+    border-radius: var(--radius-lg);
+    padding: 24px 20px;
+  }
+
+  .why-card-icon {
+    font-size: 28px;
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .why-card h4 {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 8px;
+  }
+
+  .why-card p {
+    font-size: 13px;
+    color: var(--gray-text);
+    line-height: 1.6;
+  }
+
+  .devices-section {
+    background: var(--gray-bg);
+    padding: 64px 5%;
+  }
+
+  .devices-section h2 {
+    font-size: 28px;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 8px;
+  }
+
+  .devices-section .subtitle {
+    text-align: center;
+    color: var(--gray-text);
+    margin-bottom: 40px;
+    font-size: 15px;
+  }
+
+  .devices-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+
+  .device-card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: 24px 20px;
+  }
+
+  .device-brand {
+    font-family: 'Sora', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .device-card ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .device-card ul li {
+    font-size: 13px;
+    color: var(--gray-text);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .device-card ul li::before {
+    content: '✓';
+    color: var(--gold);
+    font-weight: 700;
+    font-size: 12px;
+  }
+
+  .install-section {
+    background: var(--white);
+    padding: 64px 5%;
+  }
+
+  .install-section h2 {
+    font-size: 28px;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 8px;
+  }
+
+  .install-section .subtitle {
+    text-align: center;
+    color: var(--gray-text);
+    margin-bottom: 40px;
+    font-size: 15px;
+  }
+
+  .install-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .install-card {
+    background: var(--gray-bg);
+    border-radius: var(--radius-lg);
+    padding: 28px 24px;
+  }
+
+  .install-card h3 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: var(--text-dark);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .install-steps {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .install-steps li {
+    display: flex;
+    gap: 12px;
+    font-size: 14px;
+    color: var(--gray-text);
+    line-height: 1.5;
+  }
+
+  .install-steps .num {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--navy);
+    color: var(--white);
+    font-size: 11px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-family: 'Sora', sans-serif;
+  }
+
+  /* ===== FAQ ===== */
+  .faq-section {
+    background: var(--gray-bg);
+    padding: 64px 5%;
+  }
+
+  .faq-section h2 {
+    font-size: 28px;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  .faq-list {
+    max-width: 760px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .faq-item {
+    background: var(--white);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    border: 1px solid var(--gray-mid);
+  }
+
+  .faq-q {
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none;
+    padding: 18px 20px;
+    font-family: 'Sora', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-dark);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .faq-q .arrow {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--gray-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    flex-shrink: 0;
+    transition: transform 0.2s;
+  }
+
+  .faq-item.open .faq-q .arrow { transform: rotate(180deg); }
+
+  .faq-a {
+    display: none;
+    padding: 0 20px 18px;
+    font-size: 14px;
+    color: var(--gray-text);
+    line-height: 1.7;
+  }
+
+  .faq-item.open .faq-a { display: block; }
+
+  /* ===== CTA BANNER ===== */
+  .cta-section {
+    background: var(--navy);
+    padding: 64px 5%;
+    text-align: center;
+  }
+
+  .cta-section h2 {
+    font-size: 30px;
+    font-weight: 800;
+    color: var(--white);
+    margin-bottom: 12px;
+  }
+
+  .cta-section p {
+    color: rgba(255,255,255,0.6);
+    font-size: 15px;
+    margin-bottom: 32px;
+  }
+
+  .cta-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+  }
+
+  .btn-white {
+    padding: 12px 28px;
+    border: 1.5px solid rgba(255,255,255,0.3);
+    border-radius: var(--radius-xl);
+    background: transparent;
+    color: var(--white);
+    font-family: 'Sora', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+  }
+
+  .btn-white:hover {
+    background: rgba(255,255,255,0.1);
+    border-color: rgba(255,255,255,0.5);
+  }
+
+  /* ===== SUPPORT PAGE ===== */
+  .support-search-section {
+    background: var(--navy);
+    padding: 56px 5% 48px;
+    text-align: center;
+  }
+
+  .support-search-section h1 {
+    font-size: 36px;
+    font-weight: 800;
+    color: var(--white);
+    margin-bottom: 8px;
+  }
+
+  .support-search-section .desc {
+    color: rgba(255,255,255,0.6);
+    font-size: 15px;
+    margin-bottom: 32px;
+    line-height: 1.6;
+  }
+
+  .support-search {
+    display: flex;
+    max-width: 520px;
+    margin: 0 auto;
+    background: var(--white);
+    border-radius: var(--radius-xl);
+    padding: 6px 6px 6px 20px;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .support-search input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 15px;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text-dark);
+    background: transparent;
+  }
+
+  .support-quick-links {
+    background: var(--white);
+    padding: 32px 5%;
+    border-bottom: 1px solid var(--gray-mid);
+  }
+
+  .quick-link-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--gray-bg);
+    border-radius: var(--radius-md);
+    padding: 16px 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+    border: 1.5px solid transparent;
+  }
+
+  .quick-link-card:hover {
+    border-color: var(--gold);
+    background: var(--white);
+  }
+
+  .quick-link-icon {
+    font-size: 22px;
+    width: 40px;
+    height: 40px;
+    background: var(--white);
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .quick-link-card h4 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 2px;
+  }
+
+  .quick-link-card p {
+    font-size: 12px;
+    color: var(--gray-text);
+  }
+
+  .quick-links-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+  }
+
+  .support-faq-section {
+    background: var(--gray-bg);
+    padding: 64px 5%;
+  }
+
+  .support-faq-section h2 {
+    font-size: 26px;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  .whatsapp-card {
+    background: var(--white);
+    border: 1.5px solid var(--gray-mid);
+    border-radius: var(--radius-xl);
+    padding: 32px;
+    text-align: center;
+    max-width: 480px;
+    margin: 40px auto 0;
+  }
+
+  .whatsapp-icon {
+    font-size: 40px;
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .whatsapp-card h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .whatsapp-card p {
+    font-size: 14px;
+    color: var(--gray-text);
+    margin-bottom: 24px;
+    line-height: 1.6;
+  }
+
+  .btn-whatsapp {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #25D366;
+    color: var(--white);
+    border: none;
+    border-radius: var(--radius-xl);
+    padding: 12px 28px;
+    font-family: 'Sora', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+
+  .btn-whatsapp:hover {
+    background: #1ebe5b;
+    transform: translateY(-2px);
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+    .features-grid { grid-template-columns: 1fr; }
+    .mini-features { grid-template-columns: 1fr; }
+    .footer-top { grid-template-columns: 1fr 1fr; gap: 24px; }
+    .devices-grid { grid-template-columns: 1fr 1fr; }
+    .install-grid { grid-template-columns: 1fr; }
+    .hero-badges { flex-direction: column; gap: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <a class="nav-logo" onclick="showPage('home')">
+    <span class="logo-polo">POLO</span>
+    <span class="logo-sim-box">SIM</span>
+  </a>
+  <ul class="nav-links">
+    <li><a onclick="showPage('home')" id="nav-home" class="active-link">Destinasyonlar</a></li>
+    <li><a onclick="showPage('plans')" id="nav-plans">Planlar</a></li>
+    <li><a onclick="showPage('how')" id="nav-how">Nasıl Çalışır</a></li>
+    <li><a onclick="showPage('support')" id="nav-support">Destek</a></li>
+    <li><a href="https://panel.polosim.com/" target="_blank">Bayi Girişi</a></li>
+  </ul>
+  <div class="nav-actions">
+    <span class="lang-badge">🇹🇷 TR</span>
+    <button class="btn-outline">Giriş Yap</button>
+    <button class="btn-gold">Hemen Başla</button>
+  </div>
+</nav>
+
+<!-- ==================== HOME PAGE ==================== -->
+<div class="page active" id="page-home">
+
+  <!-- HERO -->
+  <section class="hero">
+    <h1>200'den fazla ülke için anında <span class="accent-esim">eSIM</span> teslimatı.<br><span class="accent-roaming">Roaming</span> ücreti yok. Numaranızı koruyun.</h1>
+    <div class="hero-search">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color:#9CA3AF;flex-shrink:0"><circle cx="6.5" cy="6.5" r="5" stroke="currentColor" stroke-width="1.5"/><path d="M11 11l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      <input type="text" placeholder="Nereye seyahat ediyorsun?">
+      <button class="btn-search">Hemen Ara</button>
+    </div>
+    <button class="btn-destinations" onclick="showPage('plans')">200'den Fazla Destinasyonu Gör ›</button>
+    <div class="hero-badges">
+      <div class="hero-badge"><span class="hero-badge-dot"></span>Anında Aktivasyon</div>
+      <div class="hero-badge"><span class="hero-badge-dot"></span>7/24 Destek</div>
+      <div class="hero-badge"><span class="hero-badge-dot"></span>Tüm eSIM cihazlarıyla çalışır</div>
+    </div>
+  </section>
+
+  <!-- POPULAR DESTINATIONS -->
+  <section class="destinations-section">
+    <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:16px;">
+      <span class="section-label">Popüler Destinasyonlar</span>
+      <a class="section-label-link" onclick="showPage('plans')">Hepsini Gör</a>
+    </div>
+    <div class="dest-chips">
+      <a class="dest-chip"><span class="flag">🇹🇷</span><span>Türkiye</span></a>
+      <a class="dest-chip"><span class="flag">🇪🇸</span><span>İspanya</span></a>
+      <a class="dest-chip"><span class="flag">🇬🇧</span><span>İngiltere</span></a>
+      <a class="dest-chip"><span class="flag">🇫🇷</span><span>Fransa</span></a>
+      <a class="dest-chip"><span class="flag">🇵🇹</span><span>Portekiz</span></a>
+      <a class="dest-chip"><span class="flag">🇧🇷</span><span>Brezilya</span></a>
+      <a class="dest-chip"><span class="flag">🇨🇦</span><span>Kanada</span></a>
+      <a class="dest-chip"><span class="flag">🇺🇸</span><span>ABD</span></a>
+      <a class="dest-chip"><span class="flag">🇩🇪</span><span>Almanya</span></a>
+      <a class="dest-chip"><span class="flag">🇯🇵</span><span>Japonya</span></a>
+    </div>
+  </section>
+
+  <!-- REGIONS -->
+  <section class="regions-section">
+    <div class="section-header">
+      <h2>Bölgeleri Keşfet</h2>
+      <a class="see-all" onclick="showPage('plans')">Hepsini Gör</a>
+    </div>
+    <div class="regions-grid">
+      <a class="region-card" onclick="showPage('plans')">
+        <span class="region-icon">🌍</span>
+        <div class="region-name">Avrupa</div>
+        <div class="region-meta">40+ Ülke · <span>120 Plan</span></div>
+      </a>
+      <a class="region-card" onclick="showPage('plans')">
+        <span class="region-icon">🌏</span>
+        <div class="region-name">Asya</div>
+        <div class="region-meta">35+ Ülke · <span>98 Plan</span></div>
+      </a>
+      <a class="region-card featured" onclick="showPage('plans')">
+        <span class="region-icon">🌎</span>
+        <div class="region-name">Amerika</div>
+        <div class="region-meta">25+ Ülke · <span>72 Plan</span></div>
+      </a>
+      <a class="region-card" onclick="showPage('plans')">
+        <span class="region-icon">🌍</span>
+        <div class="region-name">Afrika</div>
+        <div class="region-meta">30+ Ülke · <span>55 Plan</span></div>
+      </a>
+      <a class="region-card" onclick="showPage('plans')">
+        <span class="region-icon">🏝️</span>
+        <div class="region-name">Okyanusya</div>
+        <div class="region-meta">12+ Ülke · <span>28 Plan</span></div>
+      </a>
+      <a class="region-card" onclick="showPage('plans')">
+        <span class="region-icon">🕌</span>
+        <div class="region-name">Orta Doğu</div>
+        <div class="region-meta">15+ Ülke · <span>44 Plan</span></div>
+      </a>
+      <a class="region-card" onclick="showPage('plans')">
+        <span class="region-icon">🌐</span>
+        <div class="region-name">Global</div>
+        <div class="region-meta">200+ Ülke · <span>Tek Plan</span></div>
+      </a>
+      <a class="region-card" onclick="showPage('plans')">
+        <span class="region-icon">🏔️</span>
+        <div class="region-name">Kafkasya</div>
+        <div class="region-meta">8+ Ülke · <span>22 Plan</span></div>
+      </a>
+    </div>
+  </section>
+
+  <!-- WHY ACCOUNT -->
+  <section class="why-account-section">
+    <h2>Neden Hesap Oluşturmalısınız?</h2>
+    <p class="subtitle">Ücretsiz bir hesapla özel avantajların kilidini açın ve eSIM'lerinizi kolayca yönetin.</p>
+    <div class="benefits-grid">
+      <div class="benefit-card">
+        <div class="benefit-icon orange">📦</div>
+        <h4>Siparişlerinizi Takip Edin</h4>
+        <p>Tüm satın alımlarınızı ve eSIM aktivasyonlarınızı dilediğiniz zaman profil sayfanızdan görüntüleyin.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon teal">📊</div>
+        <h4>Kullanımı İzleyin</h4>
+        <p>Veri kullanımınızı ve kalan bakiyenizi kontrol panelinizden gerçek zamanlı olarak kontrol edin.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon purple">🤝</div>
+        <h4>Ortaklık Programı</h4>
+        <p>Arkadaşlarınızı önererek ve benzersiz yönlendirme bağlantınızı paylaşarak komisyon kazanın.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon pink">🎁</div>
+        <h4>Özel Kampanyalar</h4>
+        <p>Yıl boyunca özel indirimlere, promosyonlara ve üyelere özel fırsatlara erişin.</p>
+      </div>
+    </div>
+    <a class="btn-gold-large">Ücretsiz Hesap Oluştur ›</a>
+  </section>
+
+  <!-- WHY POLO SIM -->
+  <section class="why-polo-section">
+    <h2>Neden POLO SIM?</h2>
+    <p class="subtitle">En son teknoloji eSIM teknolojimizle mobil bağlantının geleceğini deneyimleyin.</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-card-icon">⚡</div>
+        <h3>Anında Aktivasyon</h3>
+        <p>Dakikalar içinde bağlanın. Fiziksel SIM teslimatını beklemenize gerek yok — sadece QR kodunu tarayın ve çevrimiçi olun.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-card-icon">🚫</div>
+        <h3>Roaming Ücreti Yok</h3>
+        <p>Pahalı roaming ücretlerine veda edin. Şeffaf fiyatlandırmamız, eve döndüğünüzde sürpriz faturalar olmayacağı anlamına gelir.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-card-icon">🌐</div>
+        <h3>Küresel Kapsama</h3>
+        <p>200'den fazla ülke ve bölgede kapsama. Tüm uluslararası seyahat ihtiyaçlarınız için tek bir eSIM.</p>
+      </div>
+    </div>
+    <div class="mini-features">
+      <div class="mini-feature">
+        <div class="mini-feature-icon purple">🗓️</div>
+        <div>
+          <h4>Esnek Geçerlilik</h4>
+          <p>7 günden 30 güne kadar planlar</p>
+        </div>
+      </div>
+      <div class="mini-feature">
+        <div class="mini-feature-icon pink">📶</div>
+        <div>
+          <h4>Kolay Yükleme</h4>
+          <p>Her zaman, her yerde daha fazla veri ekleyin</p>
+        </div>
+      </div>
+      <div class="mini-feature">
+        <div class="mini-feature-icon blue">🎧</div>
+        <div>
+          <h4>7/24 Destek</h4>
+          <p>İhtiyacınız olduğunda uzman yardımı</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="nav-logo" style="display:inline-flex">
+          <span class="logo-polo" style="font-size:20px;">POLO</span>
+          <span class="logo-sim-box" style="font-size:14px;">SIM</span>
+        </div>
+        <p>Tek Sim, Tek Dünya. 200'den fazla ülkede anında aktivasyon ve roaming ücreti olmadan bağlı kalın.</p>
+        <div class="footer-social">
+          <a class="social-btn">𝕏</a>
+          <a class="social-btn">in</a>
+          <a class="social-btn">f</a>
+          <a class="social-btn">ig</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h5>Ürün</h5>
+        <ul>
+          <li><a onclick="showPage('plans')">Destinasyonlar</a></li>
+          <li><a onclick="showPage('plans')">Veri Planları</a></li>
+          <li><a onclick="showPage('plans')">Bölgeler</a></li>
+          <li><a>Kapsama Haritası</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Şirket</h5>
+        <ul>
+          <li><a>Hakkımızda</a></li>
+          <li><a>Kariyer</a></li>
+          <li><a>Blog</a></li>
+          <li><a>Basın</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Destek</h5>
+        <ul>
+          <li><a onclick="showPage('support')">Yardım Merkezi</a></li>
+          <li><a onclick="showPage('support')">İletişim</a></li>
+          <li><a onclick="showPage('how')">Kurulum Rehberi</a></li>
+          <li><a onclick="showPage('how')">Cihaz Uyumluluğu</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Yasal</h5>
+        <ul>
+          <li><a>Gizlilik Politikası</a></li>
+          <li><a>Kullanım Koşulları</a></li>
+          <li><a>İade Politikası</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 POLO SIM. Tüm hakları saklıdır.</p>
+      <div class="footer-bottom-badges">
+        <span class="footer-bottom-badge">200'den fazla ülkede kullanılabilir</span>
+        <span class="footer-bottom-badge">Güvenli ödemeler</span>
+      </div>
+    </div>
+  </footer>
+
+</div>
+
+<!-- ==================== PLANS PAGE ==================== -->
+<div class="page" id="page-plans">
+
+  <div class="page-hero">
+    <div class="tag">200+ Destinasyon Mevcut</div>
+    <h1>Tüm Planları İncele</h1>
+    <p class="desc">Hedefiniz için mükemmel eSIM veri planını bulun. Anında aktivasyon, roaming ücreti yok.</p>
+  </div>
+
+  <div class="plans-filters">
+    <button class="filter-btn active">Çok Satanlar</button>
+    <button class="filter-btn">Avrupa</button>
+    <button class="filter-btn">Asya</button>
+    <button class="filter-btn">Amerika</button>
+    <button class="filter-btn">Afrika</button>
+    <button class="filter-btn">Global</button>
+    <button class="filter-btn">Bölgeler</button>
+  </div>
+
+  <section class="plans-section">
+    <div class="plans-grid">
+
+      <div class="plan-card popular">
+        <div class="plan-card-header">
+          <div class="plan-country"><span class="plan-flag">🇹🇷</span><span class="plan-country-name">Türkiye</span></div>
+          <span class="plan-badge">Popüler</span>
+        </div>
+        <div class="plan-card-body">
+          <div class="plan-specs">
+            <div class="plan-spec"><span class="plan-spec-value">10 GB</span><span class="plan-spec-label">Veri</span></div>
+            <div class="plan-spec"><span class="plan-spec-value">30 Gün</span><span class="plan-spec-label">Geçerlilik</span></div>
+          </div>
+          <div class="plan-price-row">
+            <span class="plan-price">$12<span>.99</span></span>
+            <button class="btn-buy">Satın Al</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="plan-card">
+        <div class="plan-card-header">
+          <div class="plan-country"><span class="plan-flag">🇪🇸</span><span class="plan-country-name">İspanya</span></div>
+          <span class="plan-badge">Çok Satan</span>
+        </div>
+        <div class="plan-card-body">
+          <div class="plan-specs">
+            <div class="plan-spec"><span class="plan-spec-value">5 GB</span><span class="plan-spec-label">Veri</span></div>
+            <div class="plan-spec"><span class="plan-spec-value">15 Gün</span><span class="plan-spec-label">Geçerlilik</span></div>
+          </div>
+          <div class="plan-price-row">
+            <span class="plan-price">$9<span>.99</span></span>
+            <button class="btn-buy">Satın Al</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="plan-card">
+        <div class="plan-card-header">
+          <div class="plan-country"><span class="plan-flag">🇬🇧</span><span class="plan-country-name">İngiltere</span></div>
+        </div>
+        <div class="plan-card-body">
+          <div class="plan-specs">
+            <div class="plan-spec"><span class="plan-spec-value">20 GB</span><span class="plan-spec-label">Veri</span></div>
+            <div class="plan-spec"><span class="plan-spec-value">30 Gün</span><span class="plan-spec-label">Geçerlilik</span></div>
+          </div>
+          <div class="plan-price-row">
+            <span class="plan-price">$18<span>.99</span></span>
+            <button class="btn-buy">Satın Al</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="plan-card">
+        <div class="plan-card-header">
+          <div class="plan-country"><span class="plan-flag">🇫🇷</span><span class="plan-country-name">Fransa</span></div>
+          <span class="plan-badge">Yeni</span>
+        </div>
+        <div class="plan-card-body">
+          <div class="plan-specs">
+            <div class="plan-spec"><span class="plan-spec-value">10 GB</span><span class="plan-spec-label">Veri</span></div>
+            <div class="plan-spec"><span class="plan-spec-value">14 Gün</span><span class="plan-spec-label">Geçerlilik</span></div>
+          </div>
+          <div class="plan-price-row">
+            <span class="plan-price">$11<span>.99</span></span>
+            <button class="btn-buy">Satın Al</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="plan-card">
+        <div class="plan-card-header">
+          <div class="plan-country"><span class="plan-flag">🇯🇵</span><span class="plan-country-name">Japonya</span></div>
+          <span class="plan-badge">Popüler</span>
+        </div>
+        <div class="plan-card-body">
+          <div class="plan-specs">
+            <div class="plan-spec"><span class="plan-spec-value">7 GB</span><span class="plan-spec-label">Veri</span></div>
+            <div class="plan-spec"><span class="plan-spec-value">15 Gün</span><span class="plan-spec-label">Geçerlilik</span></div>
+          </div>
+          <div class="plan-price-row">
+            <span class="plan-price">$14<span>.99</span></span>
+            <button class="btn-buy">Satın Al</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="plan-card">
+        <div class="plan-card-header">
+          <div class="plan-country"><span class="plan-flag">🌐</span><span class="plan-country-name">Global</span></div>
+          <span class="plan-badge">200+ Ülke</span>
+        </div>
+        <div class="plan-card-body">
+          <div class="plan-specs">
+            <div class="plan-spec"><span class="plan-spec-value">15 GB</span><span class="plan-spec-label">Veri</span></div>
+            <div class="plan-spec"><span class="plan-spec-value">30 Gün</span><span class="plan-spec-label">Geçerlilik</span></div>
+          </div>
+          <div class="plan-price-row">
+            <span class="plan-price">$29<span>.99</span></span>
+            <button class="btn-buy">Satın Al</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="plan-card">
+        <div class="plan-card-header">
+          <div class="plan-country"><span class="plan-flag">🇩🇪</span><span class="plan-country-name">Almanya</span></div>
+        </div>
+        <div class="plan-card-body">
+          <div class="plan-specs">
+            <div class="plan-spec"><span class="plan-spec-value">10 GB</span><span class="plan-spec-label">Veri</span></div>
+            <div class="plan-spec"><span class="plan-spec-value">30 Gün</span><span class="plan-spec-label">Geçerlilik</span></div>
+          </div>
+          <div class="plan-price-row">
+            <span class="plan-price">$13<span>.99</span></span>
+            <button class="btn-buy">Satın Al</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="plan-card">
+        <div class="plan-card-header">
+          <div class="plan-country"><span class="plan-flag">🇺🇸</span><span class="plan-country-name">ABD</span></div>
+          <span class="plan-badge">Çok Satan</span>
+        </div>
+        <div class="plan-card-body">
+          <div class="plan-specs">
+            <div class="plan-spec"><span class="plan-spec-value">20 GB</span><span class="plan-spec-label">Veri</span></div>
+            <div class="plan-spec"><span class="plan-spec-value">30 Gün</span><span class="plan-spec-label">Geçerlilik</span></div>
+          </div>
+          <div class="plan-price-row">
+            <span class="plan-price">$22<span>.99</span></span>
+            <button class="btn-buy">Satın Al</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="nav-logo" style="display:inline-flex"><span class="logo-polo" style="font-size:20px;">POLO</span><span class="logo-sim-box" style="font-size:14px;">SIM</span></div>
+        <p>Tek Sim, Tek Dünya. 200'den fazla ülkede anında aktivasyon ve roaming ücreti olmadan bağlı kalın.</p>
+        <div class="footer-social">
+          <a class="social-btn">𝕏</a><a class="social-btn">in</a><a class="social-btn">f</a><a class="social-btn">ig</a>
+        </div>
+      </div>
+      <div class="footer-col"><h5>Ürün</h5><ul><li><a onclick="showPage('plans')">Destinasyonlar</a></li><li><a onclick="showPage('plans')">Veri Planları</a></li><li><a onclick="showPage('plans')">Bölgeler</a></li><li><a>Kapsama Haritası</a></li></ul></div>
+      <div class="footer-col"><h5>Şirket</h5><ul><li><a>Hakkımızda</a></li><li><a>Kariyer</a></li><li><a>Blog</a></li><li><a>Basın</a></li></ul></div>
+      <div class="footer-col"><h5>Destek</h5><ul><li><a onclick="showPage('support')">Yardım Merkezi</a></li><li><a onclick="showPage('support')">İletişim</a></li><li><a onclick="showPage('how')">Kurulum Rehberi</a></li><li><a onclick="showPage('how')">Cihaz Uyumluluğu</a></li></ul></div>
+      <div class="footer-col"><h5>Yasal</h5><ul><li><a>Gizlilik Politikası</a></li><li><a>Kullanım Koşulları</a></li><li><a>İade Politikası</a></li></ul></div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 POLO SIM. Tüm hakları saklıdır.</p>
+      <div class="footer-bottom-badges"><span class="footer-bottom-badge">200'den fazla ülkede kullanılabilir</span><span class="footer-bottom-badge">Güvenli ödemeler</span></div>
+    </div>
+  </footer>
+
+</div>
+
+<!-- ==================== HOW IT WORKS PAGE ==================== -->
+<div class="page" id="page-how">
+
+  <div class="page-hero">
+    <div class="tag">Simple Setup Process</div>
+    <h1>Nasıl Çalışır?</h1>
+    <p class="desc">Dakikalar içinde bağlanın. Fiziksel SIM kartı yok, mağaza ziyareti yok, zorluk yok. Seyahat ettiğiniz her yerde anında mobil veri.</p>
+  </div>
+
+  <section class="steps-section">
+    <div class="steps-container">
+
+      <div class="step-item">
+        <div class="step-num">01</div>
+        <div class="step-content">
+          <h3>Planınızı Seçin</h3>
+          <p>200'den fazla destinasyonumuza göz atın ve seyahat ihtiyaçlarınıza uyan veri planını seçin. Veri miktarınızı, geçerlilik sürenizi ve kapsama alanınızı belirleyin.</p>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-num">02</div>
+        <div class="step-content">
+          <h3>Satın Alma İşlemini Tamamlayın</h3>
+          <p>Tercih ettiğiniz ödeme yöntemiyle güvenli şekilde ödeme yapın. Tüm büyük kredi kartlarını, PayPal, Apple Pay ve Google Pay'i kabul ediyoruz. eSIM'iniz anında hazır olacak.</p>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-num">03</div>
+        <div class="step-content">
+          <h3>QR Kodu Tarayın</h3>
+          <p>Satın alma işleminin ardından e-posta ile bir QR kodu alacaksınız. eSIM profilini yüklemek için telefonunuzun kamerasıyla taramanız yeterli. Fiziksel SIM kart gerekmez.</p>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-num">04</div>
+        <div class="step-content">
+          <h3>Bağlantıda Kalın</h3>
+          <p>Destinasyonunuza vardığınızda eSIM'inizi etkinleştirin. Roaming ücreti olmadan hızlı ve güvenilir verinin tadını çıkarın. Daha fazla veriye ihtiyacınız olursa dilediğiniz zaman yükleyin.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="why-grid">
+      <div class="why-card">
+        <span class="why-card-icon">⚡</span>
+        <h4>Anında Teslimat</h4>
+        <p>Satın alma işleminden saniyeler sonra eSIM QR kodunuzu alın. Bekleme yok, kargo yok.</p>
+      </div>
+      <div class="why-card">
+        <span class="why-card-icon">🔐</span>
+        <h4>Güvenli Bağlantı</h4>
+        <p>Verileriniz tüm ağlarda kurumsal düzeyde şifrelemeyle korunur.</p>
+      </div>
+      <div class="why-card">
+        <span class="why-card-icon">🎧</span>
+        <h4>7/24 Destek</h4>
+        <p>Destek ekibimiz herhangi bir sorun için gece gündüz yardıma hazır.</p>
+      </div>
+      <div class="why-card">
+        <span class="why-card-icon">🌐</span>
+        <h4>Küresel Kapsama</h4>
+        <p>Dünya genelinde 200'den fazla ülke ve bölgede yüksek hızlı veriye erişin.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="devices-section">
+    <h2>Uyumlu Cihazlar</h2>
+    <p class="subtitle">eSIM'imiz modern akıllı telefon ve tabletlerin büyük çoğunluğuyla çalışır</p>
+    <div class="devices-grid">
+      <div class="device-card">
+        <div class="device-brand">🍎 Apple</div>
+        <ul>
+          <li>iPhone XS ve üzeri</li>
+          <li>iPad Pro (2018+)</li>
+          <li>iPad Air (2019+)</li>
+          <li>iPad (2019+)</li>
+        </ul>
+      </div>
+      <div class="device-card">
+        <div class="device-brand">🤖 Samsung</div>
+        <ul>
+          <li>Galaxy S20 ve üzeri</li>
+          <li>Galaxy Z Fold/Flip serisi</li>
+          <li>Galaxy Note 20+</li>
+        </ul>
+      </div>
+      <div class="device-card">
+        <div class="device-brand">🟢 Google</div>
+        <ul>
+          <li>Pixel 3 ve üzeri</li>
+          <li>Pixel Fold</li>
+        </ul>
+      </div>
+      <div class="device-card">
+        <div class="device-brand">📱 Diğer</div>
+        <ul>
+          <li>Motorola Razr</li>
+          <li>Huawei P40+</li>
+          <li>Oppo Find X3+</li>
+          <li>Sony Xperia 1 III+</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="install-section">
+    <h2>Kurulum Rehberi</h2>
+    <p class="subtitle">iOS ve Android cihazlar için hızlı kurulum</p>
+    <div class="install-grid">
+      <div class="install-card">
+        <h3>🍎 iOS Kurulumu</h3>
+        <ol class="install-steps">
+          <li><span class="num">1</span>Kamera uygulamasını açın ve QR kodu tarayın</li>
+          <li><span class="num">2</span>'eSIM Ekle' bildirimini görüntüleyin</li>
+          <li><span class="num">3</span>Ekrandaki talimatları takip edin</li>
+          <li><span class="num">4</span>Planınızı etiketleyin (örn. 'Seyahat Verisi')</li>
+          <li><span class="num">5</span>Yurt dışında veri dolaşımını etkinleştirin</li>
+        </ol>
+      </div>
+      <div class="install-card">
+        <h3>🤖 Android Kurulumu</h3>
+        <ol class="install-steps">
+          <li><span class="num">1</span>Ayarlar &gt; Ağ ve İnternet'e gidin</li>
+          <li><span class="num">2</span>'SIM'ler' veya 'Mobil Ağ'a dokunun</li>
+          <li><span class="num">3</span>'eSIM Ekle' veya '+' düğmesini seçin</li>
+          <li><span class="num">4</span>QR kodu kamerayla tarayın</li>
+          <li><span class="num">5</span>Planınızı onaylayın ve etkinleştirin</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section class="faq-section">
+    <h2>Sıkça Sorulan Sorular</h2>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">eSIM nedir? <span class="arrow">▾</span></button>
+        <div class="faq-a">eSIM (gömülü SIM), fiziksel SIM kart kullanmadan bir operatör planını etkinleştirmenizi sağlayan dijital bir SIM'dir. Cihazınıza yerleşik olup farklı operatör profilleriyle programlanabilir.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Cihazımın eSIM destekleyip desteklemediğini nasıl anlarım? <span class="arrow">▾</span></button>
+        <div class="faq-a">2018 sonrası çıkan modern akıllı telefon ve tabletlerin büyük çoğunluğu eSIM destekler. Cihaz ayarlarınızda Hücresel/Mobil Veri bölümünü kontrol edebilir ya da uyumluluk kontrolörümüzde modelinizi arayabilirsiniz.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Satın alma işleminin hemen ardından eSIM'imi kullanabilir miyim? <span class="arrow">▾</span></button>
+        <div class="faq-a">Evet! eSIM QR kodunuz satın almadan hemen sonra teslim edilir. Anında yükleyebilir ve destinasyonunuza vardığınızda etkinleştirebilirsiniz.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Normal SIM kartım eSIM ile birlikte çalışır mı? <span class="arrow">▾</span></button>
+        <div class="faq-a">Kesinlikle. Çoğu cihaz Çift SIM özelliğini destekler; böylece hem normal SIM'inizi (arama ve mesajlar için) hem de eSIM'inizi (veri için) aynı anda kullanabilirsiniz.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Tüm veri kotamı kullanırsam ne olur? <span class="arrow">▾</span></button>
+        <div class="faq-a">Uygulamamız veya web sitemiz üzerinden eSIM'inize kolayca ek veri yükleyebilirsiniz. Bu işlem yalnızca birkaç dakika sürer.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <h2>Başlamaya Hazır mısınız?</h2>
+    <p>POLO SIM ile bağlantıda kalan milyonlarca gezgine katılın. Planları inceleyin ve anında bağlantı kazanın.</p>
+    <div class="cta-buttons">
+      <a class="btn-gold-large" onclick="showPage('plans')">Planlara Gözat</a>
+      <a class="btn-white" onclick="showPage('support')">Desteğe Başvur</a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="nav-logo" style="display:inline-flex"><span class="logo-polo" style="font-size:20px;">POLO</span><span class="logo-sim-box" style="font-size:14px;">SIM</span></div>
+        <p>Tek Sim, Tek Dünya. 200'den fazla ülkede anında aktivasyon ve roaming ücreti olmadan bağlı kalın.</p>
+        <div class="footer-social"><a class="social-btn">𝕏</a><a class="social-btn">in</a><a class="social-btn">f</a><a class="social-btn">ig</a></div>
+      </div>
+      <div class="footer-col"><h5>Ürün</h5><ul><li><a onclick="showPage('plans')">Destinasyonlar</a></li><li><a onclick="showPage('plans')">Veri Planları</a></li><li><a onclick="showPage('plans')">Bölgeler</a></li><li><a>Kapsama Haritası</a></li></ul></div>
+      <div class="footer-col"><h5>Şirket</h5><ul><li><a>Hakkımızda</a></li><li><a>Kariyer</a></li><li><a>Blog</a></li><li><a>Basın</a></li></ul></div>
+      <div class="footer-col"><h5>Destek</h5><ul><li><a onclick="showPage('support')">Yardım Merkezi</a></li><li><a onclick="showPage('support')">İletişim</a></li><li><a onclick="showPage('how')">Kurulum Rehberi</a></li><li><a onclick="showPage('how')">Cihaz Uyumluluğu</a></li></ul></div>
+      <div class="footer-col"><h5>Yasal</h5><ul><li><a>Gizlilik Politikası</a></li><li><a>Kullanım Koşulları</a></li><li><a>İade Politikası</a></li></ul></div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 POLO SIM. Tüm hakları saklıdır.</p>
+      <div class="footer-bottom-badges"><span class="footer-bottom-badge">200'den fazla ülkede kullanılabilir</span><span class="footer-bottom-badge">Güvenli ödemeler</span></div>
+    </div>
+  </footer>
+
+</div>
+
+<!-- ==================== SUPPORT PAGE ==================== -->
+<div class="page" id="page-support">
+
+  <div class="support-search-section">
+    <div class="page-hero" style="background:transparent;padding:0;text-align:left;max-width:none;">
+      <div class="tag" style="display:block;text-align:center;">Destek Merkezi</div>
+    </div>
+    <h1>Size Nasıl Yardımcı Olabiliriz?</h1>
+    <p class="desc">Kurulum, bağlantı ve paket yönetimi için hızlı cevaplar alın. Küresel destek ekibimiz 7/24 yanınızda.</p>
+    <div class="support-search">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color:#9CA3AF;flex-shrink:0"><circle cx="6.5" cy="6.5" r="5" stroke="currentColor" stroke-width="1.5"/><path d="M11 11l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      <input type="text" placeholder="Sorunuzu arayın...">
+      <button class="btn-search">Ara</button>
+    </div>
+  </div>
+
+  <div class="support-quick-links">
+    <div class="quick-links-grid">
+      <a class="quick-link-card" onclick="showPage('how')">
+        <div class="quick-link-icon">📖</div>
+        <div>
+          <h4>Kurulum Rehberi</h4>
+          <p>eSIM nasıl kurulur adım adım</p>
+        </div>
+      </a>
+      <a class="quick-link-card">
+        <div class="quick-link-icon">📦</div>
+        <div>
+          <h4>Sipariş Durumu</h4>
+          <p>Siparişinizi takip edin</p>
+        </div>
+      </a>
+      <a class="quick-link-card">
+        <div class="quick-link-icon">📶</div>
+        <div>
+          <h4>Bağlantı Sorunu</h4>
+          <p>Bağlantı sorunlarını giderin</p>
+        </div>
+      </a>
+      <a class="quick-link-card">
+        <div class="quick-link-icon">💳</div>
+        <div>
+          <h4>Ödeme ve İade</h4>
+          <p>Ödeme ve iade politikası</p>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <section class="support-faq-section">
+    <h2>Sık Sorulan Sorular</h2>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">eSIM nedir ve nasıl çalışır? <span class="arrow">▾</span></button>
+        <div class="faq-a">eSIM (gömülü SIM), fiziksel SIM kart kullanmadan bir mobil operatör planını etkinleştirmenizi sağlayan dijital bir SIM teknolojisidir. Cihazınıza yerleşik olup QR kod ile kolayca yüklenebilir.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Satın alma işleminden sonra eSIM ne kadar sürede gelir? <span class="arrow">▾</span></button>
+        <div class="faq-a">eSIM QR kodunuz ödeme işleminin tamamlanmasından hemen sonra e-posta adresinize gönderilir. Genellikle birkaç saniye içinde alırsınız.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Hangi ödeme yöntemlerini kabul ediyorsunuz? <span class="arrow">▾</span></button>
+        <div class="faq-a">Tüm büyük kredi ve banka kartlarını (Visa, Mastercard, Amex), PayPal, Apple Pay ve Google Pay'i güvenle kabul ediyoruz.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">İnternete bağlanamıyorum, ne yapmalıyım? <span class="arrow">▾</span></button>
+        <div class="faq-a">Önce cihazınızda veri dolaşımının (data roaming) açık olduğunu kontrol edin. Ardından eSIM profilinin aktif olduğundan emin olun. Sorun devam ederse WhatsApp destek hattımızdan 7/24 yardım alabilirsiniz.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">İade politikası nedir? <span class="arrow">▾</span></button>
+        <div class="faq-a">Henüz kullanılmamış eSIM'ler için satın almadan itibaren 7 gün içinde tam iade yapılabilir. Aktive edilmiş eSIM'lerde iade yapılamamaktadır. Detaylar için İade Politikamızı inceleyin.</div>
+      </div>
+    </div>
+
+    <div class="whatsapp-card">
+      <span class="whatsapp-icon">💬</span>
+      <h3>Hâlâ yardıma mı ihtiyacınız var?</h3>
+      <p>Destek ekibimiz 12 dilde size yardımcı olmak için çevrimiçi.</p>
+      <a class="btn-whatsapp" href="https://wa.me/000000000000" target="_blank">
+        WhatsApp ile 7/24 Destek
+      </a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="nav-logo" style="display:inline-flex"><span class="logo-polo" style="font-size:20px;">POLO</span><span class="logo-sim-box" style="font-size:14px;">SIM</span></div>
+        <p>Tek Sim, Tek Dünya. 200'den fazla ülkede anında aktivasyon ve roaming ücreti olmadan bağlı kalın.</p>
+        <div class="footer-social"><a class="social-btn">𝕏</a><a class="social-btn">in</a><a class="social-btn">f</a><a class="social-btn">ig</a></div>
+      </div>
+      <div class="footer-col"><h5>Ürün</h5><ul><li><a onclick="showPage('plans')">Destinasyonlar</a></li><li><a onclick="showPage('plans')">Veri Planları</a></li><li><a onclick="showPage('plans')">Bölgeler</a></li><li><a>Kapsama Haritası</a></li></ul></div>
+      <div class="footer-col"><h5>Şirket</h5><ul><li><a>Hakkımızda</a></li><li><a>Kariyer</a></li><li><a>Blog</a></li><li><a>Basın</a></li></ul></div>
+      <div class="footer-col"><h5>Destek</h5><ul><li><a onclick="showPage('support')">Yardım Merkezi</a></li><li><a onclick="showPage('support')">İletişim</a></li><li><a onclick="showPage('how')">Kurulum Rehberi</a></li><li><a onclick="showPage('how')">Cihaz Uyumluluğu</a></li></ul></div>
+      <div class="footer-col"><h5>Yasal</h5><ul><li><a>Gizlilik Politikası</a></li><li><a>Kullanım Koşulları</a></li><li><a>İade Politikası</a></li></ul></div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 POLO SIM. Tüm hakları saklıdır.</p>
+      <div class="footer-bottom-badges"><span class="footer-bottom-badge">200'den fazla ülkede kullanılabilir</span><span class="footer-bottom-badge">Güvenli ödemeler</span></div>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active-link'));
+  const map = { home: 'nav-home', plans: 'nav-plans', how: 'nav-how', support: 'nav-support' };
+  if (map[id]) document.getElementById(map[id]).classList.add('active-link');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function toggleFaq(btn) {
+  const item = btn.closest('.faq-item');
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+  if (!isOpen) item.classList.add('open');
+}
+
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    this.closest('.plans-filters').querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+</script>
+</body>
+</html>
