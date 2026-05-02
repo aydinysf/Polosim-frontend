@@ -35,6 +35,7 @@ type EsimPackage = EsimPackageData & {
 
 export default function ProfilePage() {
   const t = useTranslations('Profile');
+  const tc = useTranslations('GetStarted');
   const locale = useLocale();
   const { user, isLoading: authLoading, isAuthenticated, logout } = useAuth();
   const router = useRouter();

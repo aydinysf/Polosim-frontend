@@ -9,7 +9,7 @@ import { GuestCheckoutForm } from "@/components/guest-checkout-form";
 import { PaymentMethodSelector } from "@/components/payment-method-selector";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2, CreditCard, Wallet, User, CheckCircle, ArrowLeft, ShoppingBag, Send } from "lucide-react";
+import { Loader2, CreditCard, Wallet, User, CheckCircle, ArrowLeft, ShoppingBag, Send, X } from "lucide-react";
 import { StripeProvider } from "@/components/stripe-provider";
 import { StripePaymentForm } from "@/components/stripe-payment-form";
 import { WalletPaymentButton } from "@/components/wallet-payment-button";
@@ -37,6 +37,7 @@ enum PageState {
 
 export function NewCheckout() {
   const t = useTranslations('Checkout');
+  const tc = useTranslations('Cart');
   const locale = useLocale();
   const { isAuthenticated, user } = useAuth();
   const { items, clearCart, isLoaded, totalPrice } = useCart();
