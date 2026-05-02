@@ -463,7 +463,6 @@ export default function PlansPage() {
               />
             )}
           </div>
-        </div>
       </section>
 
       {/* Filters & Content */}
