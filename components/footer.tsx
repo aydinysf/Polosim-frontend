@@ -76,31 +76,31 @@ export function Footer() {
 
   return (
     <footer className="bg-[var(--navy)]">
-      <div className="max-w-7xl mx-auto px-[5%] pt-14 pb-8">
-        <div className="grid grid-cols-2 md:grid-cols-6 gap-6 sm:gap-10 pb-10 border-b border-white/10 mb-7">
+      <div className="max-w-[1440px] mx-auto px-[5%] pt-20 pb-10">
+        <div className="grid grid-cols-2 md:grid-cols-6 gap-10 pb-12 border-b border-white/10 mb-8">
           {/* Brand column */}
           <div className="col-span-2">
-            <Link href="/" className="flex items-center mb-4 cursor-pointer">
+            <Link href="/" className="flex items-center mb-6 cursor-pointer">
               <Image
                 src="/logo.png"
                 alt="POLO SIM - One Sim One World"
-                width={360}
-                height={120}
-                className="h-14 sm:h-16 w-auto brightness-110"
+                width={400}
+                height={140}
+                className="h-20 sm:h-24 w-auto brightness-110"
               />
             </Link>
-            <p className="text-[13px] text-white/50 leading-[1.7] mb-6 max-w-[220px]">
+            <p className="text-[14px] text-white/50 leading-[1.8] mb-8 max-w-[320px]">
               {t('description')}
             </p>
-            <div className="flex gap-2.5">
+            <div className="flex gap-3">
               {socialLinks.map((social) => (
                 <a
                   key={social.name}
                   href={social.href}
-                  className="w-[34px] h-[34px] rounded-lg bg-white/[0.08] flex items-center justify-center text-white/60 cursor-pointer transition-all hover:bg-[var(--gold)] hover:text-white"
+                  className="w-[40px] h-[40px] rounded-xl bg-white/[0.05] border border-white/10 flex items-center justify-center text-white/50 cursor-pointer transition-all hover:bg-[var(--gold)] hover:text-white hover:scale-110"
                   aria-label={social.name}
                 >
-                  <social.icon className="w-4 h-4" />
+                  <social.icon className="w-5 h-5" />
                 </a>
               ))}
             </div>

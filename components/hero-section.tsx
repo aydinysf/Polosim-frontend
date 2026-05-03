@@ -282,17 +282,16 @@ export function HeroSection() {
 
       <div className="relative z-10 w-full max-w-7xl mx-auto px-[5%]">
         <div className="text-center mb-10">
-          <h1 className="text-[clamp(32px,5vw,56px)] font-extrabold text-white leading-[1.1] max-w-[850px] mx-auto mb-8 tracking-tight">
-            {t.rich('mainHeading', {
-              gold: (chunks) => <span className="text-[var(--gold)]">{chunks}</span>
-            })}
+          <h1 className="text-[clamp(32px,4vw,48px)] font-extrabold text-white leading-[1.2] max-w-[950px] mx-auto mb-8 tracking-tight">
+            200'den fazla ülke için anında <span className="text-[var(--gold)]">eSIM</span> teslimatı.<br />
+            <span className="text-[var(--gold)]">Roaming</span> ücreti yok. Numaranızı koruyun.
           </h1>
         </div>
 
         {/* Search bar */}
-        <div className="relative max-w-[560px] mx-auto mb-6">
-          <div className="relative flex items-center bg-white rounded-3xl pl-5 pr-1.5 py-1.5 gap-2 shadow-lg">
-            <svg width="18" height="18" viewBox="0 0 16 16" fill="none" className="text-[#9CA3AF] shrink-0"><circle cx="6.5" cy="6.5" r="5" stroke="currentColor" strokeWidth="1.5"/><path d="M11 11l3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
+        <div className="relative max-w-[640px] mx-auto mb-8">
+          <div className="relative flex items-center bg-white rounded-full pl-6 pr-2 py-2 gap-2 shadow-2xl">
+            <Search className="w-5 h-5 text-[#9CA3AF] shrink-0" />
             <Input
               type="text"
               placeholder={t('searchPlaceholder')}
@@ -301,10 +300,10 @@ export function HeroSection() {
               onFocus={() => setShowSuggestions(true)}
               onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
               onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-              className="border-0 bg-transparent focus-visible:ring-0 text-[var(--text-dark)] placeholder:text-[#9CA3AF] text-[15px] flex-1 h-10"
+              className="border-0 bg-transparent focus-visible:ring-0 text-[var(--text-dark)] placeholder:text-[#9CA3AF] text-base flex-1 h-12"
             />
             <button
-              className="bg-[var(--gold)] text-white border-none rounded-2xl px-7 h-10 font-['Sora'] font-bold text-sm cursor-pointer whitespace-nowrap hover:bg-[var(--gold-light)] transition-all hover:scale-[1.02]"
+              className="bg-[var(--gold)] text-white border-none rounded-full px-8 h-12 font-['Sora'] font-bold text-[15px] cursor-pointer whitespace-nowrap hover:bg-[var(--gold-light)] transition-all"
               onClick={() => handleSearch()}
             >
               {t('searchButton')}
@@ -332,31 +331,40 @@ export function HeroSection() {
         </div>
 
         {/* View All Button */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-20">
           <button
-            className="inline-flex items-center gap-2 bg-transparent border-[1.5px] border-white/30 text-white rounded-full px-7 py-2.5 font-['Sora'] font-semibold text-[13px] cursor-pointer hover:border-[var(--gold)] hover:text-[var(--gold)] transition-all"
+            className="inline-flex items-center gap-2 bg-white/5 border border-white/20 text-white rounded-xl px-10 py-3 font-['Sora'] font-semibold text-[14px] cursor-pointer hover:bg-white/10 hover:border-white/40 transition-all backdrop-blur-sm"
             onClick={() => router.push("/plans")}
           >
-            {t('viewAllDestinations')} ›
+            200'den Fazla Destinasyonu Gör
+            <div className="w-5 h-5 rounded-full border border-white/40 flex items-center justify-center ml-2">
+              <ChevronRight className="w-3 h-3" />
+            </div>
           </button>
         </div>
 
-        {/* Popular Destinations Chips */}
-        <div className="max-w-4xl mx-auto mb-16">
-          <div className="flex items-center justify-between mb-4 px-2">
-            <span className="text-[12px] font-bold text-white/40 uppercase tracking-[1.5px]">{t('popularDestinations')}</span>
+        {/* Popular Destinations Cards */}
+        <div className="max-w-6xl mx-auto mb-16">
+          <div className="flex items-center justify-between mb-6 px-2">
+            <span className="text-[18px] font-bold text-white font-['Sora']">{t('popularDestinations')}</span>
+            <button 
+              className="text-[12px] font-bold text-[var(--gold)] hover:underline bg-transparent border-none p-0 cursor-pointer"
+              onClick={() => router.push("/plans")}
+            >
+              Hepsini Gör
+            </button>
           </div>
-          <div className="flex flex-wrap justify-center gap-2.5">
+          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3">
             {popularCountries.map((country) => {
               const countryName = getLocalizedText(country.name);
               return (
                 <button
                   key={country.id}
-                  className="flex-shrink-0 inline-flex items-center gap-2.5 bg-white/[0.07] border border-white/[0.12] rounded-full px-4 py-2 cursor-pointer hover:bg-[rgba(201,168,76,0.15)] hover:border-[var(--gold)] transition-all group no-underline"
+                  className="flex flex-col items-center justify-center gap-2 bg-white rounded-xl py-4 px-2 cursor-pointer hover:shadow-lg transition-all border-none group no-underline"
                   onClick={() => router.push(`/plans?search=${encodeURIComponent(countryName)}`)}
                 >
                   <FlagDisplay flag={country.flag_url || country.iso_code} name={countryName} size="md" />
-                  <span className="text-sm font-semibold text-white/90 group-hover:text-white">{countryName}</span>
+                  <span className="text-[13px] font-bold text-[var(--text-dark)] group-hover:text-[var(--gold)]">{countryName}</span>
                 </button>
               );
             })}

@@ -67,15 +67,15 @@ export function Navbar() {
 
   return (
     <nav className="sticky top-0 z-50 bg-white border-b border-[var(--gray-mid)]">
-      <div className="max-w-7xl mx-auto px-[5%] flex items-center justify-between h-[68px]">
+      <div className="max-w-[1440px] mx-auto px-[5%] flex items-center justify-between h-[100px]">
         {/* Logo */}
         <Link href="/" className="flex items-center">
           <Image
             src="/logo.png"
             alt="POLO SIM - One Sim One World"
-            width={360}
-            height={120}
-            className="h-14 sm:h-16 w-auto"
+            width={480}
+            height={160}
+            className="h-20 sm:h-24 w-auto"
             priority
           />
         </Link>

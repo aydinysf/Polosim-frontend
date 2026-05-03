@@ -36,38 +36,38 @@ export function PlansRegionsTabs() {
   ];
 
   return (
-    <section className="py-16 sm:py-[72px] px-[5%] bg-white text-center">
-      <div className="max-w-[900px] mx-auto">
+    <section className="py-20 sm:py-24 px-[5%] bg-white text-center">
+      <div className="max-w-[1200px] mx-auto">
         {/* Section header */}
-        <h2 className="text-[32px] font-extrabold mb-3 text-[var(--text-dark)]">
-          {t('title')}
+        <h2 className="text-[36px] font-extrabold mb-4 text-[var(--text-dark)] font-['Sora']">
+          Neden Hesap Oluşturmalısınız?
         </h2>
-        <p className="text-[var(--gray-text)] text-base max-w-[480px] mx-auto mb-12 leading-[1.6]">
-          {t('subtitle')}
+        <p className="text-[var(--gray-text)] text-[16px] max-w-[600px] mx-auto mb-16 leading-[1.6]">
+          Ücretsiz bir hesapla özel avantajların kilidini açın ve eSIM'lerinizi kolayca yönetin.
         </p>
 
         {/* Benefits Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
           {benefits.map((benefit) => (
             <div
               key={benefit.title}
-              className="bg-[var(--gray-bg)] rounded-2xl p-6 text-left"
+              className="bg-[#F9FAFB] rounded-2xl p-8 text-left border border-transparent hover:border-[var(--gold)]/30 hover:bg-white hover:shadow-xl transition-all group"
             >
-              <div className={`w-11 h-11 rounded-xl ${benefit.iconBg} flex items-center justify-center text-xl mb-3.5`}>
+              <div className={`w-14 h-14 rounded-2xl ${benefit.iconBg} flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform`}>
                 {benefit.icon}
               </div>
-              <h4 className="text-sm font-bold text-[var(--text-dark)] mb-2 font-['Sora']">{benefit.title}</h4>
-              <p className="text-[13px] text-[var(--gray-text)] leading-[1.6]">{benefit.description}</p>
+              <h4 className="text-[17px] font-bold text-[var(--text-dark)] mb-3 font-['Sora'] group-hover:text-[var(--gold)] transition-colors">{benefit.title}</h4>
+              <p className="text-[14px] text-[var(--gray-text)] leading-[1.6]">{benefit.description}</p>
             </div>
           ))}
         </div>
 
         {/* CTA Button */}
         <button
-          className="inline-flex items-center gap-2 bg-[var(--gold)] text-white border-none rounded-3xl px-8 py-3.5 font-['Sora'] font-bold text-[15px] cursor-pointer hover:bg-[var(--gold-light)] hover:translate-y-[-2px] hover:shadow-[0_8px_24px_rgba(201,168,76,0.3)] transition-all"
+          className="inline-flex items-center gap-2 bg-[var(--gold)] text-white border-none rounded-xl px-10 py-4 font-['Sora'] font-bold text-[15px] cursor-pointer hover:bg-[var(--gold-light)] hover:translate-y-[-2px] transition-all shadow-lg"
           onClick={() => router.push("/sign-in")}
         >
-          {t('createAccount')} ›
+          Ücretsiz Hesap Oluştur ›
         </button>
       </div>
     </section>

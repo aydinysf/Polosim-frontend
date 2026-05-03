@@ -44,47 +44,48 @@ export function FeaturesSection() {
   ];
 
   return (
-    <section className="py-16 sm:py-[72px] px-[5%] bg-[var(--gray-bg)] text-center">
-      <div className="max-w-7xl mx-auto">
+    <section className="py-24 px-[5%] bg-white text-center">
+      <div className="max-w-[1200px] mx-auto">
         {/* Section header */}
-        <div className="mb-10 sm:mb-12">
-          <h2 className="text-[32px] font-extrabold mb-3 text-[var(--text-dark)]">
-            {t('title')}
+        <div className="mb-16">
+          <h2 className="text-[36px] font-extrabold mb-4 text-[var(--text-dark)] font-['Sora']">
+            Neden POLO SIM?
           </h2>
-          <p className="text-[var(--gray-text)] text-base max-w-xl mx-auto">
-            {t('subtitle')}
+          <p className="text-[var(--gray-text)] text-[16px] max-w-[600px] mx-auto leading-[1.6]">
+            En son teknoloji eSIM teknolojimizle mobil bağlantının geleceğini deneyimleyin.
           </p>
         </div>
 
         {/* Main features - navy cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           {features.map((feature) => (
             <div
               key={feature.title}
-              className="bg-[var(--navy)] rounded-2xl p-7 text-left transition-all hover:translate-y-[-2px]"
+              className="bg-[var(--navy)] rounded-2xl p-10 text-left transition-all hover:translate-y-[-4px] shadow-xl group relative overflow-hidden"
             >
-              <div className="w-[52px] h-[52px] rounded-xl bg-[rgba(201,168,76,0.15)] flex items-center justify-center mb-4">
-                <feature.icon className="w-6 h-6 text-[var(--gold)]" />
+              <div className="absolute top-0 right-0 w-24 h-24 bg-white/5 rounded-full -mr-12 -mt-12 transition-transform group-hover:scale-150" />
+              <div className="w-[64px] h-[64px] rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-8 group-hover:border-[var(--gold)]/50 transition-colors">
+                <feature.icon className="w-8 h-8 text-[var(--gold)]" />
               </div>
-              <h3 className="text-[15px] font-bold text-[var(--gold)] mb-2.5 font-['Sora']">{feature.title}</h3>
-              <p className="text-[13px] text-white/65 leading-[1.6]">{feature.description}</p>
+              <h3 className="text-[19px] font-bold text-white mb-4 font-['Sora'] group-hover:text-[var(--gold)] transition-colors">{feature.title}</h3>
+              <p className="text-[14px] text-white/60 leading-[1.7]">{feature.description}</p>
             </div>
           ))}
         </div>
 
         {/* Additional features bar */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {additionalFeatures.map((feature) => (
             <div
               key={feature.title}
-              className="bg-white rounded-xl py-[18px] px-5 flex items-center gap-3.5 text-left"
+              className="bg-[#F9FAFB] rounded-2xl py-[24px] px-8 flex items-center gap-5 text-left border border-transparent hover:border-[var(--gold)]/20 hover:bg-white hover:shadow-lg transition-all group"
             >
-              <div className={`w-9 h-9 rounded-lg ${feature.iconBgClass} flex items-center justify-center shrink-0`}>
-                <feature.icon className="w-[18px] h-[18px] text-[var(--text-dark)]" />
+              <div className={`w-12 h-12 rounded-xl ${feature.iconBgClass} flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform`}>
+                <feature.icon className="w-[22px] h-[22px] text-[var(--text-dark)]" />
               </div>
               <div>
-                <h4 className="text-[13px] font-bold text-[var(--text-dark)] mb-0.5 font-['Sora']">{feature.title}</h4>
-                <p className="text-[12px] text-[var(--gray-text)]">{feature.description}</p>
+                <h4 className="text-[15px] font-bold text-[var(--text-dark)] mb-1 font-['Sora'] group-hover:text-[var(--gold)] transition-colors">{feature.title}</h4>
+                <p className="text-[13px] text-[var(--gray-text)]">{feature.description}</p>
               </div>
             </div>
           ))}
