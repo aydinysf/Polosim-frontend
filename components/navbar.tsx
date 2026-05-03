@@ -66,22 +66,22 @@ export function Navbar() {
   };
 
   return (
-    <nav className="sticky top-0 z-50 bg-white border-b border-[var(--gray-mid)]">
-      <div className="max-w-[1440px] mx-auto px-[5%] flex items-center justify-between h-[100px]">
+    <nav className="fixed top-0 left-0 right-0 z-50 pt-6 px-[5%] pointer-events-none">
+      <div className="max-w-[1440px] mx-auto bg-white rounded-[24px] shadow-[0_15px_50px_rgba(0,0,0,0.1)] flex items-center justify-between h-[90px] px-8 pointer-events-auto">
         {/* Logo */}
-        <Link href="/" className="flex items-center">
+        <Link href="/" className="flex items-center shrink-0">
           <Image
             src="/logo.png"
             alt="POLO SIM - One Sim One World"
-            width={480}
-            height={160}
-            className="h-20 sm:h-24 w-auto"
+            width={240}
+            height={80}
+            className="h-14 sm:h-16 w-auto"
             priority
           />
         </Link>
 
         {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center gap-8">
+        <div className="hidden lg:flex items-center gap-6">
           {dynamicLinks.map((link, idx) => {
             const title = link.key ? t(link.key as any) : link.title;
             const isExternal = link.external || link.target === "_blank";
@@ -94,12 +94,12 @@ export function Navbar() {
                   onMouseEnter={() => setActiveDropdown(`desktop-${idx}`)}
                   onMouseLeave={() => setActiveDropdown(null)}
                 >
-                  <button className="flex items-center gap-1 text-[var(--text-dark)] hover:text-[var(--gold)] transition-colors text-sm font-medium cursor-default py-2">
+                  <button className="flex items-center gap-1 text-[#1A2332] hover:text-[var(--gold)] transition-colors text-[14px] font-bold cursor-default py-2">
                     {title}
                     <ChevronDown className="w-3 h-3" />
                   </button>
                   {activeDropdown === `desktop-${idx}` && (
-                    <div className="absolute top-10 left-0 mt-2 bg-white border border-[var(--gray-mid)] rounded-xl overflow-hidden z-50 min-w-[200px] shadow-lg py-2">
+                    <div className="absolute top-[80%] left-0 mt-2 bg-white border border-[var(--gray-mid)] rounded-xl overflow-hidden z-50 min-w-[200px] shadow-lg py-2">
                       {link.children.map((child: any, cidx: number) => (
                         <Link
                           key={cidx}
@@ -121,7 +121,7 @@ export function Navbar() {
                 href={link.url || link.href || '#'}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[var(--text-dark)] hover:text-[var(--gold)] transition-colors text-sm font-medium"
+                className="text-[#1A2332] hover:text-[var(--gold)] transition-colors text-[14px] font-bold whitespace-nowrap"
               >
                 {title}
               </a>
@@ -129,7 +129,7 @@ export function Navbar() {
               <Link
                 key={idx}
                 href={link.url || link.href || '#'}
-                className="text-[var(--text-dark)] hover:text-[var(--gold)] transition-colors text-sm font-medium"
+                className="text-[#1A2332] hover:text-[var(--gold)] transition-colors text-[14px] font-bold whitespace-nowrap"
               >
                 {title}
               </Link>
@@ -138,45 +138,20 @@ export function Navbar() {
         </div>
 
         {/* Desktop Actions */}
-        <div className="hidden md:flex items-center gap-3">
-          {/* Language Switcher */}
-          <div className="relative">
-            <button
-              onClick={() => setLangMenuOpen(!langMenuOpen)}
-              onBlur={() => setTimeout(() => setLangMenuOpen(false), 150)}
-              className="flex items-center gap-1.5 text-xs font-semibold text-[var(--gray-text)] hover:text-[var(--text-dark)] transition-colors"
-              disabled={isPending}
-            >
-              🌐 {locale.toUpperCase()}
-            </button>
-            {langMenuOpen && (
-              <div className="absolute top-full right-0 mt-2 bg-white border border-[var(--gray-mid)] rounded-xl overflow-hidden z-50 min-w-[130px] shadow-md">
-                {languages.map((lang) => (
-                  <button
-                    key={lang.code}
-                    onClick={() => handleLanguageChange(lang.code)}
-                    className={`w-full px-4 py-2.5 text-left text-sm hover:bg-[var(--gray-bg)] transition-colors ${locale === lang.code ? "text-[var(--gold)] font-semibold" : "text-[var(--text-dark)]"
-                      }`}
-                  >
-                    {lang.code.toUpperCase()} - {lang.label}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-
+        <div className="hidden lg:flex items-center gap-4">
           {/* Cart Icon */}
           <Link
             href="/cart"
-            className="relative flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-[var(--text-dark)] hover:text-[var(--gold)] transition-colors"
+            className="relative flex items-center justify-center w-10 h-10 rounded-lg text-[#1A2332] hover:text-[var(--gold)] transition-colors"
           >
-            <ShoppingCart className="w-4 h-4" />
+            <ShoppingCart className="w-6 h-6" />
             {totalItems > 0 && (
               <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-[var(--gold)] text-white text-xs flex items-center justify-center font-medium">
                 {totalItems > 9 ? "9+" : totalItems}
               </span>
             )}
           </Link>
+
           {isLoading ? (
             <div className="w-8 h-8 rounded-full bg-[var(--gray-mid)] animate-pulse" />
           ) : isAuthenticated ? (
@@ -189,7 +164,7 @@ export function Navbar() {
                 <div className="w-8 h-8 rounded-full bg-[var(--gold-pale)] border border-[var(--gold)]/20 flex items-center justify-center">
                   <User className="w-4 h-4 text-[var(--gold)]" />
                 </div>
-                <span className="hidden lg:inline">{user?.name?.split(" ")[0]}</span>
+                <span className="hidden xl:inline">{user?.name?.split(" ")[0]}</span>
               </button>
               {userMenuOpen && (
                 <div className="absolute top-full right-0 mt-2 bg-white border border-[var(--gray-mid)] rounded-xl overflow-hidden z-50 min-w-[180px] shadow-md">
@@ -218,21 +193,47 @@ export function Navbar() {
           ) : (
             <>
               <Link href="/sign-in">
-                <button className="px-5 py-2 border-[1.5px] border-[var(--text-dark)] rounded-xl bg-transparent font-['Sora'] font-semibold text-[13px] text-[var(--text-dark)] hover:bg-[var(--text-dark)] hover:text-white transition-all">
-                  {t('login')}
+                <button className="px-7 py-3 border-[1.5px] border-[var(--gold)] rounded-xl bg-transparent font-['Sora'] font-bold text-[14px] text-[var(--gold)] hover:bg-[var(--gold)] hover:text-white transition-all whitespace-nowrap">
+                  Giriş Yap
                 </button>
               </Link>
               <Link href="/get-started">
-                <button className="px-5 py-2 border-none rounded-xl bg-[var(--gold)] font-['Sora'] font-bold text-[13px] text-white hover:bg-[var(--gold-light)] hover:translate-y-[-1px] transition-all">
-                  {t('getStarted')}
+                <button className="px-7 py-3 border-none rounded-xl bg-[#D4AF37] font-['Sora'] font-bold text-[14px] text-white hover:bg-[var(--gold-light)] transition-all whitespace-nowrap shadow-md">
+                  Hemen Başla
                 </button>
               </Link>
             </>
           )}
+
+          {/* Language Switcher */}
+          <div className="relative ml-2">
+            <button
+              onClick={() => setLangMenuOpen(!langMenuOpen)}
+              className="flex items-center gap-1.5 text-[14px] font-bold text-[#1A2332] hover:text-[var(--gold)] transition-colors"
+              disabled={isPending}
+            >
+              <span className="text-lg">{locale === 'tr' ? '🇹🇷' : '🇬🇧'}</span>
+              <span>{locale.toUpperCase()}</span>
+            </button>
+            {langMenuOpen && (
+              <div className="absolute top-full right-0 mt-2 bg-white border border-[var(--gray-mid)] rounded-xl overflow-hidden z-50 min-w-[130px] shadow-lg pointer-events-auto">
+                {languages.map((lang) => (
+                  <button
+                    key={lang.code}
+                    onClick={() => handleLanguageChange(lang.code)}
+                    className={`w-full px-4 py-2.5 text-left text-sm hover:bg-[var(--gray-bg)] transition-colors ${locale === lang.code ? "text-[var(--gold)] font-semibold" : "text-[var(--text-dark)]"
+                      }`}
+                  >
+                    {lang.code.toUpperCase()} - {lang.label}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Mobile Cart & Menu */}
-        <div className="flex items-center gap-2 md:hidden">
+        <div className="flex lg:hidden items-center gap-2">
           <Link
             href="/cart"
             className="relative p-2 rounded-lg hover:bg-[var(--gray-bg)] text-[var(--text-dark)]"

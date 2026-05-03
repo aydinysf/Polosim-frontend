@@ -273,7 +273,7 @@ export function HeroSection() {
   }
 
   return (
-    <section className="relative pt-20 pb-16 flex flex-col items-center justify-start overflow-hidden bg-[var(--navy)]">
+    <section className="relative pt-40 pb-16 flex flex-col items-center justify-start overflow-hidden bg-[var(--navy)]">
       {/* Background Glows */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-[100px] -left-[100px] w-[400px] h-[400px] bg-[radial-gradient(circle,rgba(201,168,76,0.12)_0%,transparent:70%)]" />
