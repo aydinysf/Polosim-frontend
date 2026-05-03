@@ -4,33 +4,20 @@ export interface Banner {
   id: number;
   title: string;
   subtitle?: string;
-  description?: string;
-  image_url?: string;
-  button_text?: string;
-  button_url?: string;
-  position: "hero" | "promo" | "footer";
-  is_active: boolean;
-  order: number;
-  starts_at?: string;
-  ends_at?: string;
+  image_url: string;
+  link?: string;
+  position: number;
 }
 
 export const bannerService = {
-  async getAll(): Promise<Banner[]> {
-    const response = await api.get<Banner[]>("/banners");
+  async getBanners(position?: string, lang: string = "en"): Promise<Banner[]> {
+    const response = await api.get("/banners", {
+      params: {
+        position,
+        lang,
+        _t: Date.now(), // Cache buster
+      },
+    });
     return (response.data as any).data;
-  },
-
-  async getByPosition(position: Banner["position"]): Promise<Banner[]> {
-    const response = await api.get<Banner[]>(`/banners?position=${position}`);
-    return (response.data as any).data;
-  },
-
-  async getHeroBanners(): Promise<Banner[]> {
-    return this.getByPosition("hero");
-  },
-
-  async getPromoBanners(): Promise<Banner[]> {
-    return this.getByPosition("promo");
   },
 };

@@ -7,12 +7,12 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useRouter } from "@/i18n/routing";
 import { useTranslations, useLocale } from "next-intl";
-import { countryService, type Country } from "@/lib/services/countryService";
-import { regionService, type Region } from "@/lib/services/regionService";
-import { productService, type Product } from "@/lib/services/productService";
+import { countryService, type Country, regionService, type Region, productService, type Product, bannerService, type Banner } from "@/lib/services";
 import { getLocalizedText } from "@/lib/product-helpers";
 import { getImageUrl, getFlagFromISO } from "@/lib/api-client";
 import { useCart } from "@/lib/cart-context";
+import useEmblaCarousel from 'embla-carousel-react';
+import Autoplay from 'embla-carousel-autoplay';
 
 interface SearchResult {
   type: "country" | "region";
@@ -62,7 +62,11 @@ export function HeroSection() {
   const [popularCountries, setPopularCountries] = useState<Country[]>([]);
   const [regions, setRegions] = useState<Region[]>([]);
   const [countries, setCountries] = useState<Country[]>([]);
+  const [banners, setBanners] = useState<Banner[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  // Carousel ref
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [Autoplay({ delay: 5000 })]);
 
   // Search results state
   const [showSearchResults, setShowSearchResults] = useState(false);
@@ -74,13 +78,16 @@ export function HeroSection() {
     async function fetchData() {
       try {
         setIsLoading(true);
-        const [countriesData, regionsData] = await Promise.all([
+        const [countriesData, regionsData, bannersData, popularCountriesData] = await Promise.all([
           countryService.getAll(),
-          regionService.getAll()
+          regionService.getAll(),
+          bannerService.getBanners("home_slider", locale).catch(() => []),
+          countryService.getPopular().catch(() => [])
         ]);
         setCountries(countriesData);
         setRegions(regionsData);
-        setPopularCountries(countriesData.filter(c => c.is_popular).slice(0, 12));
+        setBanners(bannersData);
+        setPopularCountries(popularCountriesData.length > 0 ? popularCountriesData : countriesData.filter(c => c.is_popular).slice(0, 12));
       } catch (error) {
         console.error("Failed to fetch hero data:", error);
       } finally {
@@ -88,7 +95,7 @@ export function HeroSection() {
       }
     }
     fetchData();
-  }, []);
+  }, [locale]);
 
   const handleSearch = async (query?: string) => {
     const searchVal = query || searchQuery;
@@ -273,18 +280,51 @@ export function HeroSection() {
   }
 
   return (
-    <section className="relative pt-40 pb-16 flex flex-col items-center justify-start overflow-hidden bg-[var(--navy)]">
-      {/* Background Glows */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-[100px] -left-[100px] w-[400px] h-[400px] bg-[radial-gradient(circle,rgba(201,168,76,0.12)_0%,transparent:70%)]" />
-        <div className="absolute -bottom-[80px] -right-[60px] w-[350px] h-[350px] bg-[radial-gradient(circle,rgba(201,168,76,0.08)_0%,transparent:70%)]" />
-      </div>
+    <section className="relative pt-40 pb-16 flex flex-col items-center justify-start overflow-hidden bg-[var(--navy)] min-h-[500px]">
+      {/* Background Banners Carousel */}
+      {banners.length > 0 ? (
+        <div className="absolute inset-0 z-0" ref={emblaRef}>
+          <div className="flex h-full">
+            {banners.map((banner) => (
+              <div key={banner.id} className="relative flex-[0_0_100%] h-full">
+                <div className="absolute inset-0 bg-black/40 z-10" />
+                <img 
+                  src={banner.image_url} 
+                  alt={banner.title} 
+                  className="w-full h-full object-cover"
+                />
+                {/* Optional Link overlay */}
+                {banner.link && (
+                  <a href={banner.link} className="absolute inset-0 z-20" aria-label={banner.title} />
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute -top-[100px] -left-[100px] w-[400px] h-[400px] bg-[radial-gradient(circle,rgba(201,168,76,0.12)_0%,transparent:70%)]" />
+          <div className="absolute -bottom-[80px] -right-[60px] w-[350px] h-[350px] bg-[radial-gradient(circle,rgba(201,168,76,0.08)_0%,transparent:70%)]" />
+        </div>
+      )}
 
       <div className="relative z-10 w-full max-w-7xl mx-auto px-[5%]">
         <div className="text-center mb-10">
-          <h1 className="text-[clamp(32px,4vw,48px)] font-extrabold text-white leading-[1.2] max-w-[950px] mx-auto mb-8 tracking-tight">
-            200'den fazla ülke için anında <span className="text-[var(--gold)]">eSIM</span> teslimatı.<br />
-            <span className="text-[var(--gold)]">Roaming</span> ücreti yok. Numaranızı koruyun.
+          <h1 className="text-[clamp(32px,4vw,48px)] font-extrabold text-white leading-[1.2] max-w-[950px] mx-auto mb-8 tracking-tight drop-shadow-lg">
+            {banners.length > 0 && emblaApi ? (
+               // Dynamic title from current banner if needed, 
+               // but usually we keep a consistent title or allow the banner to have its own overlay text.
+               // For now, let's keep the main title but make it white/bold for visibility
+               <>
+                 200'den fazla ülke için anında <span className="text-[var(--gold)]">eSIM</span> teslimatı.<br />
+                 <span className="text-[var(--gold)]">Roaming</span> ücreti yok. Numaranızı koruyun.
+               </>
+            ) : (
+              <>
+                200'den fazla ülke için anında <span className="text-[var(--gold)]">eSIM</span> teslimatı.<br />
+                <span className="text-[var(--gold)]">Roaming</span> ücreti yok. Numaranızı koruyun.
+              </>
+            )}
           </h1>
         </div>
 
