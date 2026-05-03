@@ -144,3 +144,11 @@
 .animate-marquee-reverse {
   animation: marquee-reverse 40s linear infinite;
 }
+
+@layer utilities {
+  @media (min-width: 40rem) {
+    .sm\:h-16 {
+      height: calc(var(--spacing) * 36);
+    }
+  }
+}
