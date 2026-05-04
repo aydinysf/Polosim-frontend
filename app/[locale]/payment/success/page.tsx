@@ -5,7 +5,7 @@ import { CheckCircle, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link, useRouter } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
-import { useCart } from "@/hooks/use-cart";
+import { useCart } from "@/lib/cart-context";
 
 export default function PaymentSuccessPage() {
     const t = useTranslations('Checkout');
