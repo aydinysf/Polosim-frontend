@@ -81,7 +81,7 @@ export function HeroSection() {
         const [countriesData, regionsData, bannersData, popularCountriesData] = await Promise.all([
           countryService.getAll(),
           regionService.getAll(),
-          bannerService.getBanners("home_slider", locale).catch(() => []),
+          bannerService.getBanners(undefined, locale).catch(() => []),
           countryService.getPopular().catch(() => [])
         ]);
         setCountries(countriesData);
