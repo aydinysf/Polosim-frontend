@@ -21,12 +21,11 @@ export default function SignInPage() {
   const { setAuthData } = useAuth();
   const router = useRouter();
   const t = useTranslations('Auth');
-  const tc = useTranslations('Common');
 
   const handleLogin = async (e?: React.FormEvent) => {
     e?.preventDefault();
     if (!email || !/\S+@\S+\.\S+/.test(email)) {
-      setError("Lütfen geçerli bir e-posta adresi girin.");
+      setError(t('invalidEmail'));
       return;
     }
     setIsLoading(true);
@@ -39,9 +38,9 @@ export default function SignInPage() {
       }
     } catch (err) {
       if (err instanceof ApiError) {
-        setError(err.message || "Giriş yapılamadı. Lütfen tekrar deneyin.");
+        setError(err.message || t('loginError'));
       } else {
-        setError("Bir hata oluştu. Lütfen tekrar deneyin.");
+        setError(t('generalError'));
       }
     } finally {
       setIsLoading(false);
@@ -137,14 +136,14 @@ export default function SignInPage() {
 
           {/* Trust indicators */}
           <div className="grid grid-cols-2 gap-4 mt-8">
-             <div className="flex items-center justify-center gap-2 text-[11px] font-bold text-[var(--gray-text)] uppercase tracking-wider bg-[var(--gray-bg)] py-2 rounded-lg">
-                <Lock className="w-3.5 h-3.5 text-[var(--gold)]" />
-                <span>Şifresiz Giriş</span>
-             </div>
-             <div className="flex items-center justify-center gap-2 text-[11px] font-bold text-[var(--gray-text)] uppercase tracking-wider bg-[var(--gray-bg)] py-2 rounded-lg">
-                <Smartphone className="w-3.5 h-3.5 text-[var(--gold)]" />
-                <span>Anında Aktivasyon</span>
-             </div>
+              <div className="flex items-center justify-center gap-2 text-[11px] font-bold text-[var(--gray-text)] uppercase tracking-wider bg-[var(--gray-bg)] py-2 rounded-lg">
+                 <Lock className="w-3.5 h-3.5 text-[var(--gold)]" />
+                 <span>{t('trust.noPassword')}</span>
+              </div>
+              <div className="flex items-center justify-center gap-2 text-[11px] font-bold text-[var(--gray-text)] uppercase tracking-wider bg-[var(--gray-bg)] py-2 rounded-lg">
+                 <Smartphone className="w-3.5 h-3.5 text-[var(--gold)]" />
+                 <span>{t('trust.instant')}</span>
+              </div>
           </div>
         </div>
       </section>

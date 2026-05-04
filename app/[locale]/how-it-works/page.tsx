@@ -5,38 +5,40 @@ import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { Link } from "@/i18n/routing";
 import { useState } from "react";
-
-const steps = [
-  { number: "01", title: "Planınızı Seçin", description: "200'den fazla destinasyonumuza göz atın ve seyahat ihtiyaçlarınıza uyan veri planını seçin. Veri miktarınızı, geçerlilik sürenizi ve kapsama alanınızı belirleyin.", icon: Globe },
-  { number: "02", title: "Satın Alma İşlemini Tamamlayın", description: "Tercih ettiğiniz ödeme yöntemiyle güvenli şekilde ödeme yapın. Tüm büyük kredi kartlarını, PayPal, Apple Pay ve Google Pay'i kabul ediyoruz. eSIM'iniz anında hazır olacak.", icon: Shield },
-  { number: "03", title: "QR Kodu Tarayın", description: "Satın alma işleminin ardından e-posta ile bir QR kodu alacaksınız. eSIM profilini yüklemek için telefonunuzun kamerasıyla taramanız yeterli. Fiziksel SIM kart gerekmez.", icon: QrCode },
-  { number: "04", title: "Bağlantıda Kalın", description: "Destinasyonunuza vardığınızda eSIM'inizi etkinleştirin. Roaming ücreti olmadan hızlı ve güvenilir verinin tadını çıkarın. Daha fazla veriye ihtiyacınız olursa dilediğiniz zaman yükleyin.", icon: Wifi },
-];
-
-const whyCards = [
-  { icon: "⚡", title: "Anında Teslimat", desc: "Satın alma işleminden saniyeler sonra eSIM QR kodunuzu alın. Bekleme yok, kargo yok." },
-  { icon: "🔐", title: "Güvenli Bağlantı", desc: "Verileriniz tüm ağlarda kurumsal düzeyde şifrelemeyle korunur." },
-  { icon: "🎧", title: "7/24 Destek", desc: "Destek ekibimiz herhangi bir sorun için gece gündüz yardıma hazır." },
-  { icon: "🌐", title: "Küresel Kapsama", desc: "Dünya genelinde 200'den fazla ülke ve bölgede yüksek hızlı veriye erişin." },
-];
-
-const compatibleDevices = [
-  { brand: "🍎 Apple", models: ["iPhone XS ve üzeri", "iPad Pro (2018+)", "iPad Air (2019+)", "iPad (2019+)"] },
-  { brand: "🤖 Samsung", models: ["Galaxy S20 ve üzeri", "Galaxy Z Fold/Flip serisi", "Galaxy Note 20+"] },
-  { brand: "🟢 Google", models: ["Pixel 3 ve üzeri", "Pixel Fold"] },
-  { brand: "📱 Diğer", models: ["Motorola Razr", "Huawei P40+", "Oppo Find X3+", "Sony Xperia 1 III+"] },
-];
-
-const faqs = [
-  { q: "eSIM nedir?", a: "eSIM (gömülü SIM), fiziksel SIM kart kullanmadan bir operatör planını etkinleştirmenizi sağlayan dijital bir SIM'dir. Cihazınıza yerleşik olup farklı operatör profilleriyle programlanabilir." },
-  { q: "Cihazımın eSIM destekleyip desteklemediğini nasıl anlarım?", a: "2018 sonrası çıkan modern akıllı telefon ve tabletlerin büyük çoğunluğu eSIM destekler. Cihaz ayarlarınızda Hücresel/Mobil Veri bölümünü kontrol edebilir ya da uyumluluk kontrolörümüzde modelinizi arayabilirsiniz." },
-  { q: "Satın alma işleminin hemen ardından eSIM'imi kullanabilir miyim?", a: "Evet! eSIM QR kodunuz satın almadan hemen sonra teslim edilir. Anında yükleyebilir ve destinasyonunuza vardığınızda etkinleştirebilirsiniz." },
-  { q: "Normal SIM kartım eSIM ile birlikte çalışır mı?", a: "Kesinlikle. Çoğu cihaz Çift SIM özelliğini destekler; böylece hem normal SIM'inizi hem de eSIM'inizi aynı anda kullanabilirsiniz." },
-  { q: "Tüm veri kotamı kullanırsam ne olur?", a: "Uygulamamız veya web sitemiz üzerinden eSIM'inize kolayca ek veri yükleyebilirsiniz. Bu işlem yalnızca birkaç dakika sürer." },
-];
+import { useTranslations } from "next-intl";
 
 export default function HowItWorksPage() {
+  const t = useTranslations('HowItWorks');
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
+
+  const steps = [
+    { number: "01", title: t('steps.step1.title'), description: t('steps.step1.description'), icon: Globe },
+    { number: "02", title: t('steps.step2.title'), description: t('steps.step2.description'), icon: Shield },
+    { number: "03", title: t('steps.step3.title'), description: t('steps.step3.description'), icon: QrCode },
+    { number: "04", title: t('steps.step4.title'), description: t('steps.step4.description'), icon: Wifi },
+  ];
+
+  const whyCards = [
+    { icon: "⚡", title: t('features.instant.title'), desc: t('features.instant.desc') },
+    { icon: "🔐", title: t('features.secure.title'), desc: t('features.secure.desc') },
+    { icon: "🎧", title: t('features.support.title'), desc: t('features.support.desc') },
+    { icon: "🌐", title: t('features.global.title'), desc: t('features.global.desc') },
+  ];
+
+  const compatibleDevices = [
+    { brand: `🍎 ${t('compatibility.brands.apple')}`, models: ["iPhone XS ve üzeri", "iPad Pro (2018+)", "iPad Air (2019+)", "iPad (2019+)"] },
+    { brand: `🤖 ${t('compatibility.brands.samsung')}`, models: ["Galaxy S20 ve üzeri", "Galaxy Z Fold/Flip serisi", "Galaxy Note 20+"] },
+    { brand: `🟢 ${t('compatibility.brands.google')}`, models: ["Pixel 3 ve üzeri", "Pixel Fold"] },
+    { brand: `📱 ${t('compatibility.brands.other')}`, models: ["Motorola Razr", "Huawei P40+", "Oppo Find X3+", "Sony Xperia 1 III+"] },
+  ];
+
+  const faqs = [
+    { q: t('faq.q1'), a: t('faq.a1') },
+    { q: t('faq.q2'), a: t('faq.a2') },
+    { q: t('faq.q3'), a: t('faq.a3') },
+    { q: t('faq.q4'), a: t('faq.a4') },
+    { q: t('faq.q5'), a: t('faq.a5') },
+  ];
 
   return (
     <main className="min-h-screen bg-white">
@@ -45,11 +47,11 @@ export default function HowItWorksPage() {
       {/* Hero Section */}
       <section className="bg-[var(--navy)] pt-14 pb-12 px-[5%] text-center">
         <div className="inline-block bg-[rgba(201,168,76,0.15)] text-[var(--gold)] border border-[rgba(201,168,76,0.3)] rounded-full px-4 py-1.5 text-[12px] font-bold tracking-[0.5px] uppercase mb-5">
-          Simple Setup Process
+          {t('badge')}
         </div>
-        <h1 className="text-[38px] font-extrabold text-white mb-3 tracking-tight">Nasıl Çalışır?</h1>
+        <h1 className="text-[38px] font-extrabold text-white mb-3 tracking-tight">{t('title')}</h1>
         <p className="text-[15px] text-white/60 max-w-[520px] mx-auto leading-[1.6]">
-          Dakikalar içinde bağlanın. Fiziksel SIM kartı yok, mağaza ziyareti yok, zorluk yok. Seyahat ettiğiniz her yerde anında mobil veri.
+          {t('subtitle')}
         </p>
       </section>
 
@@ -86,8 +88,8 @@ export default function HowItWorksPage() {
 
       {/* Compatible Devices */}
       <section className="bg-[var(--gray-bg)] py-16 px-[5%]">
-        <h2 className="text-[28px] font-extrabold text-center mb-2 text-[var(--text-dark)]">Uyumlu Cihazlar</h2>
-        <p className="text-center text-[var(--gray-text)] mb-10 text-[15px]">eSIM'imiz modern akıllı telefon ve tabletlerin büyük çoğunluğuyla çalışır</p>
+        <h2 className="text-[28px] font-extrabold text-center mb-2 text-[var(--text-dark)]">{t('compatibility.title')}</h2>
+        <p className="text-center text-[var(--gray-text)] mb-10 text-[15px]">{t('compatibility.subtitle')}</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-6xl mx-auto">
           {compatibleDevices.map((device) => (
             <div key={device.brand} className="bg-white rounded-2xl p-6">
@@ -109,14 +111,14 @@ export default function HowItWorksPage() {
 
       {/* Installation Guide */}
       <section className="bg-white py-16 px-[5%]">
-        <h2 className="text-[28px] font-extrabold text-center mb-2 text-[var(--text-dark)]">Kurulum Rehberi</h2>
-        <p className="text-center text-[var(--gray-text)] mb-10 text-[15px]">iOS ve Android cihazlar için hızlı kurulum</p>
+        <h2 className="text-[28px] font-extrabold text-center mb-2 text-[var(--text-dark)]">{t('installation.title')}</h2>
+        <p className="text-center text-[var(--gray-text)] mb-10 text-[15px]">{t('installation.subtitle')}</p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-[800px] mx-auto">
           {/* iOS */}
           <div className="bg-[var(--gray-bg)] rounded-2xl p-7">
-            <h3 className="text-base font-bold mb-5 text-[var(--text-dark)] flex items-center gap-2">🍎 iOS Kurulumu</h3>
+            <h3 className="text-base font-bold mb-5 text-[var(--text-dark)] flex items-center gap-2">🍎 {t('installation.ios.title')}</h3>
             <ol className="flex flex-col gap-3">
-              {["Kamera uygulamasını açın ve QR kodu tarayın", "'eSIM Ekle' bildirimini görüntüleyin", "Ekrandaki talimatları takip edin", "Planınızı etiketleyin (örn. 'Seyahat Verisi')", "Yurt dışında veri dolaşımını etkinleştirin"].map((step, i) => (
+              {(t.raw('installation.ios.steps') as string[]).map((step, i) => (
                 <li key={i} className="flex gap-3 text-sm text-[var(--gray-text)] leading-[1.5]">
                   <span className="w-[22px] h-[22px] rounded-full bg-[var(--navy)] text-white text-[11px] font-bold flex items-center justify-center shrink-0 font-['Sora']">{i + 1}</span>
                   {step}
@@ -126,9 +128,9 @@ export default function HowItWorksPage() {
           </div>
           {/* Android */}
           <div className="bg-[var(--gray-bg)] rounded-2xl p-7">
-            <h3 className="text-base font-bold mb-5 text-[var(--text-dark)] flex items-center gap-2">🤖 Android Kurulumu</h3>
+            <h3 className="text-base font-bold mb-5 text-[var(--text-dark)] flex items-center gap-2">🤖 {t('installation.android.title')}</h3>
             <ol className="flex flex-col gap-3">
-              {["Ayarlar > Ağ ve İnternet'e gidin", "'SIM'ler' veya 'Mobil Ağ'a dokunun", "'eSIM Ekle' veya '+' düğmesini seçin", "QR kodu kamerayla tarayın", "Planınızı onaylayın ve etkinleştirin"].map((step, i) => (
+              {(t.raw('installation.android.steps') as string[]).map((step, i) => (
                 <li key={i} className="flex gap-3 text-sm text-[var(--gray-text)] leading-[1.5]">
                   <span className="w-[22px] h-[22px] rounded-full bg-[var(--navy)] text-white text-[11px] font-bold flex items-center justify-center shrink-0 font-['Sora']">{i + 1}</span>
                   {step}
@@ -141,7 +143,7 @@ export default function HowItWorksPage() {
 
       {/* FAQ Section */}
       <section className="bg-[var(--gray-bg)] py-16 px-[5%]">
-        <h2 className="text-[28px] font-extrabold text-center mb-10 text-[var(--text-dark)]">Sıkça Sorulan Sorular</h2>
+        <h2 className="text-[28px] font-extrabold text-center mb-10 text-[var(--text-dark)]">{t('faq.title')}</h2>
         <div className="max-w-[760px] mx-auto flex flex-col gap-2">
           {faqs.map((faq, index) => {
             const isOpen = expandedFaq === index;
@@ -167,20 +169,20 @@ export default function HowItWorksPage() {
 
       {/* CTA Section */}
       <section className="bg-[var(--navy)] py-16 px-[5%] text-center">
-        <h2 className="text-[30px] font-extrabold text-white mb-3">Başlamaya Hazır mısınız?</h2>
-        <p className="text-white/60 text-[15px] mb-8">POLO SIM ile bağlantıda kalan milyonlarca gezgine katılın. Planları inceleyin ve anında bağlantı kazanın.</p>
+        <h2 className="text-[30px] font-extrabold text-white mb-3">{t('cta.title')}</h2>
+        <p className="text-white/60 text-[15px] mb-8">{t('cta.description')}</p>
         <div className="flex gap-3 justify-center flex-wrap">
           <Link
             href="/plans"
             className="inline-flex items-center gap-2 bg-[var(--gold)] text-white border-none rounded-3xl px-8 py-3 font-['Sora'] font-bold text-[15px] cursor-pointer hover:bg-[var(--gold-light)] hover:translate-y-[-2px] hover:shadow-[0_8px_24px_rgba(201,168,76,0.3)] transition-all no-underline"
           >
-            Planlara Gözat
+            {t('cta.browse')}
           </Link>
           <Link
             href="/support"
             className="inline-flex items-center px-7 py-3 border-[1.5px] border-white/30 rounded-3xl bg-transparent text-white font-['Sora'] font-semibold text-sm cursor-pointer hover:bg-white/10 hover:border-white/50 transition-all no-underline"
           >
-            Desteğe Başvur
+            {t('cta.support')}
           </Link>
         </div>
       </section>

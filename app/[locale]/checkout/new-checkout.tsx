@@ -125,7 +125,7 @@ export function NewCheckout() {
     } catch (err: any) {
       console.error("❌ Checkout ERROR:", err);
 
-      let errorMsg = "Sipariş oluşturulurken bir hata oluştu.";
+      let errorMsg = t('error.creationError');
       let technicalDetail = "";
 
       if (err instanceof ApiError) {
@@ -165,7 +165,7 @@ export function NewCheckout() {
   const renderLoading = () => (
     <div className="flex flex-col items-center justify-center min-h-[300px] gap-4">
       <Loader2 className="w-10 h-10 animate-spin text-[var(--gold)]" />
-      <p className="text-[var(--gray-text)] font-bold uppercase tracking-widest text-[10px]">İşlem Yapılıyor...</p>
+      <p className="text-[var(--gray-text)] font-bold uppercase tracking-widest text-[10px]">{t('ready.processing')}</p>
     </div>
   );
 
@@ -174,7 +174,7 @@ export function NewCheckout() {
       <div className="w-16 h-16 rounded-full bg-white flex items-center justify-center mx-auto mb-6 shadow-sm">
         <X className="w-8 h-8 text-red-500" />
       </div>
-      <h2 className="text-xl font-bold text-[var(--text-dark)] mb-2 font-['Sora']">Bir Hata Oluştu</h2>
+      <h2 className="text-xl font-bold text-[var(--text-dark)] mb-2 font-['Sora']">{t('error.title')}</h2>
       <p className="text-red-500/80 font-medium max-w-md mx-auto">{errorMessage}</p>
       <Button onClick={() => router.push('/cart')} className="mt-8 bg-[var(--navy)] text-white hover:bg-[var(--text-dark)] rounded-2xl px-8 h-12 font-bold">
         {t('backToCart')}

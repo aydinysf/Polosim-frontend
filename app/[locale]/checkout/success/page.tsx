@@ -5,9 +5,10 @@ import { useSearchParams } from "next/navigation";
 import { useCart } from "@/lib/cart-context";
 import { CheckCircle, XCircle, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Link } from "@/i18n/routing";
+import { useTranslations } from "next-intl";
 
 export default function CheckoutSuccessPage() {
+    const t = useTranslations('Checkout');
     const searchParams = useSearchParams();
     const { clearCart } = useCart();
     const [status, setStatus] = useState<"loading" | "success" | "failed">("loading");
@@ -41,11 +42,11 @@ export default function CheckoutSuccessPage() {
                 <div className="w-20 h-20 rounded-full bg-red-500/20 border border-red-500/30 flex items-center justify-center mx-auto mb-6">
                     <XCircle className="w-10 h-10 text-red-500" />
                 </div>
-                <h1 className="text-3xl font-bold text-foreground mb-4">Ödeme Başarısız</h1>
-                <p className="text-muted-foreground mb-8">Ödeme işlemi tamamlanamadı. Lütfen tekrar deneyin.</p>
+                <h1 className="text-3xl font-bold text-foreground mb-4">{t('error.failed')}</h1>
+                <p className="text-muted-foreground mb-8">{t('error.failedDescription')}</p>
                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                    <Link href="/checkout"><Button>Tekrar Dene</Button></Link>
-                    <Link href="/support"><Button variant="outline">Destek Al</Button></Link>
+                    <Link href="/checkout"><Button>{t('error.tryAgain')}</Button></Link>
+                    <Link href="/support"><Button variant="outline">{t('error.getSupport')}</Button></Link>
                 </div>
             </div>
         );
@@ -56,13 +57,13 @@ export default function CheckoutSuccessPage() {
             <div className="w-20 h-20 rounded-full bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center mx-auto mb-6">
                 <CheckCircle className="w-10 h-10 text-emerald-500" />
             </div>
-            <h1 className="text-3xl font-bold text-foreground mb-4">Ödeme Başarılı! 🎉</h1>
+            <h1 className="text-3xl font-bold text-foreground mb-4">{t('success.title')}</h1>
             <p className="text-muted-foreground mb-8">
-                eSIM QR kodunuz e-posta adresinize gönderildi.
+                {t('success.description')}
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                <Link href="/"><Button>Ana Sayfaya Dön</Button></Link>
-                <Link href="/profile"><Button variant="outline">Siparişlerim</Button></Link>
+                <Link href="/"><Button>{t('success.backToHome')}</Button></Link>
+                <Link href="/profile"><Button variant="outline">{t('success.myOrders')}</Button></Link>
             </div>
         </div>
     );

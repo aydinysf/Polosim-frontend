@@ -155,10 +155,10 @@ export default function ProfilePage() {
     setIsDeleting(true);
     try {
       await authService.deactivateAccount();
-      toast.success("Hesabınız devre dışı bırakıldı.");
+      toast.success(t('messages.deactivated'));
       router.push("/");
     } catch (err) {
-      toast.error("Hesap devre dışı bırakılamadı. Lütfen tekrar deneyin.");
+      toast.error(t('messages.deactivateError'));
     } finally {
       setIsDeleting(false);
       setShowDeleteConfirm(false);
@@ -174,7 +174,7 @@ export default function ProfilePage() {
     try {
       const amount = parseFloat(topupAmount);
       if (isNaN(amount) || amount <= 0) {
-        toast.error("Lütfen geçerli bir tutar girin.");
+        toast.error(t('messages.invalidAmount'));
         return;
       }
 
@@ -188,7 +188,7 @@ export default function ProfilePage() {
         window.location.href = response.url;
       }
     } catch (err: any) {
-      toast.error(err.message || "Yükleme başlatılamadı.");
+      toast.error(err.message || t('messages.topupError'));
     } finally {
       setIsTopupLoading(false);
     }
@@ -209,7 +209,7 @@ export default function ProfilePage() {
     return (
       <main className="min-h-screen bg-white flex flex-col items-center justify-center gap-4">
         <Loader2 className="w-10 h-10 animate-spin text-[var(--gold)]" />
-        <p className="text-[var(--gray-text)] font-bold uppercase tracking-widest text-[10px]">Profiliniz Hazırlanıyor...</p>
+        <p className="text-[var(--gray-text)] font-bold uppercase tracking-widest text-[10px]">{t('messages.preparing')}</p>
       </main>
     );
   }
@@ -632,8 +632,8 @@ export default function ProfilePage() {
               <div className="mb-12 p-8 bg-[var(--navy)] rounded-[40px] border border-white/10 shadow-2xl">
                 <div className="flex justify-between items-end mb-4">
                   <div>
-                    <h4 className="text-base font-extrabold text-white font-['Sora']">Canlı Tüketim Durumu</h4>
-                    <p className="text-[10px] text-white/50 uppercase tracking-widest font-extrabold mt-1">Gerçek zamanlı: {usageDetails.data.status_text}</p>
+                    <h4 className="text-base font-extrabold text-white font-['Sora']">{t('usage.title')}</h4>
+                    <p className="text-[10px] text-white/50 uppercase tracking-widest font-extrabold mt-1">{t('usage.realtime')} {usageDetails.data.status_text}</p>
                   </div>
                   <div className="text-right">
                     <span className="text-[28px] font-black text-[var(--gold)] font-['Sora']">
@@ -688,10 +688,10 @@ export default function ProfilePage() {
             onClick={() => !isTopupLoading && setShowTopupModal(false)}
           />
           <div className="relative w-full max-w-md bg-white border border-[var(--gray-mid)] rounded-[40px] shadow-2xl p-10 animate-in fade-in zoom-in duration-300">
-            <h3 className="text-2xl font-extrabold text-[var(--text-dark)] mb-8 font-['Sora'] tracking-tight">Bakiye Yükle <span className="text-[var(--gold)]">(PayPal)</span></h3>
+            <h3 className="text-2xl font-extrabold text-[var(--text-dark)] mb-8 font-['Sora'] tracking-tight">{t('wallet.topupTitle')} <span className="text-[var(--gold)]">(PayPal)</span></h3>
             
             <div className="space-y-6 mb-10">
-              <label className="text-xs font-extrabold text-[var(--gray-text)] uppercase tracking-widest ml-1">Tutar Seçin (EUR)</label>
+              <label className="text-xs font-extrabold text-[var(--gray-text)] uppercase tracking-widest ml-1">{t('wallet.selectAmount')}</label>
               <div className="grid grid-cols-2 gap-3">
                 {["10", "20", "50", "100"].map((amount) => (
                   <button
@@ -713,7 +713,7 @@ export default function ProfilePage() {
                   type="number"
                   value={topupAmount}
                   onChange={(e) => setTopupAmount(e.target.value)}
-                  placeholder="Özel tutar girin"
+                  placeholder={t('wallet.customAmount')}
                   className="w-full h-16 px-6 bg-[var(--gray-bg)] border-[2px] border-transparent rounded-2xl focus:border-[var(--gold)] focus:bg-white outline-none text-xl font-extrabold text-[var(--text-dark)] transition-all"
                 />
                 <span className="absolute right-6 top-[28px] font-extrabold text-[var(--gold)]">EUR</span>
@@ -728,7 +728,7 @@ export default function ProfilePage() {
               >
                 {isTopupLoading ? <Loader2 className="w-6 h-6 animate-spin" /> : (
                   <>
-                    <span className="font-black">PayPal</span> ile Şimdi Yükle
+                    {t('wallet.payWith', { provider: 'PayPal' })}
                   </>
                 )}
               </Button>
@@ -738,12 +738,12 @@ export default function ProfilePage() {
                 onClick={() => setShowTopupModal(false)}
                 disabled={isTopupLoading}
               >
-                Vazgeç
+                {t('wallet.cancel')}
               </Button>
             </div>
             
             <p className="text-[10px] text-center text-[var(--gray-text)] mt-6 font-bold uppercase tracking-wider">
-              {tc('securePayment') || 'Güvenli Ödeme • PayPal ile yönlendirileceksiniz'}
+              {t('wallet.redirectNote', { provider: 'PayPal' })}
             </p>
           </div>
         </div>

@@ -75,6 +75,7 @@
     "lastUpdated": "Son güncelleme: {date}",
     "downloadLabel": "PDF / DOCX İndir",
     "backLabel": "Ana Sayfaya Dön",
+    "badge": "Yasal Politika",
     "termsOfService": {
       "title": "Kullanım Koşulları"
     },
@@ -215,9 +216,15 @@
     },
     "sections": {
       "browseByCategory": "Kategorilere Göre İncele",
-      "commonQuestions": "Sık Sorulan Sorular",
-      "popularArticles": "Popüler Makaleler"
+      "commonQuestions": "Sıkça Sorulan Sorular"
     },
+    "quickLinks": {
+      "setup": { "title": "Kurulum Rehberi", "desc": "eSIM nasıl kurulur adım adım" },
+      "status": { "title": "Sipariş Durumu", "desc": "Siparişinizi takip edin" },
+      "troubleshoot": { "title": "Bağlantı Sorunu", "desc": "Bağlantı sorunlarını giderin" },
+      "payment": { "title": "Ödeme ve İade", "desc": "Ödeme ve iade politikası" }
+    },
+    "popularArticles": "Popüler Makaleler",
     "categories": {
       "installation": {
         "title": "Kurulum ve Başlangıç",
@@ -341,7 +348,24 @@
       "loading": "Paketler yükleniyor...",
       "error": "Paketler yüklenemedi. Lütfen tekrar deneyin.",
       "copied": "panoya kopyalandı",
-      "noPackages": "Paket bulunamadı"
+      "noPackages": "Paket bulunamadı",
+      "deactivated": "Hesabınız devre dışı bırakıldı.",
+      "deactivateError": "Hesap devre dışı bırakılamadı. Lütfen tekrar deneyin.",
+      "invalidAmount": "Lütfen geçerli bir tutar girin.",
+      "topupError": "Yükleme başlatılamadı.",
+      "preparing": "Profiliniz Hazırlanıyor..."
+    },
+    "usage": {
+      "title": "Canlı Tüketim Durumu",
+      "realtime": "Gerçek zamanlı:"
+    },
+    "wallet": {
+      "topupTitle": "Bakiye Yükle",
+      "selectAmount": "Tutar Seçin (EUR)",
+      "customAmount": "Özel tutar girin",
+      "payWith": "{provider} ile Şimdi Yükle",
+      "cancel": "Vazgeç",
+      "redirectNote": "{provider} ile yönlendirileceksiniz"
     },
     "verification": {
       "title": "E-posta Doğrulaması Gerekli",
@@ -405,39 +429,61 @@
     "addPlans": "Başlamak için birkaç eSIM planı ekleyin",
     "browsePlans": "Planları İncele",
     "backToCart": "Sepete Geri Dön",
+    "ready": {
+      "continueAs": "{name} olarak devam ediliyor",
+      "continueAsGuest": "Misafir Olarak Devam Et",
+      "orderSummary": "Sipariş Özeti",
+      "total": "Toplam Tutar",
+      "pay": "Ödeme Yap ({amount})",
+      "processing": "İşlem Yapılıyor...",
+      "checkout": "Ödeme"
+    },
     "success": {
       "title": "Ödeme Başarılı!",
       "description": "eSIM QR kodunuz e-posta adresinize gönderildi.",
       "backToHome": "Ana Sayfaya Dön",
+      "myOrders": "Siparişlerim",
       "needHelp": "Yardıma mı ihtiyacınız var?"
     },
     "error": {
+      "title": "Bir Hata Oluştu",
       "sessionExpired": "Oturumunuz sona ermiş. Lütfen tekrar giriş yapın.",
       "general": "Ödeme işlemi sırasında bir hata oluştu.",
       "guestError": "Misafir ödemesi sırasında bir hata oluştu.",
       "stripeKeyMissing": "Stripe public anahtar yapılandırılmamış.",
       "failed": "Ödeme Başarısız",
-      "failedDescription": "Ödeme işlemi tamamlanamadı. Lütfen tekrar deneyin."
+      "failedDescription": "Ödeme işlemi tamamlanamadı. Lütfen tekrar deneyin.",
+      "tryAgain": "Tekrar Dene",
+      "getSupport": "Destek Al",
+      "creationError": "Sipariş oluşturulurken bir hata oluştu."
     },
-    "ready": {
-      "continueAs": "{name} olarak devam ediliyor",
-      "continueAsGuest": "Misafir Olarak Devam Et",
-      "orderSummary": "Sipariş Özeti",
-      "total": "Toplam",
-      "pay": "Ödeme Yap ({amount})",
-      "processing": "İşleniyor...",
-      "checkout": "Ödeme"
+    "payment": {
+      "cancelTitle": "Ödeme İptal Edildi",
+      "cancelDescription": "Ödeme işlemi kullanıcı tarafından iptal edildi veya bir sorun oluştu. Herhangi bir tutar tahsil edilmedi.",
+      "backToCheckout": "Ödemeye Geri Dön",
+      "successTitle": "Ödeme Alındı!",
+      "successDescription": "Ödemeniz başarıyla alındı ve işleniyor. İşlem tamamlandığında eSIM bilgileriniz e-posta adresinize gönderilecektir.",
+      "updating": "Sistem güncelleniyor, lütfen bekleyin..."
     }
   },
   "Cart": {
-    "title": "Alışveriş Sepetiniz",
+    "title": "Alışveriş Sepeti",
+    "header": "Sepetiniz",
+    "inCart": "sepetinizde bulunuyor",
+    "emptyTitle": "Sepetiniz Boş",
+    "emptySubtitle": "Görünüşe göre henüz bir plan eklememişsiniz. Harika fırsatlarımıza göz atmaya ne dersiniz?",
+    "browsePlans": "Planlara Göz At",
+    "continueShopping": "Alışverişe Devam Et",
+    "summaryTitle": "Sipariş Özeti",
+    "subtotal": "Ara Toplam",
+    "taxes": "Vergiler",
+    "total": "Toplam",
+    "checkout": "Ödeme Adımına Geç",
+    "secureCheckout": "Güvenli Ödeme • 256-bit SSL",
     "empty": "Sepetiniz boş",
     "backToPlans": "Planlara Geri Dön",
-    "total": "Toplam Tutar",
-    "checkout": "Ödemeye Devam Et",
     "items": "Ürünler",
-    "summary": "Sipariş Özeti",
-    "secureCheckout": "Güvenli Ödeme • SSL Şifreleme"
+    "summary": "Sipariş Özeti"
   },
   "VerifyEmail": {
     "title": "E-postanızı Doğrulayın",
@@ -501,6 +547,104 @@
       "length": "Şifre en az 8 karakter olmalıdır",
       "terms": "Lütfen kullanım koşullarını kabul edin",
       "general": "Bir hata oluştu. Lütfen tekrar deneyin."
+    }
+  },
+  "Auth": {
+    "welcomeTitle": "POLO SIM'e Hoş Geldiniz",
+    "loginSubtitle": "Şifre gerektirmeden sadece e-posta adresinizle giriş yapın.",
+    "emailLabel": "E-posta Adresiniz",
+    "loading": "Giriş yapılıyor...",
+    "loginBtn": "Giriş Yap / Kayıt Ol",
+    "noAccount": "Hesabınız yok mu?",
+    "getStarted": "Hemen Başlayın",
+    "invalidEmail": "Lütfen geçerli bir e-posta adresi girin.",
+    "loginError": "Giriş yapılamadı. Lütfen tekrar deneyin.",
+    "generalError": "Bir hata oluştu. Lütfen tekrar deneyin.",
+    "trust": {
+      "noPassword": "Şifresiz Giriş",
+      "instant": "Anında Aktivasyon"
+    }
+  },
+  "HowItWorks": {
+    "badge": "Basit Kurulum Süreci",
+    "title": "Nasıl Çalışır?",
+    "subtitle": "Dakikalar içinde bağlanın. Fiziksel SIM kartı yok, mağaza ziyareti yok, zorluk yok. Seyahat ettiğiniz her yerde anında mobil veri.",
+    "steps": {
+      "step1": {
+        "title": "Planınızı Seçin",
+        "description": "200'den fazla destinasyonumuza göz atın ve seyahat ihtiyaçlarınıza uyan veri planını seçin. Veri miktarınızı, geçerlilik sürenizi ve kapsama alanınızı belirleyin."
+      },
+      "step2": {
+        "title": "Satın Alma İşlemini Tamamlayın",
+        "description": "Tercih ettiğiniz ödeme yöntemiyle güvenli şekilde ödeme yapın. Tüm büyük kredi kartlarını, PayPal, Apple Pay ve Google Pay'i kabul ediyoruz. eSIM'iniz anında hazır olacak."
+      },
+      "step3": {
+        "title": "QR Kodu Tarayın",
+        "description": "Satın alma işleminin ardından e-posta ile bir QR kodu alacaksınız. eSIM profilini yüklemek için telefonunuzun kamerasıyla taramanız yeterli. Fiziksel SIM kart gerekmez."
+      },
+      "step4": {
+        "title": "Bağlantıda Kalın",
+        "description": "Destinasyonunuza vardığınızda eSIM'inizi etkinleştirin. Roaming ücreti olmadan hızlı ve güvenilir verinin tadını çıkarın. Daha fazla veriye ihtiyacınız olursa dilediğiniz zaman yükleyin."
+      }
+    },
+    "features": {
+      "instant": { "title": "Anında Teslimat", "desc": "Satın alma işleminden saniyeler sonra eSIM QR kodunuzu alın. Bekleme yok, kargo yok." },
+      "secure": { "title": "Güvenli Bağlantı", "desc": "Verileriniz tüm ağlarda kurumsal düzeyde şifrelemeyle korunur." },
+      "support": { "title": "7/24 Destek", "desc": "Destek ekibimiz herhangi bir sorun için gece gündüz yardıma hazır." },
+      "global": { "title": "Küresel Kapsama", "desc": "Dünya genelinde 200'den fazla ülke ve bölgede yüksek hızlı veriye erişin." }
+    },
+    "compatibility": {
+      "title": "Uyumlu Cihazlar",
+      "subtitle": "eSIM'imiz modern akıllı telefon ve tabletlerin büyük çoğunluğuyla çalışır",
+      "brands": {
+        "apple": "Apple",
+        "samsung": "Samsung",
+        "google": "Google",
+        "other": "Diğer"
+      }
+    },
+    "installation": {
+      "title": "Kurulum Rehberi",
+      "subtitle": "iOS ve Android cihazlar için hızlı kurulum",
+      "ios": {
+        "title": "iOS Kurulumu",
+        "steps": [
+          "Kamera uygulamasını açın ve QR kodu tarayın",
+          "'eSIM Ekle' bildirimini görüntüleyin",
+          "Ekrandaki talimatları takip edin",
+          "Planınızı etiketleyin (örn. 'Seyahat Verisi')",
+          "Yurt dışında veri dolaşımını etkinleştirin"
+        ]
+      },
+      "android": {
+        "title": "Android Kurulumu",
+        "steps": [
+          "Ayarlar > Ağ ve İnternet'e gidin",
+          "'SIM'ler' veya 'Mobil Ağ'a dokunun",
+          "'eSIM Ekle' veya '+' düğmesini seçin",
+          "QR kodu kamerayla tarayın",
+          "Planınızı onaylayın ve etkinleştirin"
+        ]
+      }
+    },
+    "faq": {
+      "title": "Sıkça Sorulan Sorular",
+      "q1": "eSIM nedir?",
+      "a1": "eSIM (gömülü SIM), fiziksel SIM kart kullanmadan bir operatör planını etkinleştirmenizi sağlayan dijital bir SIM'dir. Cihazınıza yerleşik olup farklı operatör profilleriyle programlanabilir.",
+      "q2": "Cihazımın eSIM destekleyip desteklemediğini nasıl anlarım?",
+      "a2": "2018 sonrası çıkan modern akıllı telefon ve tabletlerin büyük çoğunluğu eSIM destekler. Cihaz ayarlarınızda Hücresel/Mobil Veri bölümünü kontrol edebilir ya da uyumluluk kontrolörümüzde modelinizi arayabilirsiniz.",
+      "q3": "Satın alma işleminin hemen ardından eSIM'imi kullanabilir miyim?",
+      "a3": "Evet! eSIM QR kodunuz satın almadan hemen sonra teslim edilir. Anında yükleyebilir ve destinasyonunuza vardığınızda etkinleştirebilirsiniz.",
+      "q4": "Normal SIM kartım eSIM ile birlikte çalışır mı?",
+      "a4": "Kesinlikle. Çoğu cihaz Çift SIM özelliğini destekler; böylece hem normal SIM'inizi hem de eSIM'inizi aynı anda kullanabilirsiniz.",
+      "q5": "Tüm veri kotamı kullanırsam ne olur?",
+      "a5": "Uygulamamız veya web sitemiz üzerinden eSIM'inize kolayca ek veri yükleyebilirsiniz. Bu işlem yalnızca birkaç dakika sürer."
+    },
+    "cta": {
+      "title": "Başlamaya Hazır mısınız?",
+      "description": "POLO SIM ile bağlantıda kalan milyonlarca gezgine katılın. Planları inceleyin ve anında bağlantı kazanın.",
+      "browse": "Planlara Gözat",
+      "support": "Desteğe Başvur"
     }
   }
 }

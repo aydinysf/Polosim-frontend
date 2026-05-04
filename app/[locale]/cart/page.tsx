@@ -29,14 +29,14 @@ export default function CartPage() {
       {/* Hero Header */}
       <section className="bg-[var(--navy)] pt-14 pb-12 px-[5%] text-center">
         <div className="inline-block bg-[rgba(201,168,76,0.15)] text-[var(--gold)] border border-[rgba(201,168,76,0.3)] rounded-full px-4 py-1.5 text-[12px] font-bold tracking-[0.5px] uppercase mb-5">
-          {t('title') || 'Shopping Cart'}
+          {t('title')}
         </div>
         <h1 className="text-[38px] font-extrabold text-white mb-3 tracking-tight">
-          {t('header') || 'Sepetiniz'}
+          {t('header')}
         </h1>
         {totalItems > 0 && (
           <p className="text-white/60 font-medium">
-            {totalItems} {totalItems === 1 ? 'plan' : 'plan'} {t('inCart') || 'sepetinizde bulunuyor'}
+            {totalItems} {totalItems === 1 ? 'plan' : 'plans'} {t('inCart')}
           </p>
         )}
       </section>
@@ -48,14 +48,14 @@ export default function CartPage() {
               <div className="w-20 h-20 rounded-full bg-white flex items-center justify-center mx-auto mb-6 shadow-sm">
                 <ShoppingBag className="w-10 h-10 text-[var(--gold)]" />
               </div>
-              <h2 className="text-2xl font-bold text-[var(--text-dark)] mb-3 font-['Sora']">{t('emptyTitle') || 'Sepetiniz Boş'}</h2>
+              <h2 className="text-2xl font-bold text-[var(--text-dark)] mb-3 font-['Sora']">{t('emptyTitle')}</h2>
               <p className="text-[var(--gray-text)] mb-8 max-w-md mx-auto">
-                {t('emptySubtitle') || 'Görünüşe göre henüz bir plan eklememişsiniz. Harika fırsatlarımıza göz atmaya ne dersiniz?'}
+                {t('emptySubtitle')}
               </p>
               <Link href="/plans">
                 <Button className="bg-[var(--gold)] hover:bg-[var(--gold-light)] text-white rounded-3xl px-8 h-12 font-bold transition-all shadow-lg">
                   <ArrowLeft className="w-4 h-4 mr-2" />
-                  {t('browsePlans') || 'Planlara Göz At'}
+                  {t('browsePlans')}
                 </Button>
               </Link>
             </div>
@@ -111,7 +111,7 @@ export default function CartPage() {
                 <div className="pt-4">
                   <Link href="/plans" className="inline-flex items-center gap-2 text-[var(--gold)] font-bold hover:opacity-70 transition-all no-underline">
                     <ArrowLeft className="w-4 h-4" />
-                    {t('continueShopping') || 'Alışverişe Devam Et'}
+                    {t('continueShopping')}
                   </Link>
                 </div>
               </div>
@@ -119,31 +119,31 @@ export default function CartPage() {
               {/* Order Summary */}
               <div className="lg:col-span-1">
                 <div className="p-8 rounded-3xl border-[1.5px] border-[var(--gray-mid)] bg-[var(--gray-bg)] sticky top-24 shadow-sm">
-                  <h2 className="text-xl font-bold text-[var(--text-dark)] mb-6 font-['Sora']">{t('summaryTitle') || 'Sipariş Özeti'}</h2>
+                  <h2 className="text-xl font-bold text-[var(--text-dark)] mb-6 font-['Sora']">{t('summaryTitle')}</h2>
                   <div className="space-y-4 mb-8">
                     <div className="flex justify-between items-center text-sm">
-                      <span className="text-[var(--gray-text)] font-medium">{t('subtotal') || 'Ara Toplam'}</span>
+                      <span className="text-[var(--gray-text)] font-medium">{t('subtotal')}</span>
                       <span className="text-[var(--text-dark)] font-bold">{formatPrice(totalPrice)}</span>
                     </div>
                     <div className="flex justify-between items-center text-sm">
-                      <span className="text-[var(--gray-text)] font-medium">{t('taxes') || 'Vergiler'}</span>
+                      <span className="text-[var(--gray-text)] font-medium">{t('taxes')}</span>
                       <span className="text-[var(--text-dark)] font-bold">€0.00</span>
                     </div>
                     <div className="border-t border-[var(--gray-mid)] pt-4 mt-4">
                       <div className="flex justify-between items-center">
-                        <span className="text-[var(--text-dark)] font-bold text-lg">{t('total') || 'Toplam'}</span>
+                        <span className="text-[var(--text-dark)] font-bold text-lg">{t('total')}</span>
                         <span className="text-[var(--gold)] font-extrabold text-2xl">{formatPrice(totalPrice)}</span>
                       </div>
                     </div>
                   </div>
                   <Link href="/checkout" className="block no-underline">
                     <Button className="w-full bg-[var(--gold)] hover:bg-[var(--gold-light)] text-white rounded-3xl h-14 font-extrabold text-base transition-all shadow-lg flex items-center justify-center gap-2">
-                      {t('checkout') || 'Ödeme Adımına Geç'}
+                      {t('checkout')}
                       <ArrowRight className="w-5 h-5" />
                     </Button>
                   </Link>
                   <p className="text-[11px] text-[var(--gray-text)] text-center mt-4 font-medium uppercase tracking-wider">
-                    {t('secureCheckout') || 'Güvenli Ödeme • 256-bit SSL'}
+                    {t('secureCheckout')}
                   </p>
                 </div>
               </div>

@@ -12,15 +12,16 @@ import { useEffect, useState } from "react";
 import { faqService, type Faq } from "@/lib/services";
 import { Skeleton } from "@/components/ui/skeleton";
 
-const quickLinks = [
-  { icon: "📖", title: "Kurulum Rehberi", desc: "eSIM nasıl kurulur adım adım", href: "/how-it-works" },
-  { icon: "📦", title: "Sipariş Durumu", desc: "Siparişinizi takip edin", href: "#" },
-  { icon: "📶", title: "Bağlantı Sorunu", desc: "Bağlantı sorunlarını giderin", href: "#" },
-  { icon: "💳", title: "Ödeme ve İade", desc: "Ödeme ve iade politikası", href: "#" },
-];
-
 export default function SupportPage() {
   const t = useTranslations("Support");
+
+  const quickLinks = [
+    { icon: "📖", title: t('quickLinks.setup.title'), desc: t('quickLinks.setup.desc'), href: "/how-it-works" },
+    { icon: "📦", title: t('quickLinks.status.title'), desc: t('quickLinks.status.desc'), href: "#" },
+    { icon: "📶", title: t('quickLinks.troubleshoot.title'), desc: t('quickLinks.troubleshoot.desc'), href: "#" },
+    { icon: "💳", title: t('quickLinks.payment.title'), desc: t('quickLinks.payment.desc'), href: "#" },
+  ];
+
   const locale = useLocale();
   const [searchQuery, setSearchQuery] = useState("");
   const [expandedFaq, setExpandedFaq] = useState<string | null>(null);
