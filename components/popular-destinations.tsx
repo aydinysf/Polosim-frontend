@@ -35,17 +35,17 @@ export function PopularDestinations() {
             <Link
               key={destination.name}
               href={`/plans?search=${destination.name}`}
-              className="group bg-[var(--gray-bg)] rounded-2xl p-5 text-center border-[1.5px] border-transparent hover:border-[var(--gold)] transition-all cursor-pointer hover:translate-y-[-2px] no-underline"
+              className="group bg-[var(--gray-bg)] rounded-2xl px-5 py-4 text-center border-[1.5px] border-transparent hover:border-[var(--gold)] transition-all cursor-pointer hover:translate-y-[-2px] no-underline"
             >
-              <span className="text-[40px] block mb-3">{destination.icon}</span>
-              <h3 className="text-[15px] font-bold text-[var(--text-dark)] mb-1">{destination.name}</h3>
-              <p className="text-[12px] text-[var(--gray-text)] mb-2 flex items-center justify-center gap-1">
-                <MapPin className="w-3 h-3" />
+              <span className="text-[32px] block mb-2">{destination.icon}</span>
+              <h3 className="text-[14px] font-bold text-[var(--text-dark)] mb-0.5">{destination.name}</h3>
+              <p className="text-[11px] text-[var(--gray-text)] mb-1 flex items-center justify-center gap-1">
+                <MapPin className="w-2.5 h-2.5" />
                 {destination.countries}
               </p>
-              <p className="text-[15px] font-bold text-[var(--gold)]">{destination.price}</p>
+              <p className="text-[14px] font-bold text-[var(--gold)]">{destination.price}</p>
               {destination.popular && (
-                <span className="inline-block mt-2 bg-[rgba(201,168,76,0.15)] text-[var(--gold)] text-[10px] font-bold px-2.5 py-1 rounded-full">
+                <span className="inline-block mt-1.5 bg-[rgba(201,168,76,0.15)] text-[var(--gold)] text-[9px] font-bold px-2 py-0.5 rounded-full">
                   Popüler
                 </span>
               )}
