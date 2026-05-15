@@ -25,21 +25,16 @@ export interface Menu {
 
 /**
  * CMS sayfalarının URL'lerini normalize eder.
- *
- * Problem: Admin panel bazen /slug, bazen /pages/slug döndürebilir.
- * Backend'de slug alanı varsa → bu bir CMS sayfasıdır → URL kesinlikle /pages/slug olmalı.
- * Bu sayede frontend, backend versiyonundan bağımsız çalışır.
+ * slug alanı varsa → CMS sayfası → /{slug} formatını garantile.
  */
 function normalizeMenuItems(items: MenuItem[]): MenuItem[] {
   return items.map((item) => {
     const normalized = { ...item };
 
-    // Slug varsa → CMS sayfası → /pages/{slug} formatını zorla
+    // Slug varsa → CMS sayfası → /{slug} formatını zorla (/pages/ prefix olmadan)
     if (item.slug) {
-      normalized.url = `/pages/${item.slug}`;
+      normalized.url = `/${item.slug}`;
     }
-    // Slug yok ama URL /{slug} formatındaysa ve /pages/ içermiyorsa:
-    // (Eski API veya custom URL olabilir, bu durumda dokunma)
 
     // Alt menü öğelerini de normalize et
     if (item.children && item.children.length > 0) {
