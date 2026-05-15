@@ -165,7 +165,14 @@
       "from": "From",
       "countriesCount": "{count} countries",
       "region": "Region",
-      "dataPlan": "Data Plan"
+      "dataPlan": "Data Plan",
+      "upcoming": "Upcoming",
+      "dataVolume": "Data Volume",
+      "validityDuration": "Validity Duration",
+      "timeline": "Timeline",
+      "dataTag": "5 GB",
+      "daysTag": "10 Days",
+      "countries": "Countries"
     },
     "cta": {
       "buy": "Buy",

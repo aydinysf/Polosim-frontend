@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { Search, Signal, Clock, ShoppingCart, Star, ArrowUpDown, ChevronDown, Filter, Globe, Wifi, Check, MapPin, ArrowRight, Loader2, X } from "lucide-react";
+import { Search, Signal, Clock, Star, ArrowUpDown, ChevronDown, Filter, Globe, Wifi, Check, ArrowRight, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -14,7 +14,7 @@ import { useCart } from "@/lib/cart-context";
 import { productService, type Product, type PaginationMeta } from "@/lib/services/productService";
 import { regionService, type Region } from "@/lib/services/regionService";
 import { countryService, type Country } from "@/lib/services/countryService";
-import { getLocalizedText, getProductData, getProductValidity, getProductSpeed, getProductThrottleSpeed, isHotspotAllowed, hasInstantActivation, isBestSeller, getProductName } from "@/lib/product-helpers";
+import { getLocalizedText, getProductData, getProductValidity, getProductSpeed, isBestSeller, getProductName } from "@/lib/product-helpers";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Check as CheckIcon, ChevronsUpDown, ChevronLeft, ChevronRight } from "lucide-react";
@@ -735,91 +735,108 @@ export default function PlansPage() {
                     const data = getProductData(product);
                     const validity = getProductValidity(product, t);
                     const speed = getProductSpeed(product);
-                    const throttle = getProductThrottleSpeed(product);
-                    const hotspot = isHotspotAllowed(product);
-                    const instant = hasInstantActivation(product);
                     const bestSeller = isBestSeller(product);
+
+                    // Parse validity days for progress bar
+                    const validityDays = parseInt(getProductValidity(product)) || 30;
+                    const progressPct = Math.min(100, Math.round((validityDays / 30) * 40));
+
+                    // Flag URL
+                    const rawFlag = product.country?.flag_url || product.flag_url;
+                    const isFlagPath = rawFlag && (rawFlag.includes('.') || rawFlag.includes('/'));
+                    const flagUrl = isFlagPath ? getImageUrl(rawFlag) : getFlagFromISO(product.country?.iso_code);
+
+                    // Country name
+                    const countryName = getLocalizedText(product.country?.name) || name;
 
                     return (
                       <div
                         key={product.id}
-                        className="group relative overflow-hidden rounded-2xl border-[1.5px] border-[var(--gray-mid)] bg-white transition-all duration-200 hover:border-[var(--gold)] hover:translate-y-[-2px] hover:shadow-md cursor-pointer"
+                        className="group relative overflow-hidden rounded-2xl border border-[#E5E7EB] bg-white transition-all duration-200 hover:border-[var(--gold)] hover:translate-y-[-2px] hover:shadow-lg cursor-pointer"
                       >
-                        {bestSeller && (
-                          <div className="absolute top-3 right-3 z-10">
-                            <Badge className="bg-[rgba(201,168,76,0.15)] text-[var(--gold)] border border-[rgba(201,168,76,0.3)] hover:bg-[rgba(201,168,76,0.2)]">
-                              <Star className="w-3 h-3 mr-1 fill-[var(--gold)]" />
-                              {t('labels.bestSeller')}
-                            </Badge>
+                        {/* Top row: Flag + Country name + arrow */}
+                        <div className="flex items-center justify-between px-4 pt-4 pb-3">
+                          <div className="flex items-center gap-2">
+                            {flagUrl ? (
+                              <img
+                                src={flagUrl}
+                                alt={countryName}
+                                className="w-8 h-5 rounded-sm object-cover shadow-sm"
+                                onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                              />
+                            ) : (
+                              <span className="text-xl">🌍</span>
+                            )}
+                            <span className="font-bold text-[var(--text-dark)] text-[15px]">{countryName}</span>
                           </div>
-                        )}
-                        <div className="p-5">
-                          <div className="flex items-center gap-3 mb-4">
-                            {(() => {
-                              const raw = product.country?.image_url || product.image_url || product.flag_url || product.country?.flag_url;
-                              const isPath = raw && (raw.includes('.') || raw.includes('/'));
-                              const url = isPath ? getImageUrl(raw) : getFlagFromISO(product.country?.iso_code);
-                              if (!url) return <span className="text-3xl">🌍</span>;
-                              return (
-                                <img
-                                  src={url}
-                                  alt={name}
-                                  className="w-10 h-10 rounded-lg object-cover"
-                                  onError={(e) => {
-                                    (e.target as HTMLImageElement).style.display = 'none';
-                                    (e.target as HTMLImageElement).parentElement!.innerHTML = `<span class="text-3xl">🌍</span>`;
-                                  }}
-                                />
-                              );
-                            })()}
-                            <div>
-                              <h3 className="font-bold text-[var(--text-dark)] leading-tight">{name}</h3>
-                              <p className="text-2xl font-extrabold text-[var(--gold)] tracking-tight">{data}</p>
+                          <div className="w-6 h-6 rounded-full border border-[#E5E7EB] flex items-center justify-center text-[var(--text-dark)] group-hover:border-[var(--gold)] group-hover:text-[var(--gold)] transition-all">
+                            <ArrowRight className="w-3 h-3" />
+                          </div>
+                        </div>
+
+                        {/* Status + Date row */}
+                        <div className="flex items-center justify-between px-4 pb-3">
+                          <span className="inline-flex items-center gap-1 bg-[#F3F4F6] text-[var(--gray-text)] text-[11px] font-semibold px-2.5 py-1 rounded-full">
+                            <span className="w-1.5 h-1.5 rounded-full bg-[var(--gold)] inline-block"></span>
+                            {t('labels.upcoming') || 'Gelecek'}
+                          </span>
+                          {bestSeller && (
+                            <span className="text-[10px] text-[var(--gold)] font-bold uppercase tracking-wider">
+                              ★ {t('labels.bestSeller')}
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Data row */}
+                        <div className="mx-4 mb-2 flex items-center justify-between bg-[#F9FAFB] rounded-xl px-3 py-2.5">
+                          <div className="flex items-center gap-2">
+                            <div className="w-5 h-5 rounded-full bg-white border border-[#E5E7EB] flex items-center justify-center">
+                              <Signal className="w-3 h-3 text-[var(--gold)]" />
                             </div>
+                            <span className="text-[12px] text-[var(--gray-text)] font-medium">{t('labels.dataVolume') || 'Veri Hacmi'}</span>
                           </div>
+                          <span className="text-[13px] font-bold text-[var(--text-dark)]">{data}</span>
+                        </div>
 
-                          <div className="space-y-2 mb-4">
-                            <div className="flex items-center gap-2 text-sm text-[var(--gray-text)] font-medium">
-                              <Clock className="w-4 h-4 text-[var(--gold)] flex-shrink-0" />
-                              <span>{validity}</span>
+                        {/* Validity row */}
+                        <div className="mx-4 mb-4 flex items-center justify-between bg-[#F9FAFB] rounded-xl px-3 py-2.5">
+                          <div className="flex items-center gap-2">
+                            <div className="w-5 h-5 rounded-full bg-white border border-[#E5E7EB] flex items-center justify-center">
+                              <Clock className="w-3 h-3 text-[var(--gold)]" />
                             </div>
-                            {speed && (
-                              <div className="flex items-center gap-2 text-sm text-[var(--gray-text)] font-medium">
-                                <Signal className="w-4 h-4 text-[var(--gold)] flex-shrink-0" />
-                                <span>{speed}</span>
-                              </div>
-                            )}
-                            {throttle && (
-                              <div className="flex items-center gap-2 text-sm text-[var(--gray-text)] font-medium">
-                                <Wifi className="w-4 h-4 text-[var(--gold)] flex-shrink-0" />
-                                <span>{throttle}</span>
-                              </div>
-                            )}
+                            <span className="text-[12px] text-[var(--gray-text)] font-medium">{t('labels.validityDuration') || 'Geçerlilik Süresi'}</span>
                           </div>
+                          <span className="text-[13px] font-bold text-[var(--text-dark)]">{validity}</span>
+                        </div>
 
-                          {/* Feature badges */}
-                          <div className="flex flex-wrap gap-1.5 mb-4">
-                            {hotspot && (
-                              <span className="px-2 py-0.5 text-[10px] font-medium bg-emerald-500/10 text-emerald-500 rounded-full">{t('labels.hotspot')}</span>
+                        {/* Bottom: price + buy button */}
+                        <div className="flex items-center justify-between px-4 pb-4">
+                          <span className="text-xl font-extrabold text-[var(--text-dark)]">€{product.price}</span>
+                          <Button
+                            size="sm"
+                            className={`rounded-lg px-4 h-9 text-sm font-bold transition-all shadow-sm ${
+                              addedToCart === product.id
+                                ? "bg-emerald-500 hover:bg-emerald-600 text-white"
+                                : "bg-[var(--navy)] hover:bg-[var(--navy)]/90 text-white"
+                            }`}
+                            onClick={() => handleAddToCart(product)}
+                          >
+                            {addedToCart === product.id ? (
+                              <><Check className="w-4 h-4 mr-1" />{t('cta.added')}</>
+                            ) : (
+                              t('cta.buy')
                             )}
-                            {instant && (
-                              <span className="px-2 py-0.5 text-[10px] font-medium bg-blue-500/10 text-blue-500 rounded-full">{t('labels.instant')}</span>
-                            )}
-                          </div>
+                          </Button>
+                        </div>
 
-                          <div className="flex items-center justify-between pt-4 border-t border-[var(--gray-mid)]">
-                            <span className="text-2xl font-extrabold text-[var(--text-dark)]">€{product.price}</span>
-                            <Button
-                              size="sm"
-                              className={`rounded-xl px-5 h-10 font-bold transition-all shadow-sm ${addedToCart === product.id ? "bg-emerald-500 hover:bg-emerald-600 text-white" : "bg-[var(--gold)] hover:bg-[var(--gold-light)] text-white"}`}
-                              onClick={() => handleAddToCart(product)}
-                            >
-                              {addedToCart === product.id ? (
-                                <><Check className="w-4 h-4 mr-1.5" />{t('cta.added')}</>
-                              ) : (
-                                <><ShoppingCart className="w-4 h-4 mr-1.5" />{t('cta.buy')}</>
-                              )}
-                            </Button>
+                        {/* Zaman Çizelgesi progress bar */}
+                        <div className="px-4 pb-4">
+                          <span className="text-[10px] text-[var(--gray-text)] font-medium block mb-1.5">{t('labels.timeline') || 'Zaman Çizelgesi'}</span>
+                          <div className="w-full h-1.5 bg-[#F3F4F6] rounded-full overflow-hidden">
+                            <div
+                              className="h-full rounded-full bg-gradient-to-r from-[var(--gold)] to-[#E8C84A] transition-all duration-500"
+                              style={{ width: `${progressPct}%` }}
+                            />
                           </div>
                         </div>
                       </div>
@@ -837,79 +854,74 @@ export default function PlansPage() {
                 const regionName = getLocalizedText(region.name, t('labels.region'), locale);
                 const countryCount = region.countries_count || 0;
                 const startingPrice = region.starting_price || 0;
-                const regionCountries = region.countries || [];
+
+                // Region icon/image
+                const icon = region.icon;
+                const imageUrl = region.image_url;
+                const isIconPath = icon && (icon.includes('/') || icon.includes('.'));
+                const iconUrl = isIconPath ? getImageUrl(icon) : null;
+                const displayImageUrl = imageUrl ? getImageUrl(imageUrl) : iconUrl;
 
                 return (
                   <button
                     key={region.id}
-                    className="group relative overflow-hidden rounded-2xl border-[1.5px] border-[var(--gray-mid)] bg-white p-6 text-left transition-all duration-200 hover:border-[var(--gold)] hover:translate-y-[-2px] hover:shadow-md cursor-pointer"
+                    className="group relative overflow-hidden rounded-2xl border border-[#E5E7EB] bg-white text-left transition-all duration-200 hover:border-[var(--gold)] hover:translate-y-[-2px] hover:shadow-lg cursor-pointer"
                     onClick={() => {
                       setViewMode("plans");
                       setSelectedRegionId(region.id);
                     }}
                   >
-                    <div className="flex items-start gap-3 mb-3">
-                      <span className="text-5xl">
-                        {(() => {
-                          const icon = region.icon;
-                          const isPath = icon && (icon.includes('/') || icon.includes('.'));
-                          const url = isPath ? getImageUrl(icon) : null;
-                          return url ? <img src={url} alt="" className="w-12 h-12 object-cover rounded-md" /> : (icon || "🌍");
-                        })()}
-                      </span>
-                      <div>
-                        <h3 className="text-lg font-bold text-[var(--text-dark)] font-['Sora'] leading-tight">{regionName}</h3>
-                        {countryCount > 0 && (
-                          <div className="flex items-center gap-1 text-sm text-muted-foreground mt-0.5">
-                            <MapPin className="w-3 h-3 text-[var(--gold)]" />
-                            <span className="text-[var(--gray-text)] font-medium">{t('labels.countriesCount', { count: countryCount })}</span>
-                          </div>
+                    {/* Region icon at top-center */}
+                    <div className="flex justify-center pt-5 pb-3">
+                      <div className="w-16 h-16 rounded-full border-[3px] border-[#E5E7EB] bg-[#F3F4F6] overflow-hidden flex items-center justify-center shadow-sm group-hover:border-[var(--gold)] transition-all">
+                        {displayImageUrl ? (
+                          <img src={displayImageUrl} alt={regionName} className="w-full h-full object-cover" />
+                        ) : icon && !isIconPath ? (
+                          <span className="text-3xl">{icon}</span>
+                        ) : (
+                          <Globe className="w-8 h-8 text-[var(--gray-text)]" />
                         )}
                       </div>
                     </div>
 
-                    {/* Country flags with codes */}
-                    {regionCountries.length > 0 && (
-                      <div className="flex flex-wrap gap-2.5 mb-4">
-                        {regionCountries.slice(0, 6).map((country) => {
-                          const cName = getLocalizedText(country.name, "");
-                          const cCode = country.iso_code || cName.substring(0, 2).toUpperCase();
-                          return (
-                            <div key={cName} className="flex flex-col items-center gap-0.5">
-                              <span className="text-[9px] text-muted-foreground/80 font-medium uppercase leading-none">{cCode}</span>
-                              {(() => {
-                                const raw = country.flag_url;
-                                const isPath = raw && (raw.includes('.') || raw.includes('/'));
-                                const url = isPath ? getImageUrl(raw) : getFlagFromISO(country.iso_code);
-                                return url ? (
-                                  <img src={url} alt={cName} className="w-6 h-4 rounded-sm object-cover" />
-                                ) : (
-                                  <span className="text-sm leading-none">🌍</span>
-                                );
-                              })()}
-                            </div>
-                          );
-                        })}
-                        {regionCountries.length > 6 && (
-                          <div className="flex flex-col items-center gap-0.5">
-                            <span className="text-[9px] text-muted-foreground/60 font-medium leading-none">+{regionCountries.length - 6}</span>
-                            <span className="text-sm text-muted-foreground/60 leading-none">...</span>
-                          </div>
-                        )}
-                      </div>
-                    )}
+                    {/* Region name */}
+                    <div className="text-center px-4 pb-3">
+                      <h3 className="text-[15px] font-bold text-[var(--text-dark)] leading-tight">{regionName}</h3>
+                      {countryCount > 0 && (
+                        <p className="text-[11px] text-[var(--gray-text)] mt-0.5">{t('labels.countriesCount', { count: countryCount })}</p>
+                      )}
+                    </div>
 
-                    <div className="flex items-end justify-between mt-auto">
+                    {/* Badges row: data / days / speed */}
+                    <div className="flex items-center justify-center gap-2 px-3 pb-4 flex-wrap">
+                      <span className="inline-flex items-center gap-1 bg-[#F3F4F6] rounded-full px-2.5 py-1 text-[11px] font-semibold text-[var(--text-dark)]">
+                        <Signal className="w-3 h-3 text-[var(--gold)]" />
+                        {t('labels.dataTag') || '5 GB'}
+                      </span>
+                      <span className="inline-flex items-center gap-1 bg-[#F3F4F6] rounded-full px-2.5 py-1 text-[11px] font-semibold text-[var(--text-dark)]">
+                        <Clock className="w-3 h-3 text-[var(--gold)]" />
+                        {countryCount > 0 ? `${countryCount} ${t('labels.countries') || 'Ülke'}` : (t('labels.daysTag') || '10 Gün')}
+                      </span>
+                      <span className="inline-flex items-center gap-1 bg-[#F3F4F6] rounded-full px-2.5 py-1 text-[11px] font-semibold text-[var(--text-dark)]">
+                        <Wifi className="w-3 h-3 text-[var(--gold)]" />
+                        4G
+                      </span>
+                    </div>
+
+                    {/* Price + Buy button */}
+                    <div className="flex items-center justify-between px-4 pb-5">
                       <div>
-                        {startingPrice > 0 && (
+                        {startingPrice > 0 ? (
                           <>
-                            <span className="text-[11px] text-[var(--gray-text)] font-bold uppercase tracking-wider">{t('labels.from')}</span>
-                            <p className="text-2xl font-extrabold text-[var(--gold)] tracking-tight">€{startingPrice.toFixed(2)}</p>
+                            <span className="text-[10px] text-[var(--gray-text)] font-medium block">{t('labels.from')}</span>
+                            <p className="text-xl font-extrabold text-[var(--text-dark)] tracking-tight">€{startingPrice.toFixed(2)}</p>
                           </>
+                        ) : (
+                          <p className="text-xl font-extrabold text-[var(--text-dark)] tracking-tight">—</p>
                         )}
                       </div>
-                      <div className="w-9 h-9 rounded-full bg-[var(--gray-bg)] flex items-center justify-center text-[var(--gold)] group-hover:bg-[var(--gold)] group-hover:text-white transition-all">
-                        <ArrowRight className="w-4 h-4" />
+                      <div className="bg-[var(--navy)] text-white text-[12px] font-bold px-4 py-2 rounded-lg group-hover:bg-[var(--gold)] transition-all">
+                        {t('cta.buy')}
                       </div>
                     </div>
                   </button>

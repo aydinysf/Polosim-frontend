@@ -165,7 +165,14 @@
       "from": "Başlangıç",
       "countriesCount": "{count} ülke",
       "region": "Bölge",
-      "dataPlan": "Veri Planı"
+      "dataPlan": "Veri Planı",
+      "upcoming": "Gelecek",
+      "dataVolume": "Veri Hacmi",
+      "validityDuration": "Geçerlilik Süresi",
+      "timeline": "Zaman Çizelgesi",
+      "dataTag": "5 GB",
+      "daysTag": "10 Gün",
+      "countries": "Ülke"
     },
     "cta": {
       "buy": "Satın Al",
