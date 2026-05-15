@@ -71,7 +71,7 @@ export function RegionsSection() {
             Bölgeleri Keşfet
           </h2>
           <button 
-            className="text-[13px] font-semibold text-[var(--gold)] hover:text-[var(--gold-light)] bg-transparent border-none p-0 cursor-pointer transition-colors"
+            className="text-[13px] font-semibold text-black hover:text-[var(--gray-text)] bg-transparent border-none p-0 cursor-pointer transition-colors"
             onClick={() => router.push("/plans?view=regions")}
           >
             Hepsini Gör
