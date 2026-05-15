@@ -286,7 +286,7 @@ export function HeroSection() {
   }
 
   return (
-    <section className="relative pt-32 pb-8 flex flex-col items-center justify-start overflow-hidden bg-[var(--navy)]">
+    <section className="relative pt-48 pb-8 flex flex-col items-center justify-start overflow-hidden bg-[var(--navy)]">
       {/* Background decorative elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-[100px] -left-[100px] w-[400px] h-[400px] bg-[radial-gradient(circle,rgba(201,168,76,0.08)_0%,transparent_70%)]" />
