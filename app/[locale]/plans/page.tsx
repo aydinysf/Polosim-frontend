@@ -2,9 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { Search, Signal, Clock, Star, ArrowUpDown, ChevronDown, Filter, Globe, Wifi, Check, ArrowRight, Loader2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
 import { Slider } from "@/components/ui/slider";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
@@ -15,10 +13,7 @@ import { productService, type Product, type PaginationMeta } from "@/lib/service
 import { regionService, type Region } from "@/lib/services/regionService";
 import { countryService, type Country } from "@/lib/services/countryService";
 import { getLocalizedText, getProductData, getProductValidity, getProductSpeed, isBestSeller, getProductName } from "@/lib/product-helpers";
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Check as CheckIcon, ChevronsUpDown, ChevronLeft, ChevronRight } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { getImageUrl, getFlagFromISO } from "@/lib/api-client";
 import { useLocale, useTranslations } from "next-intl";
 
@@ -468,251 +463,288 @@ export default function PlansPage() {
       {/* Filters & Content */}
       <section className="pb-24 px-4">
         <div className="max-w-7xl mx-auto">
-          {/* View Mode Tabs + Filter Bar */}
-          <div className="flex flex-col gap-4 mb-8">
-            {/* View Mode Tabs */}
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => { setViewMode("regions"); setSearchQuery(""); }}
-                className={`px-6 py-3 rounded-xl text-sm font-semibold transition-all ${viewMode === "regions"
-                  ? "bg-primary text-primary-foreground shadow-lg"
-                  : "bg-card/50 text-muted-foreground hover:bg-card border border-border/50"
+
+          {/* Toolbar: Tabs + Filters + Sort */}
+          <div className="mt-6 mb-8">
+
+            {/* Top row: view toggle left, sort right */}
+            <div className="flex items-center justify-between gap-3 mb-4">
+
+              {/* View Mode Pills */}
+              <div className="inline-flex items-center bg-white border border-[#E5E7EB] rounded-xl p-1 gap-1 shadow-sm">
+                <button
+                  onClick={() => { setViewMode("plans"); }}
+                  className={`px-5 py-2 rounded-lg text-[13px] font-semibold transition-all ${
+                    viewMode === "plans"
+                      ? "bg-[var(--navy)] text-white shadow"
+                      : "text-[var(--gray-text)] hover:text-[var(--text-dark)]"
                   }`}
-              >
-                {t('tabs.regions')}
-              </button>
-            </div>
+                >
+                  {t('tabs.plans') || 'Planlar'}
+                </button>
+                <button
+                  onClick={() => { setViewMode("regions"); setSearchQuery(""); }}
+                  className={`px-5 py-2 rounded-lg text-[13px] font-semibold transition-all ${
+                    viewMode === "regions"
+                      ? "bg-[var(--navy)] text-white shadow"
+                      : "text-[var(--gray-text)] hover:text-[var(--text-dark)]"
+                  }`}
+                >
+                  {t('tabs.regions')}
+                </button>
+              </div>
 
-            {/* Filter Bar */}
-            <div className="flex flex-col gap-4 p-4 rounded-2xl bg-card/30 border border-border/50 backdrop-blur-sm">
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                <div className="flex flex-wrap items-center gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setShowFilters(!showFilters)}
-                    className={`gap-2 ${showFilters ? 'bg-primary/10 border-primary/30 text-primary' : ''}`}
-                  >
-                    <Filter className="w-4 h-4" />
-                    {t('filters.title')}
-                    {(filterData || filterValidity || filterPriceRange[0] > 0 || filterPriceRange[1] < 100) && (
-                      <Badge variant="secondary" className="ml-1 h-5 w-5 p-0 flex items-center justify-center text-[10px] rounded-full">
-                        {(filterData ? 1 : 0) + (filterValidity ? 1 : 0) + ((filterPriceRange[0] > 0 || filterPriceRange[1] < 100) ? 1 : 0)}
-                      </Badge>
-                    )}
-                  </Button>
-
-                  {viewMode === "plans" && (
-                    <>
-                      {/* Region filter pills for plans view */}
-                      {regions.slice(0, 6).map((region) => (
-                        <button
-                          key={region.id}
-                          onClick={() => { setSelectedRegionId(region.id === selectedRegionId ? null : region.id); setSearchQuery(""); }}
-                          className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${selectedRegionId === region.id
-                            ? "bg-primary text-primary-foreground"
-                            : "bg-card/50 text-muted-foreground hover:bg-card border border-border/50"
-                            }`}
-                        >
-                          {(() => {
-                            const icon = region.icon;
-                            const isPath = icon && (icon.includes('/') || icon.includes('.'));
-                            const url = isPath ? getImageUrl(icon) : null;
-                            return url ? (
-                              <div className="relative w-4 h-4 rounded-sm overflow-hidden inline-block mr-1 align-middle">
-                                <Image src={url} alt="" fill className="object-cover" sizes="16px" />
-                              </div>
-                            ) : (icon ? <span className="mr-1">{icon}</span> : null);
-                          })()}
-                          {getLocalizedText(region.name, "", locale)}
-                        </button>
-                      ))}
-
-                      <button
-                        onClick={() => setShowBestSellers(!showBestSellers)}
-                        className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${showBestSellers
-                          ? "bg-primary text-primary-foreground"
-                          : "bg-card/50 text-muted-foreground hover:bg-card border border-border/50"
-                          }`}
-                      >
-                        <Star className={`w-3 h-3 ${showBestSellers ? "fill-primary-foreground" : ""}`} />
-                        {t('filters.bestSellers')}
-                      </button>
-                    </>
+              {/* Right side: filter toggle + sort */}
+              <div className="flex items-center gap-2">
+                {/* Filter toggle button */}
+                <button
+                  onClick={() => setShowFilters(!showFilters)}
+                  className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-[13px] font-semibold border transition-all ${
+                    showFilters || filterData || filterValidity || filterPriceRange[0] > 0 || filterPriceRange[1] < 100
+                      ? "bg-[var(--navy)] text-white border-[var(--navy)]"
+                      : "bg-white text-[var(--gray-text)] border-[#E5E7EB] hover:border-[var(--navy)] hover:text-[var(--navy)]"
+                  }`}
+                >
+                  <Filter className="w-3.5 h-3.5" />
+                  {t('filters.title')}
+                  {(filterData || filterValidity || filterPriceRange[0] > 0 || filterPriceRange[1] < 100) && (
+                    <span className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-[var(--gold)] text-white text-[9px] font-bold">
+                      {(filterData ? 1 : 0) + (filterValidity ? 1 : 0) + ((filterPriceRange[0] > 0 || filterPriceRange[1] < 100) ? 1 : 0)}
+                    </span>
                   )}
-                </div>
+                </button>
 
-                {/* Sort */}
-                <div className="relative flex-shrink-0">
+                {/* Sort dropdown */}
+                <div className="relative">
                   <button
                     onClick={() => setSortMenuOpen(!sortMenuOpen)}
                     onBlur={() => setTimeout(() => setSortMenuOpen(false), 150)}
-                    className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium bg-card/50 text-muted-foreground hover:bg-card border border-border/50 transition-all"
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-[13px] font-semibold bg-white text-[var(--gray-text)] border border-[#E5E7EB] hover:border-[var(--navy)] hover:text-[var(--navy)] transition-all"
                   >
-                    <ArrowUpDown className="w-3 h-3" />
-                    {sortOptions.find((opt) => opt.key === sortBy)?.label}
-                    <ChevronDown className={`w-3 h-3 transition-transform ${sortMenuOpen ? "rotate-180" : ""}`} />
+                    <ArrowUpDown className="w-3.5 h-3.5" />
+                    <span className="hidden sm:inline">{sortOptions.find(o => o.key === sortBy)?.label}</span>
+                    <span className="sm:hidden">{t('sort.popular') || 'Sırala'}</span>
+                    <ChevronDown className={`w-3.5 h-3.5 transition-transform ${sortMenuOpen ? "rotate-180" : ""}`} />
                   </button>
                   {sortMenuOpen && (
-                    <div className="absolute top-full right-0 mt-2 bg-card/95 backdrop-blur-xl border border-border/50 rounded-xl overflow-hidden z-50 min-w-[180px]">
-                      {sortOptions.filter(o => viewMode === "regions" ? o.key !== "data-high" : true).map((option) => (
+                    <div className="absolute top-full right-0 mt-2 bg-white border border-[#E5E7EB] rounded-2xl shadow-xl overflow-hidden z-50 min-w-[200px]">
+                      {sortOptions.filter(o => viewMode === "regions" ? !["data-high", "data-low"].includes(o.key) : true).map((option) => (
                         <button
                           key={option.key}
                           onClick={() => { setSortBy(option.key); setSortMenuOpen(false); }}
-                          className={`w-full px-4 py-2.5 text-left text-sm hover:bg-secondary/50 transition-colors ${sortBy === option.key ? "text-primary font-medium" : "text-foreground"
-                            }`}
+                          className={`w-full flex items-center justify-between px-4 py-2.5 text-left text-[13px] hover:bg-[#F9FAFB] transition-colors ${
+                            sortBy === option.key
+                              ? "text-[var(--navy)] font-bold"
+                              : "text-[var(--text-dark)] font-medium"
+                          }`}
                         >
                           {option.label}
+                          {sortBy === option.key && (
+                            <span className="w-1.5 h-1.5 rounded-full bg-[var(--gold)] inline-block" />
+                          )}
                         </button>
                       ))}
                     </div>
                   )}
                 </div>
               </div>
-
-              {/* Expanded Filters Panel */}
-              {showFilters && (
-                <div className="pt-4 mt-2 border-t border-border/30 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 animate-in slide-in-from-top-2">
-
-                  {/* Data Filter */}
-                  <div className="space-y-2">
-                    <label className="text-xs font-medium text-muted-foreground">{t('filters.dataAmount')}</label>
-                    <div className="flex flex-wrap gap-2">
-                      <button
-                        onClick={() => setFilterData(null)}
-                        className={`px-3 py-1 rounded-md text-xs transition-colors ${!filterData ? 'bg-primary text-primary-foreground' : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'}`}
-                      >
-                        {t('filters.any')}
-                      </button>
-                      {dataFilterOptions.map(opt => (
-                        <button
-                          key={opt.value}
-                          onClick={() => setFilterData(filterData === opt.value ? null : opt.value)}
-                          className={`px-3 py-1 rounded-md text-xs transition-colors ${filterData === opt.value ? 'bg-primary text-primary-foreground' : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'}`}
-                        >
-                          {opt.label}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Validity Filter */}
-                  <div className="space-y-2">
-                    <label className="text-xs font-medium text-muted-foreground">{t('filters.duration')}</label>
-                    <div className="flex flex-wrap gap-2">
-                      <button
-                        onClick={() => setFilterValidity(null)}
-                        className={`px-3 py-1 rounded-md text-xs transition-colors ${!filterValidity ? 'bg-primary text-primary-foreground' : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'}`}
-                      >
-                        {t('filters.any')}
-                      </button>
-                      {validityFilterOptions.map(opt => (
-                        <button
-                          key={opt.value}
-                          onClick={() => setFilterValidity(filterValidity === opt.value ? null : opt.value)}
-                          className={`px-3 py-1 rounded-md text-xs transition-colors ${filterValidity === opt.value ? 'bg-primary text-primary-foreground' : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'}`}
-                        >
-                          {opt.label}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Price Filter */}
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <label className="text-xs font-medium text-muted-foreground">{t('filters.priceRange')}</label>
-                      <span className="text-xs font-medium">€{filterPriceRange[0]} - €{filterPriceRange[1]}</span>
-                    </div>
-                    <Slider
-                      defaultValue={[0, 100]}
-                      max={100}
-                      step={1}
-                      value={filterPriceRange}
-                      onValueChange={(val) => setFilterPriceRange(val as [number, number])}
-                      className="py-1"
-                    />
-                  </div>
-                </div>
-              )}
-
-              {/* Pagination - only show in plans view */}
-              {viewMode === "plans" && totalPages > 1 && (
-                <div className="flex items-center justify-center gap-2 mt-4">
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
-                    disabled={currentPage === 1}
-                    className="h-8 w-8"
-                  >
-                    <ChevronLeft className="h-4 w-4" />
-                  </Button>
-
-                  <div className="flex items-center gap-1">
-                    {(() => {
-                      const lastPage = totalPages;
-                      const pages: (number | string)[] = [];
-
-                      if (lastPage <= 10) {
-                        for (let i = 1; i <= lastPage; i++) pages.push(i);
-                      } else {
-                        // First 3 pages
-                        pages.push(1, 2, 3);
-
-                        const endStart = lastPage - 3;
-
-                        // Handle middle
-                        if (currentPage > 3 && currentPage < endStart) {
-                          if (currentPage > 4) pages.push('...');
-                          pages.push(currentPage);
-                          if (currentPage < endStart - 1) pages.push('...');
-                        } else {
-                          pages.push('...');
-                        }
-
-                        // Last 4 pages (n-3, n-2, n-1, n)
-                        for (let i = endStart; i <= lastPage; i++) {
-                          if (!pages.includes(i)) pages.push(i);
-                        }
-                      }
-
-                      return pages.map((page, index) => {
-                        if (page === '...') {
-                          return <span key={`ellipsis-${index}`} className="px-2 text-muted-foreground">...</span>;
-                        }
-                        const p = page as number;
-                        return (
-                          <Button
-                            key={p}
-                            variant={currentPage === p ? "default" : "outline"}
-                            size="sm"
-                            onClick={() => setCurrentPage(p)}
-                            className={cn("h-8 w-8 p-0", currentPage === p ? "pointer-events-none" : "")}
-                          >
-                            {p}
-                          </Button>
-                        );
-                      });
-                    })()}
-                  </div>
-
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
-                    disabled={currentPage === totalPages}
-                    className="h-8 w-8"
-                  >
-                    <ChevronRight className="h-4 w-4" />
-                  </Button>
-                </div>
-              )}
             </div>
+
+            {/* Region quick-filter pills (plans view only) */}
+            {viewMode === "plans" && (
+              <div className="flex flex-wrap items-center gap-2 mb-4">
+                {regions.slice(0, 8).map((region) => {
+                  const icon = region.icon;
+                  const isPath = icon && (icon.includes('/') || icon.includes('.'));
+                  const url = isPath ? getImageUrl(icon) : null;
+                  const isActive = selectedRegionId === region.id;
+                  return (
+                    <button
+                      key={region.id}
+                      onClick={() => { setSelectedRegionId(isActive ? null : region.id); setSearchQuery(""); }}
+                      className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[12px] font-semibold border transition-all ${
+                        isActive
+                          ? "bg-[var(--navy)] text-white border-[var(--navy)] shadow-sm"
+                          : "bg-white text-[var(--gray-text)] border-[#E5E7EB] hover:border-[var(--navy)] hover:text-[var(--navy)]"
+                      }`}
+                    >
+                      {url ? (
+                        <div className="relative w-3.5 h-3.5 rounded-sm overflow-hidden shrink-0">
+                          <Image src={url} alt="" fill className="object-cover" sizes="14px" />
+                        </div>
+                      ) : icon ? (
+                        <span className="text-[11px] leading-none">{icon}</span>
+                      ) : null}
+                      {getLocalizedText(region.name, "", locale)}
+                    </button>
+                  );
+                })}
+
+                {/* Best Sellers pill */}
+                <button
+                  onClick={() => setShowBestSellers(!showBestSellers)}
+                  className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[12px] font-semibold border transition-all ${
+                    showBestSellers
+                      ? "bg-[var(--gold)] text-white border-[var(--gold)] shadow-sm"
+                      : "bg-white text-[var(--gray-text)] border-[#E5E7EB] hover:border-[var(--gold)] hover:text-[var(--gold)]"
+                  }`}
+                >
+                  <Star className={`w-3 h-3 ${showBestSellers ? "fill-white" : ""}`} />
+                  {t('filters.bestSellers')}
+                </button>
+              </div>
+            )}
+
+            {/* Expanded Filter Panel */}
+            {showFilters && (
+              <div className="bg-white border border-[#E5E7EB] rounded-2xl p-5 shadow-sm mb-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+
+                {/* Data Filter */}
+                <div className="space-y-2.5">
+                  <p className="text-[11px] font-bold text-[var(--gray-text)] uppercase tracking-wider">{t('filters.dataAmount')}</p>
+                  <div className="flex flex-wrap gap-1.5">
+                    <button
+                      onClick={() => setFilterData(null)}
+                      className={`px-3 py-1 rounded-full text-[12px] font-semibold border transition-all ${
+                        !filterData
+                          ? "bg-[var(--navy)] text-white border-[var(--navy)]"
+                          : "bg-white text-[var(--gray-text)] border-[#E5E7EB] hover:border-[var(--navy)]"
+                      }`}
+                    >
+                      {t('filters.any')}
+                    </button>
+                    {dataFilterOptions.map(opt => (
+                      <button
+                        key={opt.value}
+                        onClick={() => setFilterData(filterData === opt.value ? null : opt.value)}
+                        className={`px-3 py-1 rounded-full text-[12px] font-semibold border transition-all ${
+                          filterData === opt.value
+                            ? "bg-[var(--navy)] text-white border-[var(--navy)]"
+                            : "bg-white text-[var(--gray-text)] border-[#E5E7EB] hover:border-[var(--navy)]"
+                        }`}
+                      >
+                        {opt.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Validity Filter */}
+                <div className="space-y-2.5">
+                  <p className="text-[11px] font-bold text-[var(--gray-text)] uppercase tracking-wider">{t('filters.duration')}</p>
+                  <div className="flex flex-wrap gap-1.5">
+                    <button
+                      onClick={() => setFilterValidity(null)}
+                      className={`px-3 py-1 rounded-full text-[12px] font-semibold border transition-all ${
+                        !filterValidity
+                          ? "bg-[var(--navy)] text-white border-[var(--navy)]"
+                          : "bg-white text-[var(--gray-text)] border-[#E5E7EB] hover:border-[var(--navy)]"
+                      }`}
+                    >
+                      {t('filters.any')}
+                    </button>
+                    {validityFilterOptions.map(opt => (
+                      <button
+                        key={opt.value}
+                        onClick={() => setFilterValidity(filterValidity === opt.value ? null : opt.value)}
+                        className={`px-3 py-1 rounded-full text-[12px] font-semibold border transition-all ${
+                          filterValidity === opt.value
+                            ? "bg-[var(--navy)] text-white border-[var(--navy)]"
+                            : "bg-white text-[var(--gray-text)] border-[#E5E7EB] hover:border-[var(--navy)]"
+                        }`}
+                      >
+                        {opt.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Price Filter */}
+                <div className="space-y-2.5">
+                  <div className="flex items-center justify-between">
+                    <p className="text-[11px] font-bold text-[var(--gray-text)] uppercase tracking-wider">{t('filters.priceRange')}</p>
+                    <span className="text-[12px] font-bold text-[var(--navy)]">€{filterPriceRange[0]} – €{filterPriceRange[1]}</span>
+                  </div>
+                  <Slider
+                    defaultValue={[0, 100]}
+                    max={100}
+                    step={1}
+                    value={filterPriceRange}
+                    onValueChange={(val) => setFilterPriceRange(val as [number, number])}
+                    className="py-1"
+                  />
+                  {(filterPriceRange[0] > 0 || filterPriceRange[1] < 100) && (
+                    <button
+                      onClick={() => setFilterPriceRange([0, 100])}
+                      className="text-[11px] text-[var(--gold)] font-semibold hover:underline"
+                    >
+                      Sıfırla
+                    </button>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* Pagination */}
+            {viewMode === "plans" && totalPages > 1 && (
+              <div className="flex items-center justify-center gap-1.5 mt-4">
+                <button
+                  onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                  disabled={currentPage === 1}
+                  className="w-8 h-8 rounded-lg border border-[#E5E7EB] bg-white flex items-center justify-center text-[var(--gray-text)] hover:border-[var(--navy)] hover:text-[var(--navy)] disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                </button>
+
+                {(() => {
+                  const lastPage = totalPages;
+                  const pages: (number | string)[] = [];
+                  if (lastPage <= 10) {
+                    for (let i = 1; i <= lastPage; i++) pages.push(i);
+                  } else {
+                    pages.push(1, 2, 3);
+                    const endStart = lastPage - 3;
+                    if (currentPage > 3 && currentPage < endStart) {
+                      if (currentPage > 4) pages.push('...');
+                      pages.push(currentPage);
+                      if (currentPage < endStart - 1) pages.push('...');
+                    } else { pages.push('...'); }
+                    for (let i = endStart; i <= lastPage; i++) {
+                      if (!pages.includes(i)) pages.push(i);
+                    }
+                  }
+                  return pages.map((page, index) => {
+                    if (page === '...') return <span key={`e-${index}`} className="px-1 text-[var(--gray-text)]">…</span>;
+                    const p = page as number;
+                    return (
+                      <button
+                        key={p}
+                        onClick={() => setCurrentPage(p)}
+                        className={`w-8 h-8 rounded-lg text-[13px] font-semibold border transition-all ${
+                          currentPage === p
+                            ? "bg-[var(--navy)] text-white border-[var(--navy)] pointer-events-none"
+                            : "bg-white text-[var(--gray-text)] border-[#E5E7EB] hover:border-[var(--navy)] hover:text-[var(--navy)]"
+                        }`}
+                      >
+                        {p}
+                      </button>
+                    );
+                  });
+                })()}
+
+                <button
+                  onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                  disabled={currentPage === totalPages}
+                  className="w-8 h-8 rounded-lg border border-[#E5E7EB] bg-white flex items-center justify-center text-[var(--gray-text)] hover:border-[var(--navy)] hover:text-[var(--navy)] disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                >
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
+            )}
           </div>
 
           {/* Results Count */}
-          <p className="text-sm text-muted-foreground mb-6">
+          <p className="text-[13px] text-[var(--gray-text)] font-medium mb-5">
             {viewMode === "plans"
               ? t('results.plansCount', { count: filteredProducts.length })
               : t('results.regionsCount', { count: filteredRegions.length })}
@@ -812,8 +844,7 @@ export default function PlansPage() {
                         {/* Bottom: price + buy button */}
                         <div className="flex items-center justify-between px-4 pb-4">
                           <span className="text-xl font-extrabold text-[var(--text-dark)]">€{product.price}</span>
-                          <Button
-                            size="sm"
+                          <button
                             className={`rounded-lg px-4 h-9 text-sm font-bold transition-all shadow-sm ${
                               addedToCart === product.id
                                 ? "bg-emerald-500 hover:bg-emerald-600 text-white"
@@ -822,11 +853,11 @@ export default function PlansPage() {
                             onClick={() => handleAddToCart(product)}
                           >
                             {addedToCart === product.id ? (
-                              <><Check className="w-4 h-4 mr-1" />{t('cta.added')}</>
+                              <><Check className="w-4 h-4 mr-1 inline" />{t('cta.added')}</>
                             ) : (
                               t('cta.buy')
                             )}
-                          </Button>
+                          </button>
                         </div>
 
                         {/* Zaman Çizelgesi progress bar */}

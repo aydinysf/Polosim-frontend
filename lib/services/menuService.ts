@@ -1,14 +1,18 @@
 import { api } from "../api-client";
 
 export interface MenuItem {
-  id: number;
-  title: string;
+  id?: number;
+  label?: string;  // Admin panel label override
+  title: string;   // Resolved translated title
   url: string;
+  slug?: string;   // For CMS pages
   target?: string;
-  order: number;
+  order?: number;
   children?: MenuItem[];
   icon?: string;
   key?: string; // For i18n keys if needed
+  external?: boolean;
+  href?: string;   // Fallback for static links
 }
 
 export interface Menu {
@@ -19,14 +23,14 @@ export interface Menu {
 }
 
 export const menuService = {
-  async getMenu(handle: string, lang: string = "en"): Promise<Menu> {
+  async getMenu(handle: string, lang: string = "tr"): Promise<Menu> {
     const response = await api.get<Menu>(`/menus/${handle}`, {
       headers: {
-        'x-lang': lang,
         'Cache-Control': 'no-cache',
       },
       params: {
-        _t: Date.now(), // Cache buster — her istekte taze veri al
+        locale: lang,       // Backend reads ?locale= query param
+        _t: Date.now(),     // Cache buster — her istekte taze veri al
       },
     });
     return (response.data as any).data;
