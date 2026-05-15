@@ -83,7 +83,7 @@ export function RegionsSection() {
           {displayRegions.map((region, index) => (
             <div
               key={region.id + '-' + index}
-              className="group relative bg-white rounded-2xl pt-10 pb-5 px-4 text-center border border-[var(--gray-mid)] hover:border-[var(--gold)] hover:shadow-lg transition-all duration-300 cursor-pointer flex flex-col items-center"
+              className="group relative bg-white rounded-2xl pt-8 pb-4 px-4 text-center border border-[var(--gray-mid)] hover:border-[var(--gold)] hover:shadow-lg transition-all duration-300 cursor-pointer flex flex-col items-center"
               onClick={() => router.push(`/plans?search=${region.name}`)}
             >
               {/* Floating Globe Icon */}
@@ -94,7 +94,7 @@ export function RegionsSection() {
               </div>
 
               {/* Content */}
-              <h3 className="text-[16px] font-bold text-[var(--text-dark)] mb-1.5 mt-2">
+              <h3 className="text-[16px] font-bold text-[var(--text-dark)] mb-1 mt-1">
                 {region.name}
               </h3>
               
