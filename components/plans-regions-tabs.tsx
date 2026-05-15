@@ -1,6 +1,5 @@
 "use client";
 
-import { Smartphone, Signal, Users, Gift, ArrowRight } from "lucide-react";
 import { useRouter } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
 
@@ -11,63 +10,63 @@ export function PlansRegionsTabs() {
   const benefits = [
     {
       icon: "📦",
-      title: t('trackOrders.title'),
-      description: t('trackOrders.description'),
-      iconBg: "bg-[#FFF0E0]",
+      title: "Siparişlerinizi Takip Edin",
+      description: "Tüm satın alımlarınızı ve dijital ürünlerinizi basit panel aracılığı ile takip edebilirsiniz.",
+      iconBg: "bg-[#FFF4E5]",
     },
     {
       icon: "📊",
-      title: t('monitorUsage.title'),
-      description: t('monitorUsage.description'),
-      iconBg: "bg-[#E0F5F0]",
+      title: "Kullanımı İzleyin",
+      description: "Veri kullanımınızı ve kalan paketenizi gerçek zamanlı olarak izleyin ve süreniz dolmadan önce kolayca yenilik edin.",
+      iconBg: "bg-[#E8F5E9]",
     },
     {
       icon: "🤝",
-      title: t('affiliateProgram.title'),
-      description: t('affiliateProgram.description'),
-      iconBg: "bg-[#EDE8FF]",
+      title: "Ortaklık Programı",
+      description: "Arkadaşlarınıza referans ver, kazançlar ve özel indirimler kazanın ve ortak programımıza katılarak kazanmaya başlayın.",
+      iconBg: "bg-[#EDE7F6]",
     },
     {
       icon: "🎁",
-      title: t('exclusiveCampaigns.title'),
-      description: t('exclusiveCampaigns.description'),
-      iconBg: "bg-[#FFE8EE]",
+      title: "Özel Kampanyalar",
+      description: "VIP kampanya listeli müşterilerimiz, promosyonlara ve özel fırsatlara erişim edin.",
+      iconBg: "bg-[#FCE4EC]",
     },
   ];
 
   return (
-    <section className="py-20 sm:py-24 px-[5%] bg-white text-center">
-      <div className="max-w-[1200px] mx-auto">
+    <section className="py-16 px-[5%] bg-[#D4AF37]/10 text-center">
+      <div className="max-w-[1100px] mx-auto">
         {/* Section header */}
-        <h2 className="text-[36px] font-extrabold mb-4 text-[var(--text-dark)] font-['Sora']">
+        <h2 className="text-[28px] md:text-[32px] font-bold mb-3 text-white">
           Neden Hesap Oluşturmalısınız?
         </h2>
-        <p className="text-[var(--gray-text)] text-[16px] max-w-[600px] mx-auto mb-16 leading-[1.6]">
-          Ücretsiz bir hesapla özel avantajların kilidini açın ve eSIM'lerinizi kolayca yönetin.
+        <p className="text-[var(--gray-text)] text-[14px] md:text-[15px] max-w-[500px] mx-auto mb-10 leading-[1.6]">
+          Ücretsiz bir hesapla özel avantajların kilidini açın<br />ve eSIM&apos;lerinizi kolayca yönetin.
         </p>
 
-        {/* Benefits Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-          {benefits.map((benefit) => (
+        {/* Benefits Grid - 4 columns */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-10">
+          {benefits.map((benefit, index) => (
             <div
-              key={benefit.title}
-              className="bg-[#F9FAFB] rounded-2xl p-8 text-left border border-transparent hover:border-[var(--gold)]/30 hover:bg-white hover:shadow-xl transition-all group"
+              key={index}
+              className="bg-white rounded-2xl p-6 text-left border border-transparent hover:border-[var(--gold)]/30 hover:shadow-lg transition-all group"
             >
-              <div className={`w-14 h-14 rounded-2xl ${benefit.iconBg} flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform`}>
+              <div className={`w-12 h-12 rounded-xl ${benefit.iconBg} flex items-center justify-center text-xl mb-4`}>
                 {benefit.icon}
               </div>
-              <h4 className="text-[17px] font-bold text-[var(--text-dark)] mb-3 font-['Sora'] group-hover:text-[var(--gold)] transition-colors">{benefit.title}</h4>
-              <p className="text-[14px] text-[var(--gray-text)] leading-[1.6]">{benefit.description}</p>
+              <h4 className="text-[15px] font-bold text-[var(--text-dark)] mb-2">{benefit.title}</h4>
+              <p className="text-[13px] text-[var(--gray-text)] leading-[1.6]">{benefit.description}</p>
             </div>
           ))}
         </div>
 
         {/* CTA Button */}
         <button
-          className="inline-flex items-center gap-2 bg-[var(--gold)] text-white border-none rounded-xl px-10 py-4 font-['Sora'] font-bold text-[15px] cursor-pointer hover:bg-[var(--gold-light)] hover:translate-y-[-2px] transition-all shadow-lg"
-          onClick={() => router.push("/sign-in")}
+          className="inline-flex items-center gap-2 bg-[var(--gold)] text-white border-none rounded-full px-8 py-3 font-semibold text-[14px] cursor-pointer hover:bg-[var(--gold-light)] transition-all shadow-md"
+          onClick={() => router.push("/get-started")}
         >
-          Ücretsiz Hesap Oluştur ›
+          Ücretsiz Hesap Oluştur
         </button>
       </div>
     </section>

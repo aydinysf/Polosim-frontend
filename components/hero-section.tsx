@@ -1,10 +1,9 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import { Search, ChevronLeft, ChevronRight, Loader2, Clock, Signal, Wifi, ShoppingCart, Check, Star, ArrowLeft } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Search, ChevronDown, ChevronRight, Loader2, Clock, ShoppingCart, Check, ArrowLeft } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { useRouter } from "@/i18n/routing";
 import { useTranslations, useLocale } from "next-intl";
 import { countryService, type Country, regionService, type Region, productService, type Product, bannerService, type Banner } from "@/lib/services";
@@ -31,8 +30,8 @@ const FlagDisplay = ({ flag, name, size = "md" }: { flag?: string; name: string;
   if (!url) return <span className={size === "sm" ? "text-xs" : size === "md" ? "text-lg" : "text-3xl"}>🌍</span>;
   
   const sizeClasses = {
-    sm: "w-4 h-3",
-    md: "w-6 h-4",
+    sm: "w-5 h-4",
+    md: "w-8 h-6",
     lg: "w-10 h-7"
   };
   
@@ -48,6 +47,17 @@ const FlagDisplay = ({ flag, name, size = "md" }: { flag?: string; name: string;
     />
   );
 };
+
+// Popular destination flags for display - matching the design
+const popularDestinationFlags = [
+  { name: "Türkiye", flag: "TR", color: "#E30A17" },
+  { name: "İspanya", flag: "ES", color: "#AA151B" },
+  { name: "İngiltere", flag: "GB", color: "#012169" },
+  { name: "Fransa", flag: "FR", color: "#002654" },
+  { name: "Portekiz", flag: "PT", color: "#006600" },
+  { name: "Brezilya", flag: "BR", color: "#009739" },
+  { name: "Kanada", flag: "CA", color: "#FF0000" },
+];
 
 export function HeroSection() {
   const t = useTranslations('Hero');
@@ -108,10 +118,6 @@ export function HeroSection() {
 
     try {
       const results = await productService.fetchAll({ data_amount: searchVal });
-      // If direct match failed or no results, try general search
-      if (results.length === 0) {
-        // Here we could add more complex search logic if needed
-      }
       setSearchResults(results);
     } catch (error) {
       console.error("Search failed:", error);
@@ -280,57 +286,26 @@ export function HeroSection() {
   }
 
   return (
-    <section className="relative pt-40 pb-16 flex flex-col items-center justify-start overflow-hidden bg-[var(--navy)] min-h-[500px]">
-      {/* Background Banners Carousel */}
-      {banners.length > 0 ? (
-        <div className="absolute inset-0 z-0" ref={emblaRef}>
-          <div className="flex h-full">
-            {banners.map((banner) => (
-              <div key={banner.id} className="relative flex-[0_0_100%] h-full">
-                <div className="absolute inset-0 bg-black/40 z-10" />
-                <img 
-                  src={banner.image_url} 
-                  alt={banner.title} 
-                  className="w-full h-full object-cover"
-                />
-                {/* Optional Link overlay */}
-                {banner.link && (
-                  <a href={banner.link} className="absolute inset-0 z-20" aria-label={banner.title} />
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      ) : (
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute -top-[100px] -left-[100px] w-[400px] h-[400px] bg-[radial-gradient(circle,rgba(201,168,76,0.12)_0%,transparent:70%)]" />
-          <div className="absolute -bottom-[80px] -right-[60px] w-[350px] h-[350px] bg-[radial-gradient(circle,rgba(201,168,76,0.08)_0%,transparent:70%)]" />
-        </div>
-      )}
+    <section className="relative pt-48 pb-8 flex flex-col items-center justify-start overflow-hidden bg-[var(--navy)]">
+      {/* Background decorative elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-[100px] -left-[100px] w-[400px] h-[400px] bg-[radial-gradient(circle,rgba(201,168,76,0.08)_0%,transparent_70%)]" />
+        <div className="absolute -bottom-[80px] -right-[60px] w-[350px] h-[350px] bg-[radial-gradient(circle,rgba(201,168,76,0.05)_0%,transparent_70%)]" />
+      </div>
 
       <div className="relative z-10 w-full max-w-7xl mx-auto px-[5%]">
-        <div className="text-center mb-10">
-          <h1 className="text-[clamp(32px,4vw,48px)] font-extrabold text-white leading-[1.2] max-w-[950px] mx-auto mb-8 tracking-tight drop-shadow-lg">
-            {banners.length > 0 && emblaApi ? (
-               // Dynamic title from current banner if needed, 
-               // but usually we keep a consistent title or allow the banner to have its own overlay text.
-               // For now, let's keep the main title but make it white/bold for visibility
-               <>
-                 200'den fazla ülke için anında <span className="text-[var(--gold)]">eSIM</span> teslimatı.<br />
-                 <span className="text-[var(--gold)]">Roaming</span> ücreti yok. Numaranızı koruyun.
-               </>
-            ) : (
-              <>
-                200'den fazla ülke için anında <span className="text-[var(--gold)]">eSIM</span> teslimatı.<br />
-                <span className="text-[var(--gold)]">Roaming</span> ücreti yok. Numaranızı koruyun.
-              </>
-            )}
+        {/* Hero Title */}
+        <div className="text-center mb-8">
+          <h1 className="text-[28px] sm:text-[36px] md:text-[42px] font-extrabold text-white leading-[1.3] max-w-[900px] mx-auto tracking-tight">
+            200&apos;den fazla ülke için anında <span className="text-[var(--gold)]">eSIM</span> teslimatı.
+            <br />
+            <span className="text-[var(--gold)]">Roaming</span> ücreti yok. Numaranızı koruyun.
           </h1>
         </div>
 
         {/* Search bar */}
-        <div className="relative max-w-[640px] mx-auto mb-8">
-          <div className="relative flex items-center bg-white rounded-full pl-6 pr-2 py-2 gap-2 shadow-2xl">
+        <div className="relative max-w-[580px] mx-auto mb-6">
+          <div className="relative flex items-center bg-white rounded-full pl-5 pr-2 py-1.5 gap-2 shadow-xl">
             <Search className="w-5 h-5 text-[#9CA3AF] shrink-0" />
             <Input
               type="text"
@@ -340,13 +315,13 @@ export function HeroSection() {
               onFocus={() => setShowSuggestions(true)}
               onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
               onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-              className="border-0 bg-transparent focus-visible:ring-0 text-[var(--text-dark)] placeholder:text-[#9CA3AF] text-base flex-1 h-12"
+              className="border-0 bg-transparent focus-visible:ring-0 text-[var(--text-dark)] placeholder:text-[#9CA3AF] text-base flex-1 h-11"
             />
             <button
-              className="bg-[var(--gold)] text-white border-none rounded-full px-8 h-12 font-['Sora'] font-bold text-[15px] cursor-pointer whitespace-nowrap hover:bg-[var(--gold-light)] transition-all"
+              className="bg-[var(--gold)] text-white border-none rounded-full px-6 h-10 font-semibold text-[14px] cursor-pointer whitespace-nowrap hover:bg-[var(--gold-light)] transition-all"
               onClick={() => handleSearch()}
             >
-              {t('searchButton')}
+              Hemen Ara
             </button>
           </div>
 
@@ -370,60 +345,37 @@ export function HeroSection() {
           )}
         </div>
 
-        {/* View All Button */}
-        <div className="text-center mb-20">
+        {/* View All Destinations Button */}
+        <div className="text-center mb-10">
           <button
-            className="inline-flex items-center gap-2 bg-white/5 border border-white/20 text-white rounded-xl px-10 py-3 font-['Sora'] font-semibold text-[14px] cursor-pointer hover:bg-white/10 hover:border-white/40 transition-all backdrop-blur-sm"
+            className="inline-flex items-center gap-2 bg-[var(--navy-mid)] border border-white/20 text-white rounded-full px-6 py-2.5 font-medium text-[13px] cursor-pointer hover:bg-[var(--navy-light)] hover:border-white/30 transition-all"
             onClick={() => router.push("/plans")}
           >
-            200'den Fazla Destinasyonu Gör
-            <div className="w-5 h-5 rounded-full border border-white/40 flex items-center justify-center ml-2">
-              <ChevronRight className="w-3 h-3" />
-            </div>
+            200&apos;den Fazla Destinasyona göz atın
+            <ChevronDown className="w-4 h-4" />
           </button>
         </div>
 
-        {/* Popular Destinations Cards */}
-        <div className="max-w-6xl mx-auto mb-16">
-          <div className="flex items-center justify-between mb-6 px-2">
-            <span className="text-[18px] font-bold text-white font-['Sora']">{t('popularDestinations')}</span>
-            <button 
-              className="text-[12px] font-bold text-[var(--gold)] hover:underline bg-transparent border-none p-0 cursor-pointer"
-              onClick={() => router.push("/plans")}
-            >
-              Hepsini Gör
-            </button>
+        {/* Popular Destinations Section */}
+        <div className="max-w-5xl mx-auto mb-6">
+          <div className="flex items-center justify-between mb-4 px-1">
+            <span className="text-[18px] font-semibold text-white">Popüler Destinasyonlar</span>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3">
-            {popularCountries.map((country) => {
-              const countryName = getLocalizedText(country.name);
-              return (
-                <button
-                  key={country.id}
-                  className="flex flex-col items-center justify-center gap-2 bg-white rounded-xl py-4 px-2 cursor-pointer hover:shadow-lg transition-all border-none group no-underline"
-                  onClick={() => router.push(`/plans?search=${encodeURIComponent(countryName)}`)}
-                >
-                  <FlagDisplay flag={country.flag_url || country.iso_code} name={countryName} size="md" />
-                  <span className="text-[13px] font-bold text-[var(--text-dark)] group-hover:text-[var(--gold)]">{countryName}</span>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Trust indicators */}
-        <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-4">
-          <div className="flex items-center gap-2.5 text-[13px] font-semibold text-white/60">
-            <div className="w-2 h-2 bg-[var(--gold)] rounded-full shadow-[0_0_8px_var(--gold)]" />
-            <span>{tc('instantActivation')}</span>
-          </div>
-          <div className="flex items-center gap-2.5 text-[13px] font-semibold text-white/60">
-            <div className="w-2 h-2 bg-[var(--gold)] rounded-full shadow-[0_0_8px_var(--gold)]" />
-            <span>{tc('support247')}</span>
-          </div>
-          <div className="flex items-center gap-2.5 text-[13px] font-semibold text-white/60">
-            <div className="w-2 h-2 bg-[var(--gold)] rounded-full shadow-[0_0_8px_var(--gold)]" />
-            <span>{tc('deviceCompatibility')}</span>
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            {popularDestinationFlags.map((dest) => (
+              <button
+                key={dest.name}
+                className="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2 text-white text-[13px] font-medium hover:bg-white/20 hover:border-white/30 transition-all cursor-pointer"
+                onClick={() => router.push(`/plans?search=${encodeURIComponent(dest.name)}`)}
+              >
+                <img 
+                  src={getFlagFromISO(dest.flag)} 
+                  alt={dest.name} 
+                  className="w-5 h-4 rounded-sm object-cover"
+                />
+                {dest.name}
+              </button>
+            ))}
           </div>
         </div>
       </div>

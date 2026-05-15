@@ -20,8 +20,8 @@ const defaultNavLinks = [
 ];
 
 const languages = [
-  { code: "en", label: "English" },
-  { code: "tr", label: "Türkçe" },
+  { code: "en", label: "English", flag: "🇬🇧" },
+  { code: "tr", label: "Türkçe", flag: "🇹🇷" },
 ];
 
 
@@ -66,22 +66,22 @@ export function Navbar() {
   };
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 pt-6 px-[5%] pointer-events-none">
-      <div className="max-w-[1440px] mx-auto bg-white rounded-[24px] shadow-[0_15px_50px_rgba(0,0,0,0.1)] flex items-center justify-between h-[90px] px-8 pointer-events-auto">
+    <nav className="fixed top-0 left-0 right-0 z-50 pt-4 px-[5%] pointer-events-none">
+      <div className="max-w-[1300px] mx-auto bg-white rounded-2xl shadow-lg flex items-center justify-between h-[140px] px-8 pointer-events-auto">
         {/* Logo */}
         <Link href="/" className="flex items-center shrink-0">
           <Image
             src="/logo.png"
             alt="POLO SIM - One Sim One World"
-            width={240}
-            height={80}
-            className="h-14 sm:h-16 w-auto"
+            width={480}
+            height={150}
+            className="h-[120px] sm:h-[144px] w-auto"
             priority
           />
         </Link>
 
         {/* Desktop Navigation */}
-        <div className="hidden lg:flex items-center gap-6">
+        <div className="hidden lg:flex items-center gap-5">
           {dynamicLinks.map((link, idx) => {
             const title = link.key ? t(link.key as any) : link.title;
             const isExternal = link.external || link.target === "_blank";
@@ -94,7 +94,7 @@ export function Navbar() {
                   onMouseEnter={() => setActiveDropdown(`desktop-${idx}`)}
                   onMouseLeave={() => setActiveDropdown(null)}
                 >
-                  <button className="flex items-center gap-1 text-[#1A2332] hover:text-[var(--gold)] transition-colors text-[14px] font-bold cursor-default py-2">
+                  <button className="flex items-center gap-1 text-[#1A2332] hover:text-[var(--gold)] transition-colors text-[13px] font-semibold cursor-default py-2">
                     {title}
                     <ChevronDown className="w-3 h-3" />
                   </button>
@@ -121,7 +121,7 @@ export function Navbar() {
                 href={link.url || link.href || '#'}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[#1A2332] hover:text-[var(--gold)] transition-colors text-[14px] font-bold whitespace-nowrap"
+                className="text-[#1A2332] hover:text-[var(--gold)] transition-colors text-[13px] font-semibold whitespace-nowrap"
               >
                 {title}
               </a>
@@ -129,7 +129,7 @@ export function Navbar() {
               <Link
                 key={idx}
                 href={link.url || link.href || '#'}
-                className="text-[#1A2332] hover:text-[var(--gold)] transition-colors text-[14px] font-bold whitespace-nowrap"
+                className="text-[#1A2332] hover:text-[var(--gold)] transition-colors text-[13px] font-semibold whitespace-nowrap"
               >
                 {title}
               </Link>
@@ -138,15 +138,15 @@ export function Navbar() {
         </div>
 
         {/* Desktop Actions */}
-        <div className="hidden lg:flex items-center gap-4">
+        <div className="hidden lg:flex items-center gap-3">
           {/* Cart Icon */}
           <Link
             href="/cart"
-            className="relative flex items-center justify-center w-10 h-10 rounded-lg text-[#1A2332] hover:text-[var(--gold)] transition-colors"
+            className="relative flex items-center justify-center w-9 h-9 rounded-lg text-[#1A2332] hover:text-[var(--gold)] transition-colors"
           >
-            <ShoppingCart className="w-6 h-6" />
+            <ShoppingCart className="w-5 h-5" />
             {totalItems > 0 && (
-              <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-[var(--gold)] text-white text-xs flex items-center justify-center font-medium">
+              <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[var(--gold)] text-white text-[10px] flex items-center justify-center font-semibold">
                 {totalItems > 9 ? "9+" : totalItems}
               </span>
             )}
@@ -192,27 +192,29 @@ export function Navbar() {
             </div>
           ) : (
             <>
-              <Link href="/sign-in">
-                <button className="px-7 py-3 border-[1.5px] border-[var(--gold)] rounded-xl bg-transparent font-['Sora'] font-bold text-[14px] text-[var(--gold)] hover:bg-[var(--gold)] hover:text-white transition-all whitespace-nowrap">
-                  Giriş Yap
-                </button>
-              </Link>
-              <Link href="/get-started">
-                <button className="px-7 py-3 border-none rounded-xl bg-[#D4AF37] font-['Sora'] font-bold text-[14px] text-white hover:bg-[var(--gold-light)] transition-all whitespace-nowrap shadow-md">
-                  Hemen Başla
-                </button>
-              </Link>
+              <button
+                onClick={() => router.push("/get-started")}
+                className="px-5 py-2 border-none rounded-lg bg-[var(--gold)] font-semibold text-[13px] text-white hover:bg-[var(--gold-light)] transition-all whitespace-nowrap"
+              >
+                Hesap Aç
+              </button>
+              <button
+                onClick={() => router.push("/sign-in")}
+                className="px-5 py-2 border border-[var(--gray-mid)] rounded-lg bg-white font-semibold text-[13px] text-[var(--text-dark)] hover:border-[var(--gold)] hover:text-[var(--gold)] transition-all whitespace-nowrap"
+              >
+                Giriş Yap
+              </button>
             </>
           )}
 
           {/* Language Switcher */}
-          <div className="relative ml-2">
+          <div className="relative ml-1">
             <button
               onClick={() => setLangMenuOpen(!langMenuOpen)}
-              className="flex items-center gap-1.5 text-[14px] font-bold text-[#1A2332] hover:text-[var(--gold)] transition-colors"
+              className="flex items-center gap-1.5 text-[13px] font-semibold text-[#1A2332] hover:text-[var(--gold)] transition-colors px-2 py-1.5 rounded-lg hover:bg-[var(--gray-bg)]"
               disabled={isPending}
             >
-              <span className="text-lg">{locale === 'tr' ? '🇹🇷' : '🇬🇧'}</span>
+              <span>{locale === 'tr' ? '🇹🇷' : '🇬🇧'}</span>
               <span>{locale.toUpperCase()}</span>
             </button>
             {langMenuOpen && (
@@ -221,10 +223,11 @@ export function Navbar() {
                   <button
                     key={lang.code}
                     onClick={() => handleLanguageChange(lang.code)}
-                    className={`w-full px-4 py-2.5 text-left text-sm hover:bg-[var(--gray-bg)] transition-colors ${locale === lang.code ? "text-[var(--gold)] font-semibold" : "text-[var(--text-dark)]"
+                    className={`w-full px-4 py-2.5 text-left text-sm hover:bg-[var(--gray-bg)] transition-colors flex items-center gap-2 ${locale === lang.code ? "text-[var(--gold)] font-semibold" : "text-[var(--text-dark)]"
                       }`}
                   >
-                    {lang.code.toUpperCase()} - {lang.label}
+                    <span>{lang.flag}</span>
+                    {lang.label}
                   </button>
                 ))}
               </div>
@@ -238,9 +241,9 @@ export function Navbar() {
             href="/cart"
             className="relative p-2 rounded-lg hover:bg-[var(--gray-bg)] text-[var(--text-dark)]"
           >
-            <ShoppingCart className="w-6 h-6" />
+            <ShoppingCart className="w-5 h-5" />
             {totalItems > 0 && (
-              <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-[var(--gold)] text-white text-xs flex items-center justify-center font-medium">
+              <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[var(--gold)] text-white text-[10px] flex items-center justify-center font-semibold">
                 {totalItems > 9 ? "9+" : totalItems}
               </span>
             )}
@@ -249,14 +252,14 @@ export function Navbar() {
             className="p-2 rounded-lg hover:bg-[var(--gray-bg)] text-[var(--text-dark)]"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
-            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
         </div>
       </div>
 
       {/* Mobile menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-t border-[var(--gray-mid)] bg-white px-[5%] py-4">
+        <div className="lg:hidden mt-2 mx-auto max-w-[1300px] bg-white rounded-xl shadow-lg px-5 py-4 pointer-events-auto">
           <div className="flex flex-col gap-2">
             {dynamicLinks.map((link, idx) => {
               const title = link.key ? t(link.key as any) : link.title;
@@ -317,7 +320,7 @@ export function Navbar() {
               {/* Mobile Language Switcher */}
               <div className="flex items-center gap-2 px-4 py-2">
                 <Globe className="w-4 h-4 text-[var(--gray-text)]" />
-                <span className="text-sm text-[var(--gray-text)]">Language:</span>
+                <span className="text-sm text-[var(--gray-text)]">Dil:</span>
                 {languages.map((lang) => (
                   <button
                     key={lang.code}
@@ -325,12 +328,13 @@ export function Navbar() {
                       handleLanguageChange(lang.code);
                       setMobileMenuOpen(false);
                     }}
-                    className={`px-3 py-1 rounded-md text-sm ${locale === lang.code
+                    className={`px-3 py-1 rounded-md text-sm flex items-center gap-1 ${locale === lang.code
                         ? "bg-[var(--gold)] text-white"
                         : "bg-[var(--gray-bg)] text-[var(--gray-text)]"
                       }`}
                   >
-                    {lang.code}
+                    <span>{lang.flag}</span>
+                    {lang.code.toUpperCase()}
                   </button>
                 ))}
               </div>
@@ -355,18 +359,26 @@ export function Navbar() {
                   </Button>
                 </>
               ) : (
-                <>
-                  <Link href="/sign-in" onClick={() => setMobileMenuOpen(false)}>
-                    <button className="w-full px-5 py-2.5 border-[1.5px] border-[var(--text-dark)] rounded-xl bg-transparent font-['Sora'] font-semibold text-[13px] text-[var(--text-dark)] hover:bg-[var(--text-dark)] hover:text-white transition-all">
-                      {t('login')}
-                    </button>
-                  </Link>
-                  <Link href="/get-started" onClick={() => setMobileMenuOpen(false)}>
-                    <button className="w-full px-5 py-2.5 border-none rounded-xl bg-[var(--gold)] font-['Sora'] font-bold text-[13px] text-white hover:bg-[var(--gold-light)] transition-all">
-                      {t('getStarted')}
-                    </button>
-                  </Link>
-                </>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => {
+                      router.push("/get-started");
+                      setMobileMenuOpen(false);
+                    }}
+                    className="flex-1 px-5 py-2.5 border-none rounded-lg bg-[var(--gold)] font-semibold text-[13px] text-white hover:bg-[var(--gold-light)] transition-all"
+                  >
+                    Hesap Aç
+                  </button>
+                  <button
+                    onClick={() => {
+                      router.push("/sign-in");
+                      setMobileMenuOpen(false);
+                    }}
+                    className="flex-1 px-5 py-2.5 border border-[var(--gray-mid)] rounded-lg bg-white font-semibold text-[13px] text-[var(--text-dark)] hover:border-[var(--gold)] transition-all"
+                  >
+                    Giriş Yap
+                  </button>
+                </div>
               )}
             </div>
           </div>
