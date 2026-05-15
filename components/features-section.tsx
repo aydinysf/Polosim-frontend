@@ -1,102 +1,83 @@
-import { Zap, Shield, Globe, Clock, CreditCard, Headphones } from "lucide-react";
+"use client";
+
+import { Zap, X, Globe, Clock, CreditCard, Headphones } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 export function FeaturesSection() {
   const t = useTranslations('Features');
 
-  const features = [
+  const mainFeatures = [
     {
       icon: Zap,
-      title: t('instantActivation.title'),
-      description: t('instantActivation.description'),
+      title: "Anında Aktivasyon",
+      description: "Satın alımdan hemen sonra kurulum. Dakikalar içinde bağlantı sağlayın - fiziksel SIM kart beklemeye gerek yok.",
     },
     {
-      icon: Shield,
-      title: t('noRoamingFees.title'),
-      description: t('noRoamingFees.description'),
+      icon: X,
+      title: "Roaming Ücreti Yok",
+      description: "Yurtdışı seyahat sürprizleriyle karşılaşmayın. Şeffaf fiyatlandırma ve yeraltı oranlarıyla bağlı kalın.",
     },
     {
       icon: Globe,
-      title: t('globalCoverage.title'),
-      description: t('globalCoverage.description'),
+      title: "Küresel Kapsama",
+      description: "200'den fazla ülke ve bölgede kapsama. Dünyanın neresinde olursanız olun bağlı kalın.",
     },
   ];
 
-  const additionalFeatures = [
+  const bottomFeatures = [
     {
       icon: Clock,
-      title: t('flexibleValidity.title'),
-      description: t('flexibleValidity.description'),
-      iconBgClass: "bg-[#F3E8FF]",
-      iconColorClass: "text-[#7C3AED]",
+      title: "Esnek Seçenekler",
+      description: "1 günden 30 güne kadar esneklik",
+      iconBg: "bg-[#FFF4E5]",
+      iconColor: "text-[#F59E0B]",
     },
     {
       icon: CreditCard,
-      title: t('easyTopUps.title'),
-      description: t('easyTopUps.description'),
-      iconBgClass: "bg-[#FFE4E6]",
-      iconColorClass: "text-[#E11D48]",
+      title: "Kolay Yükleme",
+      description: "Her saniye bir satışla fayda sağlamaktadır",
+      iconBg: "bg-[#E8F5E9]",
+      iconColor: "text-[#22C55E]",
     },
     {
       icon: Headphones,
-      title: t('support247.title'),
-      description: t('support247.description'),
-      iconBgClass: "bg-[#E0F2FE]",
-      iconColorClass: "text-[#0284C7]",
+      title: "7/24 Destek",
+      description: "Müşteriye solusyolaşmada yardım",
+      iconBg: "bg-[#E0F2FE]",
+      iconColor: "text-[#0EA5E9]",
     },
   ];
 
   return (
-    <section className="py-24 px-[5%] bg-[#F9FAFB] text-center">
-      <div className="max-w-[1240px] mx-auto">
-        {/* Section header */}
-        <div className="mb-16">
-          <h2 className="text-[32px] md:text-[42px] font-extrabold mb-5 text-[var(--navy)] font-['Sora'] tracking-tight">
-            Neden POLO SIM?
-          </h2>
-          <p className="text-[var(--gray-text)] text-[16px] md:text-[18px] max-w-[700px] mx-auto leading-relaxed font-medium">
-            En son teknoloji eSIM teknolojimizle mobil bağlantının geleceğini deneyimleyin.
-          </p>
-        </div>
+    <>
+      {/* Main Features Section - Navy Background */}
+      <section className="py-14 px-[5%] bg-[var(--navy)] text-center">
+        <div className="max-w-[1100px] mx-auto">
+          {/* Section header */}
+          <div className="mb-10">
+            <h2 className="text-[28px] md:text-[32px] font-bold mb-3 text-white">
+              Neden POLO SIM?
+            </h2>
+            <p className="text-white/60 text-[14px] md:text-[15px] max-w-[550px] mx-auto leading-relaxed">
+              En son teknoloji eSIM teknolojimizle mobil bağlantının geleceğini deneyimleyin.
+            </p>
+          </div>
 
-        {/* Main features - Navy cards with Gold Border */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-12">
-          {features.map((feature) => (
-            <div
-              key={feature.title}
-              className="bg-[var(--navy)] rounded-xl p-8 text-left border-[1.5px] border-[var(--gold)] flex items-start gap-6 transition-all hover:translate-y-[-4px] hover:shadow-2xl shadow-lg relative group"
-            >
-              <div className="flex-shrink-0 w-16 h-16 rounded-full border-[1.5px] border-[var(--gold)] flex items-center justify-center group-hover:scale-110 transition-transform">
-                <feature.icon className="w-8 h-8 text-[var(--gold)]" />
-              </div>
-              <div className="flex flex-col">
-                <h3 className="text-[18px] font-bold text-[var(--gold)] mb-2 font-['Sora']">
-                  {feature.title}
-                </h3>
-                <p className="text-[13px] text-white/70 leading-relaxed font-medium">
-                  {feature.description}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Bottom Strip - Single White Bar */}
-        <div className="bg-white rounded-2xl shadow-xl border border-[#E5E7EB] overflow-hidden">
-          <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-gray-100">
-            {additionalFeatures.map((feature) => (
+          {/* Feature Cards - 3 columns with gold borders */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            {mainFeatures.map((feature, index) => (
               <div
-                key={feature.title}
-                className="py-6 px-10 flex items-center gap-5 text-left hover:bg-gray-50/50 transition-colors cursor-default"
+                key={index}
+                className="bg-[var(--navy-mid)] rounded-xl p-6 text-left border border-[var(--gold)] flex items-start gap-4 transition-all hover:translate-y-[-2px] hover:shadow-xl"
               >
-                <div className={`w-11 h-11 rounded-xl ${feature.iconBgClass} flex items-center justify-center shrink-0`}>
-                  <feature.icon className={`w-5 h-5 ${feature.iconColorClass}`} />
+                <div className="flex-shrink-0 w-12 h-12 rounded-full border border-[var(--gold)] flex items-center justify-center">
+                  <feature.icon className="w-6 h-6 text-[var(--gold)]" />
                 </div>
-                <div>
-                  <h4 className="text-[15px] font-bold text-[var(--text-dark)] mb-0.5 font-['Sora']">
+                <div className="flex flex-col">
+                  <h3 className="text-[15px] font-bold text-[var(--gold)] mb-1.5">
                     {feature.title}
-                  </h4>
-                  <p className="text-[12px] text-[var(--gray-text)] font-medium">
+                  </h3>
+                  <p className="text-[12px] text-white/60 leading-relaxed">
                     {feature.description}
                   </p>
                 </div>
@@ -104,7 +85,35 @@ export function FeaturesSection() {
             ))}
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      {/* Bottom Features Strip - Light Background */}
+      <section className="py-10 px-[5%] bg-[#F9FAFB]">
+        <div className="max-w-[1100px] mx-auto">
+          <div className="bg-white rounded-xl shadow-sm border border-[var(--gray-mid)] overflow-hidden">
+            <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-gray-100">
+              {bottomFeatures.map((feature, index) => (
+                <div
+                  key={index}
+                  className="py-5 px-6 flex items-center gap-4 text-left"
+                >
+                  <div className={`w-10 h-10 rounded-lg ${feature.iconBg} flex items-center justify-center shrink-0`}>
+                    <feature.icon className={`w-5 h-5 ${feature.iconColor}`} />
+                  </div>
+                  <div>
+                    <h4 className="text-[14px] font-bold text-[var(--text-dark)] mb-0.5">
+                      {feature.title}
+                    </h4>
+                    <p className="text-[12px] text-[var(--gray-text)]">
+                      {feature.description}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+    </>
   );
 }
