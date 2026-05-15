@@ -73,9 +73,9 @@ export function Navbar() {
           <Image
             src="/logo.png"
             alt="POLO SIM - One Sim One World"
-            width={320}
-            height={100}
-            className="h-20 sm:h-24 w-auto"
+            width={480}
+            height={150}
+            className="h-[120px] sm:h-[144px] w-auto"
             priority
           />
         </Link>
