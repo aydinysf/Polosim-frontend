@@ -67,15 +67,15 @@ export function Navbar() {
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 pt-4 px-[5%] pointer-events-none">
-      <div className="max-w-[1300px] mx-auto bg-white rounded-2xl shadow-lg flex items-center justify-between h-[70px] px-6 pointer-events-auto">
+      <div className="max-w-[1300px] mx-auto bg-white rounded-2xl shadow-lg flex items-center justify-between h-[140px] px-8 pointer-events-auto">
         {/* Logo */}
         <Link href="/" className="flex items-center shrink-0">
           <Image
             src="/logo.png"
             alt="POLO SIM - One Sim One World"
-            width={160}
-            height={50}
-            className="h-10 sm:h-12 w-auto"
+            width={320}
+            height={100}
+            className="h-20 sm:h-24 w-auto"
             priority
           />
         </Link>
