@@ -79,7 +79,7 @@ export function RegionsSection() {
         </div>
 
         {/* Region Cards Grid - 4 columns, 2 rows */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 gap-y-10">
           {displayRegions.map((region, index) => (
             <div
               key={region.id + '-' + index}
@@ -88,8 +88,8 @@ export function RegionsSection() {
             >
               {/* Floating Globe Icon */}
               <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-14 h-14 rounded-full bg-[#FAF9F6] border border-[var(--gray-mid)] group-hover:border-[var(--gold)] flex items-center justify-center transition-all shadow-sm">
-                <div className="w-10 h-10 rounded-full bg-[#FFF8E7] flex items-center justify-center">
-                  <GlobeIcon className="w-6 h-6 text-[var(--gold)]" />
+                <div className="w-10 h-10 rounded-full bg-[#C9A84C] flex items-center justify-center">
+                  <GlobeIcon className="w-6 h-6 text-white" />
                 </div>
               </div>
 

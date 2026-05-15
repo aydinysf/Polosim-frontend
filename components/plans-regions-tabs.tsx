@@ -38,7 +38,7 @@ export function PlansRegionsTabs() {
     <section className="py-16 px-[5%] bg-[#D4AF37]/10 text-center">
       <div className="max-w-[1100px] mx-auto">
         {/* Section header */}
-        <h2 className="text-[28px] md:text-[32px] font-bold mb-3 text-[var(--text-dark)]">
+        <h2 className="text-[28px] md:text-[32px] font-bold mb-3 text-[var(--navy)]">
           Neden Hesap Oluşturmalısınız?
         </h2>
         <p className="text-[var(--gray-text)] text-[14px] md:text-[15px] max-w-[500px] mx-auto mb-10 leading-[1.6]">
