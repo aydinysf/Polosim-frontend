@@ -729,7 +729,7 @@ export default function PlansPage() {
           {viewMode === "plans" && !isLoading && !isLoadingProducts && (
             <div className="flex flex-col gap-8">
               <div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 gap-y-12 pt-8">
                   {paginatedProducts.map((product) => {
                     const name = getProductName(product, locale);
                     const data = getProductData(product);
@@ -740,7 +740,7 @@ export default function PlansPage() {
                     return (
                       <div
                         key={product.id}
-                        className="group relative overflow-hidden rounded-2xl border-[1.5px] border-[var(--gold)] bg-white transition-all duration-200 hover:shadow-lg cursor-pointer"
+                        className="group relative rounded-2xl border-[1.5px] border-[var(--gold)] bg-white transition-all duration-200 hover:shadow-lg cursor-pointer pt-10 mt-8"
                       >
                         {bestSeller && (
                           <div className="absolute top-3 right-3 z-10">
@@ -750,62 +750,62 @@ export default function PlansPage() {
                             </Badge>
                           </div>
                         )}
-                        <div className="p-5 flex flex-col items-center text-center">
-                          {/* Region Icon - Circular with gold border */}
-                          <div className="w-16 h-16 rounded-full border-2 border-[var(--gold)] bg-[#F8F5ED] flex items-center justify-center mb-4 overflow-hidden">
-                            {(() => {
-                              const raw = product.country?.image_url || product.image_url || product.flag_url || product.country?.flag_url;
-                              const isPath = raw && (raw.includes('.') || raw.includes('/'));
-                              const url = isPath ? getImageUrl(raw) : getFlagFromISO(product.country?.iso_code);
-                              if (!url) return <Globe className="w-8 h-8 text-[var(--navy)]" />;
-                              return (
-                                <img
-                                  src={url}
-                                  alt={name}
-                                  className="w-full h-full object-cover"
-                                  onError={(e) => {
-                                    (e.target as HTMLImageElement).style.display = 'none';
-                                    (e.target as HTMLImageElement).parentElement!.innerHTML = `<svg class="w-8 h-8 text-[var(--navy)]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><path d="M2 12h20"/></svg>`;
-                                  }}
-                                />
-                              );
-                            })()}
-                          </div>
+                        {/* Floating Region Icon - Half outside card */}
+                        <div className="absolute -top-8 left-1/2 -translate-x-1/2 w-16 h-16 rounded-full border-2 border-[var(--gold)] bg-[#F8F5ED] flex items-center justify-center overflow-hidden z-10">
+                          {(() => {
+                            const raw = product.country?.image_url || product.image_url || product.flag_url || product.country?.flag_url;
+                            const isPath = raw && (raw.includes('.') || raw.includes('/'));
+                            const url = isPath ? getImageUrl(raw) : getFlagFromISO(product.country?.iso_code);
+                            if (!url) return <Globe className="w-8 h-8 text-[var(--navy)]" />;
+                            return (
+                              <img
+                                src={url}
+                                alt={name}
+                                className="w-full h-full object-cover"
+                                onError={(e) => {
+                                  (e.target as HTMLImageElement).style.display = 'none';
+                                  (e.target as HTMLImageElement).parentElement!.innerHTML = `<svg class="w-8 h-8 text-[var(--navy)]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><path d="M2 12h20"/></svg>`;
+                                }}
+                              />
+                            );
+                          })()}
+                        </div>
 
+                        <div className="px-4 pb-4 flex flex-col items-center text-center">
                           {/* Title */}
-                          <h3 className="font-bold text-[var(--navy)] text-base mb-4">{name}</h3>
+                          <h3 className="font-bold text-[var(--navy)] text-base mb-3">{name}</h3>
 
-                          {/* Pill Badges Row */}
-                          <div className="flex items-center justify-center gap-2 mb-5 flex-wrap">
+                          {/* Feature Badges Row - Rectangular, side by side */}
+                          <div className="flex items-center justify-center gap-1.5 mb-4 w-full">
                             {/* Data Badge */}
-                            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-[var(--gold)] bg-white text-xs font-medium text-[var(--navy)]">
-                              <Signal className="w-3.5 h-3.5 text-[var(--gold)]" />
+                            <span className="inline-flex items-center gap-1 px-2 py-1 rounded-md border border-[var(--gold)] bg-white text-[11px] font-medium text-[var(--navy)]">
+                              <Signal className="w-3 h-3 text-[var(--gold)]" />
                               {data}
                             </span>
                             {/* Duration Badge */}
-                            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-[var(--gold)] bg-white text-xs font-medium text-[var(--navy)]">
-                              <Clock className="w-3.5 h-3.5 text-[var(--gold)]" />
+                            <span className="inline-flex items-center gap-1 px-2 py-1 rounded-md border border-[var(--gold)] bg-white text-[11px] font-medium text-[var(--navy)]">
+                              <Clock className="w-3 h-3 text-[var(--gold)]" />
                               {validity}
                             </span>
                             {/* Speed Badge */}
                             {speed && (
-                              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-[var(--gold)] bg-white text-xs font-medium text-[var(--navy)]">
-                                <Wifi className="w-3.5 h-3.5 text-[var(--gold)]" />
+                              <span className="inline-flex items-center gap-1 px-2 py-1 rounded-md border border-[var(--gold)] bg-white text-[11px] font-medium text-[var(--navy)]">
+                                <Wifi className="w-3 h-3 text-[var(--gold)]" />
                                 {speed}
                               </span>
                             )}
                           </div>
 
                           {/* Price & Buy Button Row */}
-                          <div className="flex items-center justify-between w-full pt-4 border-t border-[var(--gray-mid)]">
-                            <span className="text-xl font-bold text-[var(--gold)]">€ {product.price}</span>
+                          <div className="flex items-center justify-between w-full pt-3 border-t border-[var(--gray-mid)]">
+                            <span className="text-lg font-bold text-black">€ {product.price}</span>
                             <Button
                               size="sm"
-                              className={`rounded-lg px-5 h-9 font-semibold transition-all ${addedToCart === product.id ? "bg-emerald-500 hover:bg-emerald-600 text-white" : "bg-[var(--navy)] hover:bg-[var(--navy-mid)] text-white"}`}
+                              className={`rounded-md px-4 h-8 text-xs font-semibold transition-all ${addedToCart === product.id ? "bg-emerald-500 hover:bg-emerald-600 text-white" : "bg-[var(--navy)] hover:bg-[var(--navy-mid)] text-white"}`}
                               onClick={() => handleAddToCart(product)}
                             >
                               {addedToCart === product.id ? (
-                                <><Check className="w-4 h-4 mr-1.5" />{t('cta.added')}</>
+                                <><Check className="w-3 h-3 mr-1" />{t('cta.added')}</>
                               ) : (
                                 t('cta.buy')
                               )}
@@ -822,7 +822,7 @@ export default function PlansPage() {
 
           {/* Regions Grid */}
           {viewMode === "regions" && !isLoading && filteredRegions.length > 0 && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 gap-y-12 pt-8">
               {filteredRegions.map((region) => {
                 const regionName = getLocalizedText(region.name, t('labels.region'), locale);
                 const countryCount = region.countries_count || 0;
@@ -831,14 +831,14 @@ export default function PlansPage() {
                 return (
                   <button
                     key={region.id}
-                    className="group relative overflow-hidden rounded-2xl border-[1.5px] border-[var(--gold)] bg-white p-5 text-center transition-all duration-200 hover:shadow-lg cursor-pointer flex flex-col items-center"
+                    className="group relative rounded-2xl border-[1.5px] border-[var(--gold)] bg-white text-center transition-all duration-200 hover:shadow-lg cursor-pointer flex flex-col items-center pt-10 pb-4 px-4"
                     onClick={() => {
                       setViewMode("plans");
                       setSelectedRegionId(region.id);
                     }}
                   >
-                    {/* Region Icon - Circular with gold border */}
-                    <div className="w-16 h-16 rounded-full border-2 border-[var(--gold)] bg-[#F8F5ED] flex items-center justify-center mb-4 overflow-hidden">
+                    {/* Floating Region Icon - Half outside card */}
+                    <div className="absolute -top-8 left-1/2 -translate-x-1/2 w-16 h-16 rounded-full border-2 border-[var(--gold)] bg-[#F8F5ED] flex items-center justify-center overflow-hidden z-10">
                       {(() => {
                         const icon = region.icon;
                         const isPath = icon && (icon.includes('/') || icon.includes('.'));
@@ -852,26 +852,26 @@ export default function PlansPage() {
                     </div>
 
                     {/* Title */}
-                    <h3 className="text-base font-bold text-[var(--navy)] mb-4">{regionName}</h3>
+                    <h3 className="text-base font-bold text-[var(--navy)] mb-3">{regionName}</h3>
 
-                    {/* Pill Badges Row */}
-                    <div className="flex items-center justify-center gap-2 mb-5 flex-wrap">
+                    {/* Feature Badges Row - Rectangular */}
+                    <div className="flex items-center justify-center gap-1.5 mb-4 w-full">
                       {countryCount > 0 && (
-                        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-[var(--gold)] bg-white text-xs font-medium text-[var(--navy)]">
-                          <MapPin className="w-3.5 h-3.5 text-[var(--gold)]" />
+                        <span className="inline-flex items-center gap-1 px-2 py-1 rounded-md border border-[var(--gold)] bg-white text-[11px] font-medium text-[var(--navy)]">
+                          <MapPin className="w-3 h-3 text-[var(--gold)]" />
                           {countryCount} {t('labels.countries')}
                         </span>
                       )}
                     </div>
 
                     {/* Price & Explore Button Row */}
-                    <div className="flex items-center justify-between w-full pt-4 border-t border-[var(--gray-mid)] mt-auto">
+                    <div className="flex items-center justify-between w-full pt-3 border-t border-[var(--gray-mid)] mt-auto">
                       {startingPrice > 0 ? (
-                        <span className="text-xl font-bold text-[var(--gold)]">€ {startingPrice.toFixed(2)}</span>
+                        <span className="text-lg font-bold text-black">€ {startingPrice.toFixed(2)}</span>
                       ) : (
                         <span className="text-sm text-[var(--gray-text)]">{t('labels.from')}</span>
                       )}
-                      <span className="rounded-lg px-5 py-2 text-sm font-semibold bg-[var(--navy)] text-white group-hover:bg-[var(--navy-mid)] transition-all">
+                      <span className="rounded-md px-4 py-1.5 text-xs font-semibold bg-[var(--navy)] text-white group-hover:bg-[var(--navy-mid)] transition-all">
                         {t('cta.explore')}
                       </span>
                     </div>
