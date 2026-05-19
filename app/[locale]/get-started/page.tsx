@@ -3,7 +3,7 @@
 import React from "react"
 
 import { useState } from "react";
-import { Eye, EyeOff, Mail, Lock, User, ArrowRight, Check, Smartphone } from "lucide-react";
+import { Eye, EyeOff, Mail, Lock, User, ArrowRight, Check, Smartphone, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Navbar } from "@/components/navbar";
@@ -83,7 +83,6 @@ export default function GetStartedPage() {
         password: formData.password,
         password_confirmation: formData.confirmPassword,
       });
-      // Redirect to verification page instead of profile
       router.push(`/verify-email?email=${encodeURIComponent(email)}`);
     } catch (err) {
       console.error("Registration error:", err);
@@ -108,56 +107,59 @@ export default function GetStartedPage() {
     return strength;
   };
 
-  const strengthLabels = ["Weak", "Fair", "Good", "Strong"];
   const strengthColors = ["bg-red-500", "bg-orange-500", "bg-yellow-500", "bg-emerald-500"];
 
   return (
-    <main className="min-h-screen bg-background">
+    <main className="min-h-screen bg-white">
       <Navbar />
 
-      <section className="pt-40 pb-20 px-4 min-h-screen flex items-center justify-center relative overflow-hidden">
-        {/* Background */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(14,116,144,0.04)_1px,transparent_1px),linear-gradient(to_bottom,rgba(14,116,144,0.04)_1px,transparent_1px)] bg-[size:40px_40px]" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(14,116,144,0.06)_0%,transparent_70%)]" />
-          <div className="absolute top-20 left-10 w-48 md:w-72 h-48 md:h-72 bg-primary/10 rounded-full blur-3xl" />
-          <div className="absolute bottom-20 right-10 w-64 md:w-96 h-64 md:h-96 bg-primary/5 rounded-full blur-3xl" />
+      <section className="relative pt-32 pb-20 px-[5%] min-h-[calc(100vh-68px)] flex items-center justify-center overflow-hidden">
+        {/* Background Accents */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          <div className="absolute top-[-10%] left-[-5%] w-[40%] h-[40%] bg-[radial-gradient(circle,rgba(201,168,76,0.05)_0%,transparent_70%)]" />
+          <div className="absolute bottom-[-10%] right-[-5%] w-[50%] h-[50%] bg-[radial-gradient(circle,rgba(13,27,42,0.03)_0%,transparent_70%)]" />
         </div>
 
         <div className="relative z-10 w-full max-w-md">
-          {/* Logo */}
+          {/* Logo & Header */}
           <div className="text-center mb-8">
-            <Link href="/" className="inline-block">
+            <Link href="/" className="inline-block transition-transform hover:scale-105">
               <Image
                 src="/logo.png"
                 alt="POLO SIM"
-                width={180}
-                height={60}
+                width={200}
+                height={70}
                 className="h-16 w-auto mx-auto"
               />
             </Link>
-            <h1 className="text-2xl font-bold text-foreground mt-6">{t('title')}</h1>
-            <p className="text-muted-foreground mt-2">{t('subtitle')}</p>
+            <h1 className="text-[28px] font-extrabold text-[var(--navy)] mt-8 tracking-tight">
+              {t('title')}
+            </h1>
+            <p className="text-[var(--gray-text)] mt-2 font-medium">
+              {t('subtitle')}
+            </p>
           </div>
 
           {/* Progress Steps */}
           <div className="flex items-center justify-center gap-3 mb-8">
-            <div className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-medium ${step >= 1 ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
-              }`}>
-              {step > 1 ? <Check className="w-4 h-4" /> : "1"}
+            <div className={`flex items-center justify-center w-10 h-10 rounded-full text-sm font-bold transition-all ${
+              step >= 1 ? "bg-[var(--gold)] text-white shadow-lg" : "bg-[var(--gray-bg)] text-[var(--gray-text)]"
+            }`}>
+              {step > 1 ? <Check className="w-5 h-5" /> : "1"}
             </div>
-            <div className={`w-16 h-1 rounded-full ${step > 1 ? "bg-primary" : "bg-muted"}`} />
-            <div className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-medium ${step >= 2 ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
-              }`}>
+            <div className={`w-20 h-1.5 rounded-full transition-all ${step > 1 ? "bg-[var(--gold)]" : "bg-[var(--gray-mid)]"}`} />
+            <div className={`flex items-center justify-center w-10 h-10 rounded-full text-sm font-bold transition-all ${
+              step >= 2 ? "bg-[var(--gold)] text-white shadow-lg" : "bg-[var(--gray-bg)] text-[var(--gray-text)]"
+            }`}>
               2
             </div>
           </div>
 
-          {/* Sign Up Form */}
-          <div className="bg-card/60 backdrop-blur-xl border border-border/50 rounded-2xl p-8">
+          {/* Sign Up Form Card */}
+          <div className="bg-white border-[1.5px] border-[var(--gray-mid)] rounded-3xl p-8 shadow-[0_8px_32px_rgba(0,0,0,0.04)]">
             <form onSubmit={handleSubmit} className="space-y-5">
               {error && (
-                <div className="p-3 rounded-lg bg-destructive/10 border border-destructive/20 text-destructive text-sm">
+                <div className="p-4 rounded-xl bg-red-50 border border-red-100 text-red-500 text-sm font-semibold">
                   {error}
                 </div>
               )}
@@ -167,29 +169,31 @@ export default function GetStartedPage() {
                   {/* Name fields */}
                   <div className="grid grid-cols-2 gap-3">
                     <div className="space-y-2">
-                      <label className="text-sm font-medium text-foreground">{t('firstName')}</label>
-                      <div className="relative">
-                        <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                      <label className="text-sm font-bold text-[var(--navy)] ml-1">{t('firstName')}</label>
+                      <div className="relative group">
+                        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--gray-text)] group-focus-within:text-[var(--gold)] transition-colors">
+                          <User className="w-5 h-5" />
+                        </div>
                         <Input
                           type="text"
                           name="firstName"
                           placeholder={t('firstNamePlaceholder')}
                           value={formData.firstName}
                           onChange={handleChange}
-                          className="pl-10 bg-background/50 border-border/50 focus:border-primary"
+                          className="h-12 pl-12 bg-[var(--gray-bg)] border-[1.5px] border-transparent focus:border-[var(--gold)] focus:bg-white rounded-xl transition-all font-medium text-[var(--navy)] placeholder:text-[var(--gray-text)]/50"
                           required
                         />
                       </div>
                     </div>
                     <div className="space-y-2">
-                      <label className="text-sm font-medium text-foreground">{t('lastName')}</label>
+                      <label className="text-sm font-bold text-[var(--navy)] ml-1">{t('lastName')}</label>
                       <Input
                         type="text"
                         name="lastName"
                         placeholder={t('lastNamePlaceholder')}
                         value={formData.lastName}
                         onChange={handleChange}
-                        className="bg-background/50 border-border/50 focus:border-primary"
+                        className="h-12 bg-[var(--gray-bg)] border-[1.5px] border-transparent focus:border-[var(--gold)] focus:bg-white rounded-xl transition-all font-medium text-[var(--navy)] placeholder:text-[var(--gray-text)]/50"
                         required
                       />
                     </div>
@@ -197,63 +201,71 @@ export default function GetStartedPage() {
 
                   {/* Email */}
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-foreground">{t('email')}</label>
-                    <div className="relative">
-                      <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                    <label className="text-sm font-bold text-[var(--navy)] ml-1">{t('email')}</label>
+                    <div className="relative group">
+                      <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--gray-text)] group-focus-within:text-[var(--gold)] transition-colors">
+                        <Mail className="w-5 h-5" />
+                      </div>
                       <Input
                         type="email"
                         name="email"
                         placeholder={t('emailPlaceholder')}
                         value={formData.email}
                         onChange={handleChange}
-                        className="pl-10 bg-background/50 border-border/50 focus:border-primary"
+                        className="h-12 pl-12 bg-[var(--gray-bg)] border-[1.5px] border-transparent focus:border-[var(--gold)] focus:bg-white rounded-xl transition-all font-medium text-[var(--navy)] placeholder:text-[var(--gray-text)]/50"
                         required
                       />
                     </div>
                   </div>
 
                   {/* Continue Button */}
-                  <Button type="submit" className="w-full bg-primary text-primary-foreground hover:bg-primary/90">
+                  <Button 
+                    type="submit" 
+                    className="w-full bg-[var(--gold)] hover:bg-[var(--gold-light)] text-white h-14 rounded-2xl font-extrabold text-base transition-all shadow-lg flex items-center justify-center gap-2"
+                  >
                     {t('continue')}
-                    <ArrowRight className="w-4 h-4 ml-2" />
+                    <ArrowRight className="w-5 h-5" />
                   </Button>
                 </>
               ) : (
                 <>
                   {/* Password */}
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-foreground">{t('password')}</label>
-                    <div className="relative">
-                      <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                    <label className="text-sm font-bold text-[var(--navy)] ml-1">{t('password')}</label>
+                    <div className="relative group">
+                      <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--gray-text)] group-focus-within:text-[var(--gold)] transition-colors">
+                        <Lock className="w-5 h-5" />
+                      </div>
                       <Input
                         type={showPassword ? "text" : "password"}
                         name="password"
                         placeholder={t('passwordPlaceholder')}
                         value={formData.password}
                         onChange={handleChange}
-                        className="pl-10 pr-10 bg-background/50 border-border/50 focus:border-primary"
+                        className="h-12 pl-12 pr-12 bg-[var(--gray-bg)] border-[1.5px] border-transparent focus:border-[var(--gold)] focus:bg-white rounded-xl transition-all font-medium text-[var(--navy)] placeholder:text-[var(--gray-text)]/50"
                         required
                       />
                       <button
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                        className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--gray-text)] hover:text-[var(--navy)] transition-colors"
                       >
                         {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                       </button>
                     </div>
                     {formData.password && (
-                      <div className="space-y-1">
+                      <div className="space-y-2 pt-1">
                         <div className="flex gap-1">
                           {[...Array(4)].map((_, i) => (
                             <div
                               key={i}
-                              className={`h-1 flex-1 rounded-full ${i < passwordStrength() ? strengthColors[passwordStrength() - 1] : "bg-muted"
-                                }`}
+                              className={`h-1.5 flex-1 rounded-full transition-all ${
+                                i < passwordStrength() ? strengthColors[passwordStrength() - 1] : "bg-[var(--gray-mid)]"
+                              }`}
                             />
                           ))}
                         </div>
-                        <p className="text-xs text-muted-foreground">
+                        <p className="text-xs font-medium text-[var(--gray-text)]">
                           {t('passwordStrength')} {t(`strength.${["weak", "fair", "good", "strong"][passwordStrength() - 1] || "weak"}`)}
                         </p>
                       </div>
@@ -262,73 +274,72 @@ export default function GetStartedPage() {
 
                   {/* Confirm Password */}
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-foreground">{t('confirmPassword')}</label>
-                    <div className="relative">
-                      <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                    <label className="text-sm font-bold text-[var(--navy)] ml-1">{t('confirmPassword')}</label>
+                    <div className="relative group">
+                      <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--gray-text)] group-focus-within:text-[var(--gold)] transition-colors">
+                        <Lock className="w-5 h-5" />
+                      </div>
                       <Input
                         type={showPassword ? "text" : "password"}
                         name="confirmPassword"
                         placeholder={t('confirmPasswordPlaceholder')}
                         value={formData.confirmPassword}
                         onChange={handleChange}
-                        className="pl-10 bg-background/50 border-border/50 focus:border-primary"
+                        className="h-12 pl-12 bg-[var(--gray-bg)] border-[1.5px] border-transparent focus:border-[var(--gold)] focus:bg-white rounded-xl transition-all font-medium text-[var(--navy)] placeholder:text-[var(--gray-text)]/50"
                         required
                       />
                     </div>
                   </div>
 
                   {/* Terms */}
-                  <div className="space-y-3">
-                    <div className="flex items-start gap-2">
+                  <div className="space-y-3 pt-2">
+                    <label className="flex items-start gap-3 cursor-pointer group">
                       <input
                         type="checkbox"
-                        id="acceptTerms"
                         name="acceptTerms"
                         checked={formData.acceptTerms}
                         onChange={handleChange}
-                        className="w-4 h-4 mt-0.5 rounded border-border/50 bg-background/50 text-primary focus:ring-primary"
+                        className="w-5 h-5 mt-0.5 rounded border-[var(--gray-mid)] bg-[var(--gray-bg)] text-[var(--gold)] focus:ring-[var(--gold)] cursor-pointer"
                       />
-                      <label htmlFor="acceptTerms" className="text-sm text-muted-foreground">
-                        {t('agreeTo')}
-                        <Link href="/terms" className="text-primary hover:underline">{t('termsAgreement')}</Link>
+                      <span className="text-sm text-[var(--gray-text)] leading-relaxed">
+                        <Link href="/terms" className="text-[var(--gold)] hover:underline font-semibold">{t('termsAgreement')}</Link>
                         {t('and')}
-                        <Link href="/privacy" className="text-primary hover:underline">{t('privacyAgreement')}</Link>
+                        <Link href="/privacy" className="text-[var(--gold)] hover:underline font-semibold">{t('privacyAgreement')}</Link>
                         {t('agreeToPost') || ""}
-                      </label>
-                    </div>
-                    <div className="flex items-start gap-2">
+                      </span>
+                    </label>
+                    <label className="flex items-start gap-3 cursor-pointer group">
                       <input
                         type="checkbox"
-                        id="acceptMarketing"
                         name="acceptMarketing"
                         checked={formData.acceptMarketing}
                         onChange={handleChange}
-                        className="w-4 h-4 mt-0.5 rounded border-border/50 bg-background/50 text-primary focus:ring-primary"
+                        className="w-5 h-5 mt-0.5 rounded border-[var(--gray-mid)] bg-[var(--gray-bg)] text-[var(--gold)] focus:ring-[var(--gold)] cursor-pointer"
                       />
-                      <label htmlFor="acceptMarketing" className="text-sm text-muted-foreground">
+                      <span className="text-sm text-[var(--gray-text)] leading-relaxed">
                         {t('marketingConsent')}
-                      </label>
-                    </div>
+                      </span>
+                    </label>
                   </div>
 
                   {/* Buttons */}
-                  <div className="flex gap-3">
+                  <div className="flex gap-3 pt-2">
                     <Button
                       type="button"
                       variant="outline"
                       onClick={() => setStep(1)}
-                      className="flex-1 bg-transparent border-border/50"
+                      className="flex-1 h-12 rounded-xl border-[1.5px] border-[var(--gray-mid)] bg-white text-[var(--navy)] font-bold hover:bg-[var(--gray-bg)] hover:border-[var(--gold)] transition-all"
                     >
                       {t('back')}
                     </Button>
                     <Button
                       type="submit"
-                      className="flex-1 bg-primary text-primary-foreground hover:bg-primary/90"
+                      className="flex-1 h-12 rounded-xl bg-[var(--gold)] hover:bg-[var(--gold-light)] text-white font-bold transition-all shadow-lg"
                       disabled={isLoading}
                     >
                       {isLoading ? (
                         <div className="flex items-center gap-2">
-                          <div className="w-4 h-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
+                          <Loader2 className="w-5 h-5 animate-spin" />
                           {t('creating')}
                         </div>
                       ) : (
@@ -343,27 +354,33 @@ export default function GetStartedPage() {
             {step === 1 && (
               <>
                 {/* Divider */}
-                <div className="relative my-6">
+                <div className="relative my-8">
                   <div className="absolute inset-0 flex items-center">
-                    <div className="w-full border-t border-border/50" />
+                    <div className="w-full border-t border-[var(--gray-mid)]" />
                   </div>
                   <div className="relative flex justify-center text-xs uppercase">
-                    <span className="bg-card px-2 text-muted-foreground">{t('orContinueWith')}</span>
+                    <span className="bg-white px-4 text-[var(--gray-text)] font-semibold">{t('orContinueWith')}</span>
                   </div>
                 </div>
 
                 {/* Social Sign Up */}
                 <div className="grid grid-cols-2 gap-3">
-                  <Button variant="outline" className="bg-transparent border-border/50 hover:bg-secondary/50">
+                  <Button 
+                    variant="outline" 
+                    className="h-12 rounded-xl border-[1.5px] border-[var(--gray-mid)] bg-white text-[var(--navy)] font-semibold hover:bg-[var(--gray-bg)] hover:border-[var(--gold)] transition-all"
+                  >
                     <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
-                      <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-                      <path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-                      <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
-                      <path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+                      <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                      <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                      <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
+                      <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
                     </svg>
                     Google
                   </Button>
-                  <Button variant="outline" className="bg-transparent border-border/50 hover:bg-secondary/50">
+                  <Button 
+                    variant="outline" 
+                    className="h-12 rounded-xl border-[1.5px] border-[var(--gray-mid)] bg-white text-[var(--navy)] font-semibold hover:bg-[var(--gray-bg)] hover:border-[var(--gold)] transition-all"
+                  >
                     <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701" />
                     </svg>
@@ -374,32 +391,35 @@ export default function GetStartedPage() {
             )}
 
             {/* Sign In Link */}
-            <p className="text-center text-sm text-muted-foreground mt-6">
-              <Link href="/sign-in" className="text-primary hover:underline font-medium">
-                {t('signIn')}
-              </Link>
-            </p>
+            <div className="mt-8 pt-6 border-t border-[var(--gray-mid)] text-center">
+              <p className="text-sm text-[var(--gray-text)] font-medium">
+                {t('alreadyHaveAccount') || 'Zaten hesabınız var mı?'}{" "}
+                <Link href="/sign-in" className="text-[var(--gold)] hover:underline font-bold">
+                  {t('signIn')}
+                </Link>
+              </p>
+            </div>
           </div>
 
           {/* Benefits */}
           <div className="grid grid-cols-3 gap-4 mt-8 text-center">
-            <div>
-              <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-2">
-                <Smartphone className="w-5 h-5 text-primary" />
+            <div className="flex flex-col items-center">
+              <div className="w-12 h-12 rounded-full bg-[var(--gold)]/10 flex items-center justify-center mb-2">
+                <Smartphone className="w-5 h-5 text-[var(--gold)]" />
               </div>
-              <p className="text-xs text-muted-foreground break-words max-w-[100px] mx-auto leading-tight">{t('benefits.instantActivation')}</p>
+              <p className="text-xs font-semibold text-[var(--gray-text)] max-w-[90px] leading-tight">{t('benefits.instantActivation')}</p>
             </div>
-            <div>
-              <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-2">
-                <Check className="w-5 h-5 text-primary" />
+            <div className="flex flex-col items-center">
+              <div className="w-12 h-12 rounded-full bg-[var(--gold)]/10 flex items-center justify-center mb-2">
+                <Check className="w-5 h-5 text-[var(--gold)]" />
               </div>
-              <p className="text-xs text-muted-foreground break-words max-w-[100px] mx-auto leading-tight">{t('benefits.noHiddenFees')}</p>
+              <p className="text-xs font-semibold text-[var(--gray-text)] max-w-[90px] leading-tight">{t('benefits.noHiddenFees')}</p>
             </div>
-            <div>
-              <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-2">
-                <Lock className="w-5 h-5 text-primary" />
+            <div className="flex flex-col items-center">
+              <div className="w-12 h-12 rounded-full bg-[var(--gold)]/10 flex items-center justify-center mb-2">
+                <Lock className="w-5 h-5 text-[var(--gold)]" />
               </div>
-              <p className="text-xs text-muted-foreground break-words max-w-[100px] mx-auto leading-tight">{t('benefits.securePayment')}</p>
+              <p className="text-xs font-semibold text-[var(--gray-text)] max-w-[90px] leading-tight">{t('benefits.securePayment')}</p>
             </div>
           </div>
         </div>

@@ -70,7 +70,7 @@ export default function SignInPage() {
                 className="h-16 w-auto mx-auto"
               />
             </Link>
-            <h1 className="text-[28px] font-extrabold text-[var(--text-dark)] mt-8 font-['Sora'] tracking-tight">
+            <h1 className="text-[28px] font-extrabold text-[var(--navy)] mt-8 tracking-tight">
               {t('welcomeTitle') || 'POLO SIM\'e Hoş Geldiniz'}
             </h1>
             <p className="text-[var(--gray-text)] mt-2 font-medium">
@@ -88,7 +88,7 @@ export default function SignInPage() {
 
             <form onSubmit={handleLogin} className="space-y-6">
               <div className="space-y-2">
-                <label className="text-sm font-bold text-[var(--text-dark)] ml-1">{t('emailLabel') || 'E-posta Adresiniz'}</label>
+                <label className="text-sm font-bold text-[var(--navy)] ml-1">{t('emailLabel') || 'E-posta Adresiniz'}</label>
                 <div className="relative group">
                   <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--gray-text)] group-focus-within:text-[var(--gold)] transition-colors">
                     <Mail className="w-5 h-5" />
@@ -98,7 +98,7 @@ export default function SignInPage() {
                     placeholder="you@example.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="h-14 pl-12 bg-[var(--gray-bg)] border-[1.5px] border-transparent focus:border-[var(--gold)] focus:bg-white rounded-2xl transition-all font-medium text-[var(--text-dark)] placeholder:text-[var(--gray-text)]/50"
+                    className="h-14 pl-12 bg-[var(--gray-bg)] border-[1.5px] border-transparent focus:border-[var(--gold)] focus:bg-white rounded-2xl transition-all font-medium text-[var(--navy)] placeholder:text-[var(--gray-text)]/50"
                     required
                     autoFocus
                   />
