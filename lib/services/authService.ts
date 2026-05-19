@@ -19,6 +19,7 @@ export interface LoginRequest {
   identifier: string; // 🔥 E-posta veya Telefon
   password?: string;
   code?: string;
+  name?: string;
 }
 
 export interface RegisterRequest {
@@ -83,7 +84,11 @@ export const authService = {
   },
 
   register: async (data: RegisterRequest): Promise<AuthResponse> => {
-    const response = await api.post<AuthResponse>('/register', data);
+    // Backend'de /register kaldırıldığı için /login üzerinden şifresiz kayıt/giriş akışına yönlendiriyoruz
+    const response = await api.post<AuthResponse>('/login', {
+      identifier: data.email,
+      name: data.name,
+    });
     if (response.data.token && response.data.user) {
       setAuthToken(response.data.token);
       setUserToStorage(response.data.user);

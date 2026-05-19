@@ -3,7 +3,7 @@
 import React from "react"
 
 import { useState } from "react";
-import { Eye, EyeOff, Mail, Lock, User, ArrowRight, Check, Smartphone } from "lucide-react";
+import { Mail, Lock, User, ArrowRight, Check, Smartphone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Navbar } from "@/components/navbar";
@@ -21,15 +21,12 @@ export default function GetStartedPage() {
     firstName: "",
     lastName: "",
     email: "",
-    password: "",
-    confirmPassword: "",
     acceptTerms: false,
     acceptMarketing: false,
   });
-  const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const { register } = useAuth();
+  const { login, setAuthData } = useAuth();
   const router = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -53,16 +50,6 @@ export default function GetStartedPage() {
       return;
     }
 
-    if (formData.password !== formData.confirmPassword) {
-      setError(t('error.match'));
-      return;
-    }
-
-    if (formData.password.length < 8) {
-      setError(t('error.length'));
-      return;
-    }
-
     if (!formData.acceptTerms) {
       setError(t('error.terms'));
       return;
@@ -77,16 +64,18 @@ export default function GetStartedPage() {
       const email = formData.email.trim();
 
       const fullName = `${firstName} ${lastName}`;
-      await register({
+      const response = await login({
+        identifier: email,
         name: fullName,
-        email: email,
-        password: formData.password,
-        password_confirmation: formData.confirmPassword,
       });
-      // Redirect to verification page instead of profile
-      router.push(`/verify-email?email=${encodeURIComponent(email)}`);
+      if (response.token && response.user) {
+        setAuthData(response.user, response.token);
+        router.push("/profile");
+      } else {
+        router.push(`/verify-email?email=${encodeURIComponent(email)}`);
+      }
     } catch (err) {
-      console.error("Registration error:", err);
+      console.error("Login error:", err);
       if (err instanceof ApiError) {
         setError(err.message);
       } else {
@@ -97,19 +86,6 @@ export default function GetStartedPage() {
       setIsLoading(false);
     }
   };
-
-  const passwordStrength = () => {
-    const password = formData.password;
-    let strength = 0;
-    if (password.length >= 8) strength++;
-    if (/[A-Z]/.test(password)) strength++;
-    if (/[0-9]/.test(password)) strength++;
-    if (/[^A-Za-z0-9]/.test(password)) strength++;
-    return strength;
-  };
-
-  const strengthLabels = ["Weak", "Fair", "Good", "Strong"];
-  const strengthColors = ["bg-red-500", "bg-orange-500", "bg-yellow-500", "bg-emerald-500"];
 
   return (
     <main className="min-h-screen bg-background">
@@ -220,63 +196,6 @@ export default function GetStartedPage() {
                 </>
               ) : (
                 <>
-                  {/* Password */}
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium text-foreground">{t('password')}</label>
-                    <div className="relative">
-                      <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                      <Input
-                        type={showPassword ? "text" : "password"}
-                        name="password"
-                        placeholder={t('passwordPlaceholder')}
-                        value={formData.password}
-                        onChange={handleChange}
-                        className="pl-10 pr-10 bg-background/50 border-border/50 focus:border-primary"
-                        required
-                      />
-                      <button
-                        type="button"
-                        onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-                      >
-                        {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                      </button>
-                    </div>
-                    {formData.password && (
-                      <div className="space-y-1">
-                        <div className="flex gap-1">
-                          {[...Array(4)].map((_, i) => (
-                            <div
-                              key={i}
-                              className={`h-1 flex-1 rounded-full ${i < passwordStrength() ? strengthColors[passwordStrength() - 1] : "bg-muted"
-                                }`}
-                            />
-                          ))}
-                        </div>
-                        <p className="text-xs text-muted-foreground">
-                          {t('passwordStrength')} {t(`strength.${["weak", "fair", "good", "strong"][passwordStrength() - 1] || "weak"}`)}
-                        </p>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Confirm Password */}
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium text-foreground">{t('confirmPassword')}</label>
-                    <div className="relative">
-                      <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                      <Input
-                        type={showPassword ? "text" : "password"}
-                        name="confirmPassword"
-                        placeholder={t('confirmPasswordPlaceholder')}
-                        value={formData.confirmPassword}
-                        onChange={handleChange}
-                        className="pl-10 bg-background/50 border-border/50 focus:border-primary"
-                        required
-                      />
-                    </div>
-                  </div>
-
                   {/* Terms */}
                   <div className="space-y-3">
                     <div className="flex items-start gap-2">
