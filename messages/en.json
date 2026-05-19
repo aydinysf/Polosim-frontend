@@ -164,13 +164,15 @@
       "instant": "Instant",
       "from": "From",
       "countriesCount": "{count} countries",
+      "countries": "Countries",
       "region": "Region",
       "dataPlan": "Data Plan"
     },
     "cta": {
       "buy": "Buy",
       "added": "Added",
-      "viewPlans": "View Plans"
+      "viewPlans": "View Plans",
+      "explore": "Explore"
     },
     "empty": {
       "title": "No results found",

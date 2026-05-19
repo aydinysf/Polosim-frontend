@@ -164,13 +164,15 @@
       "instant": "Anında",
       "from": "Başlangıç",
       "countriesCount": "{count} ülke",
+      "countries": "Ülke",
       "region": "Bölge",
       "dataPlan": "Veri Planı"
     },
     "cta": {
       "buy": "Satın Al",
       "added": "Eklendi",
-      "viewPlans": "Planları Gör"
+      "viewPlans": "Planları Gör",
+      "explore": "İncele"
     },
     "empty": {
       "title": "Sonuç bulunamadı",
