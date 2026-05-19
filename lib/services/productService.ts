@@ -126,6 +126,39 @@ export interface PaginatedResponse<T> {
   meta?: PaginationMeta;
 }
 
+export function normalizeProduct(product: any): Product {
+  if (!product) return product;
+
+  // Normalize price field
+  let price = 0;
+  if (product.price !== undefined && product.price !== null) {
+    price = Number(product.price);
+  } else if (product.base_price !== undefined && product.base_price !== null) {
+    price = Number(product.base_price);
+  } else if (product.cost_price !== undefined && product.cost_price !== null) {
+    price = Number(product.cost_price);
+  }
+
+  // Normalize country field if missing but exists in countries array
+  let country = product.country;
+  if (!country && Array.isArray(product.countries) && product.countries.length > 0) {
+    const c = product.countries[0];
+    country = {
+      id: c.id,
+      name: c.name,
+      flag_url: c.flag_url || c.flag,
+      image_url: c.image_url || c.image,
+      iso_code: c.iso_code,
+    };
+  }
+
+  return {
+    ...product,
+    price,
+    country,
+  };
+}
+
 export const productService = {
   async getAll(filters?: ProductFilters, signal?: AbortSignal): Promise<PaginatedResponse<Product>> {
     const params = new URLSearchParams();
@@ -148,8 +181,9 @@ export const productService = {
 
     const response = await api.get<any>(endpoint, { signal });
     const resultData = response.data;
+    const rawData = Array.isArray(resultData) ? resultData : (resultData?.data || []);
     return {
-      data: Array.isArray(resultData) ? resultData : (resultData?.data || []),
+      data: rawData.map(normalizeProduct),
       meta: resultData?.meta
     };
   },
@@ -157,8 +191,9 @@ export const productService = {
   async getByCountry(countryId: number, signal?: AbortSignal, page: number = 1): Promise<PaginatedResponse<Product>> {
     const response = await api.get<any>(`/products?country_id=${countryId}&page=${page}`, { signal });
     const resultData = response.data;
+    const rawData = Array.isArray(resultData) ? resultData : (resultData?.data || []);
     return {
-      data: Array.isArray(resultData) ? resultData : (resultData?.data || []),
+      data: rawData.map(normalizeProduct),
       meta: resultData?.meta
     };
   },
@@ -166,8 +201,9 @@ export const productService = {
   async getByRegion(regionId: number, signal?: AbortSignal, page: number = 1): Promise<PaginatedResponse<Product>> {
     const response = await api.get<any>(`/products?region_id=${regionId}&page=${page}`, { signal });
     const resultData = response.data;
+    const rawData = Array.isArray(resultData) ? resultData : (resultData?.data || []);
     return {
-      data: Array.isArray(resultData) ? resultData : (resultData?.data || []),
+      data: rawData.map(normalizeProduct),
       meta: resultData?.meta
     };
   },
@@ -175,22 +211,25 @@ export const productService = {
   async getByRegionSlug(slug: string, page: number = 1): Promise<PaginatedResponse<Product>> {
     const response = await api.get<any>(`/regions/${slug}/products?page=${page}`);
     const resultData = response.data;
+    const rawData = Array.isArray(resultData) ? resultData : (resultData?.data || []);
     return {
-      data: Array.isArray(resultData) ? resultData : (resultData?.data || []),
+      data: rawData.map(normalizeProduct),
       meta: resultData?.meta
     };
   },
 
   async getById(id: number): Promise<Product> {
     const response = await api.get<any>(`/products/${id}`);
-    return response.data?.data || response.data;
+    const rawData = response.data?.data || response.data;
+    return normalizeProduct(rawData);
   },
 
   async getBestSellers(page: number = 1): Promise<PaginatedResponse<Product>> {
     const response = await api.get<any>(`/products?is_best_seller=true&page=${page}`);
     const resultData = response.data;
+    const rawData = Array.isArray(resultData) ? resultData : (resultData?.data || []);
     return {
-      data: Array.isArray(resultData) ? resultData : (resultData?.data || []),
+      data: rawData.map(normalizeProduct),
       meta: resultData?.meta
     };
   },
