@@ -2,7 +2,7 @@
 
 import { stripe } from "@/lib/stripe";
 import { productService } from "@/lib/services/productService";
-import { getLocalizedText, getProductName, getProductData, getProductValidity, getProductSpeed } from "@/lib/product-helpers";
+import { getLocalizedText, getProductName, getProductData, getProductValidity, getProductSpeed, getProductPrice } from "@/lib/product-helpers";
 
 interface CartItemInput {
   productId: number;
@@ -30,7 +30,7 @@ export async function startCheckoutSession(cartItems: CartItemInput[], returnUrl
               name: `${name} eSIM`,
               description: `${data} - ${validity} - ${speed}`,
             },
-            unit_amount: Math.round((product.price || 0) * 100),
+            unit_amount: Math.round(getProductPrice(product) * 100),
           },
           quantity: cartItem.quantity,
         };

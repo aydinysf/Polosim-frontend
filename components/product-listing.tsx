@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { useTranslations, useLocale } from "next-intl";
 import { productService, type Product } from "@/lib/services/productService";
 import { useCart } from "@/lib/cart-context";
-import { getLocalizedText, getProductData, getProductValidity, getProductSpeed, isBestSeller, getProductName } from "@/lib/product-helpers";
+import { getLocalizedText, getProductData, getProductValidity, getProductSpeed, isBestSeller, getProductName, getProductPrice } from "@/lib/product-helpers";
 import { getImageUrl, getFlagFromISO } from "@/lib/api-client";
 import { Link } from "@/i18n/routing";
 
@@ -60,7 +60,7 @@ export function ProductListing() {
       id: product.id,
       name,
       description: getLocalizedText(product.description, "", locale) || `${data} Data Plan`,
-      priceInCents: Math.round((product.price || 0) * 100),
+      priceInCents: Math.round(getProductPrice(product) * 100),
       flag: product.flag_url || product.country?.flag_url || "",
       data,
       validity,
@@ -83,9 +83,9 @@ export function ProductListing() {
     .sort((a, b) => {
       switch (sortBy) {
         case "price-low":
-          return (a.price || 0) - (b.price || 0);
+          return getProductPrice(a) - getProductPrice(b);
         case "price-high":
-          return (b.price || 0) - (a.price || 0);
+          return getProductPrice(b) - getProductPrice(a);
         case "data-high":
           const aData = parseInt(getProductData(a)) || 0;
           const bData = parseInt(getProductData(b)) || 0;
@@ -224,7 +224,7 @@ export function ProductListing() {
 
                     <div className="flex items-center justify-between pt-4 border-t border-[var(--gray-mid)]">
                       <div>
-                        <span className="text-2xl font-extrabold text-[var(--text-dark)]">€{plan.price}</span>
+                        <span className="text-2xl font-extrabold text-[var(--text-dark)]">€{getProductPrice(plan)}</span>
                       </div>
                       <Button
                         size="sm"

@@ -12,7 +12,7 @@ import { useCart } from "@/lib/cart-context";
 import { productService, type Product, type PaginationMeta } from "@/lib/services/productService";
 import { regionService, type Region } from "@/lib/services/regionService";
 import { countryService, type Country } from "@/lib/services/countryService";
-import { getLocalizedText, getProductData, getProductValidity, getProductSpeed, isBestSeller, getProductName } from "@/lib/product-helpers";
+import { getLocalizedText, getProductData, getProductValidity, getProductSpeed, isBestSeller, getProductName, getProductPrice } from "@/lib/product-helpers";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { getImageUrl, getFlagFromISO } from "@/lib/api-client";
 import { useLocale, useTranslations } from "next-intl";
@@ -259,7 +259,7 @@ export default function PlansPage() {
       id: product.id,
       name,
       description: getLocalizedText(product.description, "", locale) || `${data} ${t('labels.dataPlan')}`,
-      priceInCents: Math.round((product.price || 0) * 100),
+      priceInCents: Math.round(getProductPrice(product) * 100),
       flag: product.flag_url || product.country?.flag_url || "",
       data,
       validity,
@@ -305,7 +305,7 @@ export default function PlansPage() {
       // Price Filter
       let matchesPrice = true;
       if (filterPriceRange[0] > 0 || filterPriceRange[1] < 100) {
-        const price = product.price || 0;
+        const price = getProductPrice(product);
         matchesPrice = price >= filterPriceRange[0] && price <= filterPriceRange[1];
       }
 
@@ -313,8 +313,8 @@ export default function PlansPage() {
     })
     .sort((a, b) => {
       switch (sortBy) {
-        case "price-low": return (a.price || 0) - (b.price || 0);
-        case "price-high": return (b.price || 0) - (a.price || 0);
+        case "price-low": return getProductPrice(a) - getProductPrice(b);
+        case "price-high": return getProductPrice(b) - getProductPrice(a);
         case "data-high": return parseDataAmount(getProductData(b)) - parseDataAmount(getProductData(a));
         case "data-low": return parseDataAmount(getProductData(a)) - parseDataAmount(getProductData(b));
         case "validity-high": return parseValidity(getProductValidity(b)) - parseValidity(getProductValidity(a));
@@ -843,7 +843,7 @@ export default function PlansPage() {
 
                         {/* Bottom: price + buy button */}
                         <div className="flex items-center justify-between px-4 pb-4">
-                          <span className="text-xl font-extrabold text-[var(--text-dark)]">€{product.price}</span>
+                          <span className="text-xl font-extrabold text-[var(--text-dark)]">€{getProductPrice(product)}</span>
                           <button
                             className={`rounded-lg px-4 h-9 text-sm font-bold transition-all shadow-sm ${
                               addedToCart === product.id

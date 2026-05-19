@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { ChevronRight, Star, Loader2 } from "lucide-react";
 import { useTranslations, useLocale } from "next-intl";
 import { productService, type Product } from "@/lib/services/productService";
-import { getLocalizedText, getProductData, getProductValidity, isBestSeller, getProductName } from "@/lib/product-helpers";
+import { getLocalizedText, getProductData, getProductValidity, isBestSeller, getProductName, getProductPrice } from "@/lib/product-helpers";
 import { getImageUrl, getFlagFromISO } from "@/lib/api-client";
 import { useCart } from "@/lib/cart-context";
 
@@ -43,7 +43,7 @@ export function PopularPlans() {
       id: product.id,
       name,
       description: getLocalizedText(product.description, "", locale) || `${data} Data Plan`,
-      priceInCents: Math.round((product.price || 0) * 100),
+      priceInCents: Math.round(getProductPrice(product) * 100),
       flag: product.flag_url || product.country?.flag_url || "",
       data,
       validity,
@@ -114,7 +114,7 @@ export function PopularPlans() {
 
               {/* Price */}
               <div className="mt-2 pt-2 border-t border-border/50">
-                <span className="text-base font-bold text-primary">€{plan.price}</span>
+                <span className="text-base font-bold text-primary">€{getProductPrice(plan)}</span>
               </div>
             </button>
           );

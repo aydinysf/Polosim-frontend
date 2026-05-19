@@ -122,3 +122,13 @@ export function getCoverageArea(product: Product): string | undefined {
   if (features?.coverage_area) return String(features.coverage_area);
   return undefined;
 }
+
+// Helper to get product price
+export function getProductPrice(product: Product): number {
+  const p = product.price !== undefined && product.price !== null ? product.price : product.base_price;
+  if (p === undefined || p === null) return 0;
+  if (typeof p === 'number') return p;
+  const parsed = parseFloat(p);
+  return isNaN(parsed) ? 0 : parsed;
+}
+

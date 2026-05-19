@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "@/i18n/routing";
 import { useTranslations, useLocale } from "next-intl";
 import { countryService, type Country, regionService, type Region, productService, type Product, bannerService, type Banner } from "@/lib/services";
-import { getLocalizedText } from "@/lib/product-helpers";
+import { getLocalizedText, getProductPrice } from "@/lib/product-helpers";
 import { getImageUrl, getFlagFromISO } from "@/lib/api-client";
 import { useCart } from "@/lib/cart-context";
 import useEmblaCarousel from 'embla-carousel-react';
@@ -137,15 +137,22 @@ export function HeroSection() {
   };
 
   const handleAddToCart = (product: Product) => {
+    const name = getLocalizedText(product.name, "", locale) || getLocalizedText(product.country?.name, "", locale) || "";
+    const data = product.data_amount || product.data_limit || product.data || "";
+    const rawValidity = product.validity?.toString() || "";
+    const validity = rawValidity.includes("Day") ? rawValidity : `${rawValidity} Days`;
+    const speed = product.speed || "4G/LTE";
+
     addItem({
       id: product.id,
-      name: getLocalizedText(product.name, "", locale),
-      price: product.price,
-      quantity: 1,
-      image_url: product.country?.image_url || product.image_url || product.flag_url,
-      country_name: getLocalizedText(product.country?.name || "", "", locale),
-      data_amount: product.data_amount || product.data_limit || product.data || "",
-      validity: product.validity?.toString() || ""
+      name,
+      description: getLocalizedText(product.description, "", locale) || `${data} Data Plan`,
+      priceInCents: Math.round(getProductPrice(product) * 100),
+      flag: product.flag_url || product.country?.flag_url || "",
+      data,
+      validity,
+      speed,
+      region: getLocalizedText(product.region_name, "", locale),
     });
     setAddedToCart(product.id);
     setTimeout(() => setAddedToCart(null), 2000);
@@ -250,7 +257,7 @@ export function HeroSection() {
                       </div>
 
                       <div className="flex items-center justify-between pt-4 border-t border-[var(--gray-mid)]">
-                        <span className="text-xl font-extrabold text-[var(--text-dark)]">€{product.price}</span>
+                        <span className="text-xl font-extrabold text-[var(--text-dark)]">€{getProductPrice(product)}</span>
                         <Button
                           size="sm"
                           className={`rounded-xl px-4 h-9 font-bold transition-all ${addedToCart === product.id ? "bg-emerald-500 hover:bg-emerald-600 text-white" : "bg-[var(--gold)] hover:bg-[var(--gold-light)] text-white"}`}
