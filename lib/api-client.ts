@@ -1,13 +1,14 @@
 import axios, { type AxiosError } from 'axios';
 
-const ensureV1 = (url: string) => {
-  if (url.endsWith('/api/V1')) return url;
-  if (url.endsWith('/')) return `${url}api/V1`;
-  return `${url}/api/V1`;
+const ensureV2 = (url: string) => {
+  if (url.endsWith('/api/V2')) return url;
+  if (url.endsWith('/api/V1')) return url.replace('/api/V1', '/api/V2');
+  if (url.endsWith('/')) return `${url}api/V2`;
+  return `${url}/api/V2`;
 };
 
-const API_URL = ensureV1(process.env.NEXT_PUBLIC_API_URL || 'https://esim-projects-web-test-api.bhnrgc.easypanel.host/api/V1');
-const WEB_API_URL = ensureV1(process.env.NEXT_PUBLIC_WEB_API_URL || 'https://esim-projects-web-test-api.bhnrgc.easypanel.host/api/V1');
+const API_URL = ensureV2(process.env.NEXT_PUBLIC_API_URL || 'https://web-api.polosim.com/api/V2');
+const WEB_API_URL = ensureV2(process.env.NEXT_PUBLIC_WEB_API_URL || 'https://web-api.polosim.com/api/V2');
 
 export class ApiError extends Error {
   public readonly statusCode: number;
@@ -154,7 +155,7 @@ export function getImageUrl(path?: string): string {
   if (path.startsWith('http://') || path.startsWith('https://') || path.startsWith('/')) {
     return path;
   }
-  return `${API_URL.replace('/api/V1', '')}/storage/${path}`;
+  return `${API_URL.replace('/api/V2', '').replace('/api/V1', '')}/storage/${path}`;
 }
 
 export function getFlagFromISO(isoCode?: string | null): string | null {
