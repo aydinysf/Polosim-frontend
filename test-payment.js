@@ -12,7 +12,7 @@ async function testPaymentMethod(method) {
     };
     
     // Test API URL based on docker-compose.yml NEXT_PUBLIC_API_URL
-    const response = await axios.post('https://esim-projects-web-test-api.bhnrgc.easypanel.host/api/V1/checkout/execute', payload, {
+    const response = await axios.post('https://web-api.polosim.com/api/V2/checkout/execute', payload, {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'

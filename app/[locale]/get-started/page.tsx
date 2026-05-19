@@ -63,10 +63,10 @@ export default function GetStartedPage() {
       const lastName = formData.lastName.trim();
       const email = formData.email.trim();
 
-      const fullName = `${firstName} ${lastName}`;
       const response = await login({
         identifier: email,
-        name: fullName,
+        name: firstName,
+        last_name: lastName,
       });
       if (response.token && response.user) {
         setAuthData(response.user, response.token);

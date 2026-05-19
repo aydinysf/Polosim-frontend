@@ -20,10 +20,12 @@ export interface LoginRequest {
   password?: string;
   code?: string;
   name?: string;
+  last_name?: string;
 }
 
 export interface RegisterRequest {
   name: string;
+  last_name?: string;
   email: string;
   password?: string;
   password_confirmation?: string;
@@ -88,6 +90,7 @@ export const authService = {
     const response = await api.post<AuthResponse>('/login', {
       identifier: data.email,
       name: data.name,
+      last_name: data.last_name,
     });
     if (response.data.token && response.data.user) {
       setAuthToken(response.data.token);
