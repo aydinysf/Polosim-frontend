@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
 import { regionService, type Region } from "@/lib/services/regionService";
+import { getImageUrl } from "@/lib/api-client";
 
 // Default data as fallback - 8 Afrika regions matching the design
 const defaultRegions = [
@@ -45,7 +46,7 @@ export function RegionsSection() {
             name: reg.name,
             price: `${reg.starting_price ? reg.starting_price + ' Dolar' : '8 Dolar'}`,
             validity: `30 Minutes Plan`,
-            icon: reg.slug || reg.name.toLowerCase(),
+            icon: reg.image_url || reg.icon || "",
             originalId: reg.id
           }));
           
@@ -88,8 +89,20 @@ export function RegionsSection() {
             >
               {/* Floating Globe Icon */}
               <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-14 h-14 rounded-full bg-[#FAF9F6] border border-[var(--gray-mid)] group-hover:border-[var(--gold)] flex items-center justify-center transition-all shadow-sm">
-                <div className="w-10 h-10 rounded-full bg-[#C9A84C] flex items-center justify-center">
-                  <GlobeIcon className="w-6 h-6 text-white" />
+                <div className="w-10 h-10 rounded-full bg-[#C9A84C] flex items-center justify-center overflow-hidden">
+                  {region.icon && (region.icon.startsWith('http') || region.icon.includes('/')) ? (
+                    <img 
+                      src={getImageUrl(region.icon)} 
+                      alt={region.name} 
+                      className="w-full h-full object-cover" 
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).style.display = 'none';
+                        const fallbackIcon = (e.target as HTMLImageElement).parentElement?.querySelector('.fallback-globe');
+                        if (fallbackIcon) fallbackIcon.classList.remove('hidden');
+                      }}
+                    />
+                  ) : null}
+                  <GlobeIcon className={`w-6 h-6 text-white fallback-globe ${region.icon && (region.icon.startsWith('http') || region.icon.includes('/')) ? 'hidden' : ''}`} />
                 </div>
               </div>
 
