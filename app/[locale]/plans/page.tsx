@@ -18,7 +18,6 @@ import { getLocalizedText, getProductData, getProductValidity, getProductSpeed, 
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { cn } from "@/lib/utils";
 import { getImageUrl, getFlagFromISO } from "@/lib/api-client";
 import { useLocale, useTranslations } from "next-intl";
 
@@ -468,99 +467,96 @@ export default function PlansPage() {
       {/* Filters & Content */}
       <section className="pb-24 px-4 bg-[#F8F5ED]">
         <div className="max-w-7xl mx-auto pt-8">
-          {/* View Mode Tabs + Filter Bar */}
-          <div className="flex flex-col gap-4 mb-8">
-            {/* View Mode Tabs */}
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => { setViewMode("regions"); setSearchQuery(""); }}
-                className={`px-6 py-3 rounded-xl text-sm font-semibold transition-all ${viewMode === "regions"
-                  ? "bg-primary text-primary-foreground shadow-lg"
-                  : "bg-card/50 text-muted-foreground hover:bg-card border border-border/50"
-                  }`}
-              >
-                {t('tabs.regions')}
-              </button>
-            </div>
-
-            {/* Filter Bar */}
-            <div className="flex flex-col gap-4 p-4 rounded-2xl bg-card/30 border border-border/50 backdrop-blur-sm">
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          {/* Filter Bar - Elegant Gold/Navy Theme */}
+          <div className="flex flex-col gap-6 mb-8">
+            {/* Main Filter Bar */}
+            <div className="bg-white rounded-2xl border border-[var(--gray-mid)] shadow-sm p-5">
+              <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+                {/* Left: Filter Button + Region Pills */}
                 <div className="flex flex-wrap items-center gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
+                  {/* Filter Toggle Button */}
+                  <button
                     onClick={() => setShowFilters(!showFilters)}
-                    className={`gap-2 ${showFilters ? 'bg-primary/10 border-primary/30 text-primary' : ''}`}
+                    className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                      showFilters 
+                        ? 'bg-[var(--gold)] text-white' 
+                        : 'bg-white border border-[var(--gold)] text-[var(--gold)] hover:bg-[var(--gold)]/10'
+                    }`}
                   >
                     <Filter className="w-4 h-4" />
                     {t('filters.title')}
                     {(filterData || filterValidity || filterPriceRange[0] > 0 || filterPriceRange[1] < 100) && (
-                      <Badge variant="secondary" className="ml-1 h-5 w-5 p-0 flex items-center justify-center text-[10px] rounded-full">
+                      <span className="ml-1 w-5 h-5 rounded-full bg-white text-[var(--gold)] text-[10px] font-bold flex items-center justify-center">
                         {(filterData ? 1 : 0) + (filterValidity ? 1 : 0) + ((filterPriceRange[0] > 0 || filterPriceRange[1] < 100) ? 1 : 0)}
-                      </Badge>
+                      </span>
                     )}
-                  </Button>
+                  </button>
 
                   {viewMode === "plans" && (
                     <>
-                      {/* Region filter pills for plans view */}
+                      {/* Region Pills */}
                       {regions.slice(0, 6).map((region) => (
                         <button
                           key={region.id}
                           onClick={() => { setSelectedRegionId(region.id === selectedRegionId ? null : region.id); setSearchQuery(""); }}
-                          className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${selectedRegionId === region.id
-                            ? "bg-primary text-primary-foreground"
-                            : "bg-card/50 text-muted-foreground hover:bg-card border border-border/50"
-                            }`}
+                          className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                            selectedRegionId === region.id
+                              ? "bg-[var(--gold)] text-white shadow-sm"
+                              : "bg-white border border-[var(--gray-mid)] text-[var(--navy)] hover:border-[var(--gold)] hover:text-[var(--gold)]"
+                          }`}
                         >
                           {(() => {
                             const icon = region.icon;
                             const isPath = icon && (icon.includes('/') || icon.includes('.'));
                             const url = isPath ? getImageUrl(icon) : null;
                             return url ? (
-                              <div className="relative w-4 h-4 rounded-sm overflow-hidden inline-block mr-1 align-middle">
+                              <div className="relative w-4 h-4 rounded-sm overflow-hidden">
                                 <Image src={url} alt="" fill className="object-cover" sizes="16px" />
                               </div>
-                            ) : (icon ? <span className="mr-1">{icon}</span> : null);
+                            ) : null;
                           })()}
                           {getLocalizedText(region.name, "", locale)}
                         </button>
                       ))}
 
+                      {/* Best Sellers */}
                       <button
                         onClick={() => setShowBestSellers(!showBestSellers)}
-                        className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${showBestSellers
-                          ? "bg-primary text-primary-foreground"
-                          : "bg-card/50 text-muted-foreground hover:bg-card border border-border/50"
-                          }`}
+                        className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                          showBestSellers
+                            ? "bg-[var(--gold)] text-white shadow-sm"
+                            : "bg-white border border-[var(--gray-mid)] text-[var(--navy)] hover:border-[var(--gold)] hover:text-[var(--gold)]"
+                        }`}
                       >
-                        <Star className={`w-3 h-3 ${showBestSellers ? "fill-primary-foreground" : ""}`} />
+                        <Star className={`w-4 h-4 ${showBestSellers ? "fill-white" : ""}`} />
                         {t('filters.bestSellers')}
                       </button>
                     </>
                   )}
                 </div>
 
-                {/* Sort */}
+                {/* Right: Sort Dropdown */}
                 <div className="relative flex-shrink-0">
                   <button
                     onClick={() => setSortMenuOpen(!sortMenuOpen)}
                     onBlur={() => setTimeout(() => setSortMenuOpen(false), 150)}
-                    className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium bg-card/50 text-muted-foreground hover:bg-card border border-border/50 transition-all"
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium bg-white border border-[var(--gray-mid)] text-[var(--navy)] hover:border-[var(--gold)] transition-all"
                   >
-                    <ArrowUpDown className="w-3 h-3" />
+                    <ArrowUpDown className="w-4 h-4 text-[var(--gold)]" />
                     {sortOptions.find((opt) => opt.key === sortBy)?.label}
-                    <ChevronDown className={`w-3 h-3 transition-transform ${sortMenuOpen ? "rotate-180" : ""}`} />
+                    <ChevronDown className={`w-4 h-4 text-[var(--gray-text)] transition-transform ${sortMenuOpen ? "rotate-180" : ""}`} />
                   </button>
                   {sortMenuOpen && (
-                    <div className="absolute top-full right-0 mt-2 bg-card/95 backdrop-blur-xl border border-border/50 rounded-xl overflow-hidden z-50 min-w-[180px]">
+                    <div className="absolute top-full right-0 mt-2 bg-white border border-[var(--gray-mid)] rounded-xl shadow-lg overflow-hidden z-50 min-w-[220px]">
                       {sortOptions.filter(o => viewMode === "regions" ? o.key !== "data-high" : true).map((option) => (
                         <button
                           key={option.key}
                           onClick={() => { setSortBy(option.key); setSortMenuOpen(false); }}
-                          className={`w-full px-4 py-2.5 text-left text-sm hover:bg-secondary/50 transition-colors ${sortBy === option.key ? "text-primary font-medium" : "text-foreground"
-                            }`}
+                          className={`w-full px-4 py-3 text-left text-sm hover:bg-[var(--gray-bg)] transition-colors ${
+                            sortBy === option.key 
+                              ? "text-[var(--gold)] font-semibold bg-[var(--gold)]/5" 
+                              : "text-[var(--navy)]"
+                          }`}
                         >
                           {option.label}
                         </button>
@@ -572,15 +568,18 @@ export default function PlansPage() {
 
               {/* Expanded Filters Panel */}
               {showFilters && (
-                <div className="pt-4 mt-2 border-t border-border/30 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 animate-in slide-in-from-top-2">
-
+                <div className="pt-5 mt-5 border-t border-[var(--gray-mid)] grid grid-cols-1 md:grid-cols-3 gap-8">
                   {/* Data Filter */}
-                  <div className="space-y-2">
-                    <label className="text-xs font-medium text-muted-foreground">{t('filters.dataAmount')}</label>
+                  <div className="space-y-3">
+                    <label className="text-sm font-semibold text-[var(--navy)]">{t('filters.dataAmount')}</label>
                     <div className="flex flex-wrap gap-2">
                       <button
                         onClick={() => setFilterData(null)}
-                        className={`px-3 py-1 rounded-md text-xs transition-colors ${!filterData ? 'bg-primary text-primary-foreground' : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'}`}
+                        className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                          !filterData 
+                            ? 'bg-[var(--gold)] text-white' 
+                            : 'bg-[var(--gray-bg)] text-[var(--navy)] hover:bg-[var(--gold)]/10 border border-transparent hover:border-[var(--gold)]'
+                        }`}
                       >
                         {t('filters.any')}
                       </button>
@@ -588,7 +587,11 @@ export default function PlansPage() {
                         <button
                           key={opt.value}
                           onClick={() => setFilterData(filterData === opt.value ? null : opt.value)}
-                          className={`px-3 py-1 rounded-md text-xs transition-colors ${filterData === opt.value ? 'bg-primary text-primary-foreground' : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'}`}
+                          className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                            filterData === opt.value 
+                              ? 'bg-[var(--gold)] text-white' 
+                              : 'bg-[var(--gray-bg)] text-[var(--navy)] hover:bg-[var(--gold)]/10 border border-transparent hover:border-[var(--gold)]'
+                          }`}
                         >
                           {opt.label}
                         </button>
@@ -597,12 +600,16 @@ export default function PlansPage() {
                   </div>
 
                   {/* Validity Filter */}
-                  <div className="space-y-2">
-                    <label className="text-xs font-medium text-muted-foreground">{t('filters.duration')}</label>
+                  <div className="space-y-3">
+                    <label className="text-sm font-semibold text-[var(--navy)]">{t('filters.duration')}</label>
                     <div className="flex flex-wrap gap-2">
                       <button
                         onClick={() => setFilterValidity(null)}
-                        className={`px-3 py-1 rounded-md text-xs transition-colors ${!filterValidity ? 'bg-primary text-primary-foreground' : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'}`}
+                        className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                          !filterValidity 
+                            ? 'bg-[var(--gold)] text-white' 
+                            : 'bg-[var(--gray-bg)] text-[var(--navy)] hover:bg-[var(--gold)]/10 border border-transparent hover:border-[var(--gold)]'
+                        }`}
                       >
                         {t('filters.any')}
                       </button>
@@ -610,7 +617,11 @@ export default function PlansPage() {
                         <button
                           key={opt.value}
                           onClick={() => setFilterValidity(filterValidity === opt.value ? null : opt.value)}
-                          className={`px-3 py-1 rounded-md text-xs transition-colors ${filterValidity === opt.value ? 'bg-primary text-primary-foreground' : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'}`}
+                          className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                            filterValidity === opt.value 
+                              ? 'bg-[var(--gold)] text-white' 
+                              : 'bg-[var(--gray-bg)] text-[var(--navy)] hover:bg-[var(--gold)]/10 border border-transparent hover:border-[var(--gold)]'
+                          }`}
                         >
                           {opt.label}
                         </button>
@@ -619,10 +630,10 @@ export default function PlansPage() {
                   </div>
 
                   {/* Price Filter */}
-                  <div className="space-y-4">
+                  <div className="space-y-3">
                     <div className="flex items-center justify-between">
-                      <label className="text-xs font-medium text-muted-foreground">{t('filters.priceRange')}</label>
-                      <span className="text-xs font-medium">€{filterPriceRange[0]} - €{filterPriceRange[1]}</span>
+                      <label className="text-sm font-semibold text-[var(--navy)]">{t('filters.priceRange')}</label>
+                      <span className="text-sm font-bold text-[var(--gold)]">€{filterPriceRange[0]} - €{filterPriceRange[1]}</span>
                     </div>
                     <Slider
                       defaultValue={[0, 100]}
@@ -630,26 +641,24 @@ export default function PlansPage() {
                       step={1}
                       value={filterPriceRange}
                       onValueChange={(val) => setFilterPriceRange(val as [number, number])}
-                      className="py-1"
+                      className="py-2 [&_[role=slider]]:bg-[var(--gold)] [&_[role=slider]]:border-[var(--gold)] [&_.bg-primary]:bg-[var(--gold)]"
                     />
                   </div>
                 </div>
               )}
 
-              {/* Pagination - only show in plans view */}
+              {/* Pagination - Elegant Style */}
               {viewMode === "plans" && totalPages > 1 && (
-                <div className="flex items-center justify-center gap-2 mt-4">
-                  <Button
-                    variant="outline"
-                    size="icon"
+                <div className="flex items-center justify-center gap-1 pt-5 mt-5 border-t border-[var(--gray-mid)]">
+                  <button
                     onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
                     disabled={currentPage === 1}
-                    className="h-8 w-8"
+                    className="w-9 h-9 rounded-lg flex items-center justify-center border border-[var(--gray-mid)] text-[var(--navy)] hover:border-[var(--gold)] hover:text-[var(--gold)] disabled:opacity-40 disabled:cursor-not-allowed transition-all"
                   >
                     <ChevronLeft className="h-4 w-4" />
-                  </Button>
+                  </button>
 
-                  <div className="flex items-center gap-1">
+                  <div className="flex items-center gap-1 mx-2">
                     {(() => {
                       const lastPage = totalPages;
                       const pages: (number | string)[] = [];
@@ -657,12 +666,8 @@ export default function PlansPage() {
                       if (lastPage <= 10) {
                         for (let i = 1; i <= lastPage; i++) pages.push(i);
                       } else {
-                        // First 3 pages
                         pages.push(1, 2, 3);
-
                         const endStart = lastPage - 3;
-
-                        // Handle middle
                         if (currentPage > 3 && currentPage < endStart) {
                           if (currentPage > 4) pages.push('...');
                           pages.push(currentPage);
@@ -670,8 +675,6 @@ export default function PlansPage() {
                         } else {
                           pages.push('...');
                         }
-
-                        // Last 4 pages (n-3, n-2, n-1, n)
                         for (let i = endStart; i <= lastPage; i++) {
                           if (!pages.includes(i)) pages.push(i);
                         }
@@ -679,40 +682,40 @@ export default function PlansPage() {
 
                       return pages.map((page, index) => {
                         if (page === '...') {
-                          return <span key={`ellipsis-${index}`} className="px-2 text-muted-foreground">...</span>;
+                          return <span key={`ellipsis-${index}`} className="px-2 text-[var(--gray-text)]">...</span>;
                         }
                         const p = page as number;
                         return (
-                          <Button
+                          <button
                             key={p}
-                            variant={currentPage === p ? "default" : "outline"}
-                            size="sm"
                             onClick={() => setCurrentPage(p)}
-                            className={cn("h-8 w-8 p-0", currentPage === p ? "pointer-events-none" : "")}
+                            className={`w-9 h-9 rounded-lg text-sm font-medium transition-all ${
+                              currentPage === p
+                                ? "bg-[var(--gold)] text-white shadow-sm"
+                                : "border border-[var(--gray-mid)] text-[var(--navy)] hover:border-[var(--gold)] hover:text-[var(--gold)]"
+                            }`}
                           >
                             {p}
-                          </Button>
+                          </button>
                         );
                       });
                     })()}
                   </div>
 
-                  <Button
-                    variant="outline"
-                    size="icon"
+                  <button
                     onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
                     disabled={currentPage === totalPages}
-                    className="h-8 w-8"
+                    className="w-9 h-9 rounded-lg flex items-center justify-center border border-[var(--gray-mid)] text-[var(--navy)] hover:border-[var(--gold)] hover:text-[var(--gold)] disabled:opacity-40 disabled:cursor-not-allowed transition-all"
                   >
                     <ChevronRight className="h-4 w-4" />
-                  </Button>
+                  </button>
                 </div>
               )}
             </div>
           </div>
 
-          {/* Results Count */}
-          <p className="text-sm text-muted-foreground mb-6">
+          {/* Results Count - Styled */}
+          <p className="text-sm font-medium text-[var(--gray-text)] mb-6">
             {viewMode === "plans"
               ? t('results.plansCount', { count: filteredProducts.length })
               : t('results.regionsCount', { count: filteredRegions.length })}
