@@ -263,27 +263,6 @@ export default function ProfilePage() {
 
       <section className="py-12 px-[5%]">
         <div className="max-w-6xl mx-auto">
-          {/* Verification Warning */}
-          {user && !user.email_verified_at && (
-            <div className="mb-10 p-6 rounded-3xl bg-amber-50 border-[1.5px] border-amber-200 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-sm">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-2xl bg-white border border-amber-200 flex items-center justify-center text-amber-500 shadow-sm">
-                  <AlertCircle className="w-6 h-6" />
-                </div>
-                <div>
-                  <h3 className="font-bold text-[var(--text-dark)] font-['Sora']">{t('verification.title')}</h3>
-                  <p className="text-sm text-[var(--gray-text)] font-medium mt-0.5">
-                    {t('verification.message')}
-                  </p>
-                </div>
-              </div>
-              <Link href={`/verify-email?email=${encodeURIComponent(user.email)}`} className="no-underline">
-                <Button className="bg-amber-500 hover:bg-amber-600 text-white border-none rounded-2xl px-8 h-12 font-bold shadow-lg shadow-amber-500/20 whitespace-nowrap">
-                  {t('verification.button')}
-                </Button>
-              </Link>
-            </div>
-          )}
 
           {/* Stats Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">

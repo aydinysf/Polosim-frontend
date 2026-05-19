@@ -521,6 +521,8 @@
     "lastNamePlaceholder": "Doe",
     "email": "Email",
     "emailPlaceholder": "you@example.com",
+    "confirmEmail": "Confirm Email",
+    "confirmEmailPlaceholder": "Re-enter your email",
     "password": "Password",
     "passwordPlaceholder": "Create a password",
     "confirmPassword": "Confirm Password",
@@ -551,6 +553,7 @@
     },
     "error": {
       "fillAll": "Please fill in all fields",
+      "emailMatch": "Emails do not match",
       "match": "Passwords do not match",
       "length": "Password must be at least 8 characters",
       "terms": "Please accept the terms and conditions",

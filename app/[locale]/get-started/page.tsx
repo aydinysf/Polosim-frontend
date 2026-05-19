@@ -21,6 +21,7 @@ export default function GetStartedPage() {
     firstName: "",
     lastName: "",
     email: "",
+    confirmEmail: "",
     acceptTerms: false,
     acceptMarketing: false,
   });
@@ -41,8 +42,12 @@ export default function GetStartedPage() {
     e.preventDefault();
 
     if (step === 1) {
-      if (!formData.firstName || !formData.lastName || !formData.email) {
+      if (!formData.firstName || !formData.lastName || !formData.email || !formData.confirmEmail) {
         setError(t('error.fillAll'));
+        return;
+      }
+      if (formData.email.trim().toLowerCase() !== formData.confirmEmail.trim().toLowerCase()) {
+        setError(t('error.emailMatch'));
         return;
       }
       setError("");
@@ -70,10 +75,8 @@ export default function GetStartedPage() {
       });
       if (response.token && response.user) {
         setAuthData(response.user, response.token);
-        router.push("/profile");
-      } else {
-        router.push(`/verify-email?email=${encodeURIComponent(email)}`);
       }
+      router.push("/profile");
     } catch (err) {
       console.error("Login error:", err);
       if (err instanceof ApiError) {
@@ -181,6 +184,23 @@ export default function GetStartedPage() {
                         name="email"
                         placeholder={t('emailPlaceholder')}
                         value={formData.email}
+                        onChange={handleChange}
+                        className="pl-10 bg-background/50 border-border/50 focus:border-primary"
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  {/* Confirm Email */}
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-foreground">{t('confirmEmail')}</label>
+                    <div className="relative">
+                      <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                      <Input
+                        type="email"
+                        name="confirmEmail"
+                        placeholder={t('confirmEmailPlaceholder')}
+                        value={formData.confirmEmail}
                         onChange={handleChange}
                         className="pl-10 bg-background/50 border-border/50 focus:border-primary"
                         required

@@ -521,6 +521,8 @@
     "lastNamePlaceholder": "Yılmaz",
     "email": "E-posta",
     "emailPlaceholder": "eposta@ornek.com",
+    "confirmEmail": "E-postayı Doğrula",
+    "confirmEmailPlaceholder": "E-postanızı tekrar girin",
     "password": "Şifre",
     "passwordPlaceholder": "Bir şifre oluşturun",
     "confirmPassword": "Şifreyi Onayla",
@@ -551,6 +553,7 @@
     },
     "error": {
       "fillAll": "Lütfen tüm alanları doldurun",
+      "emailMatch": "E-posta adresleri eşleşmiyor",
       "match": "Şifreler eşleşmiyor",
       "length": "Şifre en az 8 karakter olmalıdır",
       "terms": "Lütfen kullanım koşullarını kabul edin",
