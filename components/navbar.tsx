@@ -24,6 +24,7 @@ const languages = [
   { code: "tr", label: "Türkçe", flag: "🇹🇷" },
 ];
 
+const MAIN_MENU_HANDLE = "header";
 
 export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -40,16 +41,21 @@ export function Navbar() {
   const pathname = usePathname();
   const [isPending, startTransition] = useTransition();
 
+  const resolveMenuTitle = (link: MenuItem & { href?: string }) => {
+    const apiTitle = typeof link.title === "string" ? link.title.trim() : "";
+    if (apiTitle) return apiTitle;
+    return link.key ? t(link.key as any) : "";
+  };
+
   useEffect(() => {
-    menuService.getMenu('main-menu', locale)
+    menuService.getMenu(MAIN_MENU_HANDLE, locale)
       .then((data: any) => {
-        console.log('Main menu data received:', data);
         const items = data?.items || data?.data?.items;
         if (items?.length > 0) {
           setDynamicLinks(items);
         }
       })
-      .catch((err: Error) => console.log('Menu fetch failed:', err.message));
+      .catch(() => {});
   }, [locale]);
 
   const handleLogout = async () => {
@@ -83,7 +89,7 @@ export function Navbar() {
         {/* Desktop Navigation */}
         <div className="hidden lg:flex items-center gap-5">
           {dynamicLinks.map((link, idx) => {
-            const title = link.key ? t(link.key as any) : link.title;
+            const title = resolveMenuTitle(link);
             const isExternal = link.external || link.target === "_blank";
 
             if (link.children && link.children.length > 0) {
@@ -262,7 +268,7 @@ export function Navbar() {
         <div className="lg:hidden mt-2 mx-auto max-w-[1300px] bg-white rounded-xl shadow-lg px-5 py-4 pointer-events-auto">
           <div className="flex flex-col gap-2">
             {dynamicLinks.map((link, idx) => {
-              const title = link.key ? t(link.key as any) : link.title;
+              const title = resolveMenuTitle(link);
               const isExternal = link.external || link.target === "_blank";
 
               if (link.children && link.children.length > 0) {

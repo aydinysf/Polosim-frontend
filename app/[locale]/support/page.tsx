@@ -10,6 +10,7 @@ import { Link } from "@/i18n/routing";
 import { useTranslations, useLocale } from "next-intl";
 import { useEffect, useState } from "react";
 import { faqService, type Faq } from "@/lib/services";
+import { pageService, type Page } from "@/lib/services/pageService";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default function SupportPage() {
@@ -27,6 +28,8 @@ export default function SupportPage() {
   const [expandedFaq, setExpandedFaq] = useState<string | null>(null);
   const [dynamicFaqs, setDynamicFaqs] = useState<Faq[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [pageData, setPageData] = useState<Page | null>(null);
+  const [isPageLoading, setIsPageLoading] = useState(true);
 
   useEffect(() => {
     setIsLoading(true);
@@ -34,6 +37,14 @@ export default function SupportPage() {
       .then((data: Faq[]) => setDynamicFaqs(data))
       .catch((err: Error) => console.error("Failed to fetch FAQs:", err))
       .finally(() => setIsLoading(false));
+  }, [locale]);
+
+  useEffect(() => {
+    setIsPageLoading(true);
+    pageService.getPage("support", locale)
+      .then((data) => setPageData(data))
+      .catch(() => setPageData(null))
+      .finally(() => setIsPageLoading(false));
   }, [locale]);
 
   const toggleFaq = (key: string) => {
@@ -100,6 +111,56 @@ export default function SupportPage() {
       </div>
     );
   };
+
+  if (isPageLoading) {
+    return (
+      <main className="min-h-screen bg-white">
+        <Navbar />
+        <section className="bg-[var(--navy)] pt-14 pb-12 px-[5%] text-center">
+          <Skeleton className="h-7 w-32 mx-auto mb-5 rounded-full" />
+          <Skeleton className="h-10 w-72 mx-auto mb-3" />
+          <Skeleton className="h-5 w-[520px] max-w-full mx-auto" />
+        </section>
+        <section className="py-16 px-[5%]">
+          <div className="max-w-3xl mx-auto">
+            <Skeleton className="h-6 w-48 mb-6" />
+            <Skeleton className="h-4 w-full mb-3" />
+            <Skeleton className="h-4 w-full mb-3" />
+            <Skeleton className="h-4 w-3/4" />
+          </div>
+        </section>
+        <Footer />
+      </main>
+    );
+  }
+
+  if (pageData?.content) {
+    return (
+      <main className="min-h-screen bg-white">
+        <Navbar />
+        <section className="bg-[var(--navy)] pt-14 pb-12 px-[5%] text-center">
+          <div className="inline-block bg-[rgba(201,168,76,0.15)] text-[var(--gold)] border border-[rgba(201,168,76,0.3)] rounded-full px-4 py-1.5 text-[12px] font-bold tracking-[0.5px] uppercase mb-5">
+            {t("hero.badge")}
+          </div>
+          <h1 className="text-4xl md:text-[36px] font-extrabold text-white mb-2 tracking-tight">
+            {pageData.title}
+          </h1>
+          <p className="text-[15px] text-white/60 mb-8 leading-[1.6] max-w-lg mx-auto">
+            {pageData.updated_at ? new Date(pageData.updated_at).toLocaleDateString(locale) : t("hero.subtitle")}
+          </p>
+        </section>
+
+        <section className="py-16 px-[5%]">
+          <div
+            className="max-w-3xl mx-auto prose max-w-none prose-headings:text-[var(--text-dark)] prose-p:text-[var(--gray-text)] prose-p:leading-relaxed"
+            dangerouslySetInnerHTML={{ __html: pageData.content }}
+          />
+        </section>
+
+        <Footer />
+      </main>
+    );
+  }
 
   return (
     <main className="min-h-screen bg-white">

@@ -4,12 +4,25 @@ import { Globe, Shield, QrCode, Wifi, Zap, Clock, Headphones, CheckCircle, Apple
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { Link } from "@/i18n/routing";
-import { useState } from "react";
-import { useTranslations } from "next-intl";
+import { useEffect, useState } from "react";
+import { useLocale, useTranslations } from "next-intl";
+import { pageService, type Page } from "@/lib/services/pageService";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function HowItWorksPage() {
   const t = useTranslations('HowItWorks');
+  const locale = useLocale();
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
+  const [pageData, setPageData] = useState<Page | null>(null);
+  const [isPageLoading, setIsPageLoading] = useState(true);
+
+  useEffect(() => {
+    setIsPageLoading(true);
+    pageService.getPage("how-it-works", locale)
+      .then((data) => setPageData(data))
+      .catch(() => setPageData(null))
+      .finally(() => setIsPageLoading(false));
+  }, [locale]);
 
   const steps = [
     { number: "01", title: t('steps.step1.title'), description: t('steps.step1.description'), icon: Globe },
@@ -39,6 +52,55 @@ export default function HowItWorksPage() {
     { q: t('faq.q4'), a: t('faq.a4') },
     { q: t('faq.q5'), a: t('faq.a5') },
   ];
+
+  if (isPageLoading) {
+    return (
+      <main className="min-h-screen bg-white">
+        <Navbar />
+        <section className="bg-[var(--navy)] pt-14 pb-12 px-[5%] text-center">
+          <Skeleton className="h-7 w-32 mx-auto mb-5 rounded-full" />
+          <Skeleton className="h-10 w-72 mx-auto mb-3" />
+          <Skeleton className="h-5 w-[520px] max-w-full mx-auto" />
+        </section>
+        <section className="py-16 px-[5%]">
+          <div className="max-w-3xl mx-auto">
+            <Skeleton className="h-6 w-48 mb-6" />
+            <Skeleton className="h-4 w-full mb-3" />
+            <Skeleton className="h-4 w-full mb-3" />
+            <Skeleton className="h-4 w-3/4" />
+          </div>
+        </section>
+        <Footer />
+      </main>
+    );
+  }
+
+  if (pageData?.content) {
+    return (
+      <main className="min-h-screen bg-white">
+        <Navbar />
+
+        <section className="bg-[var(--navy)] pt-14 pb-12 px-[5%] text-center">
+          <div className="inline-block bg-[rgba(201,168,76,0.15)] text-[var(--gold)] border border-[rgba(201,168,76,0.3)] rounded-full px-4 py-1.5 text-[12px] font-bold tracking-[0.5px] uppercase mb-5">
+            {t('badge')}
+          </div>
+          <h1 className="text-[38px] font-extrabold text-white mb-3 tracking-tight">{pageData.title}</h1>
+          <p className="text-[15px] text-white/60 max-w-[520px] mx-auto leading-[1.6]">
+            {pageData.updated_at ? new Date(pageData.updated_at).toLocaleDateString(locale) : t('subtitle')}
+          </p>
+        </section>
+
+        <section className="py-16 px-[5%]">
+          <div
+            className="max-w-3xl mx-auto prose max-w-none prose-headings:text-[var(--text-dark)] prose-p:text-[var(--gray-text)] prose-p:leading-relaxed"
+            dangerouslySetInnerHTML={{ __html: pageData.content }}
+          />
+        </section>
+
+        <Footer />
+      </main>
+    );
+  }
 
   return (
     <main className="min-h-screen bg-white">
