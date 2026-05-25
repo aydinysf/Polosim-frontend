@@ -297,9 +297,9 @@ export function HeroSection() {
         {/* Hero Title */}
         <div className="text-center mb-8">
           <h1 className="text-[28px] sm:text-[36px] md:text-[42px] font-extrabold text-white leading-[1.3] max-w-[900px] mx-auto tracking-tight">
-            200&apos;den fazla ülke için anında <span className="text-[var(--gold)]">eSIM</span> teslimatı.
-            <br />
-            <span className="text-[var(--gold)]">Roaming</span> ücreti yok. Numaranızı koruyun.
+            {t.rich('mainHeading', {
+              gold: (chunks) => <span className="text-[var(--gold)]">{chunks}</span>
+            })}
           </h1>
         </div>
 
@@ -321,7 +321,7 @@ export function HeroSection() {
               className="bg-[var(--gold)] text-white border-none rounded-full px-6 h-10 font-semibold text-[14px] cursor-pointer whitespace-nowrap hover:bg-[var(--gold-light)] transition-all"
               onClick={() => handleSearch()}
             >
-              Hemen Ara
+              {t('searchButton')}
             </button>
           </div>
 
@@ -351,7 +351,7 @@ export function HeroSection() {
             className="inline-flex items-center gap-2 bg-[var(--navy-mid)] border border-white/20 text-white rounded-full px-6 py-2.5 font-medium text-[13px] cursor-pointer hover:bg-[var(--navy-light)] hover:border-white/30 transition-all"
             onClick={() => router.push("/plans")}
           >
-            200&apos;den Fazla Destinasyona göz atın
+            {t('viewAllDestinations')}
             <ChevronDown className="w-4 h-4" />
           </button>
         </div>
@@ -359,23 +359,30 @@ export function HeroSection() {
         {/* Popular Destinations Section */}
         <div className="max-w-5xl mx-auto mb-6">
           <div className="flex items-center justify-between mb-4 px-1">
-            <span className="text-[18px] font-semibold text-white">Popüler Destinasyonlar</span>
+            <span className="text-[18px] font-semibold text-white">{t('popularDestinations')}</span>
           </div>
           <div className="flex flex-wrap items-center justify-center gap-3">
-            {popularDestinationFlags.map((dest) => (
-              <button
-                key={dest.name}
-                className="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2 text-white text-[13px] font-medium hover:bg-white/20 hover:border-white/30 transition-all cursor-pointer"
-                onClick={() => router.push(`/plans?search=${encodeURIComponent(dest.name)}`)}
-              >
-                <img 
-                  src={getFlagFromISO(dest.flag)} 
-                  alt={dest.name} 
-                  className="w-5 h-4 rounded-sm object-cover"
-                />
-                {dest.name}
-              </button>
-            ))}
+            {popularDestinationFlags.map((dest) => {
+              const dbCountry = countries.find(c => c.iso_code === dest.flag);
+              const localizedName = dbCountry 
+                ? getLocalizedText(dbCountry.name, dest.name, locale)
+                : dest.name;
+
+              return (
+                <button
+                  key={dest.name}
+                  className="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2 text-white text-[13px] font-medium hover:bg-white/20 hover:border-white/30 transition-all cursor-pointer"
+                  onClick={() => router.push(`/plans?search=${encodeURIComponent(localizedName)}`)}
+                >
+                  <img 
+                    src={getFlagFromISO(dest.flag)} 
+                    alt={localizedName} 
+                    className="w-5 h-4 rounded-sm object-cover"
+                  />
+                  {localizedName}
+                </button>
+              );
+            })}
           </div>
         </div>
       </div>
