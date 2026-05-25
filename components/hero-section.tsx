@@ -362,23 +362,23 @@ export function HeroSection() {
             <span className="text-[18px] font-semibold text-white">{t('popularDestinations')}</span>
           </div>
           <div className="flex flex-wrap items-center justify-center gap-3">
-            {popularDestinationFlags.map((dest) => {
-              const dbCountry = countries.find(c => c.iso_code === dest.flag);
-              const localizedName = dbCountry 
-                ? getLocalizedText(dbCountry.name, dest.name, locale)
-                : dest.name;
+            {popularCountries.slice(0, 12).map((country) => {
+              const localizedName = getLocalizedText(country.name, "", locale);
+              const flagSrc = country.flag_url || getFlagFromISO(country.iso_code);
 
               return (
                 <button
-                  key={dest.name}
+                  key={country.id}
                   className="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2 text-white text-[13px] font-medium hover:bg-white/20 hover:border-white/30 transition-all cursor-pointer"
                   onClick={() => router.push(`/plans?search=${encodeURIComponent(localizedName)}`)}
                 >
-                  <img 
-                    src={getFlagFromISO(dest.flag)} 
-                    alt={localizedName} 
-                    className="w-5 h-4 rounded-sm object-cover"
-                  />
+                  {flagSrc && (
+                    <img 
+                      src={flagSrc} 
+                      alt={localizedName} 
+                      className="w-5 h-4 rounded-sm object-cover"
+                    />
+                  )}
                   {localizedName}
                 </button>
               );
