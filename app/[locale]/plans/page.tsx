@@ -367,7 +367,7 @@ export default function PlansPage() {
       <Navbar />
 
       {/* Hero Section */}
-      <section className="bg-[var(--navy)] pt-14 pb-12 px-[5%] relative overflow-hidden text-center">
+      <section className="bg-[var(--navy)] pt-14 pb-12 px-[5%] relative text-center">
 
 
         <div className="relative max-w-7xl mx-auto text-center">
@@ -401,66 +401,66 @@ export default function PlansPage() {
                   />
                 </div>
               </div>
-            </div>
 
-            {/* Autocomplete Dropdown */}
-            {openCombobox && searchQuery && filteredSuggestions.length > 0 && (
-              <div className="absolute top-full left-0 right-0 mt-2 bg-card border border-border rounded-xl shadow-xl overflow-hidden max-h-80 overflow-y-auto">
-                {filteredSuggestions.map((item) => (
-                  <button
-                    key={`${item.type}-${item.id}`}
-                    className="w-full flex items-center gap-3 px-4 py-3 hover:bg-secondary/50 text-left transition-colors"
-                    onClick={() => {
-                      setSearchQuery(item.type === 'country' ? (item as Country).name : getLocalizedText((item as Region).name));
-                      setOpenCombobox(false);
-                      setViewMode("plans");
-                      if (item.type === 'country') {
-                        setSelectedCountryId(item.id);
-                        setSelectedRegionId(null);
-                      } else {
-                        setSelectedRegionId(item.id);
-                        setSelectedCountryId(null);
-                      }
-                    }}
-                  >
-                    <span className="text-xl">
-                      {item.type === 'country'
-                        ? (() => {
-                          const country = item as Country;
-                          const rawFlag = country.flag_url;
-                          const isPath = rawFlag && (rawFlag.includes('.') || rawFlag.includes('/'));
-                          const url = isPath ? getImageUrl(rawFlag) : getFlagFromISO(country.iso_code);
-                          return url ? <img src={url} alt="" className="w-6 h-4 object-cover rounded-sm" /> : "🏳️";
-                        })()
-                        : (() => {
-                          const icon = (item as Region).icon;
-                          const isPath = icon && (icon.includes('/') || icon.includes('.'));
-                          const url = isPath ? getImageUrl(icon) : null;
-                          return url ? (
-                            <div className="relative w-6 h-6 rounded-sm overflow-hidden">
-                              <Image src={url} alt="" fill className="object-cover" sizes="24px" />
-                            </div>
-                          ) : (icon || "🌍");
-                        })()}
-                    </span>
-                    <div>
-                      <div className="font-medium text-foreground">
-                        {item.type === 'country' ? (item as Country).name : getLocalizedText((item as Region).name, "", locale)}
+              {/* Autocomplete Dropdown */}
+              {openCombobox && searchQuery && filteredSuggestions.length > 0 && (
+                <div className="absolute top-full left-0 right-0 mt-2 bg-card border border-border rounded-xl shadow-xl overflow-hidden max-h-80 overflow-y-auto z-[9999] text-left">
+                  {filteredSuggestions.map((item) => (
+                    <button
+                      key={`${item.type}-${item.id}`}
+                      className="w-full flex items-center gap-3 px-4 py-3 hover:bg-secondary/50 text-left transition-colors"
+                      onClick={() => {
+                        setSearchQuery(item.type === 'country' ? (item as Country).name : getLocalizedText((item as Region).name));
+                        setOpenCombobox(false);
+                        setViewMode("plans");
+                        if (item.type === 'country') {
+                          setSelectedCountryId(item.id);
+                          setSelectedRegionId(null);
+                        } else {
+                          setSelectedRegionId(item.id);
+                          setSelectedCountryId(null);
+                        }
+                      }}
+                    >
+                      <span className="text-xl">
+                        {item.type === 'country'
+                          ? (() => {
+                            const country = item as Country;
+                            const rawFlag = country.flag_url;
+                            const isPath = rawFlag && (rawFlag.includes('.') || rawFlag.includes('/'));
+                            const url = isPath ? getImageUrl(rawFlag) : getFlagFromISO(country.iso_code);
+                            return url ? <img src={url} alt="" className="w-6 h-4 object-cover rounded-sm" /> : "🏳️";
+                          })()
+                          : (() => {
+                            const icon = (item as Region).icon;
+                            const isPath = icon && (icon.includes('/') || icon.includes('.'));
+                            const url = isPath ? getImageUrl(icon) : null;
+                            return url ? (
+                              <div className="relative w-6 h-6 rounded-sm overflow-hidden">
+                                <Image src={url} alt="" fill className="object-cover" sizes="24px" />
+                              </div>
+                            ) : (icon || "🌍");
+                          })()}
+                      </span>
+                      <div>
+                        <div className="font-medium text-foreground">
+                          {item.type === 'country' ? (item as Country).name : getLocalizedText((item as Region).name, "", locale)}
+                        </div>
+                        <div className="text-xs text-muted-foreground capitalize">{item.type}</div>
                       </div>
-                      <div className="text-xs text-muted-foreground capitalize">{item.type}</div>
-                    </div>
-                  </button>
-                ))}
-              </div>
-            )}
+                    </button>
+                  ))}
+                </div>
+              )}
 
-            {/* Click outside to close */}
-            {openCombobox && (
-              <div
-                className="fixed inset-0 z-[-1]"
-                onClick={() => setOpenCombobox(false)}
-              />
-            )}
+              {/* Click outside to close */}
+              {openCombobox && (
+                <div
+                  className="fixed inset-0 z-[-1]"
+                  onClick={() => setOpenCombobox(false)}
+                />
+              )}
+            </div>
           </div>
       </section>
 
