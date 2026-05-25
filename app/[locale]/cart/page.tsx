@@ -15,8 +15,7 @@ export default function CartPage() {
   const locale = useLocale();
 
   const formatPrice = (amount: number) => {
-    const value = amount > 5000 ? amount / 100 : amount; 
-    return `€${value.toFixed(2)}`;
+    return `€${(amount / 100).toFixed(2)}`;
   };
 
   return (
@@ -202,10 +201,6 @@ export default function CartPage() {
                     <div className="flex justify-between items-center">
                       <span className="text-[var(--gray-text)] font-medium">{t('taxes') || 'Vergiler'}</span>
                       <span className="text-[var(--navy)] font-semibold">€0.00</span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-[var(--gray-text)] font-medium">{t('shipping') || 'Teslimat'}</span>
-                      <span className="text-emerald-600 font-semibold">{t('free') || 'Ücretsiz'}</span>
                     </div>
                     
                     <div className="border-t border-[var(--gray-mid)] pt-4">

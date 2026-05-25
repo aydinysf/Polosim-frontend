@@ -41,7 +41,7 @@ export function Navbar() {
   const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
-    menuService.getMenu('main-menu', locale)
+    menuService.getMenu('header', locale)
       .then((data: any) => {
         console.log('Main menu data received:', data);
         const items = data?.items || data?.data?.items;

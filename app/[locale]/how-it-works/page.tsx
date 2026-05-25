@@ -1,11 +1,12 @@
 "use client";
 
-import { Globe, Shield, QrCode, Wifi, Zap, Clock, Headphones, CheckCircle, Apple, Download, ChevronDown } from "lucide-react";
+import { Globe, Shield, QrCode, Wifi, Clock, ArrowRight } from "lucide-react";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { Link } from "@/i18n/routing";
 import { useState } from "react";
 import { useTranslations } from "next-intl";
+import { SearchHeader } from "@/components/search-header";
 
 export default function HowItWorksPage() {
   const t = useTranslations('HowItWorks');
@@ -41,151 +42,168 @@ export default function HowItWorksPage() {
   ];
 
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-background">
       <Navbar />
 
-      {/* Hero Section */}
-      <section className="bg-[var(--navy)] pt-14 pb-12 px-[5%] text-center">
-        <div className="inline-block bg-[rgba(201,168,76,0.15)] text-[var(--gold)] border border-[rgba(201,168,76,0.3)] rounded-full px-4 py-1.5 text-[12px] font-bold tracking-[0.5px] uppercase mb-5">
-          {t('badge')}
-        </div>
-        <h1 className="text-[38px] font-extrabold text-white mb-3 tracking-tight">{t('title')}</h1>
-        <p className="text-[15px] text-white/60 max-w-[520px] mx-auto leading-[1.6]">
-          {t('subtitle')}
-        </p>
-      </section>
+      {/* Hero / Header Section */}
+      <SearchHeader 
+        title={t('title')}
+        subtitle={t('subtitle')}
+        badge={t('badge')}
+      />
 
-      {/* Steps Section */}
-      <section className="bg-white py-[72px] px-[5%]">
-        <div className="max-w-[760px] mx-auto">
-          {steps.map((step, index) => (
-            <div key={step.number} className="flex gap-7 mb-12 relative">
-              {index < steps.length - 1 && (
-                <div className="absolute left-[23px] top-[52px] w-0.5 h-[calc(100%-20px)] bg-[var(--gray-mid)]" />
-              )}
-              <div className="w-12 h-12 rounded-full bg-[var(--navy)] flex items-center justify-center font-['Sora'] text-base font-extrabold text-[var(--gold)] shrink-0 relative z-[1]">
-                {step.number}
-              </div>
-              <div className="pt-2.5">
-                <h3 className="text-lg font-bold text-[var(--text-dark)] mb-2">{step.title}</h3>
-                <p className="text-[15px] text-[var(--gray-text)] leading-[1.7]">{step.description}</p>
-              </div>
-            </div>
-          ))}
-
-          {/* Why Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-12">
-            {whyCards.map((card) => (
-              <div key={card.title} className="bg-[var(--gray-bg)] rounded-2xl p-6">
-                <span className="text-[28px] block mb-3">{card.icon}</span>
-                <h4 className="text-[15px] font-bold text-[var(--text-dark)] mb-2">{card.title}</h4>
-                <p className="text-[13px] text-[var(--gray-text)] leading-[1.6]">{card.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Compatible Devices */}
-      <section className="bg-[var(--gray-bg)] py-16 px-[5%]">
-        <h2 className="text-[28px] font-extrabold text-center mb-2 text-[var(--text-dark)]">{t('compatibility.title')}</h2>
-        <p className="text-center text-[var(--gray-text)] mb-10 text-[15px]">{t('compatibility.subtitle')}</p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-6xl mx-auto">
-          {compatibleDevices.map((device) => (
-            <div key={device.brand} className="bg-white rounded-2xl p-6">
-              <div className="font-['Sora'] text-[15px] font-bold text-[var(--text-dark)] mb-3.5 flex items-center gap-2">
-                {device.brand}
-              </div>
-              <ul className="flex flex-col gap-2">
-                {device.models.map((model) => (
-                  <li key={model} className="text-[13px] text-[var(--gray-text)] flex items-center gap-2">
-                    <span className="text-[var(--gold)] font-bold text-[12px]">✓</span>
-                    {model}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Installation Guide */}
-      <section className="bg-white py-16 px-[5%]">
-        <h2 className="text-[28px] font-extrabold text-center mb-2 text-[var(--text-dark)]">{t('installation.title')}</h2>
-        <p className="text-center text-[var(--gray-text)] mb-10 text-[15px]">{t('installation.subtitle')}</p>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-[800px] mx-auto">
-          {/* iOS */}
-          <div className="bg-[var(--gray-bg)] rounded-2xl p-7">
-            <h3 className="text-base font-bold mb-5 text-[var(--text-dark)] flex items-center gap-2">🍎 {t('installation.ios.title')}</h3>
-            <ol className="flex flex-col gap-3">
-              {(t.raw('installation.ios.steps') as string[]).map((step, i) => (
-                <li key={i} className="flex gap-3 text-sm text-[var(--gray-text)] leading-[1.5]">
-                  <span className="w-[22px] h-[22px] rounded-full bg-[var(--navy)] text-white text-[11px] font-bold flex items-center justify-center shrink-0 font-['Sora']">{i + 1}</span>
-                  {step}
-                </li>
-              ))}
-            </ol>
-          </div>
-          {/* Android */}
-          <div className="bg-[var(--gray-bg)] rounded-2xl p-7">
-            <h3 className="text-base font-bold mb-5 text-[var(--text-dark)] flex items-center gap-2">🤖 {t('installation.android.title')}</h3>
-            <ol className="flex flex-col gap-3">
-              {(t.raw('installation.android.steps') as string[]).map((step, i) => (
-                <li key={i} className="flex gap-3 text-sm text-[var(--gray-text)] leading-[1.5]">
-                  <span className="w-[22px] h-[22px] rounded-full bg-[var(--navy)] text-white text-[11px] font-bold flex items-center justify-center shrink-0 font-['Sora']">{i + 1}</span>
-                  {step}
-                </li>
-              ))}
-            </ol>
-          </div>
-        </div>
-      </section>
-
-      {/* FAQ Section */}
-      <section className="bg-[var(--gray-bg)] py-16 px-[5%]">
-        <h2 className="text-[28px] font-extrabold text-center mb-10 text-[var(--text-dark)]">{t('faq.title')}</h2>
-        <div className="max-w-[760px] mx-auto flex flex-col gap-2">
-          {faqs.map((faq, index) => {
-            const isOpen = expandedFaq === index;
-            return (
-              <div key={index} className={`bg-white rounded-xl border overflow-hidden ${isOpen ? "border-[var(--gold)]/30" : "border-[var(--gray-mid)]"}`}>
-                <button
-                  onClick={() => setExpandedFaq(isOpen ? null : index)}
-                  className="w-full text-left bg-transparent border-none py-[18px] px-5 font-['Sora'] text-[15px] font-semibold text-[var(--text-dark)] cursor-pointer flex justify-between items-center gap-4"
-                >
-                  {faq.q}
-                  <span className={`w-6 h-6 rounded-full bg-[var(--gray-bg)] flex items-center justify-center text-[12px] shrink-0 transition-transform ${isOpen ? "rotate-180" : ""}`}>▾</span>
-                </button>
-                {isOpen && (
-                  <div className="px-5 pb-[18px] text-sm text-[var(--gray-text)] leading-[1.7]">
-                    {faq.a}
+      {/* Unified Container Section */}
+      <div className="bg-[#F8F5ED] py-12 px-4">
+        <div className="max-w-5xl mx-auto bg-white rounded-3xl border border-[var(--gray-mid)] shadow-sm p-6 md:p-12 space-y-16">
+          
+          {/* Steps Section */}
+          <div>
+            <h2 className="text-2xl font-extrabold text-[var(--navy)] text-center mb-10">{t('badge')}</h2>
+            <div className="max-w-3xl mx-auto">
+              {steps.map((step, index) => (
+                <div key={step.number} className="flex gap-7 mb-12 relative last:mb-0">
+                  {index < steps.length - 1 && (
+                    <div className="absolute left-[23px] top-[52px] w-0.5 h-[calc(100%-20px)] bg-[var(--gray-mid)]" />
+                  )}
+                  <div className="w-12 h-12 rounded-full bg-[var(--navy)] flex items-center justify-center font-['Sora'] text-base font-extrabold text-[var(--gold)] shrink-0 relative z-[1]">
+                    {step.number}
                   </div>
-                )}
-              </div>
-            );
-          })}
-        </div>
-      </section>
+                  <div className="pt-2.5">
+                    <h3 className="text-lg font-bold text-[var(--text-dark)] mb-2">{step.title}</h3>
+                    <p className="text-[15px] text-[var(--gray-text)] leading-[1.7]">{step.description}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
 
-      {/* CTA Section */}
-      <section className="bg-[var(--navy)] py-16 px-[5%] text-center">
-        <h2 className="text-[30px] font-extrabold text-white mb-3">{t('cta.title')}</h2>
-        <p className="text-white/60 text-[15px] mb-8">{t('cta.description')}</p>
-        <div className="flex gap-3 justify-center flex-wrap">
-          <Link
-            href="/plans"
-            className="inline-flex items-center gap-2 bg-[var(--gold)] text-white border-none rounded-3xl px-8 py-3 font-['Sora'] font-bold text-[15px] cursor-pointer hover:bg-[var(--gold-light)] hover:translate-y-[-2px] hover:shadow-[0_8px_24px_rgba(201,168,76,0.3)] transition-all no-underline"
-          >
-            {t('cta.browse')}
-          </Link>
-          <Link
-            href="/support"
-            className="inline-flex items-center px-7 py-3 border-[1.5px] border-white/30 rounded-3xl bg-transparent text-white font-['Sora'] font-semibold text-sm cursor-pointer hover:bg-white/10 hover:border-white/50 transition-all no-underline"
-          >
-            {t('cta.support')}
-          </Link>
+            {/* Why Cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-16">
+              {whyCards.map((card) => (
+                <div key={card.title} className="bg-[var(--gray-bg)] border border-[var(--gray-mid)] rounded-2xl p-6 hover:border-[var(--gold)]/40 transition-colors">
+                  <span className="text-[28px] block mb-3">{card.icon}</span>
+                  <h4 className="text-[15px] font-bold text-[var(--text-dark)] mb-2">{card.title}</h4>
+                  <p className="text-[13px] text-[var(--gray-text)] leading-[1.6]">{card.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Divider */}
+          <div className="h-px bg-[var(--gray-mid)]" />
+
+          {/* Compatible Devices */}
+          <div>
+            <h2 className="text-2xl font-extrabold text-center mb-2 text-[var(--text-dark)]">{t('compatibility.title')}</h2>
+            <p className="text-center text-[var(--gray-text)] mb-10 text-[15px]">{t('compatibility.subtitle')}</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {compatibleDevices.map((device) => (
+                <div key={device.brand} className="bg-[var(--gray-bg)] border border-[var(--gray-mid)] rounded-2xl p-6">
+                  <div className="font-['Sora'] text-[15px] font-bold text-[var(--text-dark)] mb-3.5 flex items-center gap-2">
+                    {device.brand}
+                  </div>
+                  <ul className="flex flex-col gap-2">
+                    {device.models.map((model) => (
+                      <li key={model} className="text-[13px] text-[var(--gray-text)] flex items-center gap-2">
+                        <span className="text-[var(--gold)] font-bold text-[12px]">✓</span>
+                        {model}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Divider */}
+          <div className="h-px bg-[var(--gray-mid)]" />
+
+          {/* Installation Guide */}
+          <div>
+            <h2 className="text-2xl font-extrabold text-center mb-2 text-[var(--text-dark)]">{t('installation.title')}</h2>
+            <p className="text-center text-[var(--gray-text)] mb-10 text-[15px]">{t('installation.subtitle')}</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+              {/* iOS */}
+              <div className="bg-[var(--gray-bg)] border border-[var(--gray-mid)] rounded-2xl p-7">
+                <h3 className="text-base font-bold mb-5 text-[var(--text-dark)] flex items-center gap-2">🍎 {t('installation.ios.title')}</h3>
+                <ol className="flex flex-col gap-3">
+                  {(t.raw('installation.ios.steps') as string[]).map((step, i) => (
+                    <li key={i} className="flex gap-3 text-sm text-[var(--gray-text)] leading-[1.5]">
+                      <span className="w-[22px] h-[22px] rounded-full bg-[var(--navy)] text-white text-[11px] font-bold flex items-center justify-center shrink-0 font-['Sora']">{i + 1}</span>
+                      {step}
+                    </li>
+                  ))}
+                </ol>
+              </div>
+              {/* Android */}
+              <div className="bg-[var(--gray-bg)] border border-[var(--gray-mid)] rounded-2xl p-7">
+                <h3 className="text-base font-bold mb-5 text-[var(--text-dark)] flex items-center gap-2">🤖 {t('installation.android.title')}</h3>
+                <ol className="flex flex-col gap-3">
+                  {(t.raw('installation.android.steps') as string[]).map((step, i) => (
+                    <li key={i} className="flex gap-3 text-sm text-[var(--gray-text)] leading-[1.5]">
+                      <span className="w-[22px] h-[22px] rounded-full bg-[var(--navy)] text-white text-[11px] font-bold flex items-center justify-center shrink-0 font-['Sora']">{i + 1}</span>
+                      {step}
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            </div>
+          </div>
+
+          {/* Divider */}
+          <div className="h-px bg-[var(--gray-mid)]" />
+
+          {/* FAQ Section */}
+          <div>
+            <h2 className="text-2xl font-extrabold text-center mb-10 text-[var(--text-dark)]">{t('faq.title')}</h2>
+            <div className="max-w-3xl mx-auto flex flex-col gap-2">
+              {faqs.map((faq, index) => {
+                const isOpen = expandedFaq === index;
+                return (
+                  <div key={index} className={`bg-white rounded-xl border overflow-hidden transition-colors ${isOpen ? "border-[var(--gold)]/60 shadow-sm" : "border-[var(--gray-mid)]"}`}>
+                    <button
+                      onClick={() => setExpandedFaq(isOpen ? null : index)}
+                      className="w-full text-left bg-transparent border-none py-[18px] px-5 font-['Sora'] text-[15px] font-semibold text-[var(--text-dark)] cursor-pointer flex justify-between items-center gap-4 hover:text-[var(--gold)] transition-colors"
+                    >
+                      {faq.q}
+                      <span className={`w-6 h-6 rounded-full bg-[var(--gray-bg)] flex items-center justify-center text-[12px] shrink-0 transition-transform ${isOpen ? "rotate-180 text-[var(--gold)]" : ""}`}>▾</span>
+                    </button>
+                    {isOpen && (
+                      <div className="px-5 pb-[18px] text-sm text-[var(--gray-text)] leading-[1.7] border-t border-[var(--gray-mid)]/30 pt-3">
+                        {faq.a}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* CTA Banner inside container */}
+          <div className="bg-[var(--navy)] rounded-3xl p-8 md:p-12 text-center relative overflow-hidden shadow-lg border border-[rgba(255,255,255,0.05)]">
+            <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:20px_20px]" />
+            <div className="relative z-10">
+              <h2 className="text-2xl md:text-3xl font-extrabold text-white mb-3">{t('cta.title')}</h2>
+              <p className="text-white/60 text-[15px] mb-8 max-w-lg mx-auto">{t('cta.description')}</p>
+              <div className="flex gap-3 justify-center flex-wrap">
+                <Link
+                  href="/plans"
+                  className="inline-flex items-center gap-2 bg-[var(--gold)] text-white border-none rounded-3xl px-8 py-3 font-['Sora'] font-bold text-[15px] cursor-pointer hover:bg-[var(--gold-light)] hover:translate-y-[-2px] hover:shadow-[0_8px_24px_rgba(201,168,76,0.3)] transition-all no-underline"
+                >
+                  {t('cta.browse')}
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+                <Link
+                  href="/support"
+                  className="inline-flex items-center px-7 py-3 border-[1.5px] border-white/30 rounded-3xl bg-transparent text-white font-['Sora'] font-semibold text-sm cursor-pointer hover:bg-white/10 hover:border-white/50 transition-all no-underline"
+                >
+                  {t('cta.support')}
+                </Link>
+              </div>
+            </div>
+          </div>
+
         </div>
-      </section>
+      </div>
 
       <Footer />
     </main>

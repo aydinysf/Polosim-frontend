@@ -469,6 +469,7 @@
     }
   },
   "Cart": {
+    "yourPlans": "Paketleriniz",
     "title": "Alışveriş Sepeti",
     "header": "Sepetiniz",
     "inCart": "sepetinizde bulunuyor",
@@ -485,7 +486,11 @@
     "empty": "Sepetiniz boş",
     "backToPlans": "Planlara Geri Dön",
     "items": "Ürünler",
-    "summary": "Sipariş Özeti"
+    "summary": "Sipariş Özeti",
+    "acceptedPayments": "Kabul Edilen Ödeme Yöntemleri",
+    "needHelp": "Yardıma mı ihtiyacınız var?",
+    "helpText": "Sorularınız için 7/24 destek hattımızı arayabilirsiniz.",
+    "contactSupport": "Destek ile İletişime Geç"
   },
   "VerifyEmail": {
     "title": "E-postanızı Doğrulayın",

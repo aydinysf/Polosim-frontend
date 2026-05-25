@@ -469,6 +469,7 @@
     }
   },
   "Cart": {
+    "yourPlans": "Your Packages",
     "title": "Shopping Cart",
     "header": "Your Cart",
     "inCart": "plans in your cart",
@@ -485,7 +486,11 @@
     "empty": "Your cart is empty",
     "backToPlans": "Back to Plans",
     "items": "Items",
-    "summary": "Order Summary"
+    "summary": "Order Summary",
+    "acceptedPayments": "Accepted Payment Methods",
+    "needHelp": "Need help?",
+    "helpText": "Feel free to contact our support team 24/7.",
+    "contactSupport": "Contact Support"
   },
   "VerifyEmail": {
     "title": "Verify Your Email",
