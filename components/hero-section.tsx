@@ -23,22 +23,22 @@ interface SearchResult {
 
 const FlagDisplay = ({ flag, name, size = "md" }: { flag?: string; name: string; size?: "sm" | "md" | "lg" }) => {
   if (!flag) return <span className={size === "sm" ? "text-xs" : size === "md" ? "text-lg" : "text-3xl"}>🌍</span>;
-  
+
   const isPath = flag.includes("/") || flag.includes(".");
   const url = isPath ? getImageUrl(flag) : getFlagFromISO(flag);
-  
+
   if (!url) return <span className={size === "sm" ? "text-xs" : size === "md" ? "text-lg" : "text-3xl"}>🌍</span>;
-  
+
   const sizeClasses = {
     sm: "w-5 h-4",
     md: "w-8 h-6",
     lg: "w-10 h-7"
   };
-  
+
   return (
-    <img 
-      src={url} 
-      alt={name} 
+    <img
+      src={url}
+      alt={name}
       className={`${sizeClasses[size]} rounded-sm object-cover shadow-sm`}
       onError={(e) => {
         (e.target as HTMLImageElement).style.display = "none";
@@ -151,22 +151,22 @@ export function HeroSection() {
     setTimeout(() => setAddedToCart(null), 2000);
   };
 
-  const filteredSuggestions = searchQuery.length > 0 
+  const filteredSuggestions = searchQuery.length > 0
     ? [
-        ...countries.filter(c => c.name.toLowerCase().includes(searchQuery.toLowerCase())).map(c => ({
-          type: "country" as const,
-          name: c.name,
-          flag: c.flag_url || c.iso_code,
-          id: c.id
-        })),
-        ...regions.filter(r => getLocalizedText(r.name).toLowerCase().includes(searchQuery.toLowerCase())).map(r => ({
-          type: "region" as const,
-          name: getLocalizedText(r.name),
-          flag: (r as any).icon || "🌍",
-          region: r.slug,
-          id: r.id
-        }))
-      ]
+      ...countries.filter(c => c.name.toLowerCase().includes(searchQuery.toLowerCase())).map(c => ({
+        type: "country" as const,
+        name: c.name,
+        flag: c.flag_url || c.iso_code,
+        id: c.id
+      })),
+      ...regions.filter(r => getLocalizedText(r.name).toLowerCase().includes(searchQuery.toLowerCase())).map(r => ({
+        type: "region" as const,
+        name: getLocalizedText(r.name),
+        flag: (r as any).icon || "🌍",
+        region: r.slug,
+        id: r.id
+      }))
+    ]
     : [];
 
   if (showSearchResults) {
@@ -179,7 +179,7 @@ export function HeroSection() {
         <div className="relative z-10 max-w-7xl mx-auto px-[5%]">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
             <div>
-              <button 
+              <button
                 onClick={() => setShowSearchResults(false)}
                 className="flex items-center gap-2 text-[var(--gold)] font-bold mb-4 hover:opacity-70 transition-all bg-transparent border-none p-0 cursor-pointer"
               >
@@ -190,7 +190,7 @@ export function HeroSection() {
                 {t('searchResultsTitle', { query: searchQuery })}
               </h2>
             </div>
-            
+
             <div className="w-full max-w-[400px]">
               <div className="relative flex items-center bg-white rounded-2xl pl-4 pr-1 py-1 shadow-lg">
                 <Search className="w-4 h-4 text-[#9CA3AF]" />
@@ -202,7 +202,7 @@ export function HeroSection() {
                   onKeyDown={(e) => e.key === "Enter" && handleSearch()}
                   className="border-0 bg-transparent focus-visible:ring-0 text-[var(--text-dark)] h-10"
                 />
-                <Button 
+                <Button
                   onClick={() => handleSearch()}
                   className="bg-[var(--gold)] hover:bg-[var(--gold-light)] rounded-xl px-5"
                 >
@@ -223,7 +223,7 @@ export function HeroSection() {
                 const name = getLocalizedText(product.name, "", locale);
                 const data = product.data_amount || product.data_limit || product.data || "";
                 const validity = product.validity?.toString().includes("Day") ? product.validity : `${product.validity} Days`;
-                
+
                 return (
                   <div key={product.id} className="bg-white rounded-2xl overflow-hidden border border-[var(--gray-mid)] hover:border-[var(--gold)] transition-all hover:translate-y-[-2px] hover:shadow-lg flex flex-col h-full group">
                     <div className="p-5 flex flex-col h-full">
@@ -271,8 +271,8 @@ export function HeroSection() {
           ) : (
             <div className="text-center py-20 bg-white/5 rounded-3xl border border-white/10">
               <p className="text-white/60 text-lg">{t('noResultsFound')}</p>
-              <Button 
-                variant="link" 
+              <Button
+                variant="link"
                 onClick={() => router.push("/plans")}
                 className="text-[var(--gold)] font-bold mt-2"
               >
@@ -373,9 +373,9 @@ export function HeroSection() {
                   onClick={() => router.push(`/plans?search=${encodeURIComponent(localizedName)}`)}
                 >
                   {flagSrc && (
-                    <img 
-                      src={flagSrc} 
-                      alt={localizedName} 
+                    <img
+                      src={flagSrc}
+                      alt={localizedName}
                       className="w-5 h-4 rounded-sm object-cover"
                     />
                   )}
