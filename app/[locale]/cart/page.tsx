@@ -63,7 +63,7 @@ export default function CartPage() {
                   </Button>
                 </Link>
               </div>
-              
+
               {/* Trust Badges */}
               <div className="bg-[var(--gray-bg)] border-t border-[var(--gray-mid)] py-8 px-6">
                 <div className="flex flex-wrap items-center justify-center gap-8">
@@ -174,7 +174,7 @@ export default function CartPage() {
                     </div>
                   ))}
                 </div>
-                
+
                 {/* Continue Shopping Link */}
                 <div className="pt-2">
                   <Link href="/plans" className="inline-flex items-center gap-2 text-[var(--gold)] font-semibold hover:opacity-70 transition-all">
@@ -202,7 +202,7 @@ export default function CartPage() {
                       <span className="text-[var(--gray-text)] font-medium">{t('taxes') || 'Vergiler'}</span>
                       <span className="text-[var(--navy)] font-semibold">€0.00</span>
                     </div>
-                    
+
                     <div className="border-t border-[var(--gray-mid)] pt-4">
                       <div className="flex justify-between items-center">
                         <span className="text-[var(--navy)] font-bold text-lg">{t('total') || 'Toplam'}</span>
