@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { Signal, Clock, Star, ArrowUpDown, ChevronDown, Filter, Globe, Wifi, Check, MapPin, Loader2 } from "lucide-react";
+import { Signal, Clock, Star, ArrowUpDown, ChevronDown, Filter, Globe, Wifi, Check, MapPin, Loader2, SlidersHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -95,8 +95,6 @@ export default function PlansPage() {
   const [filterPriceRange, setFilterPriceRange] = useState<[number, number]>([0, 100]);
   const [showFilters, setShowFilters] = useState(false);
 
-  const [addedToCart, setAddedToCart] = useState<number | null>(null);
-
   // API data
   const [products, setProducts] = useState<Product[]>([]);
   const [regions, setRegions] = useState<Region[]>([]);
@@ -112,7 +110,7 @@ export default function PlansPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [paginationMeta, setPaginationMeta] = useState<PaginationMeta | null>(null);
 
-  const { addItem } = useCart();
+  const { items, addItem, removeItem } = useCart();
 
   // Debounce search query
   useEffect(() => {
@@ -182,9 +180,6 @@ export default function PlansPage() {
         setCountries(countriesData);
 
         // If no region is selected and no initial region, select the first one by default
-        if (!selectedRegionId && !initialRegion && regionsData.length > 0) {
-          setSelectedRegionId(regionsData[0].id);
-        }
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -246,33 +241,34 @@ export default function PlansPage() {
           setSelectedRegionId(matched.id);
         }
       } else if (!initializedRef.current) {
-        // Default to first region if no initial region specified
-        setSelectedRegionId(regions[0].id);
         initializedRef.current = true;
       }
     }
   }, [initialRegion, regions]);
 
-  const handleAddToCart = (product: Product) => {
-    const name = getProductName(product);
-    const data = getProductData(product);
-    const validity = getProductValidity(product);
-    const speed = getProductSpeed(product);
+  const handleToggleCart = (product: Product) => {
+    const isItemInCart = items.some(item => item.id === product.id);
+    if (isItemInCart) {
+      removeItem(product.id);
+    } else {
+      const name = getProductName(product);
+      const data = getProductData(product);
+      const validity = getProductValidity(product);
+      const speed = getProductSpeed(product);
 
-    const cartItem = {
-      id: product.id,
-      name,
-      description: getLocalizedText(product.description, "", locale) || `${data} ${t('labels.dataPlan')}`,
-      priceInCents: Math.round((product.price || 0) * 100),
-      flag: product.flag_url || product.country?.flag_url || "",
-      data,
-      validity,
-      speed: speed || "4G/LTE",
-      region: getLocalizedText(product.region_name, "", locale),
-    };
-    addItem(cartItem);
-    setAddedToCart(product.id);
-    setTimeout(() => setAddedToCart(null), 2000);
+      const cartItem = {
+        id: product.id,
+        name,
+        description: getLocalizedText(product.description, "", locale) || `${data} ${t('labels.dataPlan')}`,
+        priceInCents: Math.round((product.price || 0) * 100),
+        flag: product.flag_url || product.country?.flag_url || "",
+        data,
+        validity,
+        speed: speed || "4G/LTE",
+        region: getLocalizedText(product.region_name, "", locale),
+      };
+      addItem(cartItem);
+    }
   };
 
   // Filter products (Search only, as sorting and other filters are server-side)
@@ -362,12 +358,26 @@ export default function PlansPage() {
     "hover:border-amber-400/60",
   ];
 
+  const selectedCountry = countries.find(c => c.id === selectedCountryId);
+  const selectedRegion = regions.find(r => r.id === selectedRegionId);
+  
+  let displayTitle = "";
+  if (selectedCountry) {
+    displayTitle = t('labels.packages', { country: selectedCountry.name });
+  } else if (selectedRegion) {
+    displayTitle = t('labels.packages', { country: getLocalizedText(selectedRegion.name, "", locale) });
+  } else if (searchQuery) {
+    displayTitle = t('labels.packages', { country: searchQuery });
+  } else {
+    displayTitle = viewMode === "regions" ? t('tabs.regions') : t('labels.esimPlans');
+  }
+
   return (
     <main className="min-h-screen bg-background">
       <Navbar />
 
       {/* Hero Section */}
-      <section className="bg-[var(--navy)] pt-14 pb-12 px-[5%] relative text-center">
+      <section className="bg-[var(--navy)] pt-48 pb-12 px-[5%] relative text-center">
 
 
         <div className="relative max-w-7xl mx-auto text-center">
@@ -429,15 +439,15 @@ export default function PlansPage() {
                             const rawFlag = country.flag_url;
                             const isPath = rawFlag && (rawFlag.includes('.') || rawFlag.includes('/'));
                             const url = isPath ? getImageUrl(rawFlag) : getFlagFromISO(country.iso_code);
-                            return url ? <img src={url} alt="" className="w-6 h-4 object-cover rounded-sm" /> : "🏳️";
+                            return url ? <img src={url} alt="" className="w-6 h-4 object-cover flag-wave" /> : "🏳️";
                           })()
                           : (() => {
                             const icon = (item as Region).icon;
                             const isPath = icon && (icon.includes('/') || icon.includes('.'));
                             const url = isPath ? getImageUrl(icon) : null;
                             return url ? (
-                              <div className="relative w-6 h-6 rounded-sm overflow-hidden">
-                                <Image src={url} alt="" fill className="object-cover" sizes="24px" />
+                              <div className="relative w-7 h-5 overflow-hidden">
+                                <Image src={url} alt="" fill className="object-cover flag-wave" sizes="28px" />
                               </div>
                             ) : (icon || "🌍");
                           })()}
@@ -465,261 +475,162 @@ export default function PlansPage() {
       </section>
 
       {/* Filters & Content */}
-      <section className="pb-24 px-4 bg-[#F8F5ED]">
+      <section className="pb-24 px-4 bg-[#F5F7FA]">
         <div className="max-w-7xl mx-auto pt-8">
-          {/* Filter Bar - Elegant Gold/Navy Theme */}
-          <div className="flex flex-col gap-6 mb-8">
-            {/* Main Filter Bar */}
-            <div className="bg-white rounded-2xl border border-[var(--gray-mid)] shadow-sm p-5">
-              <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-                {/* Left: Filter Button + Region Pills */}
-                <div className="flex flex-wrap items-center gap-2">
-                  {/* Filter Toggle Button */}
-                  <button
-                    onClick={() => setShowFilters(!showFilters)}
-                    className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                      showFilters 
-                        ? 'bg-[var(--gold)] text-white' 
-                        : 'bg-white border border-[var(--gold)] text-[var(--gold)] hover:bg-[var(--gold)]/10'
-                    }`}
-                  >
-                    <Filter className="w-4 h-4" />
-                    {t('filters.title')}
-                    {(filterData || filterValidity || filterPriceRange[0] > 0 || filterPriceRange[1] < 100) && (
-                      <span className="ml-1 w-5 h-5 rounded-full bg-white text-[var(--gold)] text-[10px] font-bold flex items-center justify-center">
-                        {(filterData ? 1 : 0) + (filterValidity ? 1 : 0) + ((filterPriceRange[0] > 0 || filterPriceRange[1] < 100) ? 1 : 0)}
-                      </span>
-                    )}
-                  </button>
+          {/* Header & Sticky Filter Bar */}
+          <div className="mb-12 sticky top-[160px] z-40 bg-[#F5F7FA]/95 backdrop-blur-md pt-4 pb-4 -mx-4 px-4 sm:mx-0 sm:px-0 sm:pt-6 border-b border-[var(--gray-mid)]">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-bold text-[var(--navy)]">
+                {displayTitle}
+              </h3>
+              <button 
+                onClick={() => setShowFilters(!showFilters)}
+                className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all ${
+                  showFilters 
+                    ? 'bg-[var(--gold)] text-white' 
+                    : 'bg-white border border-[var(--gray-mid)] text-[var(--navy)] hover:border-[var(--gold)] hover:text-[var(--gold)] shadow-sm'
+                }`}
+              >
+                <SlidersHorizontal className="w-4 h-4" />
+                {t('labels.advancedSearch')}
+                {(filterData || filterValidity || filterPriceRange[0] > 0 || filterPriceRange[1] < 100) && (
+                  <span className="ml-1 w-5 h-5 rounded-full bg-white text-[var(--gold)] text-[10px] font-bold flex items-center justify-center">
+                    {(filterData ? 1 : 0) + (filterValidity ? 1 : 0) + ((filterPriceRange[0] > 0 || filterPriceRange[1] < 100) ? 1 : 0)}
+                  </span>
+                )}
+              </button>
+            </div>
 
-                  {viewMode === "plans" && (
-                    <>
-                      {/* Region Pills */}
-                      {regions.slice(0, 6).map((region) => (
+            {/* Expandable Filters & Sorting Panel */}
+            {showFilters && (
+              <div className="mt-4 mb-2 p-4 sm:p-6 bg-white rounded-2xl shadow-sm border border-[var(--gray-mid)]">
+                <div className="flex flex-col lg:flex-row gap-6 justify-between lg:items-center">
+                  <div className="flex flex-col sm:flex-row gap-6 flex-1">
+                    {/* Data Filter */}
+                    <div className="space-y-2">
+                      <label className="text-xs font-semibold text-[var(--gray-text)] uppercase tracking-wider">{t('filters.dataAmount')}</label>
+                      <div className="flex flex-wrap gap-2">
                         <button
-                          key={region.id}
-                          onClick={() => { setSelectedRegionId(region.id === selectedRegionId ? null : region.id); setSearchQuery(""); }}
-                          className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                            selectedRegionId === region.id
-                              ? "bg-[var(--gold)] text-white shadow-sm"
-                              : "bg-white border border-[var(--gray-mid)] text-[var(--navy)] hover:border-[var(--gold)] hover:text-[var(--gold)]"
-                          }`}
-                        >
-                          {(() => {
-                            const icon = region.icon;
-                            const isPath = icon && (icon.includes('/') || icon.includes('.'));
-                            const url = isPath ? getImageUrl(icon) : null;
-                            return url ? (
-                              <div className="relative w-4 h-4 rounded-sm overflow-hidden">
-                                <Image src={url} alt="" fill className="object-cover" sizes="16px" />
-                              </div>
-                            ) : null;
-                          })()}
-                          {getLocalizedText(region.name, "", locale)}
-                        </button>
-                      ))}
-
-                      {/* Best Sellers */}
-                      <button
-                        onClick={() => setShowBestSellers(!showBestSellers)}
-                        className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                          showBestSellers
-                            ? "bg-[var(--gold)] text-white shadow-sm"
-                            : "bg-white border border-[var(--gray-mid)] text-[var(--navy)] hover:border-[var(--gold)] hover:text-[var(--gold)]"
-                        }`}
-                      >
-                        <Star className={`w-4 h-4 ${showBestSellers ? "fill-white" : ""}`} />
-                        {t('filters.bestSellers')}
-                      </button>
-                    </>
-                  )}
-                </div>
-
-                {/* Right: Sort Dropdown */}
-                <div className="relative flex-shrink-0">
-                  <button
-                    onClick={() => setSortMenuOpen(!sortMenuOpen)}
-                    onBlur={() => setTimeout(() => setSortMenuOpen(false), 150)}
-                    className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium bg-white border border-[var(--gray-mid)] text-[var(--navy)] hover:border-[var(--gold)] transition-all"
-                  >
-                    <ArrowUpDown className="w-4 h-4 text-[var(--gold)]" />
-                    {sortOptions.find((opt) => opt.key === sortBy)?.label}
-                    <ChevronDown className={`w-4 h-4 text-[var(--gray-text)] transition-transform ${sortMenuOpen ? "rotate-180" : ""}`} />
-                  </button>
-                  {sortMenuOpen && (
-                    <div className="absolute top-full right-0 mt-2 bg-white border border-[var(--gray-mid)] rounded-xl shadow-lg overflow-hidden z-50 min-w-[220px]">
-                      {sortOptions.filter(o => viewMode === "regions" ? o.key !== "data-high" : true).map((option) => (
-                        <button
-                          key={option.key}
-                          onClick={() => { setSortBy(option.key); setSortMenuOpen(false); }}
-                          className={`w-full px-4 py-3 text-left text-sm hover:bg-[var(--gray-bg)] transition-colors ${
-                            sortBy === option.key 
-                              ? "text-[var(--gold)] font-semibold bg-[var(--gold)]/5" 
-                              : "text-[var(--navy)]"
-                          }`}
-                        >
-                          {option.label}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {/* Expanded Filters Panel */}
-              {showFilters && (
-                <div className="pt-5 mt-5 border-t border-[var(--gray-mid)] grid grid-cols-1 md:grid-cols-3 gap-8">
-                  {/* Data Filter */}
-                  <div className="space-y-3">
-                    <label className="text-sm font-semibold text-[var(--navy)]">{t('filters.dataAmount')}</label>
-                    <div className="flex flex-wrap gap-2">
-                      <button
-                        onClick={() => setFilterData(null)}
-                        className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
-                          !filterData 
-                            ? 'bg-[var(--gold)] text-white' 
-                            : 'bg-[var(--gray-bg)] text-[var(--navy)] hover:bg-[var(--gold)]/10 border border-transparent hover:border-[var(--gold)]'
-                        }`}
-                      >
-                        {t('filters.any')}
-                      </button>
-                      {dataFilterOptions.map(opt => (
-                        <button
-                          key={opt.value}
-                          onClick={() => setFilterData(filterData === opt.value ? null : opt.value)}
+                          onClick={() => { setFilterData(null); setCurrentPage(1); }}
                           className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
-                            filterData === opt.value 
-                              ? 'bg-[var(--gold)] text-white' 
-                              : 'bg-[var(--gray-bg)] text-[var(--navy)] hover:bg-[var(--gold)]/10 border border-transparent hover:border-[var(--gold)]'
+                            !filterData ? 'bg-[var(--gold)] text-white shadow-sm' : 'bg-[#F5F7FA] text-[var(--navy)] hover:bg-[var(--gray-mid)] border border-[var(--gray-mid)]'
                           }`}
                         >
-                          {opt.label}
+                          {t('filters.any')}
                         </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Validity Filter */}
-                  <div className="space-y-3">
-                    <label className="text-sm font-semibold text-[var(--navy)]">{t('filters.duration')}</label>
-                    <div className="flex flex-wrap gap-2">
-                      <button
-                        onClick={() => setFilterValidity(null)}
-                        className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
-                          !filterValidity 
-                            ? 'bg-[var(--gold)] text-white' 
-                            : 'bg-[var(--gray-bg)] text-[var(--navy)] hover:bg-[var(--gold)]/10 border border-transparent hover:border-[var(--gold)]'
-                        }`}
-                      >
-                        {t('filters.any')}
-                      </button>
-                      {validityFilterOptions.map(opt => (
-                        <button
-                          key={opt.value}
-                          onClick={() => setFilterValidity(filterValidity === opt.value ? null : opt.value)}
-                          className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
-                            filterValidity === opt.value 
-                              ? 'bg-[var(--gold)] text-white' 
-                              : 'bg-[var(--gray-bg)] text-[var(--navy)] hover:bg-[var(--gold)]/10 border border-transparent hover:border-[var(--gold)]'
-                          }`}
-                        >
-                          {opt.label}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Price Filter */}
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <label className="text-sm font-semibold text-[var(--navy)]">{t('filters.priceRange')}</label>
-                      <span className="text-sm font-bold text-[var(--gold)]">€{filterPriceRange[0]} - €{filterPriceRange[1]}</span>
-                    </div>
-                    <Slider
-                      defaultValue={[0, 100]}
-                      max={100}
-                      step={1}
-                      value={filterPriceRange}
-                      onValueChange={(val) => setFilterPriceRange(val as [number, number])}
-                      className="py-2 [&_[role=slider]]:bg-[var(--gold)] [&_[role=slider]]:border-[var(--gold)] [&_.bg-primary]:bg-[var(--gold)]"
-                    />
-                  </div>
-                </div>
-              )}
-
-              {/* Pagination - Elegant Style */}
-              {viewMode === "plans" && totalPages > 1 && (
-                <div className="flex items-center justify-center gap-1 pt-5 mt-5 border-t border-[var(--gray-mid)]">
-                  <button
-                    onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
-                    disabled={currentPage === 1}
-                    className="w-9 h-9 rounded-lg flex items-center justify-center border border-[var(--gray-mid)] text-[var(--navy)] hover:border-[var(--gold)] hover:text-[var(--gold)] disabled:opacity-40 disabled:cursor-not-allowed transition-all"
-                  >
-                    <ChevronLeft className="h-4 w-4" />
-                  </button>
-
-                  <div className="flex items-center gap-1 mx-2">
-                    {(() => {
-                      const lastPage = totalPages;
-                      const pages: (number | string)[] = [];
-
-                      if (lastPage <= 10) {
-                        for (let i = 1; i <= lastPage; i++) pages.push(i);
-                      } else {
-                        pages.push(1, 2, 3);
-                        const endStart = lastPage - 3;
-                        if (currentPage > 3 && currentPage < endStart) {
-                          if (currentPage > 4) pages.push('...');
-                          pages.push(currentPage);
-                          if (currentPage < endStart - 1) pages.push('...');
-                        } else {
-                          pages.push('...');
-                        }
-                        for (let i = endStart; i <= lastPage; i++) {
-                          if (!pages.includes(i)) pages.push(i);
-                        }
-                      }
-
-                      return pages.map((page, index) => {
-                        if (page === '...') {
-                          return <span key={`ellipsis-${index}`} className="px-2 text-[var(--gray-text)]">...</span>;
-                        }
-                        const p = page as number;
-                        return (
+                        {dataFilterOptions.map(opt => (
                           <button
-                            key={p}
-                            onClick={() => setCurrentPage(p)}
-                            className={`w-9 h-9 rounded-lg text-sm font-medium transition-all ${
-                              currentPage === p
-                                ? "bg-[var(--gold)] text-white shadow-sm"
-                                : "border border-[var(--gray-mid)] text-[var(--navy)] hover:border-[var(--gold)] hover:text-[var(--gold)]"
+                            key={opt.value}
+                            onClick={() => { setFilterData(filterData === opt.value ? null : opt.value); setCurrentPage(1); }}
+                            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                              filterData === opt.value ? 'bg-[var(--gold)] text-white shadow-sm' : 'bg-[#F5F7FA] text-[var(--navy)] hover:bg-[var(--gray-mid)] border border-[var(--gray-mid)]'
                             }`}
                           >
-                            {p}
+                            {opt.label}
                           </button>
-                        );
-                      });
-                    })()}
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Validity Filter */}
+                    <div className="space-y-2">
+                      <label className="text-xs font-semibold text-[var(--gray-text)] uppercase tracking-wider">{t('filters.duration')}</label>
+                      <div className="flex flex-wrap gap-2">
+                        <button
+                          onClick={() => { setFilterValidity(null); setCurrentPage(1); }}
+                          className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                            !filterValidity ? 'bg-[var(--gold)] text-white shadow-sm' : 'bg-[#F5F7FA] text-[var(--navy)] hover:bg-[var(--gray-mid)] border border-[var(--gray-mid)]'
+                          }`}
+                        >
+                          {t('filters.any')}
+                        </button>
+                        {validityFilterOptions.map(opt => (
+                          <button
+                            key={opt.value}
+                            onClick={() => { setFilterValidity(filterValidity === opt.value ? null : opt.value); setCurrentPage(1); }}
+                            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                              filterValidity === opt.value ? 'bg-[var(--gold)] text-white shadow-sm' : 'bg-[#F5F7FA] text-[var(--navy)] hover:bg-[var(--gray-mid)] border border-[var(--gray-mid)]'
+                            }`}
+                          >
+                            {opt.label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Price Filter */}
+                    <div className="space-y-2 flex-1 max-w-xs">
+                      <div className="flex items-center justify-between">
+                        <label className="text-xs font-semibold text-[var(--gray-text)] uppercase tracking-wider">{t('filters.priceRange')}</label>
+                        <span className="text-xs font-bold text-[var(--gold)]">€{filterPriceRange[0]} - €{filterPriceRange[1]}</span>
+                      </div>
+                      <Slider
+                        defaultValue={[0, 100]}
+                        max={100}
+                        step={1}
+                        value={filterPriceRange}
+                        onValueChange={(val) => { setFilterPriceRange(val as [number, number]); setCurrentPage(1); }}
+                        className="py-2 [&_[role=slider]]:bg-[var(--gold)] [&_[role=slider]]:border-[var(--gold)] [&_.bg-primary]:bg-[var(--gold)]"
+                      />
+                    </div>
                   </div>
 
-                  <button
-                    onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
-                    disabled={currentPage === totalPages}
-                    className="w-9 h-9 rounded-lg flex items-center justify-center border border-[var(--gray-mid)] text-[var(--navy)] hover:border-[var(--gold)] hover:text-[var(--gold)] disabled:opacity-40 disabled:cursor-not-allowed transition-all"
-                  >
-                    <ChevronRight className="h-4 w-4" />
-                  </button>
+                  {/* Right: Sort Dropdown & Best Sellers */}
+                  <div className="flex flex-wrap gap-3 items-center self-start lg:self-center">
+                    {/* Best Sellers Toggle */}
+                    <button
+                      onClick={() => { setShowBestSellers(!showBestSellers); setCurrentPage(1); }}
+                      className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold transition-all ${
+                        showBestSellers
+                          ? "bg-[var(--gold)] text-white shadow-sm"
+                          : "bg-white border border-[var(--gray-mid)] text-[var(--navy)] hover:border-[var(--gold)] hover:text-[var(--gold)] shadow-sm"
+                      }`}
+                    >
+                      <Star className={`w-4 h-4 ${showBestSellers ? "fill-white" : ""}`} />
+                      {t('filters.bestSellers')}
+                    </button>
+
+                    {/* Sort Dropdown */}
+                    <div className="relative">
+                      <button
+                        onClick={() => setSortMenuOpen(!sortMenuOpen)}
+                        onBlur={() => setTimeout(() => setSortMenuOpen(false), 150)}
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold bg-white border border-[var(--gray-mid)] text-[var(--navy)] hover:border-[var(--gold)] transition-all shadow-sm"
+                      >
+                        <ArrowUpDown className="w-4 h-4 text-[var(--gold)]" />
+                        {sortOptions.find((opt) => opt.key === sortBy)?.label}
+                        <ChevronDown className={`w-4 h-4 text-[var(--gray-text)] transition-transform ${sortMenuOpen ? "rotate-180" : ""}`} />
+                      </button>
+                      {sortMenuOpen && (
+                        <div className="absolute top-full right-0 mt-2 bg-white border border-[var(--gray-mid)] rounded-xl shadow-lg overflow-hidden z-50 min-w-[220px]">
+                          {sortOptions.filter(o => viewMode === "regions" ? o.key !== "data-high" : true).map((option) => (
+                            <button
+                              key={option.key}
+                              onClick={() => { setSortBy(option.key); setSortMenuOpen(false); setCurrentPage(1); }}
+                              className={`w-full px-4 py-3 text-left text-sm hover:bg-[var(--gray-bg)] transition-colors ${
+                                sortBy === option.key 
+                                  ? "text-[var(--gold)] font-semibold bg-[var(--gold)]/5" 
+                                  : "text-[var(--navy)]"
+                              }`}
+                            >
+                              {option.label}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
                 </div>
-              )}
-            </div>
+              </div>
+            )}
           </div>
 
           {/* Results Count - Styled */}
-          <p className="text-sm font-medium text-[var(--gray-text)] mb-6">
-            {viewMode === "plans"
-              ? t('results.plansCount', { count: filteredProducts.length })
-              : t('results.regionsCount', { count: filteredRegions.length })}
-          </p>
+          {viewMode === "plans" && (
+            <p className="text-sm font-medium text-[var(--gray-text)] mb-6">
+              {t('results.plansCount', { count: filteredProducts.length })}
+            </p>
+          )}
 
           {/* Loading State */}
           {(isLoading || isLoadingProducts) && (
@@ -732,149 +643,177 @@ export default function PlansPage() {
           {viewMode === "plans" && !isLoading && !isLoadingProducts && (
             <div className="flex flex-col gap-8">
               <div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 gap-y-12 pt-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                   {paginatedProducts.map((product) => {
                     const name = getProductName(product, locale);
                     const data = getProductData(product);
                     const validity = getProductValidity(product, t);
                     const speed = getProductSpeed(product);
-                    const bestSeller = isBestSeller(product);
+                    
+                    const raw = product.country?.image_url || product.image_url || product.flag_url || product.country?.flag_url;
+                    const isPath = raw && (raw.includes('.') || raw.includes('/'));
+                    const url = isPath ? getImageUrl(raw) : getFlagFromISO(product.country?.iso_code);
+
+                    const isItemInCart = items.some(item => item.id === product.id);
 
                     return (
                       <div
                         key={product.id}
-                        className="group relative rounded-2xl border-[1.5px] border-[var(--gold)] bg-white transition-all duration-200 hover:shadow-lg cursor-pointer pt-10 mt-8"
+                        onClick={() => handleToggleCart(product)}
+                        className={`bg-white rounded-2xl border px-6 py-4 flex items-center justify-between transition-all shadow-sm cursor-pointer ${
+                          isItemInCart
+                            ? "border-[var(--gold)]"
+                            : "border-[var(--gray-mid)] hover:border-[var(--gold)]"
+                        }`}
                       >
-                        {bestSeller && (
-                          <div className="absolute top-3 right-3 z-10">
-                            <Badge className="bg-[rgba(201,168,76,0.15)] text-[var(--gold)] border border-[rgba(201,168,76,0.3)] hover:bg-[rgba(201,168,76,0.2)]">
-                              <Star className="w-3 h-3 mr-1 fill-[var(--gold)]" />
-                              {t('labels.bestSeller')}
-                            </Badge>
-                          </div>
-                        )}
-                        {/* Floating Region Icon - Half outside card */}
-                        <div className="absolute -top-8 left-1/2 -translate-x-1/2 w-16 h-16 rounded-full border-2 border-[var(--gold)] bg-[#F8F5ED] flex items-center justify-center overflow-hidden z-10">
-                          {(() => {
-                            const raw = product.country?.image_url || product.image_url || product.flag_url || product.country?.flag_url;
-                            const isPath = raw && (raw.includes('.') || raw.includes('/'));
-                            const url = isPath ? getImageUrl(raw) : getFlagFromISO(product.country?.iso_code);
-                            if (!url) return <Globe className="w-8 h-8 text-[var(--navy)]" />;
-                            return (
-                              <img
-                                src={url}
-                                alt={name}
-                                className="w-full h-full object-cover"
-                                onError={(e) => {
-                                  (e.target as HTMLImageElement).style.display = 'none';
-                                  (e.target as HTMLImageElement).parentElement!.innerHTML = `<svg class="w-8 h-8 text-[var(--navy)]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><path d="M2 12h20"/></svg>`;
-                                }}
-                              />
-                            );
-                          })()}
+                        <div className="flex flex-col gap-1">
+                           <div className="flex items-center gap-2">
+                             {url ? (
+                               <img src={url} alt={name} className="w-7 h-5 object-cover flag-wave" />
+                             ) : (
+                               <Globe className="w-5 h-5 text-[var(--gray-text)]" />
+                             )}
+                             <span className="text-xs font-semibold text-[var(--gray-text)] uppercase tracking-wider truncate max-w-[120px]" title={name}>{name}</span>
+                           </div>
+                           <div className="flex items-center gap-3">
+                              <span className="text-lg sm:text-xl font-extrabold text-[var(--navy)]">{data}</span>
+                              <span className="text-sm font-medium text-[var(--gray-text)]">{validity}</span>
+                           </div>
                         </div>
-
-                        <div className="px-4 pb-4 flex flex-col items-center text-center">
-                          {/* Title */}
-                          <h3 className="font-bold text-[var(--navy)] text-base mb-3">{name}</h3>
-
-                          {/* Feature Badges Row - Rectangular, side by side */}
-                          <div className="flex items-center justify-center gap-1.5 mb-4 w-full">
-                            {/* Data Badge */}
-                            <span className="inline-flex items-center gap-1 px-2 py-1 rounded-md border border-[var(--gold)] bg-white text-[11px] font-medium text-[var(--navy)]">
-                              <Signal className="w-3 h-3 text-[var(--gold)]" />
-                              {data}
-                            </span>
-                            {/* Duration Badge */}
-                            <span className="inline-flex items-center gap-1 px-2 py-1 rounded-md border border-[var(--gold)] bg-white text-[11px] font-medium text-[var(--navy)]">
-                              <Clock className="w-3 h-3 text-[var(--gold)]" />
-                              {validity}
-                            </span>
-                            {/* Speed Badge */}
-                            {speed && (
-                              <span className="inline-flex items-center gap-1 px-2 py-1 rounded-md border border-[var(--gold)] bg-white text-[11px] font-medium text-[var(--navy)]">
-                                <Wifi className="w-3 h-3 text-[var(--gold)]" />
-                                {speed}
-                              </span>
-                            )}
-                          </div>
-
-                          {/* Price & Buy Button Row */}
-                          <div className="flex items-center justify-between w-full pt-3 border-t border-[var(--gray-mid)]">
-                            <span className="text-lg font-bold text-black">€ {product.price}</span>
-                            <Button
-                              size="sm"
-                              className={`rounded-md px-4 h-8 text-xs font-semibold transition-all ${addedToCart === product.id ? "bg-emerald-500 hover:bg-emerald-600 text-white" : "bg-[var(--navy)] hover:bg-[var(--navy-mid)] text-white"}`}
-                              onClick={() => handleAddToCart(product)}
-                            >
-                              {addedToCart === product.id ? (
-                                <><Check className="w-3 h-3 mr-1" />{t('cta.added')}</>
-                              ) : (
-                                t('cta.buy')
-                              )}
-                            </Button>
-                          </div>
+                        
+                        <div className="flex items-center gap-4 shrink-0">
+                           <span className="text-lg sm:text-xl font-extrabold text-[var(--navy)] tracking-tight">
+                              €{product.price?.toFixed(2) || '0.00'}
+                           </span>
+                           <button
+                             onClick={(e) => { e.stopPropagation(); handleToggleCart(product); }}
+                             className={`w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all shrink-0 ${
+                               isItemInCart
+                                 ? "bg-[var(--gold)] border-[var(--gold)] text-white"
+                                 : "bg-white border-[var(--gray-mid)] text-transparent hover:border-[var(--gold)] hover:text-[var(--gold)]"
+                             }`}
+                           >
+                             {isItemInCart ? (
+                               <Check className="w-4 h-4" />
+                             ) : (
+                               <div className="w-4 h-4 rounded-full bg-transparent group-hover:bg-[var(--gold)]" />
+                             )}
+                           </button>
                         </div>
                       </div>
                     );
                   })}
                 </div>
+
+                {/* Pagination */}
+                {totalPages > 1 && (
+                  <div className="flex items-center justify-center gap-2 pt-8 mt-8 border-t border-[var(--gray-mid)]">
+                    <button
+                      onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                      disabled={currentPage === 1}
+                      className="w-10 h-10 rounded-xl flex items-center justify-center bg-white border border-[var(--gray-mid)] text-[var(--navy)] hover:border-[var(--gold)] hover:text-[var(--gold)] disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-sm"
+                    >
+                      <ChevronLeft className="h-5 w-5" />
+                    </button>
+
+                    <div className="flex items-center gap-2 px-2">
+                      {(() => {
+                        const lastPage = totalPages;
+                        const pages = [];
+
+                        if (lastPage <= 10) {
+                          for (let i = 1; i <= lastPage; i++) pages.push(i);
+                        } else {
+                          pages.push(1, 2, 3);
+                          const endStart = lastPage - 3;
+                          if (currentPage > 3 && currentPage < endStart) {
+                            if (currentPage > 4) pages.push('...');
+                            pages.push(currentPage);
+                            if (currentPage < endStart - 1) pages.push('...');
+                          } else {
+                            pages.push('...');
+                          }
+                          for (let i = endStart; i <= lastPage; i++) {
+                            if (!pages.includes(i)) pages.push(i);
+                          }
+                        }
+
+                        return pages.map((page, index) => {
+                          if (page === '...') {
+                            return <span key={`ellipsis-${index}`} className="px-2 text-[var(--gray-text)] font-bold">...</span>;
+                          }
+                          const p = page as number;
+                          return (
+                            <button
+                              key={p}
+                              onClick={() => setCurrentPage(p)}
+                              className={`w-10 h-10 rounded-xl flex items-center justify-center text-sm font-bold transition-all shadow-sm ${
+                                currentPage === p
+                                  ? "bg-[var(--gold)] text-white border border-[var(--gold)]"
+                                  : "bg-white border border-[var(--gray-mid)] text-[var(--navy)] hover:border-[var(--gold)] hover:text-[var(--gold)]"
+                              }`}
+                            >
+                              {p}
+                            </button>
+                          );
+                        });
+                      })()}
+                    </div>
+
+                    <button
+                      onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                      disabled={currentPage === totalPages}
+                      className="w-10 h-10 rounded-xl flex items-center justify-center bg-white border border-[var(--gray-mid)] text-[var(--navy)] hover:border-[var(--gold)] hover:text-[var(--gold)] disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-sm"
+                    >
+                      <ChevronRight className="h-5 w-5" />
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           )}
 
           {/* Regions Grid */}
           {viewMode === "regions" && !isLoading && filteredRegions.length > 0 && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 gap-y-12 pt-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
               {filteredRegions.map((region) => {
                 const regionName = getLocalizedText(region.name, t('labels.region'), locale);
                 const countryCount = region.countries_count || 0;
                 const startingPrice = region.starting_price || 0;
+                
+                const icon = region.icon;
+                const isPath = icon && (icon.includes('/') || icon.includes('.'));
+                const url = isPath ? getImageUrl(icon) : null;
 
                 return (
                   <button
                     key={region.id}
-                    className="group relative rounded-2xl border-[1.5px] border-[var(--gold)] bg-white text-center transition-all duration-200 hover:shadow-lg cursor-pointer flex flex-col items-center pt-10 pb-4 px-4"
+                    className="bg-white rounded-2xl border border-[var(--gray-mid)] px-4 py-4 sm:px-6 flex items-center justify-between hover:border-[var(--gold)] transition-colors shadow-sm text-left w-full"
                     onClick={() => {
                       setViewMode("plans");
                       setSelectedRegionId(region.id);
                     }}
                   >
-                    {/* Floating Region Icon - Half outside card */}
-                    <div className="absolute -top-8 left-1/2 -translate-x-1/2 w-16 h-16 rounded-full border-2 border-[var(--gold)] bg-[#F8F5ED] flex items-center justify-center overflow-hidden z-10">
-                      {(() => {
-                        const icon = region.icon;
-                        const isPath = icon && (icon.includes('/') || icon.includes('.'));
-                        const url = isPath ? getImageUrl(icon) : null;
-                        return url ? (
-                          <img src={url} alt="" className="w-full h-full object-cover" />
-                        ) : (
-                          <Globe className="w-8 h-8 text-[var(--navy)]" />
-                        );
-                      })()}
-                    </div>
-
-                    {/* Title */}
-                    <h3 className="text-base font-bold text-[var(--navy)] mb-3">{regionName}</h3>
-
-                    {/* Feature Badges Row - Rectangular */}
-                    <div className="flex items-center justify-center gap-1.5 mb-4 w-full">
-                      {countryCount > 0 && (
-                        <span className="inline-flex items-center gap-1 px-2 py-1 rounded-md border border-[var(--gold)] bg-white text-[11px] font-medium text-[var(--navy)]">
-                          <MapPin className="w-3 h-3 text-[var(--gold)]" />
-                          {countryCount} {t('labels.countries')}
-                        </span>
-                      )}
-                    </div>
-
-                    {/* Price & Explore Button Row */}
-                    <div className="flex items-center justify-between w-full pt-3 border-t border-[var(--gray-mid)] mt-auto">
-                      {startingPrice > 0 ? (
-                        <span className="text-lg font-bold text-black">€ {startingPrice.toFixed(2)}</span>
+                    <div className="flex items-center gap-4">
+                      {url ? (
+                         <img src={url} alt={regionName} className="w-10 h-7 object-cover flag-wave shrink-0" />
                       ) : (
-                        <span className="text-sm text-[var(--gray-text)]">{t('labels.from')}</span>
+                         <Globe className="w-10 h-10 text-[var(--gray-text)] shrink-0" />
                       )}
-                      <span className="rounded-md px-4 py-1.5 text-xs font-semibold bg-[var(--navy)] text-white group-hover:bg-[var(--navy-mid)] transition-all">
+                      <div className="flex flex-col">
+                        <span className="text-lg font-bold text-[var(--navy)]">{regionName}</span>
+                        {countryCount > 0 && (
+                          <span className="text-xs font-medium text-[var(--gray-text)]">{countryCount} {t('labels.countries')}</span>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-4 shrink-0">
+                      <div className="flex flex-col items-end hidden sm:flex">
+                         <span className="text-[10px] text-[var(--gray-text)] uppercase font-semibold">{t('labels.from')}</span>
+                         <span className="text-lg font-extrabold text-[var(--navy)] tracking-tight">€{startingPrice.toFixed(2)}</span>
+                      </div>
+                      <span className="bg-[var(--navy)] text-white text-xs font-semibold px-4 py-2 rounded-lg hover:bg-[var(--navy-mid)] transition-colors shrink-0">
                         {t('cta.explore')}
                       </span>
                     </div>

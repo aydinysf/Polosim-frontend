@@ -28,7 +28,7 @@
     "viewAll": "Hepsini Gör",
     "popularRegions": "Popüler Bölgeler",
     "viewAllRegions": "Tüm Bölgeleri Gör",
-    "plansAvailable": "eSIM Planları Mevcut",
+    "plansAvailable": "eSIM Planları",
     "countriesCount": "{count}+ ülke",
     "mainHeading": "Dünyayı <gold>eSIM</gold> Özgürlüğüyle Keşfedin, <gold>Roaming</gold> Ücretlerine Elveda Deyin.",
     "searchResultsTitle": "\"{query}\" için Sonuçlar",
@@ -114,6 +114,15 @@
     "bottom": {
       "available": "200'den fazla ülkede kullanılabilir",
       "secure": "Güvenli ödemeler"
+    },
+    "contact": {
+      "title": "İletişim",
+      "address": "Adres",
+      "phone": "Telefon",
+      "fax": "Faks",
+      "email": "E-Posta",
+      "web": "Web",
+      "taxNo": "Vergi No"
     }
   },
   "Plans": {
@@ -165,8 +174,12 @@
       "instant": "Anında",
       "from": "Başlangıç",
       "countriesCount": "{count} ülke",
+      "regionCountries": "{region} Ülkeleri ({count} ülke)",
+      "advancedSearch": "Detaylı Ara",
       "countries": "Ülke",
       "region": "Bölge",
+      "packages": "{country} Paketleri",
+      "esimPlans": "eSIM Planları",
       "dataPlan": "Veri Planı"
     },
     "cta": {
@@ -182,30 +195,30 @@
   },
   "Features": {
     "title": "Neden POLO SIM?",
-    "subtitle": "En son teknoloji eSIM teknolojimizle mobil bağlantının geleceğini deneyimleyin.",
+    "subtitle": "En son eSIM teknolojimizle mobil bağlantının geleceğini deneyimleyin.",
     "instantActivation": {
-      "title": "Anında Aktivasyon",
-      "description": "Dakikalar içinde bağlanın. Fiziksel SIM teslimatını beklemenize gerek yok - sadece QR kodunu tarayın ve çevrimiçi olun."
+      "title": "Anında Etkinleştirme",
+      "description": "Satın aldıktan hemen sonra kurulum yapın. Dakikalar içinde bağlanın; fiziksel SIM kart beklemenize gerek yok."
     },
-    "noRoamingFees": {
-      "title": "Roaming Ücreti Yok",
-      "description": "Pahalı roaming ücretlerine veda edin. Şeffaf fiyatlandırmamız, eve döndüğünüzde sürpriz faturalar olmayacağı anlamına gelir."
+    "noRoaming": {
+      "title": "Dolaşım Ücreti Yok",
+      "description": "Yurt dışına seyahat ederken sürpriz ücretler yok. Şeffaf fiyatlandırma ve yerel fiyatlar ile bağlantıda kalın."
     },
     "globalCoverage": {
-      "title": "Küresel Kapsama",
-      "description": "200'den fazla ülke ve bölgede kapsama. Tüm uluslararası seyahat ihtiyaçlarınız için tek bir eSIM."
+      "title": "Küresel Kapsam",
+      "description": "200'den fazla ülke ve bölgede kapsama alanı. Dünyanın neresinde olursanız olun bağlantıda kalın."
     },
-    "flexibleValidity": {
-      "title": "Esnek Geçerlilik",
-      "description": "7 günden 30 güne kadar planlar"
+    "flexibleOptions": {
+      "title": "Esnek Seçenekler",
+      "description": "1 ila 30 gün arasında esneklik"
     },
-    "easyTopUps": {
+    "easyTopUp": {
       "title": "Kolay Yükleme",
-      "description": "Her zaman, her yerde daha fazla veri ekleyin"
+      "description": "Planınızı süresi dolmadan yenileyin"
     },
     "support247": {
       "title": "7/24 Destek",
-      "description": "İhtiyacınız olduğunda uzman yardımı"
+      "description": "Bağlantıda kalmanıza yardımcı olmak için her zaman buradayız"
     }
   },
   "Support": {
@@ -222,10 +235,22 @@
       "commonQuestions": "Sıkça Sorulan Sorular"
     },
     "quickLinks": {
-      "setup": { "title": "Kurulum Rehberi", "desc": "eSIM nasıl kurulur adım adım" },
-      "status": { "title": "Sipariş Durumu", "desc": "Siparişinizi takip edin" },
-      "troubleshoot": { "title": "Bağlantı Sorunu", "desc": "Bağlantı sorunlarını giderin" },
-      "payment": { "title": "Ödeme ve İade", "desc": "Ödeme ve iade politikası" }
+      "setup": {
+        "title": "Kurulum Rehberi",
+        "desc": "eSIM nasıl kurulur adım adım"
+      },
+      "status": {
+        "title": "Sipariş Durumu",
+        "desc": "Siparişinizi takip edin"
+      },
+      "troubleshoot": {
+        "title": "Bağlantı Sorunu",
+        "desc": "Bağlantı sorunlarını giderin"
+      },
+      "payment": {
+        "title": "Ödeme ve İade",
+        "desc": "Ödeme ve iade politikası"
+      }
     },
     "popularArticles": "Popüler Makaleler",
     "categories": {
@@ -555,7 +580,8 @@
       "length": "Şifre en az 8 karakter olmalıdır",
       "terms": "Lütfen kullanım koşullarını kabul edin",
       "general": "Bir hata oluştu. Lütfen tekrar deneyin."
-    }
+    },
+    "alreadyHaveAccount": "Zaten bir hesabınız var mı?"
   },
   "Auth": {
     "welcomeTitle": "POLO SIM'e Hoş Geldiniz",
@@ -596,10 +622,22 @@
       }
     },
     "features": {
-      "instant": { "title": "Anında Teslimat", "desc": "Satın alma işleminden saniyeler sonra eSIM QR kodunuzu alın. Bekleme yok, kargo yok." },
-      "secure": { "title": "Güvenli Bağlantı", "desc": "Verileriniz tüm ağlarda kurumsal düzeyde şifrelemeyle korunur." },
-      "support": { "title": "7/24 Destek", "desc": "Destek ekibimiz herhangi bir sorun için gece gündüz yardıma hazır." },
-      "global": { "title": "Küresel Kapsama", "desc": "Dünya genelinde 200'den fazla ülke ve bölgede yüksek hızlı veriye erişin." }
+      "instant": {
+        "title": "Anında Teslimat",
+        "desc": "Satın alma işleminden saniyeler sonra eSIM QR kodunuzu alın. Bekleme yok, kargo yok."
+      },
+      "secure": {
+        "title": "Güvenli Bağlantı",
+        "desc": "Verileriniz tüm ağlarda kurumsal düzeyde şifrelemeyle korunur."
+      },
+      "support": {
+        "title": "7/24 Destek",
+        "desc": "Destek ekibimiz herhangi bir sorun için gece gündüz yardıma hazır."
+      },
+      "global": {
+        "title": "Küresel Kapsama",
+        "desc": "Dünya genelinde 200'den fazla ülke ve bölgede yüksek hızlı veriye erişin."
+      }
     },
     "compatibility": {
       "title": "Uyumlu Cihazlar",
@@ -654,5 +692,12 @@
       "browse": "Planlara Gözat",
       "support": "Desteğe Başvur"
     }
+  },
+  "PopularDestinations": {
+    "badge": "Popüler Bölgeler",
+    "title": "Dünyayı Keşfedin",
+    "subtitle": "En popüler bölgesel planlarımızdan birini seçin ve yolculuğunuz sizi nereye götürürse götürsün bağlantıda kalın.",
+    "popular": "Popüler",
+    "viewAll": "Tüm Bölgeleri Görüntüle"
   }
 }

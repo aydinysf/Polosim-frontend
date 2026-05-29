@@ -33,7 +33,7 @@ export default async function RootLayout({
   const awaitedParams = await params;
   const { locale } = awaitedParams;
   // Ensure that the incoming `locale` is valid
-  if (!['en', 'tr'].includes(locale as any)) {
+  if (!routing.locales.includes(locale as any)) {
     notFound();
   }
  
@@ -44,7 +44,7 @@ export default async function RootLayout({
   const messages = await getMessages();
  
   return (
-    <html lang={locale}>
+    <html lang={locale} dir={locale === 'ar' ? 'rtl' : 'ltr'}>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />

@@ -15,9 +15,10 @@ interface SearchHeaderProps {
   title: string;
   subtitle?: string;
   badge?: string;
+  icon?: React.ReactNode;
 }
 
-export function SearchHeader({ title, subtitle, badge }: SearchHeaderProps) {
+export function SearchHeader({ title, subtitle, badge, icon }: SearchHeaderProps) {
   const router = useRouter();
   const locale = useLocale();
   const t = useTranslations("Hero");
@@ -80,7 +81,7 @@ export function SearchHeader({ title, subtitle, badge }: SearchHeaderProps) {
   };
 
   return (
-    <section className="bg-[var(--navy)] pt-40 pb-16 px-[5%] relative overflow-hidden text-center">
+    <section className="bg-[var(--navy)] pt-48 pb-16 px-[5%] relative overflow-hidden text-center">
       <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:30px_30px]" />
       
       <div className="relative max-w-7xl mx-auto text-center z-20">
@@ -90,9 +91,17 @@ export function SearchHeader({ title, subtitle, badge }: SearchHeaderProps) {
           </div>
         )}
         
-        <h1 className="text-[38px] font-extrabold text-white mb-3 tracking-tight">
-          {title}
-        </h1>
+        <div className="flex items-center justify-center gap-5 mb-4">
+          {icon && (
+            <div className="w-16 h-16 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center shadow-[0_0_30px_rgba(255,255,255,0.1)] relative group overflow-hidden shrink-0">
+              <div className="absolute inset-0 bg-gradient-to-tr from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+              {icon}
+            </div>
+          )}
+          <h1 className="text-[42px] font-extrabold text-white tracking-tight drop-shadow-sm">
+            {title}
+          </h1>
+        </div>
         
         {subtitle && (
           <p className="text-[15px] text-white/60 max-w-[520px] mx-auto mb-8 leading-[1.6]">
@@ -153,7 +162,7 @@ export function SearchHeader({ title, subtitle, badge }: SearchHeaderProps) {
                             ? getImageUrl(rawFlag)
                             : getFlagFromISO(country.iso_code);
                           return url ? (
-                            <img src={url} alt="" className="w-6 h-4 object-cover rounded-sm" />
+                            <img src={url} alt="" className="w-6 h-4 object-cover flag-wave" />
                           ) : (
                             "🏳️"
                           );

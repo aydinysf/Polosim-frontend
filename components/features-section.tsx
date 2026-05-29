@@ -9,40 +9,40 @@ export function FeaturesSection() {
   const mainFeatures = [
     {
       icon: Zap,
-      title: "Anında Aktivasyon",
-      description: "Satın alımdan hemen sonra kurulum. Dakikalar içinde bağlantı sağlayın - fiziksel SIM kart beklemeye gerek yok.",
+      title: t('instantActivation.title'),
+      description: t('instantActivation.description'),
     },
     {
       icon: X,
-      title: "Roaming Ücreti Yok",
-      description: "Yurtdışı seyahat sürprizleriyle karşılaşmayın. Şeffaf fiyatlandırma ve yeraltı oranlarıyla bağlı kalın.",
+      title: t('noRoaming.title'),
+      description: t('noRoaming.description'),
     },
     {
       icon: Globe,
-      title: "Küresel Kapsama",
-      description: "200'den fazla ülke ve bölgede kapsama. Dünyanın neresinde olursanız olun bağlı kalın.",
+      title: t('globalCoverage.title'),
+      description: t('globalCoverage.description'),
     },
   ];
 
   const bottomFeatures = [
     {
       icon: Clock,
-      title: "Esnek Seçenekler",
-      description: "1 günden 30 güne kadar esneklik",
+      title: t('flexibleOptions.title'),
+      description: t('flexibleOptions.description'),
       iconBg: "bg-[#FFF4E5]",
       iconColor: "text-[#F59E0B]",
     },
     {
       icon: CreditCard,
-      title: "Kolay Yükleme",
-      description: "Her saniye bir satışla fayda sağlamaktadır",
+      title: t('easyTopUp.title'),
+      description: t('easyTopUp.description'),
       iconBg: "bg-[#E8F5E9]",
       iconColor: "text-[#22C55E]",
     },
     {
       icon: Headphones,
-      title: "7/24 Destek",
-      description: "Müşteriye solusyolaşmada yardım",
+      title: t('support247.title'),
+      description: t('support247.description'),
       iconBg: "bg-[#E0F2FE]",
       iconColor: "text-[#0EA5E9]",
     },
@@ -56,10 +56,10 @@ export function FeaturesSection() {
           {/* Section header */}
           <div className="mb-10">
             <h2 className="text-[28px] md:text-[32px] font-bold mb-3 text-white">
-              Neden POLO SIM?
+              {t('title')}
             </h2>
             <p className="text-white/60 text-[14px] md:text-[15px] max-w-[550px] mx-auto leading-relaxed">
-              En son teknoloji eSIM teknolojimizle mobil bağlantının geleceğini deneyimleyin.
+              {t('subtitle')}
             </p>
           </div>
 
@@ -88,7 +88,7 @@ export function FeaturesSection() {
       </section>
 
       {/* Bottom Features Strip - Light Background */}
-      <section className="py-10 px-[5%] bg-[#F9FAFB]">
+      <section className="py-10 px-[5%] bg-[#F5F7FA]">
         <div className="max-w-[1100px] mx-auto">
           <div className="bg-white rounded-xl shadow-sm border border-[var(--gray-mid)] overflow-hidden">
             <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-gray-100">

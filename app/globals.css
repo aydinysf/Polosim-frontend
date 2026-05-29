@@ -152,3 +152,22 @@
     }
   }
 }
+
+/* ===== Waving Flag Animation ===== */
+@keyframes flag-wave {
+  0%   { transform: skewY(0deg) scaleX(1); }
+  15%  { transform: skewY(1.5deg) scaleX(0.97); }
+  30%  { transform: skewY(-1deg) scaleX(0.99); }
+  45%  { transform: skewY(2deg) scaleX(0.96); }
+  60%  { transform: skewY(-0.5deg) scaleX(0.98); }
+  75%  { transform: skewY(1deg) scaleX(0.97); }
+  100% { transform: skewY(0deg) scaleX(1); }
+}
+
+.flag-wave {
+  animation: flag-wave 2.4s ease-in-out infinite;
+  transform-origin: left center;
+  display: inline-block;
+  border-radius: 0 !important;
+}
+

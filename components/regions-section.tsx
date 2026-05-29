@@ -30,6 +30,7 @@ function GlobeIcon({ className }: { className?: string }) {
 
 export function RegionsSection() {
   const router = useRouter();
+  const t = useTranslations('Hero');
   const [displayRegions, setDisplayRegions] = useState<any[]>(defaultRegions);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -64,18 +65,18 @@ export function RegionsSection() {
   }, []);
   
   return (
-    <section className="py-16 px-[5%] bg-[#FAF9F6] relative overflow-hidden">
+    <section className="py-16 px-[5%] bg-[#F5F7FA] relative overflow-hidden">
       <div className="max-w-[1200px] mx-auto relative z-10">
         {/* Section header */}
         <div className="flex items-center justify-between mb-10">
           <h2 className="text-[24px] md:text-[28px] font-bold text-[var(--text-dark)]">
-            Bölgeleri Keşfet
+            {t('popularRegions')}
           </h2>
           <button 
             className="text-[13px] font-semibold text-black hover:text-[var(--gray-text)] bg-transparent border-none p-0 cursor-pointer transition-colors"
             onClick={() => router.push("/plans?view=regions")}
           >
-            Hepsini Gör
+            {t('viewAllRegions')}
           </button>
         </div>
 
@@ -85,10 +86,10 @@ export function RegionsSection() {
             <div
               key={region.id + '-' + index}
               className="group relative bg-white rounded-2xl pt-8 pb-4 px-4 text-center border border-[var(--gray-mid)] hover:border-[var(--gold)] hover:shadow-lg transition-all duration-300 cursor-pointer flex flex-col items-center"
-              onClick={() => router.push(`/plans?search=${region.name}`)}
+              onClick={() => router.push(`/region/${region.originalId || region.id}`)}
             >
               {/* Floating Globe Icon */}
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-14 h-14 rounded-full bg-[#FAF9F6] border border-[var(--gray-mid)] group-hover:border-[var(--gold)] flex items-center justify-center transition-all shadow-sm">
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-14 h-14 rounded-full bg-[#F5F7FA] border border-[var(--gray-mid)] group-hover:border-[var(--gold)] flex items-center justify-center transition-all shadow-sm">
                 <div className="w-10 h-10 rounded-full bg-[#C9A84C] flex items-center justify-center overflow-hidden">
                   {region.icon && (region.icon.startsWith('http') || region.icon.includes('/')) ? (
                     <img 
@@ -111,10 +112,7 @@ export function RegionsSection() {
                 {region.name}
               </h3>
               
-              <div className="flex flex-col items-center gap-0.5 text-[12px] text-[var(--gray-text)]">
-                <span className="font-semibold text-[var(--gold)]">{region.price}</span>
-                <span>{region.validity}</span>
-              </div>
+
             </div>
           ))}
         </div>

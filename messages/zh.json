@@ -1,0 +1,713 @@
+{
+  "HomePage": {
+    "title": "一个模拟一个世界",
+    "description": "全球 eSIM 市场"
+  },
+  "Navbar": {
+    "destinations": "目的地",
+    "plans": "计划",
+    "howItWorks": "它是如何运作的",
+    "support": "支持",
+    "bayi-girisi": "经销商登录",
+    "login": "登录",
+    "myProfile": "我的个人资料",
+    "logout": "退出",
+    "getStarted": "开始使用"
+  },
+  "Hero": {
+    "title": "",
+    "subtitle": "为 200 多个国家/地区提供即时 eSIM 交付。没有漫游费。保留你的号码。",
+    "searchPlaceholder": "你要去哪里？",
+    "searchButton": "搜索",
+    "bestSeller": "畅销书",
+    "regionalPlans": "区域计划",
+    "countryPlans": "国家计划",
+    "buyNow": "立即购买",
+    "popularDestinations": "热门目的地",
+    "viewAllDestinations": "查看全部 200 多个目的地",
+    "viewAll": "查看全部",
+    "popularRegions": "热门地区",
+    "viewAllRegions": "查看所有地区",
+    "plansAvailable": "eSIM 计划",
+    "countriesCount": "{count}+ 个国家/地区",
+    "mainHeading": "使用 <gold>eSIM</gold> 自由探索世界，告别 <gold> 漫游</gold> 费用。",
+    "searchResultsTitle": "“{query}”的结果",
+    "loadingPlans": "正在加载计划...",
+    "noResultsFound": "未找到匹配的计划。",
+    "viewAllPlans": "查看所有计划"
+  },
+  "Common": {
+    "back": "返回",
+    "instantActivation": "即时激活",
+    "support247": "24/7 支持",
+    "deviceCompatibility": "适用于任何 eSIM 设备",
+    "daysLeft": "{count} 剩余天数",
+    "hotspot": "热点",
+    "instant": "即时",
+    "buy": "购买",
+    "added": "已添加",
+    "details": "详情",
+    "dataUsed": "使用的数据",
+    "getPlan": "获取计划",
+    "noActiveEsim": "无活动 eSIM"
+  },
+  "AccountBenefits": {
+    "title": "为什么要创建帐户？",
+    "subtitle": "使用免费帐户解锁专属权益并轻松管理您的 eSIM。",
+    "trackOrders": {
+      "title": "追踪您的订单",
+      "description": "随时从您的个人资料页面查看您的所有购买和 eSIM 激活。"
+    },
+    "monitorUsage": {
+      "title": "监控使用情况",
+      "description": "从仪表板实时检查您的数据使用情况和剩余余额。"
+    },
+    "affiliateProgram": {
+      "title": "联盟计划",
+      "description": "通过推荐朋友并分享您独特的推荐链接来赚取佣金。"
+    },
+    "exclusiveCampaigns": {
+      "title": "独家活动",
+      "description": "全年享受特别折扣、促销和会员专享优惠。"
+    },
+    "createAccount": "创建免费帐户"
+  },
+  "Legal": {
+    "lastUpdated": "最后更新：{date}",
+    "downloadLabel": "下载 PDF/DOCX",
+    "backLabel": "返回首页",
+    "badge": "法律政策",
+    "termsOfService": {
+      "title": "服务条款"
+    },
+    "privacyPolicy": {
+      "title": "隐私政策"
+    },
+    "refundPolicy": {
+      "title": "退款政策"
+    }
+  },
+  "Footer": {
+    "description": "一个模拟，一个世界。即时激活，无需漫游费，即可在 200 多个国家/地区保持联系。",
+    "product": "产品展示",
+    "company": "公司简介",
+    "support": "支持",
+    "legal": "法律",
+    "links": {
+      "destinations": "目的地",
+      "dataPlans": "数据计划",
+      "regions": "地区",
+      "coverageMap": "覆盖地图",
+      "aboutUs": "关于我们",
+      "careers": "职业机会",
+      "blog": "博客",
+      "press": "按",
+      "helpCenter": "帮助中心",
+      "contactUs": "联系我们",
+      "setupGuide": "设置指南",
+      "deviceCompatibility": "设备兼容性",
+      "privacyPolicy": "隐私政策",
+      "termsOfService": "服务条款",
+      "refundPolicy": "退款政策"
+    },
+    "copyright": "© {year} POLO SIM。版权所有。",
+    "bottom": {
+      "available": "在 200 多个国家/地区提供",
+      "secure": "安全支付"
+    },
+    "contact": {
+      "title": "联系方式",
+      "address": "地址",
+      "phone": "电话",
+      "fax": "传真",
+      "email": "电子邮件",
+      "web": "网站",
+      "taxNo": "税号"
+    }
+  },
+  "Plans": {
+    "hero": {
+      "destinationsAvailable": "超过 200 个目的地可供选择",
+      "browseRegions": "浏览所有地区",
+      "browsePlans": "浏览所有计划",
+      "regionsDescription": "探索我们通过单一套餐覆盖多个国家/地区的区域 eSIM 计划。",
+      "plansDescription": "找到适合您目的地的完美 eSIM 数据计划。即时激活，无漫游费。"
+    },
+    "search": {
+      "regionsPlaceholder": "搜索区域...",
+      "plansPlaceholder": "搜索国家或计划..."
+    },
+    "tabs": {
+      "regions": "地区"
+    },
+    "filters": {
+      "title": "过滤器",
+      "all": "所有计划",
+      "bestSellers": "畅销书",
+      "dataAmount": "数据量",
+      "duration": "持续时间",
+      "priceRange": "价格范围",
+      "any": "任意",
+      "unlimited": "无限"
+    },
+    "sort": {
+      "popular": "最受欢迎",
+      "priceLow": "价格：从低到高",
+      "priceHigh": "价格：从高到低",
+      "dataHigh": "数据：从高到低",
+      "dataLow": "数据：从低到高",
+      "validityHigh": "持续时间：从长到短",
+      "validityLow": "持续时间：从短到长",
+      "nameAz": "名称：A到Z",
+      "nameZa": "名称：Z到A"
+    },
+    "validity": {
+      "days": "{count} 天"
+    },
+    "results": {
+      "plansCount": "显示 {count} 计划",
+      "regionsCount": "显示 {count} 区域"
+    },
+    "labels": {
+      "bestSeller": "畅销书",
+      "hotspot": "热点",
+      "instant": "即时",
+      "from": "来自",
+      "countriesCount": "{count} 个国家",
+      "regionCountries": "{region} 国家（{count} 国家）",
+      "advancedSearch": "过滤和排序",
+      "countries": "国家",
+      "region": "地区",
+      "packages": "{country} 计划",
+      "esimPlans": "eSIM 计划",
+      "dataPlan": "数据计划"
+    },
+    "cta": {
+      "buy": "购买",
+      "added": "已添加",
+      "viewPlans": "查看计划",
+      "explore": "探索"
+    },
+    "empty": {
+      "title": "没有找到结果",
+      "description": "尝试调整您的搜索或过滤器"
+    }
+  },
+  "Features": {
+    "title": "为什么选择 POLO SIM？",
+    "subtitle": "借助我们尖端的 eSIM 技术体验移动连接的未来。",
+    "instantActivation": {
+      "title": "即时激活",
+      "description": "购买后立即设置。只需几分钟即可连接 — 无需等待实体 SIM 卡。"
+    },
+    "noRoaming": {
+      "title": "无漫游费",
+      "description": "出国旅行时不会产生意外费用。与透明的定价和当地费率保持联系。"
+    },
+    "globalCoverage": {
+      "title": "全球覆盖",
+      "description": "覆盖200+国家和地区。无论您身在何处，都可以保持联系。"
+    },
+    "flexibleOptions": {
+      "title": "灵活的选择",
+      "description": "1 至 30 天的灵活性"
+    },
+    "easyTopUp": {
+      "title": "轻松充值",
+      "description": "在计划到期之前更新您的计划"
+    },
+    "support247": {
+      "title": "24/7 支持",
+      "description": "随时帮助您保持联系"
+    }
+  },
+  "Support": {
+    "hero": {
+      "badge": "支持中心",
+      "title": "我们能为您提供什么帮助？",
+      "subtitle": "获得有关设置指南、网络故障排除和计划管理的即时答案。我们的全球团队 24/7 随时待命。",
+      "searchPlaceholder": "例如。如何在 iPhone 上安装...",
+      "searchButton": "搜索",
+      "installationLink": "转至安装和设置指南"
+    },
+    "sections": {
+      "browseByCategory": "按类别浏览",
+      "commonQuestions": "常见问题",
+      "popularArticles": "热门文章"
+    },
+    "quickLinks": {
+      "setup": {
+        "title": "设置指南",
+        "desc": "如何逐步安装 eSIM"
+      },
+      "status": {
+        "title": "订单状态",
+        "desc": "追踪您的订单"
+      },
+      "troubleshoot": {
+        "title": "连接问题",
+        "desc": "解决连接问题"
+      },
+      "payment": {
+        "title": "付款及退款",
+        "desc": "付款和退款政策"
+      }
+    },
+    "categories": {
+      "installation": {
+        "title": "安装与设置",
+        "description": "eSIM 激活分步指南"
+      },
+      "connectivity": {
+        "title": "连接性",
+        "description": "解决网络和速度问题"
+      },
+      "billing": {
+        "title": "账单和计划",
+        "description": "付款、退款和数据使用"
+      },
+      "coverage": {
+        "title": "覆盖范围",
+        "description": "全球目的地和网络合作伙伴"
+      },
+      "account": {
+        "title": "我的帐户",
+        "description": "管理订单和个人资料设置"
+      },
+      "troubleshooting": {
+        "title": "故障排除",
+        "description": "技术问题和错误报告"
+      }
+    },
+    "faq": {
+      "general": {
+        "title": "一般",
+        "q1": {
+          "question": "什么是 eSIM 以及它如何工作？",
+          "answer": "eSIM（嵌入式 SIM）是一种数字 SIM 卡，允许您在不使用物理 SIM 卡的情况下激活蜂窝网络套餐。它内置于您的设备中，可以使用不同的运营商配置文件进行编程。"
+        },
+        "q2": {
+          "question": "我的设备与 eSIM 兼容吗？",
+          "answer": "2018 年之后发布的大多数智能手机都支持 eSIM，包括 iPhone XS 及更新机型、三星 Galaxy S20+ 和 Google Pixel 3+。检查您的设备设置中的“eSIM”或“添加蜂窝网络套餐”。"
+        },
+        "q3": {
+          "question": "我多久能收到我的 eSIM 卡？",
+          "answer": "确认购买后，您的 eSIM 二维码将立即通过电子邮件发送。无需等待实物交付。"
+        }
+      },
+      "technical": {
+        "title": "技术",
+        "q1": {
+          "question": "如何激活我的 eSIM 漫游？",
+          "answer": "转至您的设备设置，选择 POLO SIM 配置文件，并确保“数据漫游”已打开。这是我们的全球数据计划正常运行所必需的。"
+        },
+        "q2": {
+          "question": "我可以在多个设备上使用我的 eSIM 吗？",
+          "answer": "不可以，eSIM 配置文件通常只能安装一次。从设备中删除它通常会导致配置文件无效。请将其安装在您要使用的主要设备上。"
+        }
+      }
+    },
+    "contact": {
+      "title": "还需要帮助吗？",
+      "subtitle": "我们的支持巨星随时在线，随时准备以 12 种语言为您提供帮助。",
+      "whatsappUrl": "https://wa.me/000000000000",
+      "methods": {
+        "liveChat": {
+          "title": "24/7 WhatsApp 支持",
+          "badge": "关于 WhatsApp 的即时帮助",
+          "action": "打开 WhatsApp"
+        },
+        "email": {
+          "title": "电子邮件支持",
+          "badge": "< 2小时响应",
+          "action": "发送电子邮件"
+        },
+        "phone": {
+          "title": "直接致电",
+          "badge": "贵宾专线",
+          "action": "立即致电"
+        }
+      }
+    },
+    "status": {
+      "title": "系统状态",
+      "subtitle": "所有系统均可运行",
+      "esimActivation": "eSIM 激活",
+      "paymentProcessing": "付款处理",
+      "viewDetails": "查看详细状态页面"
+    },
+    "popular": {
+      "installIphone": "如何在 iPhone 上安装 eSIM",
+      "installAndroid": "如何在 Android 上安装 eSIM",
+      "notConnecting": "我的 eSIM 未连接到网络",
+      "checkBalance": "如何查看剩余数据余额",
+      "dualSim": "我可以同时使用 eSIM 和物理 SIM 卡吗？",
+      "topUp": "如何为我现有的 eSIM 充值"
+    }
+  },
+  "Profile": {
+    "title": "公司简介",
+    "myPackages": "我的 eSIM 套餐",
+    "logout": "退出",
+    "memberSince": "自 {date} 起成为会员",
+    "tabs": {
+      "all": "全部",
+      "active": "活跃",
+      "upcoming": "即将推出",
+      "expired": "已过期"
+    },
+    "status": {
+      "active": "活跃",
+      "upcoming": "即将推出",
+      "expired": "已过期"
+    },
+    "package": {
+      "defaultName": "eSIM 封装",
+      "data": "数据",
+      "validity": "有效性",
+      "days": "天数",
+      "remaining": "剩余",
+      "used": "二手",
+      "expires": "过期",
+      "activated": "已激活",
+      "installEsim": "安装 eSIM 卡"
+    },
+    "messages": {
+      "loading": "正在加载包...",
+      "error": "加载包失败。请再试一次。",
+      "copied": "复制到剪贴板",
+      "noPackages": "没有找到包",
+      "deactivated": "您的帐户已被停用。",
+      "deactivateError": "无法停用帐户。请再试一次。",
+      "invalidAmount": "请输入有效金额。",
+      "topupError": "无法启动充值。",
+      "preparing": "正在准备您的个人资料..."
+    },
+    "usage": {
+      "title": "实时使用状态",
+      "realtime": "Real-time:"
+    },
+    "wallet": {
+      "topupTitle": "充值余额",
+      "selectAmount": "选择金额（欧元）",
+      "customAmount": "输入自定义金额",
+      "payWith": "立即使用 {provider} 充值",
+      "cancel": "取消",
+      "redirectNote": "您将被重定向到 {provider}"
+    },
+    "verification": {
+      "title": "需要验证电子邮件",
+      "message": "请验证您的电子邮件地址以解锁所有功能并确保帐户安全。",
+      "button": "输入验证码"
+    },
+    "stats": {
+      "totalPackages": "总套餐数",
+      "activeUnits": "活跃单位",
+      "walletBalance": "钱包余额"
+    },
+    "assets": {
+      "title": "我的 eSIM 资产",
+      "subtitle": "管理和监控您的全球连接",
+      "refresh": "刷新",
+      "buyNewPlan": "购买新计划"
+    },
+    "emptyState": {
+      "title": "没有找到包裹",
+      "description": "您尚未购买此类别的任何计划。",
+      "button": "浏览全球计划"
+    },
+    "card": {
+      "dataVolume": "数据量",
+      "validityPeriod": "有效期",
+      "timelineProgress": "时间表进展"
+    },
+    "modal": {
+      "manualActivation": "手动激活",
+      "smdpAddress": "SM-DP+ 地址",
+      "activationCode": "激活码",
+      "copy": "复制",
+      "installEsim": "安装 eSIM 卡",
+      "qrCode": "二维码",
+      "scanToInstall": "扫描安装",
+      "synchronizing": "正在与网络同步...",
+      "activationInfo": "激活信息",
+      "installByScanning": "使用您的设备扫描安装",
+      "processing": "处理中...",
+      "iccidAddress": "ICCID地址",
+      "planData": "计划数据",
+      "validity": "有效性",
+      "topUp": "充值计划",
+      "renew": "更新计划",
+      "close": "关闭",
+      "generating": "生成...",
+      "order": "订单号"
+    },
+    "deleteAccount": {
+      "button": "删除帐户",
+      "dialogTitle": "停用帐户",
+      "dialogMessage": "这将停用您的帐户并在所有设备上注销您。要重新激活，请联系我们的支持团队。",
+      "cancel": "取消",
+      "confirm": "确认",
+      "processing": "处理中..."
+    }
+  },
+  "Checkout": {
+    "title": "完成付款",
+    "emptyCart": "您的购物车是空的",
+    "addPlans": "添加一些 eSIM 计划以开始使用",
+    "browsePlans": "浏览计划",
+    "backToCart": "返回购物车",
+    "ready": {
+      "continueAs": "继续 {name}",
+      "continueAsGuest": "继续以访客身份",
+      "orderSummary": "订单摘要",
+      "total": "总额",
+      "pay": "支付 ({amount})",
+      "processing": "处理中...",
+      "checkout": "结账"
+    },
+    "success": {
+      "title": "付款成功！",
+      "description": "您的 eSIM 二维码已发送至您的电子邮件地址。",
+      "backToHome": "返回首页",
+      "myOrders": "我的订单",
+      "needHelp": "需要帮助吗？"
+    },
+    "error": {
+      "title": "发生错误",
+      "sessionExpired": "您的会话已过期。请重新登录。",
+      "general": "付款处理期间发生错误。",
+      "guestError": "客人结账时发生错误。",
+      "stripeKeyMissing": "未配置 Stripe 公钥。",
+      "failed": "付款失败",
+      "failedDescription": "付款无法完成。请再试一次。",
+      "tryAgain": "再试一次",
+      "getSupport": "获得支持",
+      "creationError": "创建订单时出错。"
+    },
+    "payment": {
+      "cancelTitle": "付款已取消",
+      "cancelDescription": "付款流程被用户取消或发生错误。没有提出任何指控。",
+      "backToCheckout": "返回结帐",
+      "successTitle": "付款已收到！",
+      "successDescription": "您的付款已成功收到并正在处理中。交易完成后，您的 eSIM 信息将发送到您的电子邮件地址。",
+      "updating": "系统正在更新，请稍候..."
+    }
+  },
+  "Cart": {
+    "yourPlans": "您的包裹",
+    "title": "购物车",
+    "header": "您的购物车",
+    "inCart": "购物车中的计划",
+    "emptyTitle": "您的购物车是空的",
+    "emptySubtitle": "您似乎尚未添加任何计划。为什么不看看我们的超值优惠呢？",
+    "browsePlans": "浏览计划",
+    "continueShopping": "继续购物",
+    "summaryTitle": "订单摘要",
+    "subtotal": "小计",
+    "taxes": "税收",
+    "total": "总计",
+    "checkout": "前往结账",
+    "secureCheckout": "安全结帐 • 256 位 SSL",
+    "empty": "您的购物车是空的",
+    "backToPlans": "返回计划",
+    "items": "项目",
+    "summary": "订单摘要",
+    "acceptedPayments": "接受的付款方式",
+    "needHelp": "需要帮助吗？",
+    "helpText": "请随时联系我们的支持团队 24/7。",
+    "contactSupport": "联系支持人员"
+  },
+  "VerifyEmail": {
+    "title": "验证您的电子邮件",
+    "subtitle": "输入发送到您的电子邮件地址的代码",
+    "emailLabel": "电子邮件地址",
+    "codeLabel": "验证码",
+    "codePlaceholder": "输入 6 位数字代码",
+    "verifyButton": "验证邮箱",
+    "verifying": "正在验证...",
+    "noCode": "没有收到代码？",
+    "resendCode": "重新发送代码",
+    "resending": "重新发送...",
+    "backToSignIn": "返回登录",
+    "validCodeRequired": "请输入有效的验证码",
+    "verifySuccess": "邮箱验证成功！正在重定向以登录...",
+    "verifyError": "验证失败。请检查您的代码并重试。",
+    "emailRequiredResend": "请输入您的电子邮件以重新发送代码",
+    "resendSuccess": "验证码已重新发送至您的邮箱。",
+    "resendError": "重新发送代码失败。请稍后重试。"
+  },
+  "GetStarted": {
+    "title": "创建您的帐户",
+    "subtitle": "开启您的全球互联之旅",
+    "firstName": "名字",
+    "firstNamePlaceholder": "约翰",
+    "lastName": "姓氏",
+    "lastNamePlaceholder": "美国能源部",
+    "email": "电子邮件",
+    "emailPlaceholder": "你@example.com",
+    "password": "密码",
+    "passwordPlaceholder": "创建密码",
+    "confirmPassword": "确认密码",
+    "confirmPasswordPlaceholder": "确认您的密码",
+    "passwordStrength": "密码强度：",
+    "strength": {
+      "weak": "太弱了",
+      "fair": "公平",
+      "good": "好",
+      "strong": "强"
+    },
+    "termsAgreement": "服务条款",
+    "privacyAgreement": "隐私政策",
+    "agreeTo": "我同意 ",
+    "and": " 和 ",
+    "agreeToPost": "",
+    "marketingConsent": "向我发送新闻、优惠和更新（可选）",
+    "continue": "继续",
+    "back": "返回",
+    "createAccount": "创建帐户",
+    "creating": "创造...",
+    "orContinueWith": "或者继续",
+    "signIn": "登录",
+    "benefits": {
+      "instantActivation": "即时激活",
+      "noHiddenFees": "无隐藏费用",
+      "securePayment": "安全支付"
+    },
+    "error": {
+      "fillAll": "请填写所有字段",
+      "match": "密码不匹配",
+      "length": "密码必须至少为 8 个字符",
+      "terms": "请接受条款和条件",
+      "general": "发生错误。请再试一次。"
+    },
+    "alreadyHaveAccount": "已有账号？"
+  },
+  "Auth": {
+    "welcomeTitle": "欢迎来到 POLO SIM",
+    "loginSubtitle": "只需使用您的电子邮件地址即可登录，无需密码。",
+    "emailLabel": "您的电子邮件地址",
+    "loading": "正在登录...",
+    "loginBtn": "登录/注册",
+    "noAccount": "没有帐户？",
+    "getStarted": "立即开始",
+    "invalidEmail": "请输入有效的电子邮件地址。",
+    "loginError": "登录失败。请再试一次。",
+    "generalError": "发生错误。请再试一次。",
+    "trust": {
+      "noPassword": "无密码登录",
+      "instant": "即时激活"
+    }
+  },
+  "HowItWorks": {
+    "badge": "简单的设置过程",
+    "title": "它是如何运作的",
+    "subtitle": "只需几分钟即可连接。无需实体 SIM 卡，无需前往商店，没有任何麻烦。无论您身在何处，即时移动数据。",
+    "steps": {
+      "step1": {
+        "title": "选择您的计划",
+        "description": "浏览我们的 200 多个目的地并选择适合您旅行需求的数据计划。选择您的数据量、有效期和覆盖范围。"
+      },
+      "step2": {
+        "title": "完成您的购买",
+        "description": "使用您首选的付款方式安全付款。我们接受所有主要信用卡、PayPal、Apple Pay 和 Google Pay。您的 eSIM 将立即准备就绪。"
+      },
+      "step3": {
+        "title": "扫描二维码",
+        "description": "购买后，您将通过电子邮件收到二维码。只需使用手机摄像头扫描即可安装 eSIM 配置文件。无需实体 SIM 卡。"
+      },
+      "step4": {
+        "title": "保持联系",
+        "description": "到达目的地后激活您的 eSIM。享受快速、可靠的数据，无需支付漫游费。如果您需要更多数据，请随时充值。"
+      }
+    },
+    "features": {
+      "instant": {
+        "title": "即时交付",
+        "desc": "购买后几秒钟内即可收到您的 eSIM 二维码。无需等待，无需运送。"
+      },
+      "secure": {
+        "title": "安全连接",
+        "desc": "您的数据在所有网络上都受到企业级加密的保护。"
+      },
+      "support": {
+        "title": "24/7 支持",
+        "desc": "我们的支持团队日夜为您提供帮助解决任何问题。"
+      },
+      "global": {
+        "title": "全球覆盖",
+        "desc": "访问全球 200 多个国家和地区的高速数据。"
+      }
+    },
+    "compatibility": {
+      "title": "兼容设备",
+      "subtitle": "我们的 eSIM 适用于绝大多数现代智能手机和平板电脑",
+      "brands": {
+        "apple": "苹果",
+        "samsung": "三星",
+        "google": "谷歌",
+        "other": "其他"
+      }
+    },
+    "installation": {
+      "title": "安装指南",
+      "subtitle": "iOS 和 Android 设备的快速设置",
+      "ios": {
+        "title": "iOS安装",
+        "steps": [
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "0": "打开相机应用程序并扫描二维码",
+        "1": "点击“手机套餐”通知",
+        "2": "按照屏幕上的说明进行操作",
+        "3": "标记您的计划（例如“旅行数据”）",
+        "4": "确保在国外时数据漫游已开启"
+      },
+      "android": {
+        "title": "安卓安装",
+        "steps": [
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "0": "转到设置 > 网络和 Internet",
+        "1": "点击“SIM 卡”或“移动网络”",
+        "2": "选择“添加 eSIM”或“+”按钮",
+        "3": "用相机扫描二维码",
+        "4": "确认并激活您的计划"
+      }
+    },
+    "faq": {
+      "title": "常见问题解答",
+      "q1": "什么是 eSIM？",
+      "a1": "eSIM（嵌入式 SIM）是一种数字 SIM 卡，允许您在不使用物理 SIM 卡的情况下激活运营商计划。它内置于您的设备中，可以使用不同的运营商配置文件进行编程。",
+      "q2": "我如何知道我的设备是否支持 eSIM？",
+      "a2": "2018 年之后发布的绝大多数现代智能手机和平板电脑都支持 eSIM。您可以检查设备设置中的蜂窝/移动数据部分，或使用我们针对您的型号的兼容性检查器。",
+      "q3": "购买 eSIM 后可以立即使用吗？",
+      "a3": "是的！您的 eSIM 二维码将在购买后立即发送。您可以立即安装并在到达目的地时激活它。",
+      "q4": "我的常规 SIM 卡是否仍可与 eSIM 配合使用？",
+      "a4": "绝对地。大多数设备支持双 SIM 卡功能，允许您同时使用常规 SIM 卡和 eSIM 卡。",
+      "q5": "如果我用完所有数据流量会怎样？",
+      "a5": "您可以通过我们的应用程序或网站轻松为您的 eSIM 充值更多数据。这个过程只需要几分钟。"
+    },
+    "cta": {
+      "title": "准备好开始了吗？",
+      "description": "加入数百万旅客的行列，通过 POLO SIM 保持联系。浏览计划并立即建立联系。",
+      "browse": "浏览计划",
+      "support": "联系支持人员"
+    }
+  },
+  "PopularDestinations": {
+    "badge": "热门地区",
+    "title": "探索世界",
+    "subtitle": "从我们最受欢迎的区域计划中进行选择，无论您的旅程前往何处，都可以保持联系。",
+    "popular": "受欢迎的",
+    "viewAll": "查看所有地区"
+  }
+}

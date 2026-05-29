@@ -97,7 +97,7 @@ export default function DynamicCMSPage() {
             />
 
             {/* Content Section */}
-            <div className="bg-[#F8F5ED] py-12 px-4">
+            <div className="bg-[#F5F7FA] py-12 px-4">
                 <div className="max-w-4xl mx-auto bg-white rounded-3xl border border-[var(--gray-mid)] shadow-sm p-6 md:p-12">
                     {renderContent()}
 

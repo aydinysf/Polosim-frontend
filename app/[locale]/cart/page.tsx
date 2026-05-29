@@ -19,11 +19,11 @@ export default function CartPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#F8F5ED]">
+    <main className="min-h-screen bg-[#F5F7FA]">
       <Navbar />
 
       {/* Hero Header */}
-      <section className="bg-[var(--navy)] pt-36 pb-16 px-[5%]">
+      <section className="bg-[var(--navy)] pt-48 pb-16 px-[5%]">
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center gap-3 mb-4">
             <Link href="/plans" className="text-white/60 hover:text-white text-sm font-medium transition-colors">
@@ -106,7 +106,7 @@ export default function CartPage() {
                       className="p-5 flex flex-col sm:flex-row sm:items-center gap-4 hover:bg-[var(--gray-bg)]/50 transition-colors"
                     >
                       {/* Product Image/Flag */}
-                      <div className="w-16 h-16 rounded-xl bg-[#F8F5ED] border border-[var(--gold)]/30 flex items-center justify-center overflow-hidden flex-shrink-0">
+                      <div className="w-16 h-16 rounded-xl bg-[#F5F7FA] border border-[var(--gold)]/30 flex items-center justify-center overflow-hidden flex-shrink-0">
                         {item.flag ? (
                           typeof item.flag === 'string' && (item.flag.includes('/') || item.flag.includes('.')) ? (
                             <Image src={item.flag} alt={item.name} width={64} height={64} className="object-cover" />

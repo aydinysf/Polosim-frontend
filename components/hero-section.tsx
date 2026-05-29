@@ -39,7 +39,7 @@ const FlagDisplay = ({ flag, name, size = "md" }: { flag?: string; name: string;
     <img
       src={url}
       alt={name}
-      className={`${sizeClasses[size]} rounded-sm object-cover shadow-sm`}
+      className={`${sizeClasses[size]} object-cover shadow-sm flag-wave`}
       onError={(e) => {
         (e.target as HTMLImageElement).style.display = "none";
         (e.target as HTMLImageElement).parentElement!.innerHTML = "🌍";
@@ -376,7 +376,7 @@ export function HeroSection() {
                     <img
                       src={flagSrc}
                       alt={localizedName}
-                      className="w-5 h-4 rounded-sm object-cover"
+                      className="w-5 h-4 object-cover flag-wave"
                     />
                   )}
                   {localizedName}

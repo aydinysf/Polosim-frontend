@@ -100,7 +100,7 @@ export function PopularPlans() {
                   const isPath = raw && (raw.includes('.') || raw.includes('/'));
                   const url = isPath ? getImageUrl(raw) : getFlagFromISO(plan.country?.iso_code || plan.flag_url);
                   if (!url) return <span className="text-2xl">🌍</span>;
-                  return <img src={url} alt={name} className="w-8 h-6 rounded object-cover shadow-sm" />;
+                  return <img src={url} alt={name} className="w-8 h-6 object-cover shadow-sm flag-wave" />;
                 })()}
                 <div className="flex items-center gap-0.5 px-1.5 py-0.5 rounded-md bg-amber-50 text-amber-600">
                   <Star className="w-3 h-3 fill-current" />

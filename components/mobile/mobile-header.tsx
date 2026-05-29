@@ -2,16 +2,35 @@
 
 import { Bell, Globe } from "lucide-react";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useTransition } from "react";
+import { useLocale } from "next-intl";
+import { useRouter, usePathname } from "@/src/i18n/routing";
 
 const languages = [
-  { code: "EN", label: "English" },
-  { code: "TR", label: "Turkce" },
+  { code: "en", label: "English", flag: "🇬🇧" },
+  { code: "tr", label: "Türkçe", flag: "🇹🇷" },
+  { code: "de", label: "Deutsch", flag: "🇩🇪" },
+  { code: "fr", label: "Français", flag: "🇫🇷" },
+  { code: "zh", label: "中文", flag: "🇨🇳" },
+  { code: "ru", label: "Русский", flag: "🇷🇺" },
+  { code: "es", label: "Español", flag: "🇪🇸" },
+  { code: "pt", label: "Português", flag: "🇵🇹" },
+  { code: "ar", label: "العربية", flag: "🇸🇦" },
 ];
 
 export function MobileHeader() {
-  const [currentLang, setCurrentLang] = useState("EN");
+  const locale = useLocale();
+  const router = useRouter();
+  const pathname = usePathname();
+  const [isPending, startTransition] = useTransition();
   const [langMenuOpen, setLangMenuOpen] = useState(false);
+
+  const handleLanguageChange = (newLocale: string) => {
+    startTransition(() => {
+      router.replace(pathname, { locale: newLocale });
+    });
+    setLangMenuOpen(false);
+  };
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-lg border-b border-border/50">
@@ -35,24 +54,23 @@ export function MobileHeader() {
             <button
               onClick={() => setLangMenuOpen(!langMenuOpen)}
               className="flex items-center gap-1 px-2 py-1.5 rounded-lg text-xs font-medium text-muted-foreground hover:bg-secondary/50 transition-colors"
+              disabled={isPending}
             >
               <Globe className="w-4 h-4" />
-              {currentLang}
+              <span className="uppercase">{locale}</span>
             </button>
             {langMenuOpen && (
-              <div className="absolute top-full right-0 mt-1 bg-card border border-border rounded-lg overflow-hidden z-50 min-w-[100px] shadow-lg">
+              <div className="absolute top-full right-0 mt-1 bg-card border border-border rounded-lg overflow-hidden z-50 min-w-[120px] shadow-lg">
                 {languages.map((lang) => (
                   <button
                     key={lang.code}
-                    onClick={() => {
-                      setCurrentLang(lang.code);
-                      setLangMenuOpen(false);
-                    }}
-                    className={`w-full px-3 py-2 text-left text-xs hover:bg-secondary/50 transition-colors ${
-                      currentLang === lang.code ? "text-primary font-medium" : "text-foreground"
+                    onClick={() => handleLanguageChange(lang.code)}
+                    className={`w-full px-3 py-2 text-left text-xs hover:bg-secondary/50 transition-colors flex items-center gap-2 ${
+                      locale === lang.code ? "text-primary font-medium" : "text-foreground"
                     }`}
                   >
-                    {lang.code}
+                    <span>{lang.flag}</span>
+                    <span>{lang.label}</span>
                   </button>
                 ))}
               </div>

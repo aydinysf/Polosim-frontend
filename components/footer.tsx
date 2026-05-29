@@ -31,39 +31,39 @@ export function Footer() {
 
   const footerColumns = [
     {
-      title: "Ürün",
+      title: t('product'),
       links: [
-        { name: "Destinasyonlar", href: "/plans" },
-        { name: "Veri Planları", href: "/plans" },
-        { name: "Bölgeler", href: "/plans?view=regions" },
-        { name: "Haberler/Kaynaklar", href: "#" },
+        { name: t('links.destinations'), href: "/plans" },
+        { name: t('links.dataPlans'), href: "/plans" },
+        { name: t('links.regions'), href: "/plans?view=regions" },
+        { name: t('links.coverageMap'), href: "#" },
       ],
     },
     {
-      title: "Şirket",
+      title: t('company'),
       links: [
-        { name: "Hakkımızda", href: "#" },
-        { name: "Kariyer", href: "#" },
-        { name: "Blog", href: "#" },
-        { name: "Basın", href: "#" },
+        { name: t('links.aboutUs'), href: "#" },
+        { name: t('links.careers'), href: "#" },
+        { name: t('links.blog'), href: "#" },
+        { name: t('links.press'), href: "#" },
       ],
     },
     {
-      title: "Destek",
+      title: t('support'),
       links: [
-        { name: "Yardım Merkezi", href: "/support" },
-        { name: "İletişim", href: "/support" },
-        { name: "Kurulum Kılavuzu", href: "/how-it-works" },
-        { name: "Cihaz Uyumluluğu", href: "/how-it-works" },
+        { name: t('links.helpCenter'), href: "/support" },
+        { name: t('links.contactUs'), href: "/support" },
+        { name: t('links.setupGuide'), href: "/how-it-works" },
+        { name: t('links.deviceCompatibility'), href: "/how-it-works" },
       ],
     },
     {
-      title: "Yasal",
+      title: t('legal'),
       links: [
-        { name: "Gizlilik Politikası", href: "/privacy" },
-        { name: "Kullanım Şartları", href: "/terms-of-service" },
-        { name: "Sözleşme & Koşullar", href: "/terms-of-service" },
-        { name: "İade Politikası", href: "/refund-policy" },
+        { name: t('links.privacyPolicy'), href: "/privacy" },
+        { name: t('links.termsOfService'), href: "/terms-of-service" },
+        { name: t('links.termsOfService'), href: "/terms-of-service" },
+        { name: t('links.refundPolicy'), href: "/refund-policy" },
       ],
     },
   ];
@@ -74,7 +74,9 @@ export function Footer() {
   return (
     <footer className="bg-[var(--navy)]">
       <div className="max-w-[1200px] mx-auto px-[5%] pt-14 pb-8">
-        <div className="grid grid-cols-2 md:grid-cols-6 gap-8 pb-10 border-b border-white/10 mb-6">
+
+        {/* Top section: Logo + nav columns */}
+        <div className="grid grid-cols-2 md:grid-cols-6 gap-8 pb-10 border-b border-white/10 mb-0">
           {/* Brand column */}
           <div className="col-span-2">
             <Link href="/" className="flex items-center mb-5 cursor-pointer">
@@ -86,9 +88,7 @@ export function Footer() {
                 className="h-14 w-auto brightness-110"
               />
             </Link>
-            <p className="text-[12px] text-white/50 leading-[1.7] mb-6 max-w-[280px]">
-              Bir Sim, Tüm Dünya. 200&apos;den fazla ülkede gerçek eSIM'ler alın ve bağlantıda kalarak sınırsız iletişimin tadını çıkarın.
-            </p>
+            {/* Social icons right under logo */}
             <div className="flex gap-2">
               {socialLinks.map((social) => (
                 <a
@@ -130,8 +130,8 @@ export function Footer() {
               <div key={column.title}>
                 <h5 className="text-[12px] font-bold text-white mb-3 uppercase tracking-wide">{column.title}</h5>
                 <ul className="flex flex-col gap-2">
-                  {column.links.map((link) => (
-                    <li key={link.name}>
+                  {column.links.map((link, idx) => (
+                    <li key={`${link.name}-${idx}`}>
                       <Link href={link.href} className="text-[12px] text-white/50 hover:text-[var(--gold)] cursor-pointer transition-colors">
                         {link.name}
                       </Link>
@@ -143,23 +143,53 @@ export function Footer() {
           )}
         </div>
 
+        {/* Contact Info — separated by a divider */}
+        <div className="border-t border-white/10 py-8 mb-0">
+          <p className="text-[11px] font-bold text-white/60 uppercase tracking-widest mb-4">
+            {t('contact.title')}
+          </p>
+          <p className="text-[12px] text-white font-semibold mb-4">Check for Trips GmbH</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-2">
+            <p className="text-[11px] text-white/50">
+              <span className="text-[var(--gold-pale)] font-semibold">{t('contact.address')}: </span>
+              Hintergasse 6, 65428 Rüsselsheim, Hessen/Germany
+            </p>
+            <p className="text-[11px] text-white/50">
+              <span className="text-[var(--gold-pale)] font-semibold">{t('contact.phone')}: </span>
+              <a href="tel:+4961423019620" className="hover:text-[var(--gold)] transition-colors">+49-6142-3019620</a>
+            </p>
+            <p className="text-[11px] text-white/50">
+              <span className="text-[var(--gold-pale)] font-semibold">{t('contact.fax')}: </span>
+              +49-6142-173624
+            </p>
+            <p className="text-[11px] text-white/50">
+              <span className="text-[var(--gold-pale)] font-semibold">{t('contact.email')}: </span>
+              <a href="mailto:info@checkfortrips.de" className="hover:text-[var(--gold)] transition-colors">info@checkfortrips.de</a>
+            </p>
+            <p className="text-[11px] text-white/50">
+              <span className="text-[var(--gold-pale)] font-semibold">{t('contact.web')}: </span>
+              <a href="https://www.checkfortrips.de" target="_blank" rel="noopener noreferrer" className="hover:text-[var(--gold)] transition-colors">www.checkfortrips.de</a>
+            </p>
+            <p className="text-[11px] text-white/50">
+              <span className="text-[var(--gold-pale)] font-semibold">{t('contact.taxNo')}: </span>
+              DE310315188
+            </p>
+          </div>
+        </div>
+
         {/* Bottom bar */}
-        <div className="flex flex-col md:flex-row items-center justify-between gap-3 text-[11px] text-white/40">
+        <div className="border-t border-white/10 pt-6 flex flex-col md:flex-row items-center justify-between gap-3 text-[11px] text-white/40">
           <p>
-            © {new Date().getFullYear()} POLO SIM. Tüm Hakları Saklıdır.
+            {t('copyright', { year: new Date().getFullYear() })}
           </p>
           <div className="flex flex-wrap items-center justify-center gap-4">
             <span className="flex items-center gap-1.5">
               <span className="text-[var(--gold)] text-[6px]">●</span>
-              Dünya Çapında Kullanılabilir
+              {t('bottom.available')}
             </span>
             <span className="flex items-center gap-1.5">
               <span className="text-[var(--gold)] text-[6px]">●</span>
-              Güvenli Ödeme
-            </span>
-            <span className="flex items-center gap-1.5">
-              <span className="text-[var(--gold)] text-[6px]">●</span>
-              Güvenli İşlemler
+              {t('bottom.secure')}
             </span>
           </div>
         </div>

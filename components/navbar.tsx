@@ -22,6 +22,13 @@ const defaultNavLinks = [
 const languages = [
   { code: "en", label: "English", flag: "🇬🇧" },
   { code: "tr", label: "Türkçe", flag: "🇹🇷" },
+  { code: "de", label: "Deutsch", flag: "🇩🇪" },
+  { code: "fr", label: "Français", flag: "🇫🇷" },
+  { code: "zh", label: "中文", flag: "🇨🇳" },
+  { code: "ru", label: "Русский", flag: "🇷🇺" },
+  { code: "es", label: "Español", flag: "🇪🇸" },
+  { code: "pt", label: "Português", flag: "🇵🇹" },
+  { code: "ar", label: "العربية", flag: "🇸🇦" },
 ];
 
 
@@ -196,13 +203,13 @@ export function Navbar() {
                 onClick={() => router.push("/get-started")}
                 className="px-5 py-2 border-none rounded-lg bg-[var(--gold)] font-semibold text-[13px] text-white hover:bg-[var(--gold-light)] transition-all whitespace-nowrap"
               >
-                Hesap Aç
+                {t('getStarted')}
               </button>
               <button
                 onClick={() => router.push("/sign-in")}
                 className="px-5 py-2 border border-[var(--gray-mid)] rounded-lg bg-white font-semibold text-[13px] text-[var(--text-dark)] hover:border-[var(--gold)] hover:text-[var(--gold)] transition-all whitespace-nowrap"
               >
-                Giriş Yap
+                {t('login')}
               </button>
             </>
           )}
@@ -214,7 +221,7 @@ export function Navbar() {
               className="flex items-center gap-1.5 text-[13px] font-semibold text-[#1A2332] hover:text-[var(--gold)] transition-colors px-2 py-1.5 rounded-lg hover:bg-[var(--gray-bg)]"
               disabled={isPending}
             >
-              <span>{locale === 'tr' ? '🇹🇷' : '🇬🇧'}</span>
+              <span>{languages.find(lang => lang.code === locale)?.flag || '🇬🇧'}</span>
               <span>{locale.toUpperCase()}</span>
             </button>
             {langMenuOpen && (
@@ -367,7 +374,7 @@ export function Navbar() {
                     }}
                     className="flex-1 px-5 py-2.5 border-none rounded-lg bg-[var(--gold)] font-semibold text-[13px] text-white hover:bg-[var(--gold-light)] transition-all"
                   >
-                    Hesap Aç
+                    {t('getStarted')}
                   </button>
                   <button
                     onClick={() => {
@@ -376,7 +383,7 @@ export function Navbar() {
                     }}
                     className="flex-1 px-5 py-2.5 border border-[var(--gray-mid)] rounded-lg bg-white font-semibold text-[13px] text-[var(--text-dark)] hover:border-[var(--gold)] transition-all"
                   >
-                    Giriş Yap
+                    {t('login')}
                   </button>
                 </div>
               )}

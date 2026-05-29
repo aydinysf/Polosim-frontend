@@ -116,13 +116,14 @@ api.interceptors.request.use((config) => {
   // Locale detection from URL path or Cookie
   if (typeof window !== 'undefined') {
     let locale = window.location.pathname.split('/')[1];
-    if (!locale || !['en', 'tr'].includes(locale)) {
+    const supportedLocales = ['en', 'tr', 'ru', 'ar', 'de', 'zh', 'pt', 'es', 'fr'];
+    if (!locale || !supportedLocales.includes(locale)) {
       // Fallback: Check NEXT_LOCALE cookie or Default to 'en'
       const match = document.cookie.match(/NEXT_LOCALE=([^;]+)/);
       locale = match ? match[1] : 'en';
     }
 
-    if (locale && ['en', 'tr'].includes(locale)) {
+    if (locale && supportedLocales.includes(locale)) {
       config.headers['x-lang'] = locale;
     }
   }
@@ -145,13 +146,14 @@ webApi.interceptors.request.use((config) => {
   // Locale detection from URL path or Cookie
   if (typeof window !== 'undefined') {
     let locale = window.location.pathname.split('/')[1];
-    if (!locale || !['en', 'tr'].includes(locale)) {
+    const supportedLocales = ['en', 'tr', 'ru', 'ar', 'de', 'zh', 'pt', 'es', 'fr'];
+    if (!locale || !supportedLocales.includes(locale)) {
       // Fallback: Check NEXT_LOCALE cookie or Default to 'en'
       const match = document.cookie.match(/NEXT_LOCALE=([^;]+)/);
       locale = match ? match[1] : 'en';
     }
 
-    if (locale && ['en', 'tr'].includes(locale)) {
+    if (locale && supportedLocales.includes(locale)) {
       config.headers['x-lang'] = locale;
     }
   }
