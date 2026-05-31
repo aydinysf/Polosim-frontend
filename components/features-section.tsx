@@ -52,7 +52,7 @@ export function FeaturesSection() {
     <>
       {/* Main Features Section - Navy Background */}
       <section className="py-14 px-[5%] bg-[var(--navy)] text-center">
-        <div className="max-w-[1100px] mx-auto">
+        <div className="max-w-[1200px] mx-auto">
           {/* Section header */}
           <div className="mb-10">
             <h2 className="text-[28px] md:text-[32px] font-bold mb-3 text-white">
@@ -89,7 +89,7 @@ export function FeaturesSection() {
 
       {/* Bottom Features Strip - Light Background */}
       <section className="py-10 px-[5%] bg-[#F5F7FA]">
-        <div className="max-w-[1100px] mx-auto">
+        <div className="max-w-[1200px] mx-auto">
           <div className="bg-white rounded-xl shadow-sm border border-[var(--gray-mid)] overflow-hidden">
             <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-gray-100">
               {bottomFeatures.map((feature, index) => (

@@ -326,9 +326,8 @@ export default function PlansPage() {
       }
     });
 
-  const pageSize = 12;
-  const totalPages = Math.ceil(filteredProducts.length / pageSize);
-  const paginatedProducts = filteredProducts.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+  // All products shown without pagination
+  const paginatedProducts = filteredProducts;
 
   // Filter regions
   const filteredRegions = regions
@@ -384,7 +383,7 @@ export default function PlansPage() {
           <div className="inline-block bg-[rgba(201,168,76,0.15)] text-[var(--gold)] border border-[rgba(201,168,76,0.3)] rounded-full px-4 py-1.5 text-[12px] font-bold tracking-[0.5px] uppercase mb-5">
             {t('hero.destinationsAvailable')}
           </div>
-          <h1 className="text-[38px] font-extrabold text-white mb-3 tracking-tight">
+          <h1 className="text-[32px] font-extrabold text-white mb-3 tracking-tight">
             {viewMode === "regions" ? t('hero.browseRegions') : t('hero.browsePlans')}
           </h1>
           <p className="text-[15px] text-white/60 max-w-[520px] mx-auto mb-8 leading-[1.6]">
@@ -660,10 +659,10 @@ export default function PlansPage() {
                       <div
                         key={product.id}
                         onClick={() => handleToggleCart(product)}
-                        className={`bg-white rounded-2xl border px-6 py-4 flex items-center justify-between transition-all shadow-sm cursor-pointer ${
+                        className={`bg-[#F0F2F5] rounded-2xl border px-6 py-4 flex items-center justify-between transition-all shadow-sm cursor-pointer ${
                           isItemInCart
                             ? "border-[var(--gold)]"
-                            : "border-[var(--gray-mid)] hover:border-[var(--gold)]"
+                            : "border-[#E2E5EA] hover:border-[var(--gold)]"
                         }`}
                       >
                         <div className="flex flex-col gap-1">
@@ -676,7 +675,10 @@ export default function PlansPage() {
                              <span className="text-xs font-semibold text-[var(--gray-text)] uppercase tracking-wider truncate max-w-[120px]" title={name}>{name}</span>
                            </div>
                            <div className="flex items-center gap-3">
-                              <span className="text-lg sm:text-xl font-extrabold text-[var(--navy)]">{data}</span>
+                              <span className="text-sm font-extrabold text-[var(--navy)] flex items-baseline">
+                                {data.replace(/GB/g, '').replace(/MB/g, '')}
+                                <span className="text-sm font-extrabold text-[#A38334] ml-1">{data.includes('GB') ? 'GB' : data.includes('MB') ? 'MB' : ''}</span>
+                              </span>
                               <span className="text-sm font-medium text-[var(--gray-text)]">{validity}</span>
                            </div>
                         </div>
@@ -705,70 +707,7 @@ export default function PlansPage() {
                   })}
                 </div>
 
-                {/* Pagination */}
-                {totalPages > 1 && (
-                  <div className="flex items-center justify-center gap-2 pt-8 mt-8 border-t border-[var(--gray-mid)]">
-                    <button
-                      onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
-                      disabled={currentPage === 1}
-                      className="w-10 h-10 rounded-xl flex items-center justify-center bg-white border border-[var(--gray-mid)] text-[var(--navy)] hover:border-[var(--gold)] hover:text-[var(--gold)] disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-sm"
-                    >
-                      <ChevronLeft className="h-5 w-5" />
-                    </button>
-
-                    <div className="flex items-center gap-2 px-2">
-                      {(() => {
-                        const lastPage = totalPages;
-                        const pages = [];
-
-                        if (lastPage <= 10) {
-                          for (let i = 1; i <= lastPage; i++) pages.push(i);
-                        } else {
-                          pages.push(1, 2, 3);
-                          const endStart = lastPage - 3;
-                          if (currentPage > 3 && currentPage < endStart) {
-                            if (currentPage > 4) pages.push('...');
-                            pages.push(currentPage);
-                            if (currentPage < endStart - 1) pages.push('...');
-                          } else {
-                            pages.push('...');
-                          }
-                          for (let i = endStart; i <= lastPage; i++) {
-                            if (!pages.includes(i)) pages.push(i);
-                          }
-                        }
-
-                        return pages.map((page, index) => {
-                          if (page === '...') {
-                            return <span key={`ellipsis-${index}`} className="px-2 text-[var(--gray-text)] font-bold">...</span>;
-                          }
-                          const p = page as number;
-                          return (
-                            <button
-                              key={p}
-                              onClick={() => setCurrentPage(p)}
-                              className={`w-10 h-10 rounded-xl flex items-center justify-center text-sm font-bold transition-all shadow-sm ${
-                                currentPage === p
-                                  ? "bg-[var(--gold)] text-white border border-[var(--gold)]"
-                                  : "bg-white border border-[var(--gray-mid)] text-[var(--navy)] hover:border-[var(--gold)] hover:text-[var(--gold)]"
-                              }`}
-                            >
-                              {p}
-                            </button>
-                          );
-                        });
-                      })()}
-                    </div>
-
-                    <button
-                      onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
-                      disabled={currentPage === totalPages}
-                      className="w-10 h-10 rounded-xl flex items-center justify-center bg-white border border-[var(--gray-mid)] text-[var(--navy)] hover:border-[var(--gold)] hover:text-[var(--gold)] disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-sm"
-                    >
-                      <ChevronRight className="h-5 w-5" />
-                    </button>
-                  </div>
-                )}
+                {/* Pagination removed — all products shown at once */}
               </div>
             </div>
           )}
@@ -788,7 +727,7 @@ export default function PlansPage() {
                 return (
                   <button
                     key={region.id}
-                    className="bg-white rounded-2xl border border-[var(--gray-mid)] px-4 py-4 sm:px-6 flex items-center justify-between hover:border-[var(--gold)] transition-colors shadow-sm text-left w-full"
+                    className="bg-[#F0F2F5] rounded-2xl border border-[#E2E5EA] px-4 py-4 sm:px-6 flex items-center justify-between hover:border-[var(--gold)] transition-colors shadow-sm text-left w-full"
                     onClick={() => {
                       setViewMode("plans");
                       setSelectedRegionId(region.id);

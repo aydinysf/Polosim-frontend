@@ -98,7 +98,7 @@ export function SearchHeader({ title, subtitle, badge, icon }: SearchHeaderProps
               {icon}
             </div>
           )}
-          <h1 className="text-[42px] font-extrabold text-white tracking-tight drop-shadow-sm">
+          <h1 className="text-[32px] font-extrabold text-white tracking-tight drop-shadow-sm">
             {title}
           </h1>
         </div>

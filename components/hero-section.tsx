@@ -293,10 +293,10 @@ export function HeroSection() {
         <div className="absolute -bottom-[80px] -right-[60px] w-[350px] h-[350px] bg-[radial-gradient(circle,rgba(201,168,76,0.05)_0%,transparent_70%)]" />
       </div>
 
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-[5%]">
+      <div className="relative z-10 w-full max-w-[1200px] mx-auto px-[5%]">
         {/* Hero Title */}
-        <div className="text-center mb-8">
-          <h1 className="text-[28px] sm:text-[36px] md:text-[42px] font-extrabold text-white leading-[1.3] max-w-[900px] mx-auto tracking-tight">
+        <div className="text-center mb-8 max-w-[1100px] mx-auto">
+          <h1 className="text-[28px] md:text-[32px] font-extrabold text-white leading-[1.3] max-w-[900px] mx-auto tracking-tight">
             {t.rich('mainHeading', {
               gold: (chunks) => <span className="text-[var(--gold)]">{chunks}</span>
             })}

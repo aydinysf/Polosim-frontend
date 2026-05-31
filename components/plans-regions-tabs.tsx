@@ -36,7 +36,7 @@ export function PlansRegionsTabs() {
 
   return (
     <section className="py-16 px-[5%] bg-[#D4AF37]/10 text-center">
-      <div className="max-w-[1100px] mx-auto">
+      <div className="max-w-[1200px] mx-auto">
         {/* Section header */}
         <h2 className="text-[28px] md:text-[32px] font-bold mb-3 text-white">
           {t('title')}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition, useEffect } from "react";
+import { useState, useTransition, useEffect, Suspense } from "react";
 import { Menu, X, Globe, ShoppingCart, User, LogOut, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/lib/cart-context";
@@ -9,6 +9,7 @@ import Image from "next/image";
 import { Link, usePathname, useRouter } from "@/i18n/routing";
 import { useLocale, useTranslations } from "next-intl";
 import { menuService, type MenuItem } from "@/lib/services";
+import { useSearchParams } from "next/navigation";
 
 // Nav links will be translated in the component
 const defaultNavLinks = [
@@ -32,7 +33,16 @@ const languages = [
 ];
 
 
+// Exported wrapper so server components don't need to add Suspense themselves
 export function Navbar() {
+  return (
+    <Suspense fallback={null}>
+      <NavbarInner />
+    </Suspense>
+  );
+}
+
+function NavbarInner() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const locale = useLocale();
   const t = useTranslations('Navbar');
@@ -45,6 +55,7 @@ export function Navbar() {
   const { user, isAuthenticated, logout, isLoading } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
@@ -67,14 +78,24 @@ export function Navbar() {
 
   const handleLanguageChange = (newLocale: string) => {
     startTransition(() => {
-      router.replace(pathname, { locale: newLocale });
+      // Preserve search params (e.g. ?search=Turkey) when switching language
+      const search = searchParams.get('search');
+      const view = searchParams.get('view');
+      const region = searchParams.get('region');
+      const params = new URLSearchParams();
+      if (search) params.set('search', search);
+      if (view) params.set('view', view);
+      if (region) params.set('region', region);
+      const queryString = params.toString();
+      const targetPath = queryString ? `${pathname}?${queryString}` : pathname;
+      router.replace(targetPath as any, { locale: newLocale });
     });
     setLangMenuOpen(false);
   };
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 pt-4 px-[5%] pointer-events-none">
-      <div className="max-w-[1300px] mx-auto bg-white rounded-2xl shadow-lg flex items-center justify-between h-[140px] px-8 pointer-events-auto">
+      <div className="max-w-[1200px] mx-auto bg-white rounded-2xl shadow-lg flex items-center justify-between h-[140px] px-8 pointer-events-auto">
         {/* Logo */}
         <Link href="/" className="flex items-center shrink-0">
           <Image
@@ -214,6 +235,7 @@ export function Navbar() {
             </>
           )}
 
+
           {/* Language Switcher */}
           <div className="relative ml-1">
             <button
@@ -325,25 +347,29 @@ export function Navbar() {
             <div className="flex flex-col gap-2 mt-4 pt-4 border-t border-[var(--gray-mid)]">
 
               {/* Mobile Language Switcher */}
-              <div className="flex items-center gap-2 px-4 py-2">
-                <Globe className="w-4 h-4 text-[var(--gray-text)]" />
-                <span className="text-sm text-[var(--gray-text)]">Dil:</span>
-                {languages.map((lang) => (
-                  <button
-                    key={lang.code}
-                    onClick={() => {
-                      handleLanguageChange(lang.code);
-                      setMobileMenuOpen(false);
-                    }}
-                    className={`px-3 py-1 rounded-md text-sm flex items-center gap-1 ${locale === lang.code
-                        ? "bg-[var(--gold)] text-white"
-                        : "bg-[var(--gray-bg)] text-[var(--gray-text)]"
-                      }`}
-                  >
-                    <span>{lang.flag}</span>
-                    {lang.code.toUpperCase()}
-                  </button>
-                ))}
+              <div className="flex flex-wrap items-center gap-2 px-4 py-2">
+                <div className="flex items-center gap-1 shrink-0">
+                  <Globe className="w-4 h-4 text-[var(--gray-text)]" />
+                  <span className="text-sm text-[var(--gray-text)]">Dil:</span>
+                </div>
+                <div className="flex flex-wrap gap-1.5">
+                  {languages.map((lang) => (
+                    <button
+                      key={lang.code}
+                      onClick={() => {
+                        handleLanguageChange(lang.code);
+                        setMobileMenuOpen(false);
+                      }}
+                      className={`px-2 py-1 rounded-md text-xs flex items-center gap-0.5 ${locale === lang.code
+                          ? "bg-[var(--gold)] text-white"
+                          : "bg-[var(--gray-bg)] text-[var(--gray-text)]"
+                        }`}
+                    >
+                      <span>{lang.flag}</span>
+                      {lang.code.toUpperCase()}
+                    </button>
+                  ))}
+                </div>
               </div>
               {isAuthenticated ? (
                 <>

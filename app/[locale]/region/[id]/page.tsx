@@ -312,11 +312,11 @@ export default function RegionPage() {
             <div className="flex justify-center py-10">
               <Loader2 className="w-8 h-8 animate-spin text-[var(--gold)]" />
             </div>
-          ) : paginatedProducts.length > 0 ? (
+          ) : filteredAndSortedProducts.length > 0 ? (
             <div>
               {/* Product List Layout */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-                {paginatedProducts.map((product) => {
+                {filteredAndSortedProducts.map((product) => {
                   const data = getProductData(product);
                   const validity = getProductValidity(product, t);
 
@@ -326,10 +326,10 @@ export default function RegionPage() {
                     <div
                       key={product.id}
                       onClick={() => handleToggleCart(product)}
-                      className={`bg-white rounded-2xl border px-6 py-4 flex items-center justify-between transition-all shadow-sm cursor-pointer ${
+                      className={`bg-[#F0F2F5] rounded-2xl border px-6 py-4 flex items-center justify-between transition-all shadow-sm cursor-pointer ${
                         isItemInCart
                           ? "border-[var(--gold)]"
-                          : "border-[var(--gray-mid)] hover:border-[var(--gold)]"
+                          : "border-[#E2E5EA] hover:border-[var(--gold)]"
                       }`}
                     >
                       <div className="flex flex-col gap-1">
@@ -344,7 +344,10 @@ export default function RegionPage() {
                            </span>
                          </div>
                          <div className="flex items-center gap-3">
-                            <span className="text-lg sm:text-xl font-extrabold text-[var(--navy)]">{data}</span>
+                            <span className="text-sm font-extrabold text-[var(--navy)] flex items-baseline">
+                              {data.replace(/GB/g, '').replace(/MB/g, '')}
+                              <span className="text-sm font-extrabold text-[#A38334] ml-1">{data.includes('GB') ? 'GB' : data.includes('MB') ? 'MB' : ''}</span>
+                            </span>
                             <span className="text-sm font-medium text-[var(--gray-text)]">{validity}</span>
                          </div>
                       </div>
@@ -373,40 +376,7 @@ export default function RegionPage() {
                 })}
               </div>
 
-              {/* Pagination */}
-              {totalPages > 1 && (
-                <div className="flex items-center justify-center gap-2 pt-8 mt-8 border-t border-[var(--gray-mid)]">
-                  <button
-                    onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
-                    disabled={currentPage === 1}
-                    className="w-10 h-10 rounded-xl flex items-center justify-center bg-white border border-[var(--gray-mid)] text-[var(--navy)] hover:border-[var(--gold)] hover:text-[var(--gold)] disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-sm"
-                  >
-                    <ChevronLeft className="h-5 w-5" />
-                  </button>
-                  <div className="flex gap-1 mx-2">
-                    {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
-                      <button
-                        key={page}
-                        onClick={() => setCurrentPage(page)}
-                        className={`w-10 h-10 rounded-xl text-sm font-bold transition-all shadow-sm ${
-                          currentPage === page
-                            ? "bg-[var(--gold)] text-white border-transparent"
-                            : "bg-white border border-[var(--gray-mid)] text-[var(--navy)] hover:border-[var(--gold)] hover:text-[var(--gold)]"
-                        }`}
-                      >
-                        {page}
-                      </button>
-                    ))}
-                  </div>
-                  <button
-                    onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
-                    disabled={currentPage === totalPages}
-                    className="w-10 h-10 rounded-xl flex items-center justify-center bg-white border border-[var(--gray-mid)] text-[var(--navy)] hover:border-[var(--gold)] hover:text-[var(--gold)] disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-sm"
-                  >
-                    <ChevronRight className="h-5 w-5" />
-                  </button>
-                </div>
-              )}
+              {/* Pagination removed */}
             </div>
           ) : (
             <div className="text-center py-20 bg-white rounded-2xl border border-[var(--gray-mid)] shadow-sm">
