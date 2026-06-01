@@ -359,7 +359,7 @@ export default function PlansPage() {
 
   const selectedCountry = countries.find(c => c.id === selectedCountryId);
   const selectedRegion = regions.find(r => r.id === selectedRegionId);
-  
+
   let displayTitle = "";
   if (selectedCountry) {
     displayTitle = t('labels.packages', { country: selectedCountry.name });
@@ -395,82 +395,82 @@ export default function PlansPage() {
           {/* Search Bar */}
           <div className="max-w-[560px] mx-auto relative z-50">
             <div className="relative flex items-center bg-white rounded-3xl pl-5 pr-1.5 py-1.5 gap-2">
-                <div className="flex items-center gap-3 flex-1">
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="text-[#9CA3AF] shrink-0"><circle cx="6.5" cy="6.5" r="5" stroke="currentColor" strokeWidth="1.5"/><path d="M11 11l3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
-                  <Input
-                    type="text"
-                    placeholder={viewMode === "regions" ? t('search.regionsPlaceholder') : t('search.plansPlaceholder')}
-                    value={searchQuery}
-                    onChange={(e) => {
-                      setSearchQuery(e.target.value);
-                      setOpenCombobox(true);
-                    }}
-                    onFocus={() => setOpenCombobox(true)}
-                    className="border-0 bg-transparent focus-visible:ring-0 text-[var(--text-dark)] placeholder:text-[#9CA3AF] text-[15px] flex-1"
-                  />
-                </div>
-              </div>
-
-              {/* Autocomplete Dropdown */}
-              {openCombobox && searchQuery && filteredSuggestions.length > 0 && (
-                <div className="absolute top-full left-0 right-0 mt-2 bg-card border border-border rounded-xl shadow-xl overflow-hidden max-h-80 overflow-y-auto z-[9999] text-left">
-                  {filteredSuggestions.map((item) => (
-                    <button
-                      key={`${item.type}-${item.id}`}
-                      className="w-full flex items-center gap-3 px-4 py-3 hover:bg-secondary/50 text-left transition-colors"
-                      onClick={() => {
-                        setSearchQuery(item.type === 'country' ? (item as Country).name : getLocalizedText((item as Region).name));
-                        setOpenCombobox(false);
-                        setViewMode("plans");
-                        if (item.type === 'country') {
-                          setSelectedCountryId(item.id);
-                          setSelectedRegionId(null);
-                        } else {
-                          setSelectedRegionId(item.id);
-                          setSelectedCountryId(null);
-                        }
-                      }}
-                    >
-                      <span className="text-xl">
-                        {item.type === 'country'
-                          ? (() => {
-                            const country = item as Country;
-                            const rawFlag = country.flag_url;
-                            const isPath = rawFlag && (rawFlag.includes('.') || rawFlag.includes('/'));
-                            const url = isPath ? getImageUrl(rawFlag) : getFlagFromISO(country.iso_code);
-                            return url ? <img src={url} alt="" className="w-6 h-4 object-cover flag-wave" /> : "🏳️";
-                          })()
-                          : (() => {
-                            const icon = (item as Region).icon;
-                            const isPath = icon && (icon.includes('/') || icon.includes('.'));
-                            const url = isPath ? getImageUrl(icon) : null;
-                            return url ? (
-                              <div className="relative w-7 h-5 overflow-hidden">
-                                <Image src={url} alt="" fill className="object-cover flag-wave" sizes="28px" />
-                              </div>
-                            ) : (icon || "🌍");
-                          })()}
-                      </span>
-                      <div>
-                        <div className="font-medium text-foreground">
-                          {item.type === 'country' ? (item as Country).name : getLocalizedText((item as Region).name, "", locale)}
-                        </div>
-                        <div className="text-xs text-muted-foreground capitalize">{item.type}</div>
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              )}
-
-              {/* Click outside to close */}
-              {openCombobox && (
-                <div
-                  className="fixed inset-0 z-[-1]"
-                  onClick={() => setOpenCombobox(false)}
+              <div className="flex items-center gap-3 flex-1">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="text-[#9CA3AF] shrink-0"><circle cx="6.5" cy="6.5" r="5" stroke="currentColor" strokeWidth="1.5" /><path d="M11 11l3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" /></svg>
+                <Input
+                  type="text"
+                  placeholder={viewMode === "regions" ? t('search.regionsPlaceholder') : t('search.plansPlaceholder')}
+                  value={searchQuery}
+                  onChange={(e) => {
+                    setSearchQuery(e.target.value);
+                    setOpenCombobox(true);
+                  }}
+                  onFocus={() => setOpenCombobox(true)}
+                  className="border-0 bg-transparent focus-visible:ring-0 text-[var(--text-dark)] placeholder:text-[#9CA3AF] text-[15px] flex-1"
                 />
-              )}
+              </div>
             </div>
+
+            {/* Autocomplete Dropdown */}
+            {openCombobox && searchQuery && filteredSuggestions.length > 0 && (
+              <div className="absolute top-full left-0 right-0 mt-2 bg-card border border-border rounded-xl shadow-xl overflow-hidden max-h-80 overflow-y-auto z-[9999] text-left">
+                {filteredSuggestions.map((item) => (
+                  <button
+                    key={`${item.type}-${item.id}`}
+                    className="w-full flex items-center gap-3 px-4 py-3 hover:bg-secondary/50 text-left transition-colors"
+                    onClick={() => {
+                      setSearchQuery(item.type === 'country' ? (item as Country).name : getLocalizedText((item as Region).name));
+                      setOpenCombobox(false);
+                      setViewMode("plans");
+                      if (item.type === 'country') {
+                        setSelectedCountryId(item.id);
+                        setSelectedRegionId(null);
+                      } else {
+                        setSelectedRegionId(item.id);
+                        setSelectedCountryId(null);
+                      }
+                    }}
+                  >
+                    <span className="text-xl">
+                      {item.type === 'country'
+                        ? (() => {
+                          const country = item as Country;
+                          const rawFlag = country.flag_url;
+                          const isPath = rawFlag && (rawFlag.includes('.') || rawFlag.includes('/'));
+                          const url = isPath ? getImageUrl(rawFlag) : getFlagFromISO(country.iso_code);
+                          return url ? <img src={url} alt="" className="w-6 h-4 object-cover flag-wave" /> : "🏳️";
+                        })()
+                        : (() => {
+                          const icon = (item as Region).icon;
+                          const isPath = icon && (icon.includes('/') || icon.includes('.'));
+                          const url = isPath ? getImageUrl(icon) : null;
+                          return url ? (
+                            <div className="relative w-7 h-5 overflow-hidden">
+                              <Image src={url} alt="" fill className="object-cover flag-wave" sizes="28px" />
+                            </div>
+                          ) : (icon || "🌍");
+                        })()}
+                    </span>
+                    <div>
+                      <div className="font-medium text-foreground">
+                        {item.type === 'country' ? (item as Country).name : getLocalizedText((item as Region).name, "", locale)}
+                      </div>
+                      <div className="text-xs text-muted-foreground capitalize">{item.type}</div>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {/* Click outside to close */}
+            {openCombobox && (
+              <div
+                className="fixed inset-0 z-[-1]"
+                onClick={() => setOpenCombobox(false)}
+              />
+            )}
           </div>
+        </div>
       </section>
 
       {/* Filters & Content */}
@@ -482,13 +482,12 @@ export default function PlansPage() {
               <h3 className="text-xl font-bold text-[var(--navy)]">
                 {displayTitle}
               </h3>
-              <button 
+              <button
                 onClick={() => setShowFilters(!showFilters)}
-                className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all ${
-                  showFilters 
-                    ? 'bg-[var(--gold)] text-white' 
+                className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all ${showFilters
+                    ? 'bg-[var(--gold)] text-white'
                     : 'bg-white border border-[var(--gray-mid)] text-[var(--navy)] hover:border-[var(--gold)] hover:text-[var(--gold)] shadow-sm'
-                }`}
+                  }`}
               >
                 <SlidersHorizontal className="w-4 h-4" />
                 {t('labels.advancedSearch')}
@@ -511,9 +510,8 @@ export default function PlansPage() {
                       <div className="flex flex-wrap gap-2">
                         <button
                           onClick={() => { setFilterData(null); setCurrentPage(1); }}
-                          className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
-                            !filterData ? 'bg-[var(--gold)] text-white shadow-sm' : 'bg-[#F5F7FA] text-[var(--navy)] hover:bg-[var(--gray-mid)] border border-[var(--gray-mid)]'
-                          }`}
+                          className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${!filterData ? 'bg-[var(--gold)] text-white shadow-sm' : 'bg-[#F5F7FA] text-[var(--navy)] hover:bg-[var(--gray-mid)] border border-[var(--gray-mid)]'
+                            }`}
                         >
                           {t('filters.any')}
                         </button>
@@ -521,9 +519,8 @@ export default function PlansPage() {
                           <button
                             key={opt.value}
                             onClick={() => { setFilterData(filterData === opt.value ? null : opt.value); setCurrentPage(1); }}
-                            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
-                              filterData === opt.value ? 'bg-[var(--gold)] text-white shadow-sm' : 'bg-[#F5F7FA] text-[var(--navy)] hover:bg-[var(--gray-mid)] border border-[var(--gray-mid)]'
-                            }`}
+                            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${filterData === opt.value ? 'bg-[var(--gold)] text-white shadow-sm' : 'bg-[#F5F7FA] text-[var(--navy)] hover:bg-[var(--gray-mid)] border border-[var(--gray-mid)]'
+                              }`}
                           >
                             {opt.label}
                           </button>
@@ -537,9 +534,8 @@ export default function PlansPage() {
                       <div className="flex flex-wrap gap-2">
                         <button
                           onClick={() => { setFilterValidity(null); setCurrentPage(1); }}
-                          className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
-                            !filterValidity ? 'bg-[var(--gold)] text-white shadow-sm' : 'bg-[#F5F7FA] text-[var(--navy)] hover:bg-[var(--gray-mid)] border border-[var(--gray-mid)]'
-                          }`}
+                          className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${!filterValidity ? 'bg-[var(--gold)] text-white shadow-sm' : 'bg-[#F5F7FA] text-[var(--navy)] hover:bg-[var(--gray-mid)] border border-[var(--gray-mid)]'
+                            }`}
                         >
                           {t('filters.any')}
                         </button>
@@ -547,9 +543,8 @@ export default function PlansPage() {
                           <button
                             key={opt.value}
                             onClick={() => { setFilterValidity(filterValidity === opt.value ? null : opt.value); setCurrentPage(1); }}
-                            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
-                              filterValidity === opt.value ? 'bg-[var(--gold)] text-white shadow-sm' : 'bg-[#F5F7FA] text-[var(--navy)] hover:bg-[var(--gray-mid)] border border-[var(--gray-mid)]'
-                            }`}
+                            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${filterValidity === opt.value ? 'bg-[var(--gold)] text-white shadow-sm' : 'bg-[#F5F7FA] text-[var(--navy)] hover:bg-[var(--gray-mid)] border border-[var(--gray-mid)]'
+                              }`}
                           >
                             {opt.label}
                           </button>
@@ -579,11 +574,10 @@ export default function PlansPage() {
                     {/* Best Sellers Toggle */}
                     <button
                       onClick={() => { setShowBestSellers(!showBestSellers); setCurrentPage(1); }}
-                      className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold transition-all ${
-                        showBestSellers
+                      className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold transition-all ${showBestSellers
                           ? "bg-[var(--gold)] text-white shadow-sm"
                           : "bg-white border border-[var(--gray-mid)] text-[var(--navy)] hover:border-[var(--gold)] hover:text-[var(--gold)] shadow-sm"
-                      }`}
+                        }`}
                     >
                       <Star className={`w-4 h-4 ${showBestSellers ? "fill-white" : ""}`} />
                       {t('filters.bestSellers')}
@@ -606,11 +600,10 @@ export default function PlansPage() {
                             <button
                               key={option.key}
                               onClick={() => { setSortBy(option.key); setSortMenuOpen(false); setCurrentPage(1); }}
-                              className={`w-full px-4 py-3 text-left text-sm hover:bg-[var(--gray-bg)] transition-colors ${
-                                sortBy === option.key 
-                                  ? "text-[var(--gold)] font-semibold bg-[var(--gold)]/5" 
+                              className={`w-full px-4 py-3 text-left text-sm hover:bg-[var(--gray-bg)] transition-colors ${sortBy === option.key
+                                  ? "text-[var(--gold)] font-semibold bg-[var(--gold)]/5"
                                   : "text-[var(--navy)]"
-                              }`}
+                                }`}
                             >
                               {option.label}
                             </button>
@@ -648,7 +641,7 @@ export default function PlansPage() {
                     const data = getProductData(product);
                     const validity = getProductValidity(product, t);
                     const speed = getProductSpeed(product);
-                    
+
                     const raw = product.country?.image_url || product.image_url || product.flag_url || product.country?.flag_url;
                     const isPath = raw && (raw.includes('.') || raw.includes('/'));
                     const url = isPath ? getImageUrl(raw) : getFlagFromISO(product.country?.iso_code);
@@ -659,48 +652,46 @@ export default function PlansPage() {
                       <div
                         key={product.id}
                         onClick={() => handleToggleCart(product)}
-                        className={`bg-[#F0F2F5] rounded-2xl border px-6 py-4 flex items-center justify-between transition-all shadow-sm cursor-pointer ${
-                          isItemInCart
+                        className={`bg-[#F0F2F5] rounded-2xl border px-6 py-4 flex items-center justify-between transition-all shadow-sm cursor-pointer ${isItemInCart
                             ? "border-[var(--gold)]"
                             : "border-[#E2E5EA] hover:border-[var(--gold)]"
-                        }`}
+                          }`}
                       >
                         <div className="flex flex-col gap-1">
-                           <div className="flex items-center gap-2">
-                             {url ? (
-                               <img src={url} alt={name} className="w-7 h-5 object-cover flag-wave" />
-                             ) : (
-                               <Globe className="w-5 h-5 text-[var(--gray-text)]" />
-                             )}
-                             <span className="text-xs font-semibold text-[var(--gray-text)] uppercase tracking-wider truncate max-w-[120px]" title={name}>{name}</span>
-                           </div>
-                           <div className="flex items-center gap-3">
-                              <span className="text-sm font-extrabold text-[var(--navy)] flex items-baseline">
-                                {data.replace(/GB/g, '').replace(/MB/g, '')}
-                                <span className="text-sm font-extrabold text-[#A38334] ml-1">{data.includes('GB') ? 'GB' : data.includes('MB') ? 'MB' : ''}</span>
-                              </span>
-                              <span className="text-sm font-medium text-[var(--gray-text)]">{validity}</span>
-                           </div>
+                          <div className="flex items-center gap-2">
+                            {url ? (
+                              <img src={url} alt={name} className="w-7 h-5 object-cover flag-wave" />
+                            ) : (
+                              <Globe className="w-5 h-5 text-[var(--gray-text)]" />
+                            )}
+                            <span className="text-xs font-semibold text-[var(--gray-text)] uppercase tracking-wider truncate max-w-[120px]" title={name}>{name}</span>
+                          </div>
+                          <div className="flex items-center gap-3">
+                            <span className="text-sm font-extrabold text-[var(--navy)] flex items-baseline">
+                              {data.replace(/GB/g, '').replace(/MB/g, '')}
+                              <span className="text-sm font-extrabold text-[#A38334] ml-1">{data.includes('GB') ? 'GB' : data.includes('MB') ? 'MB' : ''}</span>
+                            </span>
+                            <span className="text-sm font-medium text-[var(--gray-text)]">{validity}</span>
+                          </div>
                         </div>
-                        
+
                         <div className="flex items-center gap-4 shrink-0">
-                           <span className="text-lg sm:text-xl font-extrabold text-[var(--navy)] tracking-tight">
-                              €{product.price?.toFixed(2) || '0.00'}
-                           </span>
-                           <button
-                             onClick={(e) => { e.stopPropagation(); handleToggleCart(product); }}
-                             className={`w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all shrink-0 ${
-                               isItemInCart
-                                 ? "bg-[var(--gold)] border-[var(--gold)] text-white"
-                                 : "bg-white border-[var(--gray-mid)] text-transparent hover:border-[var(--gold)] hover:text-[var(--gold)]"
-                             }`}
-                           >
-                             {isItemInCart ? (
-                               <Check className="w-4 h-4" />
-                             ) : (
-                               <div className="w-4 h-4 rounded-full bg-transparent group-hover:bg-[var(--gold)]" />
-                             )}
-                           </button>
+                          <span className="text-lg sm:text-xl font-extrabold text-[var(--navy)] tracking-tight">
+                            €{product.price?.toFixed(2) || '0.00'}
+                          </span>
+                          <button
+                            onClick={(e) => { e.stopPropagation(); handleToggleCart(product); }}
+                            className={`w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all shrink-0 ${isItemInCart
+                                ? "bg-[var(--gold)] border-[var(--gold)] text-white"
+                                : "bg-white border-[var(--gray-mid)] text-transparent hover:border-[var(--gold)] hover:text-[var(--gold)]"
+                              }`}
+                          >
+                            {isItemInCart ? (
+                              <Check className="w-4 h-4" />
+                            ) : (
+                              <div className="w-4 h-4 rounded-full bg-transparent group-hover:bg-[var(--gold)]" />
+                            )}
+                          </button>
                         </div>
                       </div>
                     );
@@ -719,7 +710,7 @@ export default function PlansPage() {
                 const regionName = getLocalizedText(region.name, t('labels.region'), locale);
                 const countryCount = region.countries_count || 0;
                 const startingPrice = region.starting_price || 0;
-                
+
                 const icon = region.icon;
                 const isPath = icon && (icon.includes('/') || icon.includes('.'));
                 const url = isPath ? getImageUrl(icon) : null;
@@ -735,9 +726,9 @@ export default function PlansPage() {
                   >
                     <div className="flex items-center gap-4">
                       {url ? (
-                         <img src={url} alt={regionName} className="w-10 h-7 object-cover flag-wave shrink-0" />
+                        <img src={url} alt={regionName} className="w-10 h-7 object-cover flag-wave shrink-0" />
                       ) : (
-                         <Globe className="w-10 h-10 text-[var(--gray-text)] shrink-0" />
+                        <Globe className="w-10 h-10 text-[var(--gray-text)] shrink-0" />
                       )}
                       <div className="flex flex-col">
                         <span className="text-lg font-bold text-[var(--navy)]">{regionName}</span>
@@ -749,8 +740,8 @@ export default function PlansPage() {
 
                     <div className="flex items-center gap-4 shrink-0">
                       <div className="flex flex-col items-end hidden sm:flex">
-                         <span className="text-[10px] text-[var(--gray-text)] uppercase font-semibold">{t('labels.from')}</span>
-                         <span className="text-lg font-extrabold text-[var(--navy)] tracking-tight">€{startingPrice.toFixed(2)}</span>
+                        <span className="text-[10px] text-[var(--gray-text)] uppercase font-semibold">{t('labels.from')}</span>
+                        <span className="text-lg font-extrabold text-[var(--navy)] tracking-tight">€{startingPrice.toFixed(2)}</span>
                       </div>
                       <span className="bg-[var(--navy)] text-white text-xs font-semibold px-4 py-2 rounded-lg hover:bg-[var(--navy-mid)] transition-colors shrink-0">
                         {t('cta.explore')}
