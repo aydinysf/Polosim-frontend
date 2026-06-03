@@ -108,6 +108,17 @@ export default function RegionPage() {
   const filteredAndSortedProducts = useMemo(() => {
     let result = [...allProducts];
 
+    const parseDataAmount = (dataStr: string): number => {
+      if (!dataStr) return 0;
+      const lower = dataStr.toLowerCase().replace(/\s/g, "");
+      if (lower.includes("unlimited")) return 999999999;
+      const num = parseFloat(lower);
+      if (isNaN(num)) return 0;
+      if (lower.includes("gb")) return num * 1024;
+      if (lower.includes("mb")) return num;
+      return num;
+    };
+
     if (filterData) {
       result = result.filter(p => {
         const data = getProductData(p);
@@ -122,7 +133,7 @@ export default function RegionPage() {
         case "price_desc": return (b.price || 0) - (a.price || 0);
         case "name_asc": return getProductName(a, locale).localeCompare(getProductName(b, locale));
         case "popular":
-        default: return (isBestSeller(b) ? 1 : 0) - (isBestSeller(a) ? 1 : 0);
+        default: return (parseDataAmount(getProductData(a)) - parseDataAmount(getProductData(b))) || ((a.price || 0) - (b.price || 0));
       }
     });
 
@@ -326,10 +337,10 @@ export default function RegionPage() {
                     <div
                       key={product.id}
                       onClick={() => handleToggleCart(product)}
-                      className={`bg-[#F0F2F5] rounded-2xl border px-6 py-4 flex items-center justify-between transition-all shadow-sm cursor-pointer ${
+                      className={`bg-[var(--navy-light)] rounded-2xl border px-6 py-4 flex items-center justify-between transition-all shadow-sm cursor-pointer ${
                         isItemInCart
                           ? "border-[var(--gold)]"
-                          : "border-[#E2E5EA] hover:border-[var(--gold)]"
+                          : "border-transparent hover:border-[var(--gold)]"
                       }`}
                     >
                       <div className="flex flex-col gap-1">
@@ -337,23 +348,29 @@ export default function RegionPage() {
                            {regionIconUrl ? (
                              <img src={regionIconUrl} alt={regionName} className="w-7 h-5 object-cover flag-wave" />
                            ) : (
-                             <Globe className="w-5 h-5 text-[var(--gray-text)]" />
+                             <Globe className="w-5 h-5 text-white/90" />
                            )}
-                           <span className="text-xs font-semibold text-[var(--gray-text)] uppercase tracking-wider truncate max-w-[150px]" title={regionName}>
+                           <span className="text-xs font-semibold text-white/90 uppercase tracking-wider truncate max-w-[150px]" title={regionName}>
                              {regionName}
                            </span>
                          </div>
                          <div className="flex items-center gap-3">
-                            <span className="text-sm font-extrabold text-[var(--navy)] flex items-baseline">
-                              {data.replace(/GB/g, '').replace(/MB/g, '')}
-                              <span className="text-sm font-extrabold text-[#A38334] ml-1">{data.includes('GB') ? 'GB' : data.includes('MB') ? 'MB' : ''}</span>
+                            <span className="text-sm font-extrabold text-white flex items-baseline">
+                              {data.toLowerCase().includes('unlimited') || isNaN(parseFloat(data))
+                                ? data
+                                : Math.floor(parseFloat(data.replace(/GB/g, '').replace(/MB/g, '')) || 0)}
+                              {!(data.toLowerCase().includes('unlimited') || isNaN(parseFloat(data))) && (
+                                <span className="text-sm font-extrabold text-white ml-1">
+                                  {data.includes('GB') ? 'GB' : data.includes('MB') ? 'MB' : ''}
+                                </span>
+                              )}
                             </span>
-                            <span className="text-sm font-medium text-[var(--gray-text)]">{validity}</span>
+                            <span className="text-sm font-medium text-white/90">{validity}</span>
                          </div>
                       </div>
                       
                       <div className="flex items-center gap-6">
-                         <span className="text-lg sm:text-xl font-extrabold text-[var(--navy)] tracking-tight">
+                         <span className="text-sm font-extrabold text-white tracking-tight">
                             €{product.price?.toFixed(2) || '0.00'}
                          </span>
                          <button
@@ -361,7 +378,7 @@ export default function RegionPage() {
                            className={`w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all ${
                              isItemInCart
                                ? "bg-[var(--gold)] border-[var(--gold)] text-white"
-                               : "bg-white border-[var(--gray-mid)] text-transparent hover:border-[var(--gold)] hover:text-[var(--gold)]"
+                               : "bg-white/20 border-white text-transparent hover:border-[var(--gold)] hover:text-[var(--gold)]"
                            }`}
                          >
                            {isItemInCart ? (

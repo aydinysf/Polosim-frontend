@@ -95,7 +95,7 @@ function NavbarInner() {
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 pt-4 px-[5%] pointer-events-none">
-      <div className="max-w-[1200px] mx-auto bg-white rounded-2xl shadow-lg flex items-center justify-between h-[140px] px-8 pointer-events-auto">
+      <div className="max-w-7xl mx-auto bg-[var(--navy-light)] rounded-2xl shadow-lg flex items-center justify-between h-[140px] px-8 pointer-events-auto">
         {/* Logo */}
         <Link href="/" className="flex items-center shrink-0">
           <Image
@@ -122,17 +122,17 @@ function NavbarInner() {
                   onMouseEnter={() => setActiveDropdown(`desktop-${idx}`)}
                   onMouseLeave={() => setActiveDropdown(null)}
                 >
-                  <button className="flex items-center gap-1 text-[#1A2332] hover:text-[var(--gold)] transition-colors text-[13px] font-semibold cursor-default py-2">
+                  <button className="flex items-center gap-1 text-white hover:text-[var(--gold)] transition-colors text-[13px] font-semibold cursor-default py-2">
                     {title}
                     <ChevronDown className="w-3 h-3" />
                   </button>
                   {activeDropdown === `desktop-${idx}` && (
-                    <div className="absolute top-[80%] left-0 mt-2 bg-white border border-[var(--gray-mid)] rounded-xl overflow-hidden z-50 min-w-[200px] shadow-lg py-2">
+                    <div className="absolute top-[80%] left-0 mt-2 bg-[var(--navy-light)] border border-white/10 rounded-xl overflow-hidden z-50 min-w-[200px] shadow-lg py-2">
                       {link.children.map((child: any, cidx: number) => (
                         <Link
                           key={cidx}
                           href={child.url || child.href || '#'}
-                          className="block px-4 py-2 text-sm text-[var(--text-dark)] hover:bg-[var(--gray-bg)] hover:text-[var(--gold)] transition-colors"
+                          className="block px-4 py-2 text-sm text-white hover:bg-white/5 hover:text-[var(--gold)] transition-colors"
                         >
                           {child.title}
                         </Link>
@@ -149,7 +149,7 @@ function NavbarInner() {
                 href={link.url || link.href || '#'}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[#1A2332] hover:text-[var(--gold)] transition-colors text-[13px] font-semibold whitespace-nowrap"
+                className="text-white hover:text-[var(--gold)] transition-colors text-[13px] font-semibold whitespace-nowrap"
               >
                 {title}
               </a>
@@ -157,7 +157,7 @@ function NavbarInner() {
               <Link
                 key={idx}
                 href={link.url || link.href || '#'}
-                className="text-[#1A2332] hover:text-[var(--gold)] transition-colors text-[13px] font-semibold whitespace-nowrap"
+                className="text-white hover:text-[var(--gold)] transition-colors text-[13px] font-semibold whitespace-nowrap"
               >
                 {title}
               </Link>
@@ -170,7 +170,7 @@ function NavbarInner() {
           {/* Cart Icon */}
           <Link
             href="/cart"
-            className="relative flex items-center justify-center w-9 h-9 rounded-lg text-[#1A2332] hover:text-[var(--gold)] transition-colors"
+            className="relative flex items-center justify-center w-9 h-9 rounded-lg text-white hover:text-[var(--gold)] transition-colors"
           >
             <ShoppingCart className="w-5 h-5" />
             {totalItems > 0 && (
@@ -187,7 +187,7 @@ function NavbarInner() {
               <button
                 onClick={() => setUserMenuOpen(!userMenuOpen)}
                 onBlur={() => setTimeout(() => setUserMenuOpen(false), 150)}
-                className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-[var(--text-dark)] hover:text-[var(--gold)] transition-colors"
+                className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-white hover:text-[var(--gold)] transition-colors"
               >
                 <div className="w-8 h-8 rounded-full bg-[var(--gold-pale)] border border-[var(--gold)]/20 flex items-center justify-center">
                   <User className="w-4 h-4 text-[var(--gold)]" />
@@ -228,7 +228,7 @@ function NavbarInner() {
               </button>
               <button
                 onClick={() => router.push("/sign-in")}
-                className="px-5 py-2 border border-[var(--gray-mid)] rounded-lg bg-white font-semibold text-[13px] text-[var(--text-dark)] hover:border-[var(--gold)] hover:text-[var(--gold)] transition-all whitespace-nowrap"
+                className="px-5 py-2 border border-white/20 rounded-lg bg-transparent font-semibold text-[13px] text-white hover:border-[var(--gold)] hover:text-[var(--gold)] transition-all whitespace-nowrap"
               >
                 {t('login')}
               </button>
@@ -240,7 +240,7 @@ function NavbarInner() {
           <div className="relative ml-1">
             <button
               onClick={() => setLangMenuOpen(!langMenuOpen)}
-              className="flex items-center gap-1.5 text-[13px] font-semibold text-[#1A2332] hover:text-[var(--gold)] transition-colors px-2 py-1.5 rounded-lg hover:bg-[var(--gray-bg)]"
+              className="flex items-center gap-1.5 text-[13px] font-semibold text-white hover:text-[var(--gold)] transition-colors px-2 py-1.5 rounded-lg hover:bg-white/10"
               disabled={isPending}
             >
               <span>{languages.find(lang => lang.code === locale)?.flag || '🇬🇧'}</span>
@@ -268,7 +268,7 @@ function NavbarInner() {
         <div className="flex lg:hidden items-center gap-2">
           <Link
             href="/cart"
-            className="relative p-2 rounded-lg hover:bg-[var(--gray-bg)] text-[var(--text-dark)]"
+            className="relative p-2 rounded-lg hover:bg-white/10 text-white"
           >
             <ShoppingCart className="w-5 h-5" />
             {totalItems > 0 && (
@@ -278,7 +278,7 @@ function NavbarInner() {
             )}
           </Link>
           <button
-            className="p-2 rounded-lg hover:bg-[var(--gray-bg)] text-[var(--text-dark)]"
+            className="p-2 rounded-lg hover:bg-white/10 text-white"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
             {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
