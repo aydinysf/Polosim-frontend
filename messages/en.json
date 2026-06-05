@@ -28,7 +28,7 @@
     "viewAll": "View All",
     "popularRegions": "Popular Regions",
     "viewAllRegions": "View All Regions",
-    "plansAvailable": "eSIM Plans Available",
+    "plansAvailable": "eSIM Plans",
     "countriesCount": "{count}+ countries",
     "mainHeading": "Explore the World with <gold>eSIM</gold> Freedom, Say Goodbye to <gold>Roaming</gold> Fees.",
     "searchResultsTitle": "Results for \"{query}\"",
@@ -37,6 +37,7 @@
     "viewAllPlans": "View all plans"
   },
   "Common": {
+    "back": "Back",
     "instantActivation": "Instant Activation",
     "support247": "24/7 Support",
     "deviceCompatibility": "Works with any eSIM device",
@@ -113,6 +114,15 @@
     "bottom": {
       "available": "Available in 200+ countries",
       "secure": "Secure payments"
+    },
+    "contact": {
+      "title": "Contact",
+      "address": "Address",
+      "phone": "Phone",
+      "fax": "Fax",
+      "email": "E-Mail",
+      "web": "Web",
+      "taxNo": "Tax No"
     }
   },
   "Plans": {
@@ -164,8 +174,12 @@
       "instant": "Instant",
       "from": "From",
       "countriesCount": "{count} countries",
+      "regionCountries": "{region} Countries ({count} countries)",
+      "advancedSearch": "Filter & Sort",
       "countries": "Countries",
       "region": "Region",
+      "packages": "{country} Plans",
+      "esimPlans": "eSIM Plans",
       "dataPlan": "Data Plan"
     },
     "cta": {
@@ -222,10 +236,22 @@
       "popularArticles": "Popular Articles"
     },
     "quickLinks": {
-      "setup": { "title": "Setup Guide", "desc": "How to install eSIM step by step" },
-      "status": { "title": "Order Status", "desc": "Track your order" },
-      "troubleshoot": { "title": "Connection Issues", "desc": "Troubleshoot connection problems" },
-      "payment": { "title": "Payment & Refund", "desc": "Payment and refund policy" }
+      "setup": {
+        "title": "Setup Guide",
+        "desc": "How to install eSIM step by step"
+      },
+      "status": {
+        "title": "Order Status",
+        "desc": "Track your order"
+      },
+      "troubleshoot": {
+        "title": "Connection Issues",
+        "desc": "Troubleshoot connection problems"
+      },
+      "payment": {
+        "title": "Payment & Refund",
+        "desc": "Payment and refund policy"
+      }
     },
     "categories": {
       "installation": {
@@ -469,6 +495,7 @@
     }
   },
   "Cart": {
+    "yourPlans": "Your Packages",
     "title": "Shopping Cart",
     "header": "Your Cart",
     "inCart": "plans in your cart",
@@ -485,7 +512,11 @@
     "empty": "Your cart is empty",
     "backToPlans": "Back to Plans",
     "items": "Items",
-    "summary": "Order Summary"
+    "summary": "Order Summary",
+    "acceptedPayments": "Accepted Payment Methods",
+    "needHelp": "Need help?",
+    "helpText": "Feel free to contact our support team 24/7.",
+    "contactSupport": "Contact Support"
   },
   "VerifyEmail": {
     "title": "Verify Your Email",
@@ -549,7 +580,8 @@
       "length": "Password must be at least 8 characters",
       "terms": "Please accept the terms and conditions",
       "general": "An error occurred. Please try again."
-    }
+    },
+    "alreadyHaveAccount": "Already have an account?"
   },
   "Auth": {
     "welcomeTitle": "Welcome to POLO SIM",
@@ -590,10 +622,22 @@
       }
     },
     "features": {
-      "instant": { "title": "Instant Delivery", "desc": "Receive your eSIM QR code within seconds of purchase. No waiting, no shipping." },
-      "secure": { "title": "Secure Connection", "desc": "Your data is protected with enterprise-grade encryption across all networks." },
-      "support": { "title": "24/7 Support", "desc": "Our support team is available day and night to help with any issues." },
-      "global": { "title": "Global Coverage", "desc": "Access high-speed data in over 200 countries and territories worldwide." }
+      "instant": {
+        "title": "Instant Delivery",
+        "desc": "Receive your eSIM QR code within seconds of purchase. No waiting, no shipping."
+      },
+      "secure": {
+        "title": "Secure Connection",
+        "desc": "Your data is protected with enterprise-grade encryption across all networks."
+      },
+      "support": {
+        "title": "24/7 Support",
+        "desc": "Our support team is available day and night to help with any issues."
+      },
+      "global": {
+        "title": "Global Coverage",
+        "desc": "Access high-speed data in over 200 countries and territories worldwide."
+      }
     },
     "compatibility": {
       "title": "Compatible Devices",
@@ -648,5 +692,40 @@
       "browse": "Browse Plans",
       "support": "Contact Support"
     }
+  },
+  "Features": {
+    "title": "Why POLO SIM?",
+    "subtitle": "Experience the future of mobile connectivity with our cutting-edge eSIM technology.",
+    "instantActivation": {
+      "title": "Instant Activation",
+      "description": "Setup immediately after purchase. Get connected in minutes — no physical SIM card wait needed."
+    },
+    "noRoaming": {
+      "title": "No Roaming Fees",
+      "description": "No surprise charges when traveling abroad. Stay connected with transparent pricing and local rates."
+    },
+    "globalCoverage": {
+      "title": "Global Coverage",
+      "description": "Coverage in 200+ countries and regions. Stay connected wherever you are in the world."
+    },
+    "flexibleOptions": {
+      "title": "Flexible Options",
+      "description": "Flexibility from 1 to 30 days"
+    },
+    "easyTopUp": {
+      "title": "Easy Top-Up",
+      "description": "Renew your plan before it expires"
+    },
+    "support247": {
+      "title": "24/7 Support",
+      "description": "Always here to help you stay connected"
+    }
+  },
+  "PopularDestinations": {
+    "badge": "Popular Regions",
+    "title": "Explore the World",
+    "subtitle": "Choose from our most popular regional plans and stay connected wherever your journey takes you.",
+    "popular": "Popular",
+    "viewAll": "View All Regions"
   }
 }

@@ -1,9 +1,6 @@
 "use client";
 
-import {
-  MessageCircle, Search, ChevronDown, ChevronRight,
-} from "lucide-react";
-import { Input } from "@/components/ui/input";
+import { MessageCircle, ChevronDown } from "lucide-react";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { Link } from "@/i18n/routing";
@@ -12,9 +9,11 @@ import { useEffect, useState } from "react";
 import { faqService, type Faq } from "@/lib/services";
 import { pageService, type Page } from "@/lib/services/pageService";
 import { Skeleton } from "@/components/ui/skeleton";
+import { SearchHeader } from "@/components/search-header";
 
 export default function SupportPage() {
   const t = useTranslations("Support");
+  const locale = useLocale();
 
   const quickLinks = [
     { icon: "📖", title: t('quickLinks.setup.title'), desc: t('quickLinks.setup.desc'), href: "/how-it-works" },
@@ -23,8 +22,6 @@ export default function SupportPage() {
     { icon: "💳", title: t('quickLinks.payment.title'), desc: t('quickLinks.payment.desc'), href: "#" },
   ];
 
-  const locale = useLocale();
-  const [searchQuery, setSearchQuery] = useState("");
   const [expandedFaq, setExpandedFaq] = useState<string | null>(null);
   const [dynamicFaqs, setDynamicFaqs] = useState<Faq[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -63,7 +60,7 @@ export default function SupportPage() {
     }
 
     const faqItems = dynamicFaqs.length > 0
-      ? dynamicFaqs.map((faq, index) => ({
+      ? dynamicFaqs.map((faq) => ({
           key: `faq-dynamic-${faq.id}`,
           question: faq.question,
           answer: faq.answer,
@@ -77,27 +74,27 @@ export default function SupportPage() {
         }));
 
     return (
-      <div className="max-w-[760px] mx-auto flex flex-col gap-2">
+      <div className="max-w-3xl mx-auto flex flex-col gap-2">
         {faqItems.map((faq) => {
           const isExpanded = expandedFaq === faq.key;
           return (
             <div
               key={faq.key}
-              className={`bg-white rounded-xl border overflow-hidden ${
-                isExpanded ? "border-[var(--gold)]/30" : "border-[var(--gray-mid)]"
+              className={`bg-white rounded-xl border overflow-hidden transition-colors ${
+                isExpanded ? "border-[var(--gold)]/60 shadow-sm" : "border-[var(--gray-mid)]"
               }`}
             >
               <button
                 onClick={() => toggleFaq(faq.key)}
-                className="w-full text-left bg-transparent border-none py-[18px] px-5 font-['Sora'] text-[15px] font-semibold text-[var(--text-dark)] cursor-pointer flex justify-between items-center gap-4"
+                className="w-full text-left bg-transparent border-none py-[18px] px-5 font-['Sora'] text-[15px] font-semibold text-[var(--text-dark)] cursor-pointer flex justify-between items-center gap-4 hover:text-[var(--gold)] transition-colors"
               >
                 {faq.question}
-                <span className={`w-6 h-6 rounded-full bg-[var(--gray-bg)] flex items-center justify-center text-[12px] shrink-0 transition-transform ${isExpanded ? "rotate-180" : ""}`}>
+                <span className={`w-6 h-6 rounded-full bg-[var(--gray-bg)] flex items-center justify-center text-[12px] shrink-0 transition-transform ${isExpanded ? "rotate-180 text-[var(--gold)]" : ""}`}>
                   ▾
                 </span>
               </button>
               {isExpanded && (
-                <div className="px-5 pb-[18px] text-sm text-[var(--gray-text)] leading-[1.7]">
+                <div className="px-5 pb-[18px] text-sm text-[var(--gray-text)] leading-[1.7] border-t border-[var(--gray-mid)]/30 pt-3">
                   {faq.isHtml ? (
                     <div dangerouslySetInnerHTML={{ __html: faq.answer }} />
                   ) : (
@@ -163,78 +160,71 @@ export default function SupportPage() {
   }
 
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-background">
       <Navbar />
 
       {/* Hero Section */}
-      <section className="bg-[var(--navy)] pt-14 pb-12 px-[5%] text-center relative overflow-hidden">
-        <div className="inline-block bg-[rgba(201,168,76,0.15)] text-[var(--gold)] border border-[rgba(201,168,76,0.3)] rounded-full px-4 py-1.5 text-[12px] font-bold tracking-[0.5px] uppercase mb-5">
-          {t("hero.badge")}
-        </div>
-        <h1 className="text-4xl md:text-[36px] font-extrabold text-white mb-2 tracking-tight">{t("hero.title")}</h1>
-        <p className="text-[15px] text-white/60 mb-8 leading-[1.6] max-w-lg mx-auto">
-          {t("hero.subtitle")}
-        </p>
+      <SearchHeader 
+        title={t("hero.title")} 
+        subtitle={t("hero.subtitle")} 
+        badge={t("hero.badge")} 
+      />
 
-        {/* Search Bar */}
-        <div className="max-w-[520px] mx-auto flex items-center bg-white rounded-3xl pl-5 pr-1.5 py-1.5 gap-2">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="text-[#9CA3AF] shrink-0"><circle cx="6.5" cy="6.5" r="5" stroke="currentColor" strokeWidth="1.5"/><path d="M11 11l3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
-          <Input
-            type="text"
-            placeholder={t("hero.searchPlaceholder")}
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="border-0 bg-transparent focus-visible:ring-0 text-[var(--text-dark)] placeholder:text-[#9CA3AF] text-[15px] flex-1"
-          />
-          <button className="bg-[var(--gold)] text-white border-none rounded-2xl px-6 py-2.5 font-['Sora'] font-bold text-sm cursor-pointer whitespace-nowrap hover:bg-[var(--gold-light)] transition-colors">
-            {t("hero.searchButton")}
-          </button>
-        </div>
-      </section>
+      {/* Unified Container Section */}
+      <div className="bg-[#F5F7FA] py-12 px-4">
+        <div className="max-w-5xl mx-auto bg-white rounded-3xl border border-[var(--gray-mid)] shadow-sm p-6 md:p-12 space-y-16">
+          
+          {/* Quick Links */}
+          <div>
+            <h2 className="text-xl font-extrabold text-[var(--navy)] text-center mb-8">{t("sections.commonQuestions")}</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {quickLinks.map((ql) => (
+                <Link
+                  key={ql.title}
+                  href={ql.href}
+                  className="flex items-center gap-3 bg-[var(--gray-bg)] border border-[var(--gray-mid)] rounded-xl p-4 cursor-pointer transition-all hover:border-[var(--gold)]/40 hover:bg-white no-underline"
+                >
+                  <div className="text-[22px] w-10 h-10 bg-white rounded-lg flex items-center justify-center shrink-0 border border-[var(--gray-mid)]">
+                    {ql.icon}
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-bold text-[var(--text-dark)] mb-0.5">{ql.title}</h4>
+                    <p className="text-[12px] text-[var(--gray-text)]">{ql.desc}</p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
 
-      {/* Quick Links */}
-      <section className="bg-white py-8 px-[5%] border-b border-[var(--gray-mid)]">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 max-w-7xl mx-auto">
-          {quickLinks.map((ql) => (
-            <Link
-              key={ql.title}
-              href={ql.href}
-              className="flex items-center gap-3 bg-[var(--gray-bg)] rounded-xl p-4 cursor-pointer transition-all border-[1.5px] border-transparent hover:border-[var(--gold)] hover:bg-white no-underline"
+          {/* Divider */}
+          <div className="h-px bg-[var(--gray-mid)]" />
+
+          {/* FAQ Section */}
+          <div>
+            {renderFaqs()}
+          </div>
+
+          {/* Divider */}
+          <div className="h-px bg-[var(--gray-mid)]" />
+
+          {/* WhatsApp Card */}
+          <div className="bg-[var(--gray-bg)] border border-[var(--gray-mid)] rounded-3xl p-8 text-center max-w-[540px] mx-auto">
+            <span className="text-[40px] block mb-3">💬</span>
+            <h3 className="text-[18px] font-bold mb-2 text-[var(--text-dark)]">{t("contact.title")}</h3>
+            <p className="text-sm text-[var(--gray-text)] mb-6 leading-[1.6]">{t("contact.subtitle")}</p>
+            <a
+              href={t("contact.whatsappUrl")}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 bg-[#25D366] text-white border-none rounded-3xl px-7 py-3 font-['Sora'] font-bold text-sm cursor-pointer hover:bg-[#1ebe5b] hover:translate-y-[-2px] hover:shadow-[0_8px_24px_rgba(37,211,102,0.2)] transition-all no-underline"
             >
-              <div className="text-[22px] w-10 h-10 bg-white rounded-lg flex items-center justify-center shrink-0">
-                {ql.icon}
-              </div>
-              <div>
-                <h4 className="text-sm font-bold text-[var(--text-dark)] mb-0.5">{ql.title}</h4>
-                <p className="text-[12px] text-[var(--gray-text)]">{ql.desc}</p>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </section>
+              <MessageCircle className="w-4 h-4" />
+              {t("contact.methods.liveChat.title")}
+            </a>
+          </div>
 
-      {/* FAQ Section */}
-      <section className="bg-[var(--gray-bg)] py-16 px-[5%]">
-        <h2 className="text-[26px] font-extrabold text-center mb-10 text-[var(--text-dark)]">
-          {t("sections.commonQuestions")}
-        </h2>
-        {renderFaqs()}
-
-        {/* WhatsApp Card */}
-        <div className="bg-white border-[1.5px] border-[var(--gray-mid)] rounded-3xl p-8 text-center max-w-[480px] mx-auto mt-10">
-          <span className="text-[40px] block mb-3">💬</span>
-          <h3 className="text-[18px] font-bold mb-2 text-[var(--text-dark)]">{t("contact.title")}</h3>
-          <p className="text-sm text-[var(--gray-text)] mb-6 leading-[1.6]">{t("contact.subtitle")}</p>
-          <a
-            href={t("contact.whatsappUrl")}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex items-center gap-2 bg-[#25D366] text-white border-none rounded-3xl px-7 py-3 font-['Sora'] font-bold text-sm cursor-pointer hover:bg-[#1ebe5b] hover:translate-y-[-2px] transition-all no-underline"
-          >
-            {t("contact.methods.liveChat.title")}
-          </a>
         </div>
-      </section>
+      </div>
 
       <Footer />
     </main>

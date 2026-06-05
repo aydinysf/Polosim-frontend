@@ -1,6 +1,6 @@
 "use client";
 
-import { Download, FileText, ArrowLeft, Loader2 } from "lucide-react";
+import { Download, ArrowLeft, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
@@ -8,6 +8,7 @@ import { Link } from "@/i18n/routing";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { pageService, type Page } from "@/lib/services";
+import { SearchHeader } from "@/components/search-header";
 
 const content = {
     en: {
@@ -157,46 +158,45 @@ export default function TermsOfServicePage() {
     };
 
     return (
-        <main className="min-h-screen bg-white">
+        <main className="min-h-screen bg-background">
             <Navbar />
 
-            {/* Hero */}
-            <section className="bg-[var(--navy)] pt-14 pb-12 px-[5%] text-center">
-                <div className="inline-block bg-[rgba(201,168,76,0.15)] text-[var(--gold)] border border-[rgba(201,168,76,0.3)] rounded-full px-4 py-1.5 text-[12px] font-bold tracking-[0.5px] uppercase mb-5">
-                    {t('badge')}
-                </div>
-                <h1 className="text-[38px] font-extrabold text-white mb-3 tracking-tight">
-                    {pageData?.title || t('termsOfService.title')}
-                </h1>
-                <p className="text-[15px] text-white/60 mb-8">
-                    {pageData?.updated_at 
+            {/* Hero / Header Section */}
+            <SearchHeader 
+                title={pageData?.title || t('termsOfService.title')}
+                subtitle={
+                    pageData?.updated_at 
                         ? t('lastUpdated', { date: new Date(pageData.updated_at).toLocaleDateString(locale) })
                         : c.lastUpdated
-                    }
-                </p>
-                <div className="flex justify-center">
-                    <a href={c.downloadHref} download className="no-underline">
-                        <Button className="bg-[var(--gold)] hover:bg-[var(--gold-light)] text-white border-none rounded-3xl px-8 h-12 font-bold transition-all shadow-lg flex items-center gap-2">
-                            <Download className="w-4 h-4" />
-                            {t('downloadLabel')}
-                        </Button>
-                    </a>
-                </div>
-            </section>
+                }
+                badge={t('badge')}
+            />
 
-            {/* Content */}
-            <section className="py-16 px-[5%]">
-                <div className="max-w-3xl mx-auto">
+            {/* Unified Content Section */}
+            <div className="bg-[#F5F7FA] py-12 px-4">
+                <div className="max-w-4xl mx-auto bg-white rounded-3xl border border-[var(--gray-mid)] shadow-sm p-6 md:p-12">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8 pb-6 border-b border-[var(--gray-mid)]">
+                        <h2 className="text-xl font-extrabold text-[var(--navy)]">
+                            {pageData?.title || t('termsOfService.title')}
+                        </h2>
+                        <a href={c.downloadHref} download className="no-underline shrink-0">
+                            <Button className="bg-[var(--gold)] hover:bg-[var(--gold-light)] text-white border-none rounded-3xl px-6 h-10 font-bold transition-all shadow-md flex items-center gap-2 text-xs">
+                                <Download className="w-3.5 h-3.5" />
+                                {t('downloadLabel')}
+                            </Button>
+                        </a>
+                    </div>
+
                     {renderContent()}
 
-                    <div className="mt-16 pt-8 border-t border-[var(--gray-mid)] text-center">
+                    <div className="mt-12 pt-6 border-t border-[var(--gray-mid)] text-center">
                         <Link href="/" className="inline-flex items-center gap-2 text-[var(--gold)] font-bold hover:opacity-70 transition-all no-underline">
                             <ArrowLeft className="w-4 h-4" />
                             {t('backLabel')}
                         </Link>
                     </div>
                 </div>
-            </section>
+            </div>
 
             <Footer />
         </main>

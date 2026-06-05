@@ -201,7 +201,7 @@ export function ProductListing() {
                         const isPath = raw && (raw.includes('.') || raw.includes('/'));
                         const url = isPath ? getImageUrl(raw) : getFlagFromISO(plan.country?.iso_code || plan.flag_url);
                         if (!url) return <span className="text-3xl">🌍</span>;
-                        return <img src={url} alt={name} className="w-10 h-7 rounded object-cover" />;
+                        return <img src={url} alt={name} className="w-10 h-7 object-cover flag-wave" />;
                       })()}
                       <div>
                         <h3 className="font-bold text-[var(--text-dark)] truncate max-w-[150px] leading-tight">{name}</h3>

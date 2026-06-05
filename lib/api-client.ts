@@ -1,10 +1,24 @@
 import axios, { type AxiosError } from 'axios';
 
 const ensureV2 = (url: string) => {
-  if (url.endsWith('/api/V2')) return url;
-  if (url.endsWith('/api/V1')) return url.replace('/api/V1', '/api/V2');
-  if (url.endsWith('/')) return `${url}api/V2`;
-  return `${url}/api/V2`;
+  let normalized = url.trim().replace(/\/+$/, '');
+  
+  // Clean up common duplicate paths
+  normalized = normalized.replace(/\/api\/V1\/api\/V2/g, '/api/V2');
+  normalized = normalized.replace(/\/api\/V2\/api\/V2/g, '/api/V2');
+  
+  // Replace /api/V1 with /api/V2
+  normalized = normalized.replace(/\/api\/V1/g, '/api/V2');
+  
+  // Final duplicate clean up
+  normalized = normalized.replace(/\/api\/V2\/api\/V2/g, '/api/V2');
+  
+  // If it doesn't contain /api/V2 at all, append it
+  if (!normalized.includes('/api/V2')) {
+    normalized = `${normalized}/api/V2`;
+  }
+  
+  return normalized;
 };
 
 const API_URL = ensureV2(process.env.NEXT_PUBLIC_API_URL || 'https://web-api.polosim.com/api/V2');
@@ -102,13 +116,14 @@ api.interceptors.request.use((config) => {
   // Locale detection from URL path or Cookie
   if (typeof window !== 'undefined') {
     let locale = window.location.pathname.split('/')[1];
-    if (!locale || !['en', 'tr'].includes(locale)) {
+    const supportedLocales = ['en', 'tr', 'ru', 'ar', 'de', 'zh', 'pt', 'es', 'fr'];
+    if (!locale || !supportedLocales.includes(locale)) {
       // Fallback: Check NEXT_LOCALE cookie or Default to 'en'
       const match = document.cookie.match(/NEXT_LOCALE=([^;]+)/);
       locale = match ? match[1] : 'en';
     }
 
-    if (locale && ['en', 'tr'].includes(locale)) {
+    if (locale && supportedLocales.includes(locale)) {
       config.headers['x-lang'] = locale;
     }
   }
@@ -131,13 +146,14 @@ webApi.interceptors.request.use((config) => {
   // Locale detection from URL path or Cookie
   if (typeof window !== 'undefined') {
     let locale = window.location.pathname.split('/')[1];
-    if (!locale || !['en', 'tr'].includes(locale)) {
+    const supportedLocales = ['en', 'tr', 'ru', 'ar', 'de', 'zh', 'pt', 'es', 'fr'];
+    if (!locale || !supportedLocales.includes(locale)) {
       // Fallback: Check NEXT_LOCALE cookie or Default to 'en'
       const match = document.cookie.match(/NEXT_LOCALE=([^;]+)/);
       locale = match ? match[1] : 'en';
     }
 
-    if (locale && ['en', 'tr'].includes(locale)) {
+    if (locale && supportedLocales.includes(locale)) {
       config.headers['x-lang'] = locale;
     }
   }

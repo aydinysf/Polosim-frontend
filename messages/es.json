@@ -1,0 +1,713 @@
+{
+  "HomePage": {
+    "title": "Un Sim, un mundo",
+    "description": "Mercado global de eSIM"
+  },
+  "Navbar": {
+    "destinations": "Destinos",
+    "plans": "Planes",
+    "howItWorks": "Cómo funciona",
+    "support": "Soporte",
+    "bayi-girisi": "Inicio de sesión de revendedor",
+    "login": "Iniciar sesión",
+    "myProfile": "Mi perfil",
+    "logout": "Cerrar sesión",
+    "getStarted": "Empezar"
+  },
+  "Hero": {
+    "title": "",
+    "subtitle": "Entrega instantánea de eSIM para más de 200 países. Sin tarifas de roaming. Conserva tu número.",
+    "searchPlaceholder": "¿Adónde vas?",
+    "searchButton": "Buscar",
+    "bestSeller": "Mejor vendido",
+    "regionalPlans": "Planes Regionales",
+    "countryPlans": "Planes de país",
+    "buyNow": "Comprar ahora",
+    "popularDestinations": "Destinos populares",
+    "viewAllDestinations": "Ver los más de 200 destinos",
+    "viewAll": "Ver todo",
+    "popularRegions": "Regiones populares",
+    "viewAllRegions": "Ver todas las regiones",
+    "plansAvailable": "Planes eSIM",
+    "countriesCount": "{count}+ países",
+    "mainHeading": "Explora el mundo con <gold>eSIM</gold> Libertad, di adiós a las tarifas de <gold>Roaming</gold>.",
+    "searchResultsTitle": "Resultados para \"{query}\"",
+    "loadingPlans": "Cargando planos...",
+    "noResultsFound": "No se encontraron planes coincidentes.",
+    "viewAllPlans": "Ver todos los planes"
+  },
+  "Common": {
+    "back": "Atrás",
+    "instantActivation": "Activación instantánea",
+    "support247": "Soporte 24 horas al día, 7 días a la semana",
+    "deviceCompatibility": "Funciona con cualquier dispositivo eSIM",
+    "daysLeft": "{count} Días restantes",
+    "hotspot": "Punto de acceso",
+    "instant": "Instantáneo",
+    "buy": "comprar",
+    "added": "Añadido",
+    "details": "Detalles",
+    "dataUsed": "Datos utilizados",
+    "getPlan": "Obtener plano",
+    "noActiveEsim": "Sin eSIM activa"
+  },
+  "AccountBenefits": {
+    "title": "¿Por qué crear una cuenta?",
+    "subtitle": "Desbloquea beneficios exclusivos y gestiona tus eSIM fácilmente con una cuenta gratuita.",
+    "trackOrders": {
+      "title": "Seguimiento de sus pedidos",
+      "description": "Vea todas sus compras y activaciones de eSIM desde su página de perfil en cualquier momento."
+    },
+    "monitorUsage": {
+      "title": "Monitorear el uso",
+      "description": "Verifique su uso de datos y el saldo restante en tiempo real desde su panel de control."
+    },
+    "affiliateProgram": {
+      "title": "Programa de afiliados",
+      "description": "Gana comisiones recomendando amigos y compartiendo tu enlace de recomendación único."
+    },
+    "exclusiveCampaigns": {
+      "title": "Campañas exclusivas",
+      "description": "Acceda a descuentos especiales, promociones y ofertas exclusivas para miembros durante todo el año."
+    },
+    "createAccount": "Crear cuenta gratuita"
+  },
+  "Legal": {
+    "lastUpdated": "Última actualización: {date}",
+    "downloadLabel": "Descargar PDF/DOCX",
+    "backLabel": "Volver a Inicio",
+    "badge": "Política Legal",
+    "termsOfService": {
+      "title": "Términos de servicio"
+    },
+    "privacyPolicy": {
+      "title": "Política de privacidad"
+    },
+    "refundPolicy": {
+      "title": "Política de reembolso"
+    }
+  },
+  "Footer": {
+    "description": "Un Sim, un mundo. Manténgase conectado en más de 200 países con activación instantánea y sin tarifas de roaming.",
+    "product": "Producto",
+    "company": "Empresa",
+    "support": "Soporte",
+    "legal": "Legales",
+    "links": {
+      "destinations": "Destinos",
+      "dataPlans": "Planes de datos",
+      "regions": "Regiones",
+      "coverageMap": "Mapa de Cobertura",
+      "aboutUs": "Sobre nosotros",
+      "careers": "Carreras",
+      "blog": "Blog",
+      "press": "prensa",
+      "helpCenter": "Centro de ayuda",
+      "contactUs": "Contáctenos",
+      "setupGuide": "Guía de configuración",
+      "deviceCompatibility": "Compatibilidad del dispositivo",
+      "privacyPolicy": "Política de privacidad",
+      "termsOfService": "Términos de servicio",
+      "refundPolicy": "Política de reembolso"
+    },
+    "copyright": "© {year} POLO SIM. Reservados todos los derechos.",
+    "bottom": {
+      "available": "Disponible en más de 200 países",
+      "secure": "Pagos seguros"
+    },
+    "contact": {
+      "title": "Contacto",
+      "address": "Dirección",
+      "phone": "Teléfono",
+      "fax": "Fax",
+      "email": "Correo electrónico",
+      "web": "Web",
+      "taxNo": "N.º de IVA"
+    }
+  },
+  "Plans": {
+    "hero": {
+      "destinationsAvailable": "Más de 200 destinos disponibles",
+      "browseRegions": "Explorar todas las regiones",
+      "browsePlans": "Explorar todos los planes",
+      "regionsDescription": "Explora nuestros planes eSIM regionales que cubren varios países con un solo paquete.",
+      "plansDescription": "Encuentra el plan de datos eSIM perfecto para tu destino. Activación instantánea, sin cargos por roaming."
+    },
+    "search": {
+      "regionsPlaceholder": "Buscar regiones...",
+      "plansPlaceholder": "Buscar países o planes..."
+    },
+    "tabs": {
+      "regions": "Regiones"
+    },
+    "filters": {
+      "title": "Filtros",
+      "all": "Todos los planes",
+      "bestSellers": "Los más vendidos",
+      "dataAmount": "Cantidad de datos",
+      "duration": "Duración",
+      "priceRange": "Rango de precios",
+      "any": "Cualquiera",
+      "unlimited": "Ilimitado"
+    },
+    "sort": {
+      "popular": "Más Popular",
+      "priceLow": "Precio: de menor a mayor",
+      "priceHigh": "Precio: de mayor a menor",
+      "dataHigh": "Datos: de mayor a menor",
+      "dataLow": "Datos: de menor a mayor",
+      "validityHigh": "Duración: larga a corta",
+      "validityLow": "Duración: corta a larga",
+      "nameAz": "Nombre: De la A a la Z",
+      "nameZa": "Nombre: Z a A"
+    },
+    "validity": {
+      "days": "{count} Días"
+    },
+    "results": {
+      "plansCount": "Mostrando planes {count}",
+      "regionsCount": "Mostrando {count} regiones"
+    },
+    "labels": {
+      "bestSeller": "Mejor vendido",
+      "hotspot": "Punto de acceso",
+      "instant": "Instantáneo",
+      "from": "De",
+      "countriesCount": "{count} países",
+      "regionCountries": "{region} Países ({count} países)",
+      "advancedSearch": "Filtrar y ordenar",
+      "countries": "Países",
+      "region": "Región",
+      "packages": "{country} Planes",
+      "esimPlans": "Planes eSIM",
+      "dataPlan": "Plan de datos"
+    },
+    "cta": {
+      "buy": "comprar",
+      "added": "Añadido",
+      "viewPlans": "Ver planos",
+      "explore": "Explorar"
+    },
+    "empty": {
+      "title": "No se encontraron resultados",
+      "description": "Intente ajustar su búsqueda o filtros"
+    }
+  },
+  "Features": {
+    "title": "¿Por qué POLO SIM?",
+    "subtitle": "Experimente el futuro de la conectividad móvil con nuestra tecnología eSIM de vanguardia.",
+    "instantActivation": {
+      "title": "Activación instantánea",
+      "description": "Configuración inmediatamente después de la compra. Conéctate en minutos: no es necesario esperar por una tarjeta SIM física."
+    },
+    "noRoaming": {
+      "title": "Sin tarifas de roaming",
+      "description": "Sin cargos sorpresa al viajar al extranjero. Manténgase conectado con precios transparentes y tarifas locales."
+    },
+    "globalCoverage": {
+      "title": "Cobertura global",
+      "description": "Cobertura en más de 200 países y regiones. Mantente conectado dondequiera que estés en el mundo."
+    },
+    "flexibleOptions": {
+      "title": "Opciones flexibles",
+      "description": "Flexibilidad de 1 a 30 días"
+    },
+    "easyTopUp": {
+      "title": "Recarga fácil",
+      "description": "Renueva tu plan antes de que caduque"
+    },
+    "support247": {
+      "title": "Soporte 24 horas al día, 7 días a la semana",
+      "description": "Siempre aquí para ayudarte a mantenerte conectado"
+    }
+  },
+  "Support": {
+    "hero": {
+      "badge": "Centro de soporte",
+      "title": "¿Cómo podemos ayudarle?",
+      "subtitle": "Obtenga respuestas instantáneas a guías de configuración, solución de problemas de red y administración de planes. Nuestro equipo global está aquí 24 horas al día, 7 días a la semana.",
+      "searchPlaceholder": "P.ej. Cómo instalar en iPhone...",
+      "searchButton": "Buscar",
+      "installationLink": "Ir a la guía de instalación y configuración"
+    },
+    "sections": {
+      "browseByCategory": "Navegar por categoría",
+      "commonQuestions": "Preguntas comunes",
+      "popularArticles": "Artículos populares"
+    },
+    "quickLinks": {
+      "setup": {
+        "title": "Guía de configuración",
+        "desc": "Cómo instalar eSIM paso a paso"
+      },
+      "status": {
+        "title": "Estado del pedido",
+        "desc": "Sigue tu pedido"
+      },
+      "troubleshoot": {
+        "title": "Problemas de conexión",
+        "desc": "Solucionar problemas de conexión"
+      },
+      "payment": {
+        "title": "Pago y reembolso",
+        "desc": "Política de pago y reembolso"
+      }
+    },
+    "categories": {
+      "installation": {
+        "title": "Instalación y configuración",
+        "description": "Guías paso a paso para la activación de eSIM"
+      },
+      "connectivity": {
+        "title": "Conectividad",
+        "description": "Solucionar problemas de red y velocidad"
+      },
+      "billing": {
+        "title": "Facturación y planes",
+        "description": "Pagos, reembolsos y uso de datos"
+      },
+      "coverage": {
+        "title": "Cobertura",
+        "description": "Destinos globales y socios de red"
+      },
+      "account": {
+        "title": "Mi cuenta",
+        "description": "Administrar pedidos y configuración de perfil"
+      },
+      "troubleshooting": {
+        "title": "Solución de problemas",
+        "description": "Problemas técnicos e informes de errores"
+      }
+    },
+    "faq": {
+      "general": {
+        "title": "generales",
+        "q1": {
+          "question": "¿Qué es una eSIM y cómo funciona?",
+          "answer": "Una eSIM (SIM integrada) es una SIM digital que le permite activar un plan celular sin usar una tarjeta SIM física. Está integrado en su dispositivo y se puede programar con diferentes perfiles de operador."
+        },
+        "q2": {
+          "question": "¿Mi dispositivo es compatible con eSIM?",
+          "answer": "La mayoría de los teléfonos inteligentes lanzados después de 2018 son compatibles con eSIM, incluidos el iPhone XS y posteriores, el Samsung Galaxy S20+ y el Google Pixel 3+. Verifique la configuración de su dispositivo para 'eSIM' o 'Agregar plan celular'."
+        },
+        "q3": {
+          "question": "¿Qué tan rápido recibiré mi eSIM?",
+          "answer": "Su código QR eSIM se envía instantáneamente por correo electrónico inmediatamente después de que se confirma su compra. Sin esperas para la entrega física."
+        }
+      },
+      "technical": {
+        "title": "Técnico",
+        "q1": {
+          "question": "¿Cómo activo el roaming para mi eSIM?",
+          "answer": "Vaya a la configuración de su dispositivo, seleccione el perfil POLO SIM y asegúrese de que 'Roaming de datos' esté activado. Esto es necesario para que funcionen nuestros planes de datos globales."
+        },
+        "q2": {
+          "question": "¿Puedo usar mi eSIM en varios dispositivos?",
+          "answer": "No, normalmente un perfil eSIM solo se puede instalar una vez. Eliminarlo de un dispositivo generalmente invalida el perfil. Instálelo en el dispositivo principal que desea utilizar."
+        }
+      }
+    },
+    "contact": {
+      "title": "¿Aún necesitas ayuda?",
+      "subtitle": "Nuestras estrellas de soporte están en línea y listas para ayudarlo en 12 idiomas.",
+      "whatsappUrl": "https://wa.me/000000000000",
+      "methods": {
+        "liveChat": {
+          "title": "Soporte WhatsApp 24 horas al día, 7 días a la semana",
+          "badge": "Ayuda instantánea en WhatsApp",
+          "action": "abrir WhatsApp"
+        },
+        "email": {
+          "title": "Soporte por correo electrónico",
+          "badge": "< 2h de respuesta",
+          "action": "Enviar correo electrónico"
+        },
+        "phone": {
+          "title": "Llamada directa",
+          "badge": "Línea VIP",
+          "action": "Llama ahora"
+        }
+      }
+    },
+    "status": {
+      "title": "Estado del sistema",
+      "subtitle": "Todos los sistemas operativos",
+      "esimActivation": "Activación eSIM",
+      "paymentProcessing": "Procesamiento de pagos",
+      "viewDetails": "Ver página de estado detallada"
+    },
+    "popular": {
+      "installIphone": "Cómo instalar una eSIM en iPhone",
+      "installAndroid": "Cómo instalar una eSIM en Android",
+      "notConnecting": "Mi eSIM no se conecta a la red",
+      "checkBalance": "Cómo comprobar el saldo de datos restante",
+      "dualSim": "¿Puedo usar eSIM y SIM física juntas?",
+      "topUp": "Cómo recargar mi eSIM existente"
+    }
+  },
+  "Profile": {
+    "title": "Perfil",
+    "myPackages": "Mis paquetes eSIM",
+    "logout": "Cerrar sesión",
+    "memberSince": "Miembro desde {date}",
+    "tabs": {
+      "all": "Todos",
+      "active": "Activo",
+      "upcoming": "Próximo",
+      "expired": "Caducado"
+    },
+    "status": {
+      "active": "Activo",
+      "upcoming": "Próximo",
+      "expired": "Caducado"
+    },
+    "package": {
+      "defaultName": "Paquete eSIM",
+      "data": "Datos",
+      "validity": "Validez",
+      "days": "dias",
+      "remaining": "restante",
+      "used": "Usado",
+      "expires": "Vence",
+      "activated": "Activado",
+      "installEsim": "Instalar eSIM"
+    },
+    "messages": {
+      "loading": "Cargando paquetes...",
+      "error": "No se pudieron cargar los paquetes. Por favor inténtalo de nuevo.",
+      "copied": "copiado al portapapeles",
+      "noPackages": "No se encontraron paquetes",
+      "deactivated": "Su cuenta ha sido desactivada.",
+      "deactivateError": "No se pudo desactivar la cuenta. Por favor inténtalo de nuevo.",
+      "invalidAmount": "Por favor ingrese una cantidad válida.",
+      "topupError": "No se pudo iniciar la recarga.",
+      "preparing": "Preparando tu perfil..."
+    },
+    "usage": {
+      "title": "Estado de uso en vivo",
+      "realtime": "En tiempo real:"
+    },
+    "wallet": {
+      "topupTitle": "Recargar Saldo",
+      "selectAmount": "Seleccionar importe (EUR)",
+      "customAmount": "Ingrese la cantidad personalizada",
+      "payWith": "Recarga ahora con {provider}",
+      "cancel": "Cancelar",
+      "redirectNote": "Serás redirigido a {provider}"
+    },
+    "verification": {
+      "title": "Se requiere verificación de correo electrónico",
+      "message": "Verifique su dirección de correo electrónico para desbloquear todas las funciones y garantizar la seguridad de la cuenta.",
+      "button": "Ingrese el código de verificación"
+    },
+    "stats": {
+      "totalPackages": "Paquetes totales",
+      "activeUnits": "Unidades activas",
+      "walletBalance": "Saldo de billetera"
+    },
+    "assets": {
+      "title": "Mis activos eSIM",
+      "subtitle": "Administre y monitoree su conectividad global",
+      "refresh": "Actualizar",
+      "buyNewPlan": "Comprar nuevo plan"
+    },
+    "emptyState": {
+      "title": "No se encontraron paquetes",
+      "description": "Aún no has comprado ningún plan para esta categoría.",
+      "button": "Explorar planes globales"
+    },
+    "card": {
+      "dataVolume": "Volumen de datos",
+      "validityPeriod": "Período de validez",
+      "timelineProgress": "Progreso de la línea de tiempo"
+    },
+    "modal": {
+      "manualActivation": "Activación manual",
+      "smdpAddress": "Dirección SM-DP+",
+      "activationCode": "Código de activación",
+      "copy": "Copiar",
+      "installEsim": "Instalar eSIM",
+      "qrCode": "Código QR",
+      "scanToInstall": "Escanear para instalar",
+      "synchronizing": "Sincronizando con la red...",
+      "activationInfo": "Información de activación",
+      "installByScanning": "Instalar escaneando con su dispositivo",
+      "processing": "Procesando...",
+      "iccidAddress": "Dirección ICCID",
+      "planData": "Datos del plan",
+      "validity": "Validez",
+      "topUp": "Plan de recarga",
+      "renew": "Renovar plan",
+      "close": "Cerrar",
+      "generating": "Generando...",
+      "order": "Orden #"
+    },
+    "deleteAccount": {
+      "button": "Eliminar cuenta",
+      "dialogTitle": "Desactivar cuenta",
+      "dialogMessage": "Esto desactivará su cuenta y cerrará sesión en todos los dispositivos. Para reactivar, comuníquese con nuestro equipo de soporte.",
+      "cancel": "Cancelar",
+      "confirm": "Confirmar",
+      "processing": "Procesando..."
+    }
+  },
+  "Checkout": {
+    "title": "Pago completo",
+    "emptyCart": "Tu carrito está vacío",
+    "addPlans": "Agrega algunos planes eSIM para comenzar",
+    "browsePlans": "Explorar planes",
+    "backToCart": "Volver al carrito",
+    "ready": {
+      "continueAs": "Continuando como {name}",
+      "continueAsGuest": "Continuar como invitado",
+      "orderSummary": "Resumen del pedido",
+      "total": "Monto Total",
+      "pay": "Pagar ({amount})",
+      "processing": "Procesando...",
+      "checkout": "Pagar"
+    },
+    "success": {
+      "title": "¡Pago exitoso!",
+      "description": "Su código QR eSIM ha sido enviado a su dirección de correo electrónico.",
+      "backToHome": "Volver a Inicio",
+      "myOrders": "Mis pedidos",
+      "needHelp": "¿Necesitas ayuda?"
+    },
+    "error": {
+      "title": "Se produjo un error",
+      "sessionExpired": "Tu sesión ha caducado. Por favor inicia sesión nuevamente.",
+      "general": "Se produjo un error durante el procesamiento del pago.",
+      "guestError": "Se produjo un error durante el pago de invitados.",
+      "stripeKeyMissing": "La clave pública de Stripe no está configurada.",
+      "failed": "Pago fallido",
+      "failedDescription": "No se pudo completar el pago. Por favor inténtalo de nuevo.",
+      "tryAgain": "Inténtalo de nuevo",
+      "getSupport": "Obtenga soporte",
+      "creationError": "Se produjo un error al crear el pedido."
+    },
+    "payment": {
+      "cancelTitle": "Pago cancelado",
+      "cancelDescription": "El proceso de pago fue cancelado por el usuario o se produjo un error. No se hicieron cargos.",
+      "backToCheckout": "Volver a pagar",
+      "successTitle": "¡Pago recibido!",
+      "successDescription": "Su pago ha sido recibido exitosamente y está siendo procesado. La información de su eSIM se enviará a su dirección de correo electrónico una vez que se complete la transacción.",
+      "updating": "El sistema se está actualizando, espere..."
+    }
+  },
+  "Cart": {
+    "yourPlans": "Tus paquetes",
+    "title": "Carrito de compras",
+    "header": "Tu carrito",
+    "inCart": "planes en tu carrito",
+    "emptyTitle": "Tu carrito está vacío",
+    "emptySubtitle": "Parece que aún no has agregado ningún plan. ¿Por qué no echas un vistazo a nuestras grandes ofertas?",
+    "browsePlans": "Explorar planes",
+    "continueShopping": "Continuar comprando",
+    "summaryTitle": "Resumen del pedido",
+    "subtotal": "Subtotal",
+    "taxes": "Impuestos",
+    "total": "totales",
+    "checkout": "Proceder al pago",
+    "secureCheckout": "Pago seguro • SSL de 256 bits",
+    "empty": "Tu carrito está vacío",
+    "backToPlans": "Volver a Planes",
+    "items": "Artículos",
+    "summary": "Resumen del pedido",
+    "acceptedPayments": "Métodos de pago aceptados",
+    "needHelp": "¿Necesitas ayuda?",
+    "helpText": "No dude en ponerse en contacto con nuestro equipo de soporte 24 horas al día, 7 días a la semana.",
+    "contactSupport": "Contactar con soporte"
+  },
+  "VerifyEmail": {
+    "title": "Verifique su correo electrónico",
+    "subtitle": "Introduce el código enviado a tu dirección de correo electrónico.",
+    "emailLabel": "Dirección de correo electrónico",
+    "codeLabel": "Código de verificación",
+    "codePlaceholder": "Ingrese el código de 6 dígitos",
+    "verifyButton": "Verificar correo electrónico",
+    "verifying": "Verificando...",
+    "noCode": "¿No recibiste un código?",
+    "resendCode": "Reenviar código",
+    "resending": "Reenviando...",
+    "backToSignIn": "Volver a iniciar sesión",
+    "validCodeRequired": "Por favor ingresa un código de verificación válido",
+    "verifySuccess": "¡Correo electrónico verificado exitosamente! Redirigiendo para iniciar sesión...",
+    "verifyError": "La verificación falló. Por favor verifique su código e inténtelo nuevamente.",
+    "emailRequiredResend": "Por favor ingresa tu correo electrónico para reenviar el código",
+    "resendSuccess": "El código de verificación se ha reenviado a su correo electrónico.",
+    "resendError": "No se pudo reenviar el código. Inténtelo de nuevo más tarde."
+  },
+  "GetStarted": {
+    "title": "Crea tu cuenta",
+    "subtitle": "Comience su viaje de conectividad global",
+    "firstName": "Nombre",
+    "firstNamePlaceholder": "Juan",
+    "lastName": "Apellido",
+    "lastNamePlaceholder": "gama",
+    "email": "Correo electrónico",
+    "emailPlaceholder": "tu@ejemplo.com",
+    "password": "Contraseña",
+    "passwordPlaceholder": "Crear una contraseña",
+    "confirmPassword": "Confirmar contraseña",
+    "confirmPasswordPlaceholder": "Confirma tu contraseña",
+    "passwordStrength": "Fuerza de la contraseña:",
+    "strength": {
+      "weak": "demasiado débil",
+      "fair": "Feria",
+      "good": "bueno",
+      "strong": "fuerte"
+    },
+    "termsAgreement": "Términos de servicio",
+    "privacyAgreement": "Política de privacidad",
+    "agreeTo": "Estoy de acuerdo con el ",
+    "and": " y ",
+    "agreeToPost": "",
+    "marketingConsent": "Envíame noticias, ofertas y actualizaciones (opcional)",
+    "continue": "Continuar",
+    "back": "Atrás",
+    "createAccount": "Crear cuenta",
+    "creating": "Creando...",
+    "orContinueWith": "O continuar con",
+    "signIn": "Iniciar sesión",
+    "benefits": {
+      "instantActivation": "Activación instantánea",
+      "noHiddenFees": "Sin tarifas ocultas",
+      "securePayment": "Pago Seguro"
+    },
+    "error": {
+      "fillAll": "Por favor complete todos los campos",
+      "match": "Las contraseñas no coinciden",
+      "length": "La contraseña debe tener al menos 8 caracteres.",
+      "terms": "Por favor acepte los términos y condiciones.",
+      "general": "Se produjo un error. Por favor inténtalo de nuevo."
+    },
+    "alreadyHaveAccount": "¿Ya tienes una cuenta?"
+  },
+  "Auth": {
+    "welcomeTitle": "Bienvenido a POLO SIM",
+    "loginSubtitle": "Inicie sesión solo con su dirección de correo electrónico, no se requiere contraseña.",
+    "emailLabel": "Su dirección de correo electrónico",
+    "loading": "Iniciando sesión...",
+    "loginBtn": "Iniciar sesión / Registrarse",
+    "noAccount": "¿No tienes una cuenta?",
+    "getStarted": "Comience ahora",
+    "invalidEmail": "Por favor ingrese una dirección de correo electrónico válida.",
+    "loginError": "Error de inicio de sesion. Por favor inténtalo de nuevo.",
+    "generalError": "Se produjo un error. Por favor inténtalo de nuevo.",
+    "trust": {
+      "noPassword": "Iniciar sesión sin contraseña",
+      "instant": "Activación instantánea"
+    }
+  },
+  "HowItWorks": {
+    "badge": "Proceso de configuración sencillo",
+    "title": "Cómo funciona",
+    "subtitle": "Conéctate en minutos. Sin tarjeta SIM física, sin visitas a tienda, sin complicaciones. Datos móviles instantáneos dondequiera que viajes.",
+    "steps": {
+      "step1": {
+        "title": "Elige tu plan",
+        "description": "Explore nuestros más de 200 destinos y elija el plan de datos que se adapte a sus necesidades de viaje. Seleccione la cantidad de datos, el período de validez y la cobertura."
+      },
+      "step2": {
+        "title": "Completa tu compra",
+        "description": "Paga de forma segura con tu método de pago preferido. Aceptamos todas las principales tarjetas de crédito, PayPal, Apple Pay y Google Pay. Tu eSIM estará lista al instante."
+      },
+      "step3": {
+        "title": "Escanea el código QR",
+        "description": "Después de la compra, recibirás un código QR por correo electrónico. Simplemente escanéelo con la cámara de su teléfono para instalar el perfil eSIM. No se requiere tarjeta SIM física."
+      },
+      "step4": {
+        "title": "Manténgase conectado",
+        "description": "Activa tu eSIM al llegar a tu destino. Disfrute de datos rápidos y confiables sin cargos por roaming. Recarga en cualquier momento si necesitas más datos."
+      }
+    },
+    "features": {
+      "instant": {
+        "title": "Entrega Instantánea",
+        "desc": "Reciba su código QR eSIM a los pocos segundos de la compra. Sin esperas, sin envío."
+      },
+      "secure": {
+        "title": "Conexión segura",
+        "desc": "Sus datos están protegidos con cifrado de nivel empresarial en todas las redes."
+      },
+      "support": {
+        "title": "Soporte 24 horas al día, 7 días a la semana",
+        "desc": "Nuestro equipo de soporte está disponible día y noche para ayudar con cualquier problema."
+      },
+      "global": {
+        "title": "Cobertura global",
+        "desc": "Acceda a datos de alta velocidad en más de 200 países y territorios en todo el mundo."
+      }
+    },
+    "compatibility": {
+      "title": "Dispositivos compatibles",
+      "subtitle": "Nuestra eSIM funciona con la gran mayoría de smartphones y tablets modernos",
+      "brands": {
+        "apple": "manzana",
+        "samsung": "Samsung",
+        "google": "google",
+        "other": "Otro"
+      }
+    },
+    "installation": {
+      "title": "Guía de instalación",
+      "subtitle": "Configuración rápida para dispositivos iOS y Android",
+      "ios": {
+        "title": "Instalación de iOS",
+        "steps": [
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "0": "Abra la aplicación Cámara y escanee el código QR",
+        "1": "Toca la notificación 'Plan celular'",
+        "2": "Siga las instrucciones en pantalla",
+        "3": "Etiquete su plan (por ejemplo, \"Datos de viaje\")",
+        "4": "Asegúrese de que el roaming de datos esté activado cuando esté en el extranjero"
+      },
+      "android": {
+        "title": "Instalación de Android",
+        "steps": [
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "0": "Vaya a Configuración > Red e Internet",
+        "1": "Toca 'SIM' o 'Red móvil'",
+        "2": "Seleccione el botón 'Agregar eSIM' o '+'",
+        "3": "Escanea el código QR con tu cámara",
+        "4": "Confirma y activa tu plan"
+      }
+    },
+    "faq": {
+      "title": "Preguntas frecuentes",
+      "q1": "¿Qué es una eSIM?",
+      "a1": "Una eSIM (SIM integrada) es una SIM digital que le permite activar un plan de operador sin utilizar una tarjeta SIM física. Está integrado en su dispositivo y se puede programar con diferentes perfiles de operador.",
+      "q2": "¿Cómo sé si mi dispositivo es compatible con eSIM?",
+      "a2": "La gran mayoría de los teléfonos inteligentes y tabletas modernos lanzados después de 2018 son compatibles con eSIM. Puedes consultar la sección Celular/Datos móviles en la configuración de tu dispositivo o usar nuestro verificador de compatibilidad para tu modelo.",
+      "q3": "¿Puedo usar mi eSIM inmediatamente después de la compra?",
+      "a3": "¡Sí! Su código QR eSIM se entrega instantáneamente después de la compra. Puedes instalarlo de inmediato y activarlo cuando llegues a tu destino.",
+      "q4": "¿Mi tarjeta SIM normal seguirá funcionando con la eSIM?",
+      "a4": "Absolutamente. La mayoría de los dispositivos admiten la funcionalidad Dual SIM, lo que le permite utilizar su SIM normal y su eSIM al mismo tiempo.",
+      "q5": "¿Qué sucede si uso toda mi asignación de datos?",
+      "a5": "Puedes recargar fácilmente tu eSIM con más datos a través de nuestra aplicación o sitio web. Este proceso sólo lleva unos minutos."
+    },
+    "cta": {
+      "title": "¿Listo para empezar?",
+      "description": "Únase a millones de viajeros que se mantienen conectados con POLO SIM. Busque planes y conéctese al instante.",
+      "browse": "Explorar planes",
+      "support": "Contactar con soporte"
+    }
+  },
+  "PopularDestinations": {
+    "badge": "Regiones populares",
+    "title": "Explora el mundo",
+    "subtitle": "Elija entre nuestros planes regionales más populares y manténgase conectado dondequiera que lo lleve su viaje.",
+    "popular": "Popular",
+    "viewAll": "Ver todas las regiones"
+  }
+}

@@ -15,7 +15,7 @@ export default function CheckoutPage() {
       <Navbar />
 
       {/* Hero Header */}
-      <section className="bg-[var(--navy)] pt-14 pb-12 px-[5%] text-center">
+      <section className="bg-[var(--navy)] pt-48 pb-12 px-[5%] text-center">
         <div className="inline-block bg-[rgba(201,168,76,0.15)] text-[var(--gold)] border border-[rgba(201,168,76,0.3)] rounded-full px-4 py-1.5 text-[12px] font-bold tracking-[0.5px] uppercase mb-5">
           {t('ready.checkout') || 'Checkout'}
         </div>

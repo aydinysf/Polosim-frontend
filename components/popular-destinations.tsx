@@ -2,6 +2,7 @@
 
 import { ArrowRight, MapPin } from "lucide-react";
 import { Link } from "@/i18n/routing";
+import { useTranslations } from "next-intl";
 
 const destinations = [
   { name: "Europe", countries: "40+ countries", price: "$4.99", icon: "🇪🇺", popular: true },
@@ -13,19 +14,21 @@ const destinations = [
 ];
 
 export function PopularDestinations() {
+  const t = useTranslations('PopularDestinations');
+
   return (
     <section className="py-[72px] px-[5%] bg-white">
       <div className="max-w-7xl mx-auto">
         {/* Section header */}
         <div className="text-center mb-12">
           <div className="inline-block bg-[rgba(201,168,76,0.15)] text-[var(--gold)] border border-[rgba(201,168,76,0.3)] rounded-full px-4 py-1.5 text-[12px] font-bold tracking-[0.5px] uppercase mb-5">
-            Popular Regions
+            {t('badge')}
           </div>
           <h2 className="text-[32px] font-extrabold mb-3 text-[var(--text-dark)]">
-            Dünya'yı Keşfet
+            {t('title')}
           </h2>
           <p className="text-[var(--gray-text)] text-base max-w-xl mx-auto">
-            En popüler bölge planlarımızdan birini seçin ve yolculuğunuzun sizi götürdüğü her yerde bağlantıda kalın.
+            {t('subtitle')}
           </p>
         </div>
 
@@ -46,7 +49,7 @@ export function PopularDestinations() {
               <p className="text-[14px] font-bold text-[var(--gold)]">{destination.price}</p>
               {destination.popular && (
                 <span className="inline-block mt-1.5 bg-[rgba(201,168,76,0.15)] text-[var(--gold)] text-[9px] font-bold px-2 py-0.5 rounded-full">
-                  Popüler
+                  {t('popular')}
                 </span>
               )}
             </Link>
@@ -59,7 +62,7 @@ export function PopularDestinations() {
             href="/plans?view=regions"
             className="inline-flex items-center gap-2 text-[var(--gold)] font-['Sora'] font-bold text-sm hover:opacity-70 transition-opacity no-underline"
           >
-            Tüm Bölgeleri Görüntüle
+            {t('viewAll')}
             <ArrowRight className="w-4 h-4" />
           </Link>
         </div>

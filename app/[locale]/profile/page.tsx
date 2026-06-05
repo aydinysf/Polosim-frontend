@@ -221,7 +221,7 @@ export default function ProfilePage() {
       <Navbar />
 
       {/* Hero Header */}
-      <section className="bg-[var(--navy)] pt-14 pb-12 px-[5%]">
+      <section className="bg-[var(--navy)] pt-48 pb-12 px-[5%]">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
           <div className="flex items-center gap-5">
             <div className="w-20 h-20 rounded-full bg-white/10 border-2 border-[var(--gold)]/30 flex items-center justify-center shadow-[0_0_20px_rgba(201,168,76,0.1)]">

@@ -15,16 +15,15 @@ export default function CartPage() {
   const locale = useLocale();
 
   const formatPrice = (amount: number) => {
-    const value = amount > 5000 ? amount / 100 : amount; 
-    return `€${value.toFixed(2)}`;
+    return `€${(amount / 100).toFixed(2)}`;
   };
 
   return (
-    <main className="min-h-screen bg-[#F8F5ED]">
+    <main className="min-h-screen bg-[#F5F7FA]">
       <Navbar />
 
       {/* Hero Header */}
-      <section className="bg-[var(--navy)] pt-36 pb-16 px-[5%]">
+      <section className="bg-[var(--navy)] pt-48 pb-16 px-[5%]">
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center gap-3 mb-4">
             <Link href="/plans" className="text-white/60 hover:text-white text-sm font-medium transition-colors">
@@ -64,7 +63,7 @@ export default function CartPage() {
                   </Button>
                 </Link>
               </div>
-              
+
               {/* Trust Badges */}
               <div className="bg-[var(--gray-bg)] border-t border-[var(--gray-mid)] py-8 px-6">
                 <div className="flex flex-wrap items-center justify-center gap-8">
@@ -107,7 +106,7 @@ export default function CartPage() {
                       className="p-5 flex flex-col sm:flex-row sm:items-center gap-4 hover:bg-[var(--gray-bg)]/50 transition-colors"
                     >
                       {/* Product Image/Flag */}
-                      <div className="w-16 h-16 rounded-xl bg-[#F8F5ED] border border-[var(--gold)]/30 flex items-center justify-center overflow-hidden flex-shrink-0">
+                      <div className="w-16 h-16 rounded-xl bg-[#F5F7FA] border border-[var(--gold)]/30 flex items-center justify-center overflow-hidden flex-shrink-0">
                         {item.flag ? (
                           typeof item.flag === 'string' && (item.flag.includes('/') || item.flag.includes('.')) ? (
                             <Image src={item.flag} alt={item.name} width={64} height={64} className="object-cover" />
@@ -175,7 +174,7 @@ export default function CartPage() {
                     </div>
                   ))}
                 </div>
-                
+
                 {/* Continue Shopping Link */}
                 <div className="pt-2">
                   <Link href="/plans" className="inline-flex items-center gap-2 text-[var(--gold)] font-semibold hover:opacity-70 transition-all">
@@ -203,11 +202,7 @@ export default function CartPage() {
                       <span className="text-[var(--gray-text)] font-medium">{t('taxes') || 'Vergiler'}</span>
                       <span className="text-[var(--navy)] font-semibold">€0.00</span>
                     </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-[var(--gray-text)] font-medium">{t('shipping') || 'Teslimat'}</span>
-                      <span className="text-emerald-600 font-semibold">{t('free') || 'Ücretsiz'}</span>
-                    </div>
-                    
+
                     <div className="border-t border-[var(--gray-mid)] pt-4">
                       <div className="flex justify-between items-center">
                         <span className="text-[var(--navy)] font-bold text-lg">{t('total') || 'Toplam'}</span>

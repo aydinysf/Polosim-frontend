@@ -10,39 +10,39 @@ export function PlansRegionsTabs() {
   const benefits = [
     {
       icon: "📦",
-      title: "Siparişlerinizi Takip Edin",
-      description: "Tüm satın alımlarınızı ve dijital ürünlerinizi basit panel aracılığı ile takip edebilirsiniz.",
+      title: t('trackOrders.title'),
+      description: t('trackOrders.description'),
       iconBg: "bg-[#FFF4E5]",
     },
     {
       icon: "📊",
-      title: "Kullanımı İzleyin",
-      description: "Veri kullanımınızı ve kalan paketenizi gerçek zamanlı olarak izleyin ve süreniz dolmadan önce kolayca yenilik edin.",
+      title: t('monitorUsage.title'),
+      description: t('monitorUsage.description'),
       iconBg: "bg-[#E8F5E9]",
     },
     {
       icon: "🤝",
-      title: "Ortaklık Programı",
-      description: "Arkadaşlarınıza referans ver, kazançlar ve özel indirimler kazanın ve ortak programımıza katılarak kazanmaya başlayın.",
+      title: t('affiliateProgram.title'),
+      description: t('affiliateProgram.description'),
       iconBg: "bg-[#EDE7F6]",
     },
     {
       icon: "🎁",
-      title: "Özel Kampanyalar",
-      description: "VIP kampanya listeli müşterilerimiz, promosyonlara ve özel fırsatlara erişim edin.",
+      title: t('exclusiveCampaigns.title'),
+      description: t('exclusiveCampaigns.description'),
       iconBg: "bg-[#FCE4EC]",
     },
   ];
 
   return (
     <section className="py-16 px-[5%] bg-[#D4AF37]/10 text-center">
-      <div className="max-w-[1100px] mx-auto">
+      <div className="max-w-[1200px] mx-auto">
         {/* Section header */}
         <h2 className="text-[28px] md:text-[32px] font-bold mb-3 text-white">
-          Neden Hesap Oluşturmalısınız?
+          {t('title')}
         </h2>
         <p className="text-[var(--gray-text)] text-[14px] md:text-[15px] max-w-[500px] mx-auto mb-10 leading-[1.6]">
-          Ücretsiz bir hesapla özel avantajların kilidini açın<br />ve eSIM&apos;lerinizi kolayca yönetin.
+          {t('subtitle')}
         </p>
 
         {/* Benefits Grid - 4 columns */}
@@ -66,7 +66,7 @@ export function PlansRegionsTabs() {
           className="inline-flex items-center gap-2 bg-[var(--gold)] text-white border-none rounded-full px-8 py-3 font-semibold text-[14px] cursor-pointer hover:bg-[var(--gold-light)] transition-all shadow-md"
           onClick={() => router.push("/get-started")}
         >
-          Ücretsiz Hesap Oluştur
+          {t('createAccount')}
         </button>
       </div>
     </section>

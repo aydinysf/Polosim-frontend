@@ -23,23 +23,23 @@ interface SearchResult {
 
 const FlagDisplay = ({ flag, name, size = "md" }: { flag?: string; name: string; size?: "sm" | "md" | "lg" }) => {
   if (!flag) return <span className={size === "sm" ? "text-xs" : size === "md" ? "text-lg" : "text-3xl"}>🌍</span>;
-  
+
   const isPath = flag.includes("/") || flag.includes(".");
   const url = isPath ? getImageUrl(flag) : getFlagFromISO(flag);
-  
+
   if (!url) return <span className={size === "sm" ? "text-xs" : size === "md" ? "text-lg" : "text-3xl"}>🌍</span>;
-  
+
   const sizeClasses = {
     sm: "w-5 h-4",
     md: "w-8 h-6",
     lg: "w-10 h-7"
   };
-  
+
   return (
-    <img 
-      src={url} 
-      alt={name} 
-      className={`${sizeClasses[size]} rounded-sm object-cover shadow-sm`}
+    <img
+      src={url}
+      alt={name}
+      className={`${sizeClasses[size]} object-cover shadow-sm flag-wave`}
       onError={(e) => {
         (e.target as HTMLImageElement).style.display = "none";
         (e.target as HTMLImageElement).parentElement!.innerHTML = "🌍";
@@ -151,22 +151,22 @@ export function HeroSection() {
     setTimeout(() => setAddedToCart(null), 2000);
   };
 
-  const filteredSuggestions = searchQuery.length > 0 
+  const filteredSuggestions = searchQuery.length > 0
     ? [
-        ...countries.filter(c => c.name.toLowerCase().includes(searchQuery.toLowerCase())).map(c => ({
-          type: "country" as const,
-          name: c.name,
-          flag: c.flag_url || c.iso_code,
-          id: c.id
-        })),
-        ...regions.filter(r => getLocalizedText(r.name).toLowerCase().includes(searchQuery.toLowerCase())).map(r => ({
-          type: "region" as const,
-          name: getLocalizedText(r.name),
-          flag: (r as any).icon || "🌍",
-          region: r.slug,
-          id: r.id
-        }))
-      ]
+      ...countries.filter(c => c.name.toLowerCase().includes(searchQuery.toLowerCase())).map(c => ({
+        type: "country" as const,
+        name: c.name,
+        flag: c.flag_url || c.iso_code,
+        id: c.id
+      })),
+      ...regions.filter(r => getLocalizedText(r.name).toLowerCase().includes(searchQuery.toLowerCase())).map(r => ({
+        type: "region" as const,
+        name: getLocalizedText(r.name),
+        flag: (r as any).icon || "🌍",
+        region: r.slug,
+        id: r.id
+      }))
+    ]
     : [];
 
   if (showSearchResults) {
@@ -179,7 +179,7 @@ export function HeroSection() {
         <div className="relative z-10 max-w-7xl mx-auto px-[5%]">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
             <div>
-              <button 
+              <button
                 onClick={() => setShowSearchResults(false)}
                 className="flex items-center gap-2 text-[var(--gold)] font-bold mb-4 hover:opacity-70 transition-all bg-transparent border-none p-0 cursor-pointer"
               >
@@ -190,7 +190,7 @@ export function HeroSection() {
                 {t('searchResultsTitle', { query: searchQuery })}
               </h2>
             </div>
-            
+
             <div className="w-full max-w-[400px]">
               <div className="relative flex items-center bg-white rounded-2xl pl-4 pr-1 py-1 shadow-lg">
                 <Search className="w-4 h-4 text-[#9CA3AF]" />
@@ -202,7 +202,7 @@ export function HeroSection() {
                   onKeyDown={(e) => e.key === "Enter" && handleSearch()}
                   className="border-0 bg-transparent focus-visible:ring-0 text-[var(--text-dark)] h-10"
                 />
-                <Button 
+                <Button
                   onClick={() => handleSearch()}
                   className="bg-[var(--gold)] hover:bg-[var(--gold-light)] rounded-xl px-5"
                 >
@@ -223,7 +223,7 @@ export function HeroSection() {
                 const name = getLocalizedText(product.name, "", locale);
                 const data = product.data_amount || product.data_limit || product.data || "";
                 const validity = product.validity?.toString().includes("Day") ? product.validity : `${product.validity} Days`;
-                
+
                 return (
                   <div key={product.id} className="bg-white rounded-2xl overflow-hidden border border-[var(--gray-mid)] hover:border-[var(--gold)] transition-all hover:translate-y-[-2px] hover:shadow-lg flex flex-col h-full group">
                     <div className="p-5 flex flex-col h-full">
@@ -271,8 +271,8 @@ export function HeroSection() {
           ) : (
             <div className="text-center py-20 bg-white/5 rounded-3xl border border-white/10">
               <p className="text-white/60 text-lg">{t('noResultsFound')}</p>
-              <Button 
-                variant="link" 
+              <Button
+                variant="link"
                 onClick={() => router.push("/plans")}
                 className="text-[var(--gold)] font-bold mt-2"
               >
@@ -293,13 +293,13 @@ export function HeroSection() {
         <div className="absolute -bottom-[80px] -right-[60px] w-[350px] h-[350px] bg-[radial-gradient(circle,rgba(201,168,76,0.05)_0%,transparent_70%)]" />
       </div>
 
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-[5%]">
+      <div className="relative z-10 w-full max-w-[1200px] mx-auto px-[5%]">
         {/* Hero Title */}
-        <div className="text-center mb-8">
-          <h1 className="text-[28px] sm:text-[36px] md:text-[42px] font-extrabold text-white leading-[1.3] max-w-[900px] mx-auto tracking-tight">
-            200&apos;den fazla ülke için anında <span className="text-[var(--gold)]">eSIM</span> teslimatı.
-            <br />
-            <span className="text-[var(--gold)]">Roaming</span> ücreti yok. Numaranızı koruyun.
+        <div className="text-center mb-8 max-w-[1100px] mx-auto">
+          <h1 className="text-[28px] md:text-[32px] font-extrabold text-white leading-[1.3] max-w-[900px] mx-auto tracking-tight">
+            {t.rich('mainHeading', {
+              gold: (chunks) => <span className="text-[var(--gold)]">{chunks}</span>
+            })}
           </h1>
         </div>
 
@@ -321,7 +321,7 @@ export function HeroSection() {
               className="bg-[var(--gold)] text-white border-none rounded-full px-6 h-10 font-semibold text-[14px] cursor-pointer whitespace-nowrap hover:bg-[var(--gold-light)] transition-all"
               onClick={() => handleSearch()}
             >
-              Hemen Ara
+              {t('searchButton')}
             </button>
           </div>
 
@@ -351,7 +351,7 @@ export function HeroSection() {
             className="inline-flex items-center gap-2 bg-[var(--navy-mid)] border border-white/20 text-white rounded-full px-6 py-2.5 font-medium text-[13px] cursor-pointer hover:bg-[var(--navy-light)] hover:border-white/30 transition-all"
             onClick={() => router.push("/plans")}
           >
-            200&apos;den Fazla Destinasyona göz atın
+            {t('viewAllDestinations')}
             <ChevronDown className="w-4 h-4" />
           </button>
         </div>
@@ -359,23 +359,30 @@ export function HeroSection() {
         {/* Popular Destinations Section */}
         <div className="max-w-5xl mx-auto mb-6">
           <div className="flex items-center justify-between mb-4 px-1">
-            <span className="text-[18px] font-semibold text-white">Popüler Destinasyonlar</span>
+            <span className="text-[18px] font-semibold text-white">{t('popularDestinations')}</span>
           </div>
           <div className="flex flex-wrap items-center justify-center gap-3">
-            {popularDestinationFlags.map((dest) => (
-              <button
-                key={dest.name}
-                className="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2 text-white text-[13px] font-medium hover:bg-white/20 hover:border-white/30 transition-all cursor-pointer"
-                onClick={() => router.push(`/plans?search=${encodeURIComponent(dest.name)}`)}
-              >
-                <img 
-                  src={getFlagFromISO(dest.flag)} 
-                  alt={dest.name} 
-                  className="w-5 h-4 rounded-sm object-cover"
-                />
-                {dest.name}
-              </button>
-            ))}
+            {popularCountries.slice(0, 12).map((country) => {
+              const localizedName = getLocalizedText(country.name, "", locale);
+              const flagSrc = country.flag_url || getFlagFromISO(country.iso_code);
+
+              return (
+                <button
+                  key={country.id}
+                  className="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2 text-white text-[13px] font-medium hover:bg-white/20 hover:border-white/30 transition-all cursor-pointer"
+                  onClick={() => router.push(`/plans?search=${encodeURIComponent(localizedName)}`)}
+                >
+                  {flagSrc && (
+                    <img
+                      src={flagSrc}
+                      alt={localizedName}
+                      className="w-5 h-4 object-cover flag-wave"
+                    />
+                  )}
+                  {localizedName}
+                </button>
+              );
+            })}
           </div>
         </div>
       </div>
